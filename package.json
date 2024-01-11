@@ -7,13 +7,17 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint ./**/*.{js,jsx,ts,tsx} --cache --fix",
-    "prepare": "husky install"
+    "prettify": "prettier --write .",
+    "prepare": "husky install",
+    "lint-staged": "lint-staged",
+    "type-check": "tsc --project tsconfig.json --pretty --noEmit && echo "
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "prettier --write",
+    "src/**/*.{js,ts,tsx}": [
       "eslint --fix"
+    ],
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
     ]
   },
   "dependencies": {
@@ -32,7 +36,7 @@
     "@typescript-eslint/eslint-plugin": "^6.18.1",
     "@typescript-eslint/parser": "^6.18.1",
     "autoprefixer": "^10.0.1",
-    "eslint": "^8",
+    "eslint": "^8.56.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-next": "14.0.4",
     "eslint-import-resolver-node": "^0.3.9",
