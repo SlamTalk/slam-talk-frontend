@@ -26,5 +26,8 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
+      - name: Add pnpm to PATH
+        run: echo "$(npm bin -g)" >> $GITHUB_PATH
+
       - run: pnpm install
       - run: pnpm run lint
