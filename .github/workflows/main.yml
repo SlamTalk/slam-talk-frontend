@@ -1,4 +1,4 @@
-name: Node CI
+name: Slam Talk CI
 
 on:
   workflow_dispatch:
@@ -17,20 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Add pnpm to PATH
-        run: echo "PATH=$(npm bin -g):$PATH" >> $GITHUB_ENV
-
-      - name: Check pnpm Path
-        run: which pnpm
-
-      - run: pnpm install
-      - run: pnpm run lint
+      - run: npm run lint
