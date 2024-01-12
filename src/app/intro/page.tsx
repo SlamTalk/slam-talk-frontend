@@ -1,5 +1,7 @@
 import React from 'react';
 
-const page = () => <div>intro</div>;
+function Intro() {
+  return <h2>intro</h2>;
+}
 
-export default page;
+export default Intro;
