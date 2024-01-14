@@ -1,7 +1,5 @@
 import React from 'react';
 
-function TeamMatching() {
-  return <div />;
-}
+const TeamMatching = () => <div />;
 
 export default TeamMatching;
