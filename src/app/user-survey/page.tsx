@@ -1,7 +1,5 @@
 import React from 'react';
 
-function UserSurvey() {
-  return <div />;
-}
+const UserSurvey = () => <div />;
 
 export default UserSurvey;
