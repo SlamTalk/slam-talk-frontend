@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  max-width: 768px;
+  margin: 0 auto;
+}
+
+@media (min-width: 769px) {
+  body {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+  .footer {
+    width: 768px;
+    margin: 0 auto;
+  }
+}
