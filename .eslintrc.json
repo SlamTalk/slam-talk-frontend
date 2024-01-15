@@ -1,5 +1,11 @@
 {
-  "extends": ["next/core-web-vitals", "airbnb", "airbnb-typescript"],
+  "extends": [
+    "next/core-web-vitals",
+    "airbnb",
+    "airbnb/hooks",
+    "airbnb-typescript",
+    "prettier"
+  ],
   "env": {
     "es6": true
   },
@@ -21,6 +27,12 @@
       2,
       { "namedComponents": ["arrow-function"] }
     ],
+    // "react/no-unstable-nested-components": [
+    //   "warn",
+    //   {
+    //     "allowAsProps": true
+    //   }
+    // ],
     "import/prefer-default-export": ["off", { "target": "single" }],
     "operator-linebreak": [0]
   }
