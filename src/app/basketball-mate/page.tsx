@@ -1,7 +1,5 @@
 import React from 'react';
 
-function BasketballMate() {
-  return <div />;
-}
+const BasketballMate = () => <div />;
 
 export default BasketballMate;
