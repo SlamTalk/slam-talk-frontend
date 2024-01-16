@@ -2,6 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
+import Script from 'next/script';
 import Providers from './providers';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -13,6 +14,12 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang="en" className="light" suppressHydrationWarning>
+    <head>
+      <Script
+        strategy="beforeInteractive"
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_KEY}&autoload=false`}
+      />
+    </head>
     <body className={inter.className}>
       <Providers>{children}</Providers>
     </body>
