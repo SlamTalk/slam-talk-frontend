@@ -1,5 +1,14 @@
 {
-  "extends": ["next/core-web-vitals", "airbnb", "airbnb-typescript"],
+  "extends": [
+    "next/core-web-vitals",
+    "airbnb",
+    "airbnb/hooks",
+    "airbnb-typescript",
+    "prettier"
+  ],
+  "env": {
+    "es6": true
+  },
   "parserOptions": {
     "project": "./tsconfig.json"
   },
@@ -13,6 +22,10 @@
         "optionalDependencies": true,
         "peerDependencies": false
       }
+    ],
+    "react/function-component-definition": [
+      2,
+      { "namedComponents": ["arrow-function"] }
     ],
     "import/prefer-default-export": ["off", { "target": "single" }],
     "operator-linebreak": [0]
