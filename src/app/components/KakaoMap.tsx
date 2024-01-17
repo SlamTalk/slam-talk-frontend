@@ -1,6 +1,7 @@
 'use client';
 
 import React, { FC, useEffect, useRef, useState } from 'react';
+import { IoSearchSharp } from 'react-icons/io5';
 
 declare global {
   interface Window {
@@ -109,32 +110,35 @@ const KakaoMap: FC = () => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
-    <div className="relative">
-      <div className="absolute left-4 top-4 z-10">
+    <div className="relative h-full w-full">
+      <div className="absolute left-1/2 top-4 z-10 flex w-4/5 max-w-lg -translate-x-1/2 transform items-center justify-center rounded-md border bg-white p-1 shadow">
         <input
           type="text"
           placeholder="장소 검색"
-          className="rounded-md border p-2"
+          className="flex-grow rounded-md border-0 p-2 focus:outline-none focus:ring-0"
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              handleSearch();
-            }
-          }}
+          onKeyPress={handleKeyPress}
         />
         <button
+          aria-label="Search"
           type="button"
           onClick={handleSearch}
-          className="ml-2 rounded-md bg-blue-500 p-2 text-white hover:bg-blue-700"
+          className="ml-2 mr-2 flex h-full items-center justify-center rounded-md focus:outline-none"
         >
-          검색
+          <IoSearchSharp size={20} className="text-gray-400 hover:text-black" />
         </button>
       </div>
       <div
         ref={mapRef}
-        className="absolute left-0 top-0 z-0 h-screen w-screen overflow-hidden"
+        className="absolute left-0 right-0 top-0 z-0 h-[calc(100vh-109px)] w-full overflow-hidden"
       />
       {selectedPlace && (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
