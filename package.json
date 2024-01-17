@@ -23,6 +23,7 @@
   "dependencies": {
     "@nextui-org/button": "^2.0.26",
     "@nextui-org/react": "^2.2.9",
+    "@react-types/shared": "^3.22.0",
     "@stomp/stompjs": "^7.0.0",
     "@tanstack/react-query": "^5.17.9",
     "framer-motion": "^10.18.0",
