@@ -75,8 +75,8 @@ const KakaoMap: FC = () => {
   const displayPlaces = (places: any) => {
     if (map) {
       const bounds = new window.kakao.maps.LatLngBounds();
-      const markerImageSrc = '/icons/marker.svg';
-      const imageSize = new window.kakao.maps.Size(48, 48);
+      const markerImageSrc = '/icons/marker-img.png';
+      const imageSize = new window.kakao.maps.Size(48);
       const markerImage = new window.kakao.maps.MarkerImage(
         markerImageSrc,
         imageSize
