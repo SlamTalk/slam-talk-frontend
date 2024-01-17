@@ -17,7 +17,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
     <head>
       <Script
         strategy="beforeInteractive"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_KEY}&autoload=false`}
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_KEY}&autoload=false&libraries=services`}
       />
     </head>
     <body className={inter.className}>
