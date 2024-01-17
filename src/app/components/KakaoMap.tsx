@@ -89,6 +89,20 @@ const KakaoMap: FC = () => {
           image: markerImage,
         });
 
+        const content = `
+        <div class="flex items-center px-2 py-1 bg-white border border-gray-300 rounded text-sm font-medium shadow-sm ml-12">
+          ${place.place_name}
+        </div>`;
+
+        // eslint-disable-next-line no-new
+        new window.kakao.maps.CustomOverlay({
+          map,
+          position: new window.kakao.maps.LatLng(place.y, place.x),
+          content,
+          yAnchor: 1,
+          xAnchor: 0.5,
+        });
+
         window.kakao.maps.event.addListener(marker, 'click', () => {
           setSelectedPlace(place);
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
