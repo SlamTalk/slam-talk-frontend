@@ -31,8 +31,7 @@
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-dom": "^18",
-    "react-icons": "^5.0.1",
-    "react-kakao-maps-sdk": "^1.1.24"
+    "react-icons": "^5.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",
