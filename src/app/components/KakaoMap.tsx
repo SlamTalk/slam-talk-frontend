@@ -18,6 +18,7 @@ const KakaoMap: FC = () => {
   const [userLocation, setUserLocation] = useState<any>(null);
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
   const [, setIsLoading] = useState<boolean>(true);
+  const [mapLevel] = useState(3); // 초기 확대 레벨 설정
 
   useEffect(() => {
     const loadKakaoMap = () => {
@@ -58,7 +59,8 @@ const KakaoMap: FC = () => {
 
   const moveToLocation = () => {
     if (userLocation && map) {
-      map.setCenter(userLocation);
+      map.setLevel(mapLevel);
+      map.panTo(userLocation);
     } else {
       alert('사용자 위치 정보가 설정되지 않았습니다.');
     }
