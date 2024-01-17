@@ -1,5 +1,6 @@
 import React from 'react';
+import KakaoMap from '../components/KakaoMap';
 
-const Map = () => <div />;
+const Map = () => <KakaoMap />;
 
 export default Map;
