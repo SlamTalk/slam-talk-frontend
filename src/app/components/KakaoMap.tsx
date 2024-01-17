@@ -17,30 +17,38 @@ const KakaoMap: FC = () => {
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [userLocation, setUserLocation] = useState<any>(null);
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
-  const [isLocationSet, setIsLocationSet] = useState<boolean>(false);
+  const [, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const loadKakaoMap = () => {
       window.kakao.maps.load(() => {
-        const options = {
-          center: new window.kakao.maps.LatLng(37.5665, 126.978),
-          level: 3,
-        };
-
-        const kakaoMap = new window.kakao.maps.Map(mapRef.current, options);
-        setMap(kakaoMap);
-
         if ('geolocation' in navigator) {
-          navigator.geolocation.getCurrentPosition((position) => {
-            const { latitude, longitude } = position.coords;
-            const userLatLng = new window.kakao.maps.LatLng(
-              latitude,
-              longitude
-            );
-            setUserLocation(userLatLng);
-            setIsLocationSet(true);
-            kakaoMap.setCenter(userLatLng);
-          });
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords;
+              const userLatLng = new window.kakao.maps.LatLng(
+                latitude,
+                longitude
+              );
+              setUserLocation(userLatLng);
+              const options = { center: userLatLng, level: 3 };
+              const kakaoMap = new window.kakao.maps.Map(
+                mapRef.current,
+                options
+              );
+              setMap(kakaoMap);
+              setIsLoading(false);
+            },
+            () => {
+              // 사용자 위치를 가져오는데 실패했을 때 처리
+              alert('위치 정보를 가져오는데 실패했습니다.');
+              setIsLoading(false);
+            }
+          );
+        } else {
+          // Geolocation API를 지원하지 않는 경우 처리
+          alert('이 브라우저는 위치 서비스를 지원하지 않습니다.');
+          setIsLoading(false);
         }
       });
     };
@@ -51,6 +59,8 @@ const KakaoMap: FC = () => {
   const moveToLocation = () => {
     if (userLocation && map) {
       map.setCenter(userLocation);
+    } else {
+      alert('사용자 위치 정보가 설정되지 않았습니다.');
     }
   };
 
@@ -59,8 +69,6 @@ const KakaoMap: FC = () => {
       alert('검색어를 입력하세요.');
       return;
     }
-
-    setIsLocationSet(false);
 
     if (map) {
       const ps = new window.kakao.maps.services.Places();
@@ -176,7 +184,6 @@ const KakaoMap: FC = () => {
           type="button"
           className="flex h-10 w-10 items-center justify-center rounded-full bg-primary shadow-md"
           onClick={moveToLocation}
-          disabled={!isLocationSet}
         >
           <MdMyLocation size={22} className="text-white" />
         </button>
