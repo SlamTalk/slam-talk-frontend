@@ -75,11 +75,18 @@ const KakaoMap: FC = () => {
   const displayPlaces = (places: any) => {
     if (map) {
       const bounds = new window.kakao.maps.LatLngBounds();
+      const markerImageSrc = '/icons/marker.svg';
+      const imageSize = new window.kakao.maps.Size(48, 48);
+      const markerImage = new window.kakao.maps.MarkerImage(
+        markerImageSrc,
+        imageSize
+      );
 
       places.forEach((place: any) => {
         const marker = new window.kakao.maps.Marker({
           map,
           position: new window.kakao.maps.LatLng(place.y, place.x),
+          image: markerImage,
         });
 
         window.kakao.maps.event.addListener(marker, 'click', () => {
