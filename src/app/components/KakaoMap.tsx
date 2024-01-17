@@ -2,6 +2,7 @@
 
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { IoSearchSharp } from 'react-icons/io5';
+import { MdMyLocation } from 'react-icons/md';
 
 declare global {
   interface Window {
@@ -14,8 +15,9 @@ const KakaoMap: FC = () => {
   const modalRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<any>(null);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
-  const [, setUserLocation] = useState<any>(null);
+  const [userLocation, setUserLocation] = useState<any>(null);
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
+  const [isLocationSet, setIsLocationSet] = useState<boolean>(false);
 
   useEffect(() => {
     const loadKakaoMap = () => {
@@ -36,6 +38,7 @@ const KakaoMap: FC = () => {
               longitude
             );
             setUserLocation(userLatLng);
+            setIsLocationSet(true);
             kakaoMap.setCenter(userLatLng);
           });
         }
@@ -45,16 +48,22 @@ const KakaoMap: FC = () => {
     loadKakaoMap();
   }, []);
 
+  const moveToLocation = () => {
+    if (userLocation && map) {
+      map.setCenter(userLocation);
+    }
+  };
+
   const handleSearch = () => {
     if (!searchKeyword) {
       alert('검색어를 입력하세요.');
       return;
     }
 
+    setIsLocationSet(false);
+
     if (map) {
       const ps = new window.kakao.maps.services.Places();
-
-      // 사용자 위치 주변에서 검색
       ps.keywordSearch(
         searchKeyword,
         (data: any, status: any) => {
@@ -67,7 +76,7 @@ const KakaoMap: FC = () => {
             alert('검색 결과 중 오류가 발생했습니다.');
           }
         },
-        { location: map.getCenter() } // 현재 지도 중심을 기준으로 검색
+        { location: map.getCenter() }
       );
     }
   };
@@ -121,7 +130,7 @@ const KakaoMap: FC = () => {
       modalRef.current.style.display = 'flex';
       modalRef.current.style.alignItems = 'center';
       modalRef.current.style.justifyContent = 'center';
-      document.body.style.overflow = 'hidden'; // 스크롤 없음
+      document.body.style.overflow = 'hidden';
     }
   };
 
@@ -159,8 +168,19 @@ const KakaoMap: FC = () => {
       </div>
       <div
         ref={mapRef}
-        className="absolute left-0 right-0 top-0 z-0 h-[calc(100vh-109px)] w-full overflow-hidden"
+        className="relative h-[calc(100vh-109px)] w-full overflow-hidden"
       />
+      <div className="absolute bottom-10 right-6 z-10">
+        <button
+          aria-label="Current Location"
+          type="button"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-primary shadow-md"
+          onClick={moveToLocation}
+          disabled={!isLocationSet}
+        >
+          <MdMyLocation size={22} className="text-white" />
+        </button>
+      </div>
       {selectedPlace && (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
         <div
