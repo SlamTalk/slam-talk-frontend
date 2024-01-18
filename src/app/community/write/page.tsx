@@ -70,41 +70,58 @@ const Page = () => {
   };
 
   return (
-    <div>
-      <input placeholder="title" value={title} onChange={titleHandler} />
+    <div className="flex flex-col">
+      <div className="flex space-x-96 ">
+        <Dropdown>
+          <DropdownTrigger>
+            <Button variant="bordered">{selectedValue}</Button>
+          </DropdownTrigger>
+          <DropdownMenu
+            onAction={tagHandler}
+            aria-label="Static Actions"
+            selectionMode="single"
+            selectedKeys={selectedKeys}
+            onSelectionChange={handleSelectionChange}
+          >
+            <DropdownItem key="자유" value="free">
+              자유
+            </DropdownItem>
+            <DropdownItem key="중고 거래" value="usedtrade">
+              중고 거래
+            </DropdownItem>
+            <DropdownItem key="질문" value="question">
+              질문
+            </DropdownItem>
+            <DropdownItem key="대관 양도" value="rentaltransfer">
+              대관 양도
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+        <div className="space-x-4">
+          <button type="button">임시저장</button>
+          <button
+            className="font-bold text-orange-600"
+            type="button"
+            onClick={submitHandler}
+          >
+            작성완료
+          </button>
+        </div>
+      </div>
+
+      <input
+        className="border-b border-solid border-gray-200"
+        placeholder="title"
+        value={title}
+        onChange={titleHandler}
+      />
       <textarea
+        className="h-48 border-b border-solid border-gray-200	 "
         placeholder="contents"
         value={content}
         onChange={contentHandler}
+        style={{ resize: 'none' }}
       />
-      <Dropdown>
-        <DropdownTrigger>
-          <Button variant="bordered">{selectedValue}</Button>
-        </DropdownTrigger>
-        <DropdownMenu
-          onAction={tagHandler}
-          aria-label="Static Actions"
-          selectionMode="single"
-          selectedKeys={selectedKeys}
-          onSelectionChange={handleSelectionChange}
-        >
-          <DropdownItem key="자유" value="free">
-            자유
-          </DropdownItem>
-          <DropdownItem key="중고 거래" value="usedtrade">
-            중고 거래
-          </DropdownItem>
-          <DropdownItem key="질문" value="question">
-            질문
-          </DropdownItem>
-          <DropdownItem key="대관 양도" value="rentaltransfer">
-            대관 양도
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-      <button type="button" onClick={submitHandler}>
-        작성완료
-      </button>
     </div>
   );
 };

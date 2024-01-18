@@ -1,5 +1,6 @@
 'use client';
 
+import { Listbox, ListboxItem } from '@nextui-org/react';
 import { useParams } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 // TODO: 게시글 페이지, 게시판, 작성 페이지 , 댓글
@@ -15,21 +16,19 @@ const Page = () => {
     }
   }, [dummyData]);
   return (
-    <div>
+    <Listbox color="warning">
       {params.tag === 'all'
         ? data.map((item) => (
-            <div key={item.id}>
-              <h1>{item.title}</h1>
-            </div>
+            <ListboxItem className="h-4/5	" key={item.id}>
+              {item.title}
+            </ListboxItem>
           ))
         : data
             .filter((item) => item.tag === params.tag)
             .map((item) => (
-              <div key={item.id}>
-                <h1>{item.title}</h1>
-              </div>
+              <ListboxItem key={item.id}>{item.title}</ListboxItem>
             ))}
-    </div>
+    </Listbox>
   );
 };
 
