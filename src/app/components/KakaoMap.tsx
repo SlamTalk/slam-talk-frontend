@@ -75,11 +75,32 @@ const KakaoMap: FC = () => {
   const displayPlaces = (places: any) => {
     if (map) {
       const bounds = new window.kakao.maps.LatLngBounds();
+      const markerImageSrc = '/icons/marker-img.png';
+      const imageSize = new window.kakao.maps.Size(48);
+      const markerImage = new window.kakao.maps.MarkerImage(
+        markerImageSrc,
+        imageSize
+      );
 
       places.forEach((place: any) => {
         const marker = new window.kakao.maps.Marker({
           map,
           position: new window.kakao.maps.LatLng(place.y, place.x),
+          image: markerImage,
+        });
+
+        const content = `
+        <div class="flex items-center px-2 py-1 bg-white border border-gray-300 rounded text-sm font-medium shadow-sm ml-12">
+          ${place.place_name}
+        </div>`;
+
+        // eslint-disable-next-line no-new
+        new window.kakao.maps.CustomOverlay({
+          map,
+          position: new window.kakao.maps.LatLng(place.y, place.x),
+          content,
+          yAnchor: 1,
+          xAnchor: 0.5,
         });
 
         window.kakao.maps.event.addListener(marker, 'click', () => {
