@@ -1,21 +1,17 @@
 import React from 'react';
-import Image from 'next/image';
-import { PiBell } from 'react-icons/pi';
-import { HiOutlineUserCircle } from 'react-icons/hi2';
+import { Anton } from 'next/font/google';
+import { PiBell, PiUserCircle } from 'react-icons/pi';
+
+const anton = Anton({ weight: '400', subsets: ['latin'] });
 
 const Header = () => (
-  <div className="mt-4 flex h-12 items-center justify-between border-b-1 pl-4">
-    <div>
-      <Image
-        src="/logo/slamtalk_logo.png"
-        alt="slamtalk-logo"
-        width={100}
-        height={50}
-      />
+  <div className="z-30 mt-1 flex h-[61px] items-center justify-between border-b-1 pl-4">
+    <div className={`${anton.className} text-2xl`}>
+      <div>SLAM TALK</div>
     </div>
     <div className="flex space-x-4 pr-4">
-      <HiOutlineUserCircle size={28} />
-      <PiBell size={28} />
+      <PiUserCircle size={24} />
+      <PiBell size={24} />
     </div>
   </div>
 );
