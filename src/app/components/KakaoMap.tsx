@@ -2,6 +2,7 @@
 
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { IoSearchSharp } from 'react-icons/io5';
+import { MdMyLocation } from 'react-icons/md';
 
 declare global {
   interface Window {
@@ -14,36 +15,56 @@ const KakaoMap: FC = () => {
   const modalRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<any>(null);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
-  const [, setUserLocation] = useState<any>(null);
+  const [userLocation, setUserLocation] = useState<any>(null);
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
+  const [, setIsLoading] = useState<boolean>(true);
+  const [mapLevel] = useState(3); // 초기 확대 레벨 설정
 
   useEffect(() => {
     const loadKakaoMap = () => {
       window.kakao.maps.load(() => {
-        const options = {
-          center: new window.kakao.maps.LatLng(37.5665, 126.978),
-          level: 3,
-        };
-
-        const kakaoMap = new window.kakao.maps.Map(mapRef.current, options);
-        setMap(kakaoMap);
-
         if ('geolocation' in navigator) {
-          navigator.geolocation.getCurrentPosition((position) => {
-            const { latitude, longitude } = position.coords;
-            const userLatLng = new window.kakao.maps.LatLng(
-              latitude,
-              longitude
-            );
-            setUserLocation(userLatLng);
-            kakaoMap.setCenter(userLatLng);
-          });
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords;
+              const userLatLng = new window.kakao.maps.LatLng(
+                latitude,
+                longitude
+              );
+              setUserLocation(userLatLng);
+              const options = { center: userLatLng, level: 3 };
+              const kakaoMap = new window.kakao.maps.Map(
+                mapRef.current,
+                options
+              );
+              setMap(kakaoMap);
+              setIsLoading(false);
+            },
+            () => {
+              // 사용자 위치를 가져오는데 실패했을 때 처리
+              alert('위치 정보를 가져오는데 실패했습니다.');
+              setIsLoading(false);
+            }
+          );
+        } else {
+          // Geolocation API를 지원하지 않는 경우 처리
+          alert('이 브라우저는 위치 서비스를 지원하지 않습니다.');
+          setIsLoading(false);
         }
       });
     };
 
     loadKakaoMap();
   }, []);
+
+  const moveToLocation = () => {
+    if (userLocation && map) {
+      map.setLevel(mapLevel);
+      map.panTo(userLocation);
+    } else {
+      alert('사용자 위치 정보가 설정되지 않았습니다.');
+    }
+  };
 
   const handleSearch = () => {
     if (!searchKeyword) {
@@ -53,8 +74,6 @@ const KakaoMap: FC = () => {
 
     if (map) {
       const ps = new window.kakao.maps.services.Places();
-
-      // 사용자 위치 주변에서 검색
       ps.keywordSearch(
         searchKeyword,
         (data: any, status: any) => {
@@ -67,7 +86,7 @@ const KakaoMap: FC = () => {
             alert('검색 결과 중 오류가 발생했습니다.');
           }
         },
-        { location: map.getCenter() } // 현재 지도 중심을 기준으로 검색
+        { location: map.getCenter() }
       );
     }
   };
@@ -121,7 +140,7 @@ const KakaoMap: FC = () => {
       modalRef.current.style.display = 'flex';
       modalRef.current.style.alignItems = 'center';
       modalRef.current.style.justifyContent = 'center';
-      document.body.style.overflow = 'hidden'; // 스크롤 없음
+      document.body.style.overflow = 'hidden';
     }
   };
 
@@ -159,8 +178,18 @@ const KakaoMap: FC = () => {
       </div>
       <div
         ref={mapRef}
-        className="absolute left-0 right-0 top-0 z-0 h-[calc(100vh-109px)] w-full overflow-hidden"
+        className="relative h-[calc(100vh-109px)] w-full overflow-hidden"
       />
+      <div className="absolute bottom-10 right-6 z-10">
+        <button
+          aria-label="Current Location"
+          type="button"
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-primary shadow-md"
+          onClick={moveToLocation}
+        >
+          <MdMyLocation size={22} className="text-white" />
+        </button>
+      </div>
       {selectedPlace && (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
         <div
