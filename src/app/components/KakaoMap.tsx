@@ -176,10 +176,7 @@ const KakaoMap: FC = () => {
           <IoSearchSharp size={20} className="text-gray-400 hover:text-black" />
         </button>
       </div>
-      <div
-        ref={mapRef}
-        className="relative h-[calc(100vh-109px)] w-full overflow-hidden"
-      />
+      <div ref={mapRef} className="relative h-[calc(100vh-109px)] w-full" />
       <div className="absolute bottom-10 right-6 z-10">
         <button
           aria-label="Current Location"
