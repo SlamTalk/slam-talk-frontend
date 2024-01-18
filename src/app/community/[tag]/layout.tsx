@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import '@/styles/globals.css';
+import Page from './page';
 
 const Layout = () => (
   <div className="border-solid">
@@ -13,6 +14,7 @@ const Layout = () => (
     <button type="button">
       <Link href="/community/write">+글 작성하기</Link>
     </button>
+    <Page />
   </div>
 );
 

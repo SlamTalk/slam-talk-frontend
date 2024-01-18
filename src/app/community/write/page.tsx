@@ -32,9 +32,20 @@ const Page = () => {
     setContent(e.target.value);
   };
   const tagHandler = (key: Key) => {
-    console.log({ tag });
-    setTag(key.toString());
+    if (key === '자유') {
+      setTag('free');
+    }
+    if (key === '질문') {
+      setTag('question');
+    }
+    if (key === '중고 거래') {
+      setTag('usedtrade');
+    }
+    if (key === '대관 양도') {
+      setTag('rentaltransfer');
+    }
   };
+
   const selectedValue = useMemo(
     () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
     [selectedKeys]
@@ -80,11 +91,7 @@ const Page = () => {
           <DropdownItem key="자유" value="free">
             자유
           </DropdownItem>
-          <DropdownItem
-            key="중고 거래
-"
-            value="usedtrade"
-          >
+          <DropdownItem key="중고 거래" value="usedtrade">
             중고 거래
           </DropdownItem>
           <DropdownItem key="질문" value="question">
