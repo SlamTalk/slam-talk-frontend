@@ -1,9 +1,10 @@
 'use client';
 
 import React, { FC, useEffect, useRef, useState } from 'react';
+import { Button } from '@nextui-org/button';
 import { IoSearchSharp } from 'react-icons/io5';
 import { MdMyLocation } from 'react-icons/md';
-import { Button } from '@nextui-org/button';
+import { BiSolidLocationPlus } from 'react-icons/bi';
 
 declare global {
   interface Window {
@@ -177,8 +178,8 @@ const KakaoMap: FC = () => {
           <IoSearchSharp size={20} className="text-gray-400 hover:text-black" />
         </button>
       </div>
-      <div ref={mapRef} className="relative h-[calc(100vh-109px)] w-full" />
-      <div className="absolute bottom-10 right-6 z-10">
+      <div ref={mapRef} className="w-ful relative h-[calc(100vh-109px)]" />
+      <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
         <Button
           isIconOnly
           aria-label="Current Location"
@@ -187,6 +188,15 @@ const KakaoMap: FC = () => {
           onClick={moveToLocation}
         >
           <MdMyLocation size={22} className="text-white" />
+        </Button>
+        <Button
+          startContent={<BiSolidLocationPlus size={20} />}
+          aria-label="Court Report"
+          type="button"
+          className="justify-center rounded-full bg-primary text-white shadow-md"
+          onClick={moveToLocation}
+        >
+          농구장 제보
         </Button>
       </div>
       {selectedPlace && (
