@@ -4,13 +4,28 @@ import { PiChatsCircle, PiMapPinBold } from 'react-icons/pi';
 import { AiOutlineHome } from 'react-icons/ai';
 
 const Footer = () => (
-  <div className="footer fixed bottom-0 w-full border-t-1 p-4">
+  <div className="footer fixed bottom-0 z-30 h-[48px] w-full border-t-1 bg-white pt-[4px]">
     <div className="flex items-center justify-around">
-      <AiOutlineHome size={28} />
-      <TbClipboardText size={28} />
-      <PiMapPinBold size={28} />
-      <PiChatsCircle size={28} />
-      <TbMoodSearch size={28} />
+      <div className="grid place-items-center">
+        <AiOutlineHome size={24} />
+        <div className="text-xs">홈</div>
+      </div>
+      <div className="grid place-items-center">
+        <TbClipboardText size={24} />
+        <div className="text-xs">커뮤니티</div>
+      </div>
+      <div className="grid place-items-center">
+        <PiMapPinBold size={24} />
+        <div className="text-xs">농구장 지도</div>
+      </div>
+      <div className="grid place-items-center">
+        <PiChatsCircle size={24} />
+        <div className="text-xs">채팅</div>
+      </div>
+      <div className="grid place-items-center">
+        <TbMoodSearch size={24} />
+        <div className="text-xs">매칭</div>
+      </div>
     </div>
   </div>
 );
