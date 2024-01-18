@@ -3,6 +3,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { IoSearchSharp } from 'react-icons/io5';
 import { MdMyLocation } from 'react-icons/md';
+import { Button } from '@nextui-org/button';
 
 declare global {
   interface Window {
@@ -178,14 +179,15 @@ const KakaoMap: FC = () => {
       </div>
       <div ref={mapRef} className="relative h-[calc(100vh-109px)] w-full" />
       <div className="absolute bottom-10 right-6 z-10">
-        <button
+        <Button
+          isIconOnly
           aria-label="Current Location"
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-primary shadow-md"
+          className="justify-center rounded-full bg-primary shadow-md"
           onClick={moveToLocation}
         >
           <MdMyLocation size={22} className="text-white" />
-        </button>
+        </Button>
       </div>
       {selectedPlace && (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
