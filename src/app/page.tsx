@@ -4,7 +4,7 @@ import Image from 'next/image';
 const Home = () => (
   <div>
     <div className="m-auto grid max-w-[568px] overflow-y-auto pb-[48px] scrollbar-hide">
-      <div className="mt-4 rounded-md bg-gray-200 px-8">
+      <div className="mt-4 rounded-md bg-gray-100 px-8">
         <div className="mt-2 text-center text-lg font-bold">
           임박한 약속이 있어요!
         </div>
@@ -37,7 +37,7 @@ const Home = () => (
       <div>
         <div className="text-lg font-bold">경기할 팀을 찾고 있어요!</div>
         <div className="grid">
-          <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-200 p-1 px-3">
+          <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-100 p-1 px-3">
             <div className="col-span-4 truncate text-sm">
               동탄 오산 1월 19일 초청팀 구합니다.
             </div>
@@ -51,7 +51,7 @@ const Home = () => (
               〉
             </div>
           </div>
-          <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-200 p-1 px-3">
+          <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-100 p-1 px-3">
             <div className="col-span-4 truncate text-sm">
               동탄 오산 1월 19일 초청팀 구합니다.
             </div>
@@ -65,7 +65,7 @@ const Home = () => (
               〉
             </div>
           </div>
-          <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-200 p-1 px-3">
+          <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-100 p-1 px-3">
             <div className="col-span-4 truncate text-sm">
               동탄 오산 1월 19일 초청팀 구합니다.
             </div>
@@ -83,7 +83,7 @@ const Home = () => (
       </div>
       <div>
         <div className="mt-4 text-lg font-bold">같이 농구할 사람을 구해요!</div>
-        <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-200 p-1 px-3">
+        <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-100 p-1 px-3">
           <div className="col-span-4 truncate text-sm">
             [위례/송파] 1/20(토) 게스트 모집
           </div>
@@ -97,7 +97,7 @@ const Home = () => (
             〉
           </div>
         </div>
-        <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-200 p-1 px-3">
+        <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-100 p-1 px-3">
           <div className="col-span-4 truncate text-sm">
             [마포/상암]상암체육관(정규 코트) 1월 18일(목)15:40~18:10 게스트 모집
           </div>
@@ -111,7 +111,7 @@ const Home = () => (
             〉
           </div>
         </div>
-        <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-200 p-1 px-3">
+        <div className="mt-2 grid max-w-[568px] grid-cols-12 items-center gap-4 rounded bg-gray-100 p-1 px-3">
           <div className="col-span-4 truncate text-sm">
             [부천,인천] 부천JW스포츠센터 1월 20일(토) 아침 6시~9시 게스트 초청
             드립니다
