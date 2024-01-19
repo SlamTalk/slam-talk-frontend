@@ -1,8 +1,11 @@
 'use client';
 
 import React, { FC, useEffect, useRef, useState } from 'react';
+import { Button } from '@nextui-org/button';
 import { IoSearchSharp } from 'react-icons/io5';
 import { MdMyLocation } from 'react-icons/md';
+import { BiSolidLocationPlus } from 'react-icons/bi';
+import CourtReport from './CourtReport';
 
 declare global {
   interface Window {
@@ -19,6 +22,7 @@ const KakaoMap: FC = () => {
   const [selectedPlace, setSelectedPlace] = useState<any>(null);
   const [, setIsLoading] = useState<boolean>(true);
   const [mapLevel] = useState(3); // 초기 확대 레벨 설정
+  const [isCourtReportVisible, setIsCourtReportVisible] = useState(false);
 
   useEffect(() => {
     const loadKakaoMap = () => {
@@ -64,6 +68,10 @@ const KakaoMap: FC = () => {
     } else {
       alert('사용자 위치 정보가 설정되지 않았습니다.');
     }
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchKeyword(e.target.value);
   };
 
   const handleSearch = () => {
@@ -150,10 +158,18 @@ const KakaoMap: FC = () => {
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  const showCourtReport = () => {
+    setIsCourtReportVisible(true);
+  };
+
+  const hideCourtReport = () => {
+    setIsCourtReportVisible(false);
   };
 
   return (
@@ -164,8 +180,8 @@ const KakaoMap: FC = () => {
           placeholder="장소 검색"
           className="flex-grow rounded-md border-0 p-2 focus:outline-none focus:ring-0"
           value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
-          onKeyPress={handleKeyPress}
+          onChange={handleSearchChange}
+          onKeyDown={handleKeyDown}
         />
         <button
           aria-label="Search"
@@ -176,22 +192,39 @@ const KakaoMap: FC = () => {
           <IoSearchSharp size={20} className="text-gray-400 hover:text-black" />
         </button>
       </div>
-      <div ref={mapRef} className="relative h-[calc(100vh-109px)] w-full" />
-      <div className="absolute bottom-10 right-6 z-10">
-        <button
+      <div ref={mapRef} className="relative h-[calc(100vh-109px)] w-full">
+        {isCourtReportVisible && (
+          <CourtReport
+            isVisible={isCourtReportVisible}
+            onClose={hideCourtReport}
+          />
+        )}
+      </div>
+      <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
+        <Button
+          isIconOnly
           aria-label="Current Location"
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-primary shadow-md"
+          className="justify-center rounded-full bg-primary shadow-md"
           onClick={moveToLocation}
         >
           <MdMyLocation size={22} className="text-white" />
-        </button>
+        </Button>
+        <Button
+          startContent={<BiSolidLocationPlus size={20} />}
+          aria-label="Court Report"
+          type="button"
+          className="justify-center rounded-full bg-primary text-white shadow-md"
+          onClick={showCourtReport}
+        >
+          농구장 제보
+        </Button>
       </div>
       {selectedPlace && (
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
         <div
           ref={modalRef}
-          className="fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-black bg-opacity-50"
+          className="fixed left-0 top-0 z-40 flex h-full w-full items-center justify-center bg-black bg-opacity-50"
           onClick={closeModal}
           style={{ display: 'none' }}
         >
