@@ -2,6 +2,9 @@ import React from 'react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
+import Script from 'next/script';
+import Header from './components/Header';
+import Footer from './components/Footer';
 import Providers from './providers';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -13,8 +16,18 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang="en" className="light" suppressHydrationWarning>
-    <body className={inter.className}>
-      <Providers>{children}</Providers>
+    <head>
+      <Script
+        strategy="beforeInteractive"
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_KEY}&autoload=false&libraries=services`}
+      />
+    </head>
+    <body className={`${inter.className} flex min-h-screen flex-col`}>
+      <div className="flex-grow">
+        <Header />
+        <Providers>{children}</Providers>
+        <Footer />
+      </div>
     </body>
   </html>
 );

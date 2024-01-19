@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  min-width: 320px; /* iPhone 6/7/8/SE2 크기: 375px, 최소 모바일: 320px(SE1) */
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 640px은 일반적으로 작은 태블릿이나 큰 스마트폰 화면 크기 */
+@media (max-width: 640px) {
+  body {
+    max-width: 100%;
+  }
+}
+
+.footer {
+  max-width: 600px;
+  margin: 0 auto;
+}
