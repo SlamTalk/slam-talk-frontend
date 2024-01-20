@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import { Textarea, Input, RadioGroup, Radio, Button } from '@nextui-org/react';
 import { IoIosClose } from 'react-icons/io';
 import { FaPhone } from 'react-icons/fa';
@@ -16,7 +18,37 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
   onClose,
   selectedPlace,
 }) => {
-  console.log(selectedPlace);
+  const [otherInfo, setOtherInfo] = useState<string>(
+    '주차하기 어려워요. 대중교통 이용 추천해요.'
+  );
+  const [isInfoModified, setIsInfoModified] = useState<boolean>(false);
+
+  // api 개발 완료 후 주석 처리 부분 연결 예정
+  useEffect(() => {
+    // otherInfo 상태가 변경될 때마다 isInfoModified 상태를 설정
+    if (otherInfo !== selectedPlace.otherInfo) {
+      setIsInfoModified(true);
+    } else {
+      setIsInfoModified(false);
+    }
+  }, [otherInfo, selectedPlace]);
+
+  const handleSaveClick = async () => {
+    // try {
+    //   const response = await axios.post('/api/map/marker/{court_id}/info/save', {
+    //     placeId: selectedPlace.id,
+    //     otherInfo,
+    //   });
+    //   console.log('데이터 저장 성공:', response.data);
+    //   setIsInfoModified(false); // 저장 후 isInfoModified를 false로 설정하여 저장 버튼 숨김
+    // } catch (error) {
+    //   console.error('데이터 저장 실패:', error);
+    // }
+  };
+
+  const handleOtherInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOtherInfo(e.target.value);
+  };
 
   const handlePhoneClick = () => {
     if (selectedPlace.phone) {
@@ -42,6 +74,16 @@ shadow-md transition-all duration-300  ease-in-out ${isVisible ? '' : 'hidden'}`
             alt="농구장 사진"
             src="/images/court.svg"
           />
+          {isInfoModified && (
+            <Button
+              size="sm"
+              className="bg-gradient absolute right-9 top-3"
+              onClick={handleSaveClick}
+              aria-label="Save"
+            >
+              저장
+            </Button>
+          )}
           <Button
             isIconOnly
             className="bg-gradient absolute right-2 top-2"
@@ -139,10 +181,11 @@ shadow-md transition-all duration-300  ease-in-out ${isVisible ? '' : 'hidden'}`
             </RadioGroup>
             <div className="w-full">
               <Textarea
-                isReadOnly
                 variant="bordered"
                 label="기타 정보"
-                defaultValue="주차하기 어려워요. 대중교통 이용 추천해요."
+                defaultValue={otherInfo}
+                value={otherInfo}
+                onChange={handleOtherInfoChange}
               />
             </div>
           </div>
