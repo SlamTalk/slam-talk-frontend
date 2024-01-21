@@ -26,38 +26,41 @@ const KakaoMap: FC = () => {
   const [isCourtDetailsVisible, setIsCourtDetailsVisible] = useState(false);
 
   useEffect(() => {
-    const loadKakaoMap = () => {
-      window.kakao.maps.load(() => {
-        if ('geolocation' in navigator) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const { latitude, longitude } = position.coords;
-              const userLatLng = new window.kakao.maps.LatLng(
-                latitude,
-                longitude
-              );
-              setUserLocation(userLatLng);
-              const options = { center: userLatLng, level: mapLevel };
-              const kakaoMap = new window.kakao.maps.Map(
-                mapRef.current,
-                options
-              );
-              setMap(kakaoMap);
-              setIsLoading(false);
-            },
-            () => {
-              alert('위치 정보를 가져오는데 실패했습니다.');
-              setIsLoading(false);
-            }
-          );
-        } else {
-          alert('이 브라우저는 위치 서비스를 지원하지 않습니다.');
+    if (!window.kakao || !window.kakao.maps) {
+      console.error('Kakao Maps API를 불러오는데 실패했습니다.');
+      return;
+    }
+
+    window.kakao.maps.load(() => {
+      if (!('geolocation' in navigator)) {
+        alert('이 브라우저는 위치 서비스를 지원하지 않습니다.');
+        setIsLoading(false);
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const userLatLng = new window.kakao.maps.LatLng(latitude, longitude);
+          setUserLocation(userLatLng);
+          const options = { center: userLatLng, level: mapLevel };
+          const kakaoMap = new window.kakao.maps.Map(mapRef.current, options);
+          setMap(kakaoMap);
+          setIsLoading(false);
+        },
+        (error) => {
+          console.error(`Error: ${error.message}`);
+          if (error.code === error.PERMISSION_DENIED) {
+            alert(
+              '이 기능을 사용하려면 기기의 위치 서비스를 활성화해야 합니다. 설정에서 위치 서비스를 켜주세요.'
+            );
+          } else {
+            alert('위치 정보를 가져오는데 실패했습니다.');
+          }
           setIsLoading(false);
         }
-      });
-    };
-
-    loadKakaoMap();
+      );
+    });
   }, [mapLevel]);
 
   const moveToLocation = () => {
