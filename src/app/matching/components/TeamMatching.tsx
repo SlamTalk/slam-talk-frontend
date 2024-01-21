@@ -147,10 +147,12 @@ const TeamMatching = () => {
       {filteredPosts.map((post) => (
         <PostCard key={post.title} {...post} />
       ))}
-      <div className="fixed bottom-[54px] md:left-[calc(50%-400px)] md:right-[16px]">
-        <Button color="primary" onClick={handleNewPostClick}>
-          새 모집글 작성
-        </Button>
+      <div className="fixed bottom-14 w-full max-w-[600px]">
+        <div className="mr-4 flex justify-end">
+          <Button color="primary" onClick={handleNewPostClick}>
+            새 모집글 작성
+          </Button>
+        </div>
       </div>
     </div>
   );
