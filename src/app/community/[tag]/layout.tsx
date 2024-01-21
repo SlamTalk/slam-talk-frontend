@@ -4,11 +4,12 @@ import Link from 'next/link';
 import React from 'react';
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
-
+import { FaPlus } from 'react-icons/fa';
 import Page from './page';
 
 const Layout = () => {
   const router = useRouter();
+
   return (
     <div className="flex h-svh flex-col">
       <div className="flex justify-center space-x-10">
@@ -53,6 +54,7 @@ const Layout = () => {
       <Button
         aria-label="Court Report"
         type="button"
+        startContent={<FaPlus />}
         className="justify-center rounded-full bg-primary text-white shadow-md"
         onClick={() => {
           router.push('/community/write');

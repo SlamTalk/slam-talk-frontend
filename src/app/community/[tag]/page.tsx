@@ -37,6 +37,7 @@ export default Page;
 interface ICommunityItem {
   id: number;
   title: string;
+  content: string;
   tag: string;
   // 추가 필요한 속성들을 정의해주세요.
 }
