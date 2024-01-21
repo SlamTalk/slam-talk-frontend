@@ -13,7 +13,7 @@ const anton = Anton({ weight: '400', subsets: ['latin'] });
 
 // [TODO] 뒤로 가기 구현 ✅
 // 링크 연결 ✅
-// 헤더 마이페이지 아이콘 변경, 아이콘별 링크 설정
+// 헤더 마이페이지 아이콘 변경 ✅
 const Login = () => {
   const router = useRouter();
 
