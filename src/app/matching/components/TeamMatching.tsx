@@ -55,7 +55,13 @@ const posts: Post[] = [
   },
 ];
 
-const PostCard: React.FC<Post> = ({ title, date, type, location, level }) => (
+const TeamPostCard: React.FC<Post> = ({
+  title,
+  date,
+  type,
+  location,
+  level,
+}) => (
   <Card className="m-3">
     <div className="p-4">
       <h4 className="text-md font-bold">{title}</h4>
@@ -145,7 +151,7 @@ const TeamMatching = () => {
         </div>
       </div>
       {filteredPosts.map((post) => (
-        <PostCard key={post.title} {...post} />
+        <TeamPostCard key={post.title} {...post} />
       ))}
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
