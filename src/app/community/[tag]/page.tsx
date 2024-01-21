@@ -2,6 +2,7 @@
 
 import { Listbox, ListboxItem } from '@nextui-org/react';
 import { useParams } from 'next/navigation';
+
 import React, { useState, useEffect } from 'react';
 // TODO: 게시글 페이지, 게시판, 작성 페이지 , 댓글
 
@@ -19,7 +20,7 @@ const Page = () => {
     <Listbox color="warning">
       {params.tag === 'all'
         ? data.map((item) => (
-            <ListboxItem className="h-4/5	" key={item.id}>
+            <ListboxItem className="h-4/5" key={item.id}>
               {item.title}
             </ListboxItem>
           ))
