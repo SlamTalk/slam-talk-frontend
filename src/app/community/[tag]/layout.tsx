@@ -52,7 +52,7 @@ const Layout = () => {
       <Page />
 
       <Button
-        aria-label="Court Report"
+        aria-label="Write new post"
         type="button"
         startContent={<FaPlus />}
         className="justify-center rounded-full bg-primary text-white shadow-md"
