@@ -10,7 +10,11 @@ const config: Config = {
   ],
   darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        md: '600px', // md 브레이크포인트를 600px로 설정
+      },
+    },
   },
   plugins: [
     nextui({
