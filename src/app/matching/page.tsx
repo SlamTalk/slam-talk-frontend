@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from './layout';
+import MatchingLayout from './layout';
 
-const MatchingPage = () => <Layout />;
+const MatchingPage = () => <MatchingLayout />;
 
 export default MatchingPage;
