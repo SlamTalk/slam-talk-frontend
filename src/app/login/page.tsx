@@ -11,9 +11,6 @@ import GoogleImg from './Google';
 
 const anton = Anton({ weight: '400', subsets: ['latin'] });
 
-// [TODO] 뒤로 가기 구현 ✅
-// 링크 연결 ✅
-// 헤더 마이페이지 아이콘 변경 ✅
 const Login = () => {
   const router = useRouter();
 
@@ -46,7 +43,7 @@ const Login = () => {
           <Link href="/login/kakao">
             <Button
               radius="full"
-              className="relative mb-3 w-full min-w-80 bg-kakao text-sm font-bold text-black shadow-md md:w-96"
+              className="relative mb-3 w-full min-w-80 bg-kakao text-sm font-bold text-black shadow-md dark:shadow-slate-500 md:w-96"
             >
               <div className="absolute left-4">
                 <KakaoImg />
@@ -57,7 +54,7 @@ const Login = () => {
           <Link href="/login/google">
             <Button
               radius="full"
-              className="relative mb-2.5 w-full min-w-80 border-1 border-black bg-background font-bold text-black shadow-md md:w-96"
+              className="relative mb-2.5 w-full min-w-80 border-1 border-black bg-white font-bold text-black shadow-md dark:shadow-slate-500 md:w-96"
             >
               <div className="absolute left-4">
                 <GoogleImg />
@@ -66,7 +63,7 @@ const Login = () => {
             </Button>
           </Link>
         </div>
-        <div className="mt-5 flex gap-3 align-middle text-sm text-gray-500">
+        <div className="mt-5 flex gap-3 align-middle text-sm text-gray-400">
           <Link href="/signup">
             <p>이메일로 가입</p>
           </Link>
