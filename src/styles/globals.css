@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  min-width: 320px; /* iPhone 6/7/8/SE2 크기: 375px, 최소 모바일: 320px(SE1) */
+  min-width: 320px;
   max-width: 600px;
   margin: 0 auto;
 }

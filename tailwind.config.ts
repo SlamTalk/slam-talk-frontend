@@ -11,8 +11,12 @@ const config: Config = {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        kakao: '#FEE500',
+      },
       screens: {
-        md: '600px', // md 브레이크포인트를 600px로 설정
+        sm: { max: '499px' }, // 499px까지는 sm으로 적용
+        md: '600px', // 600px 이상의 화면에서 고정
       },
     },
   },
