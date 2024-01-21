@@ -12,7 +12,7 @@ import GoogleImg from './Google';
 const anton = Anton({ weight: '400', subsets: ['latin'] });
 
 // [TODO] 뒤로 가기 구현 ✅
-// 링크 연결
+// 링크 연결 ✅
 // 헤더 마이페이지 아이콘 변경, 아이콘별 링크 설정
 const Login = () => {
   const router = useRouter();
@@ -43,24 +43,28 @@ const Login = () => {
           SLAM TALK
         </div>
         <div className="flex flex-col font-semibold">
-          <Button
-            radius="full"
-            className="relative mb-3 w-full min-w-80 bg-kakao text-sm font-bold text-black shadow-md md:w-96"
-          >
-            <div className="absolute left-4">
-              <KakaoImg />
-            </div>
-            <span className="ml-3">카카오로 3초만에 로그인하기</span>
-          </Button>
-          <Button
-            radius="full"
-            className="relative mb-2.5 w-full min-w-80 border-1 border-black bg-background font-bold text-black shadow-md md:w-96"
-          >
-            <div className="absolute left-4">
-              <GoogleImg />
-            </div>
-            <span className="ml-3">구글로 간편하게 로그인하기</span>
-          </Button>
+          <Link href="/login/kakao">
+            <Button
+              radius="full"
+              className="relative mb-3 w-full min-w-80 bg-kakao text-sm font-bold text-black shadow-md md:w-96"
+            >
+              <div className="absolute left-4">
+                <KakaoImg />
+              </div>
+              <span className="ml-3">카카오로 3초만에 로그인하기</span>
+            </Button>
+          </Link>
+          <Link href="/login/google">
+            <Button
+              radius="full"
+              className="relative mb-2.5 w-full min-w-80 border-1 border-black bg-background font-bold text-black shadow-md md:w-96"
+            >
+              <div className="absolute left-4">
+                <GoogleImg />
+              </div>
+              <span className="ml-3">구글로 간편하게 로그인하기</span>
+            </Button>
+          </Link>
         </div>
         <div className="mt-5 flex gap-3 align-middle text-sm text-gray-500">
           <Link href="/signup">
