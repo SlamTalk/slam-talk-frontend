@@ -5,7 +5,7 @@ import { Tabs, Tab } from '@nextui-org/react';
 import TeamMatching from './components/TeamMatching';
 import MateMatching from './components/MateMatching';
 
-const Layout = () => {
+const MatchingLayout = () => {
   const [selectedTab, setSelectedTab] = useState<string>('team');
 
   const handleSelectionChange = (key: React.Key) => {
@@ -32,4 +32,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default MatchingLayout;
