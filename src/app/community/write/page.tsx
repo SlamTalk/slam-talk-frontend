@@ -71,7 +71,7 @@ const Page = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex space-x-96 ">
+      <div className="flex space-x-96">
         <Dropdown>
           <DropdownTrigger>
             <Button variant="bordered">{selectedValue}</Button>
@@ -116,7 +116,7 @@ const Page = () => {
         onChange={titleHandler}
       />
       <textarea
-        className="h-48 border-b border-solid border-gray-200	 "
+        className="h-48 border-b border-solid border-gray-200"
         placeholder="contents"
         value={content}
         onChange={contentHandler}
