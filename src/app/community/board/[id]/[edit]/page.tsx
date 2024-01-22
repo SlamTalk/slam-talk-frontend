@@ -20,12 +20,16 @@ const Page = () => {
   const editorHandler = () => {
     matchedData.title = editedTitle;
     matchedData.content = editedContent;
-    communityData.splice(matchedData.id, 1, {
+    communityData.splice(matchedData.id - 1, 1, {
       id: matchedData.id,
       title: editedTitle,
       tag: matchedData.tag,
       content: editedContent,
     });
+    localStorage.setItem('community', JSON.stringify(communityData));
+  };
+  const deleteHandler = () => {
+    communityData.splice(matchedData.id - 1, 1);
     localStorage.setItem('community', JSON.stringify(communityData));
   };
   return (
@@ -73,7 +77,7 @@ const Page = () => {
                 >
                   수정 완료
                 </Button>
-                <Button>삭제</Button>
+                <Button onClick={deleteHandler}>삭제</Button>
               </div>
             </div>
           </div>
