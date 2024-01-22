@@ -1,12 +1,13 @@
 'use client';
 
 import { Listbox, ListboxItem } from '@nextui-org/react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 import React, { useState, useEffect } from 'react';
 // TODO: 게시글 페이지, 게시판, 작성 페이지 , 댓글
 
 const Page = () => {
+  const router = useRouter();
   const params = useParams<{ tag: string }>();
   const [data, setData] = useState<ICommunityItem[]>([
     {
@@ -30,12 +31,20 @@ const Page = () => {
       setData(JSON.parse(dummyData));
     }
   }, [data]);
-
+  const LinkHandler = (e: React.MouseEvent<HTMLLIElement>) => {
+    router.push(`/community/board/${e.currentTarget.value}`);
+  };
   return (
     <Listbox color="warning">
       {params.tag === 'all'
         ? data.map((item) => (
-            <ListboxItem className="h-4/5" key={item.id}>
+            <ListboxItem
+              onClick={LinkHandler}
+              className="h-4/5"
+              key={item.id}
+              value={item.id}
+              aria-labelledby={`title-${item.id}`}
+            >
               {item.title}
             </ListboxItem>
           ))
