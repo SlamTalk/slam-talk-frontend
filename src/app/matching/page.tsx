@@ -1,5 +1,5 @@
 import React from 'react';
 
-const MatchingPage = () => <MatchingLayout />;
+const MatchingPage = () => <div />;
 
 export default MatchingPage;
