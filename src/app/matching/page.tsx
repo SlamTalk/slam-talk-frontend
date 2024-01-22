@@ -1,4 +1,5 @@
 import React from 'react';
 
-const Matching = () => <div>Matching</div>;
-export default Matching;
+const MatchingPage = () => <div />;
+
+export default MatchingPage;
