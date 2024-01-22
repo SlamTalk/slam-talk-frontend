@@ -50,18 +50,21 @@ const Layout = () => {
       <input className="border-solid" placeholder="검색어를 입력해주세요" />
 
       <Page />
-
-      <Button
-        aria-label="Write new post"
-        type="button"
-        startContent={<FaPlus />}
-        className="justify-center rounded-full bg-primary text-white shadow-md"
-        onClick={() => {
-          router.push('/community/write');
-        }}
-      >
-        글 작성하기
-      </Button>
+      <div className="fixed bottom-14 w-full max-w-[600px]">
+        <div className="mr-4 flex justify-end">
+          <Button
+            aria-label="Write new post"
+            type="button"
+            startContent={<FaPlus />}
+            className="rounded-full bg-primary text-white shadow-md"
+            onClick={() => {
+              router.push('/community/write');
+            }}
+          >
+            글 작성하기
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
