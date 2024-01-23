@@ -8,11 +8,13 @@ import {
   validatePassword,
 } from '@/utils/validations';
 import { AxiosError } from 'axios';
+import { useRouter } from 'next/router';
 import { EyeSlashFilledIcon } from '../login/email/EyeSlashFilledIcon';
 import { EyeFilledIcon } from '../login/email/EyeFilledIcon';
 import axiosInstance from '../api/axiosInstance';
 
 const SignUp = () => {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
@@ -59,6 +61,7 @@ const SignUp = () => {
 
       if (response.status === 200) {
         alert('감사합니다. 회원가입에 성공했습니다!');
+        router.push('/main');
       }
     } catch (error) {
       if (error instanceof AxiosError) {
