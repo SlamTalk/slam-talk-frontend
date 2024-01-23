@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import axios, { AxiosError } from 'axios';
 import useAuthStore from '@/store/authStore';
 // import { useRouter } from 'next/navigation';
