@@ -40,14 +40,15 @@ const Page = () => {
         <div>
           <div className="flex items-center justify-center border-b-2">
             <Button
-              className="flex-none border-2"
+              className="flex-none rounded-md focus:outline-none"
               isIconOnly
               color="default"
+              variant="ghost"
               onClick={() => {
                 router.push('/community/all');
               }}
             >
-              <IoIosArrowBack />
+              <IoIosArrowBack className="text-gray-600 hover:text-black" />
             </Button>
 
             <h1 className="flex-grow text-center">{matchedData.title}</h1>
@@ -56,31 +57,41 @@ const Page = () => {
           <div className="flex h-40 flex-col justify-between border-b-2">
             <p>{matchedData.content}</p>
             <div className="flex justify-between">
-              <Button isIconOnly>
+              <Button aria-label="like button" variant="ghost" isIconOnly>
                 <FaHeart />
               </Button>
               <div>
                 <Button
+                  variant="ghost"
+                  className=""
                   onClick={() => {
                     router.push(`/community/board/${params.id}/edit`);
                   }}
                 >
                   수정
                 </Button>
-                <Button>삭제</Button>
+                <Button variant="ghost">삭제</Button>
               </div>
             </div>
           </div>
-          <input
-            placeholder="댓글을 입력해주세요"
-            value={comment}
-            onChange={(e) => {
-              setComment(e.target.value);
-            }}
-          />
-          <button type="button" onClick={CommentHandler}>
-            입력
-          </button>
+          <div className="flex">
+            <input
+              placeholder="댓글을 입력해주세요"
+              className="w-11/12 rounded-md bg-background p-1 p-2 shadow-md focus:outline-none focus:ring-0"
+              value={comment}
+              onChange={(e) => {
+                setComment(e.target.value);
+              }}
+            />
+            <Button
+              variant="ghost"
+              className="w-[10px]"
+              type="button"
+              onClick={CommentHandler}
+            >
+              입력
+            </Button>
+          </div>
           <CommentList />
         </div>
       ) : (

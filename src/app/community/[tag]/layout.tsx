@@ -1,54 +1,46 @@
 'use client';
 
-import Link from 'next/link';
 import React from 'react';
 import { Button } from '@nextui-org/button';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { FaPlus } from 'react-icons/fa';
+import { IoSearchSharp } from 'react-icons/io5';
+
+import { Tab, Tabs } from '@nextui-org/react';
 import Page from './page';
 
 const Layout = () => {
   const router = useRouter();
-
+  const pathname = usePathname();
   return (
-    <div className="flex h-svh flex-col">
+    <div className="flex flex-col">
       <div className="flex justify-center space-x-10">
-        <Link
-          className="h-8 w-16 rounded-md  border-2 border-solid border-gray-300 text-center"
-          href="/community/all"
-        >
-          전체
-        </Link>
-        <Link
-          className="h-8 w-16 rounded-md  border-2 border-solid border-gray-300	text-center"
-          href="/community/free"
-        >
-          자유
-        </Link>
-
-        <Link
-          className="h-8 w-16 rounded-md  border-2 border-solid border-gray-300	text-center"
-          href="/community/usedtrade"
-        >
-          중고 거래
-        </Link>
-
-        <Link
-          className="h-8 w-16 rounded-md  border-2 border-solid border-gray-300	 text-center"
-          href="/community/question"
-        >
-          질문
-        </Link>
-
-        <Link
-          className="h-8 w-16 rounded-md  border-2 border-solid border-gray-300	 text-center"
-          href="/community/rentaltransfer"
-        >
-          대관 양도
-        </Link>
+        <Tabs aria-label="Options" selectedKey={pathname}>
+          <Tab key="all" title="전체" href="/community/all" />
+          <Tab key="free" title="자유" href="/community/free" />
+          <Tab href="/community/usedtrade" key="usedtrade" title="중고거래" />
+          <Tab href="/community/question" key="question" title="질문" />
+          <Tab
+            href="/community/rentaltransfer"
+            key="rentaltransfer"
+            title="대관양도"
+          />
+        </Tabs>
       </div>
-      <input className="border-solid" placeholder="검색어를 입력해주세요" />
 
+      <div className="z-10 flex w-full transform items-center justify-center rounded-md bg-background p-1 shadow-md">
+        <input
+          placeholder="검색어를 입력해주세요"
+          className="w-11/12 p-2 focus:outline-none focus:ring-0"
+        />
+        <button
+          type="button"
+          aria-label="search button in community"
+          className="ml-2 mr-2 flex h-full w-8 items-center justify-center rounded-md focus:outline-none"
+        >
+          <IoSearchSharp className="w-full text-gray-400 hover:text-black" />
+        </button>
+      </div>
       <Page />
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">

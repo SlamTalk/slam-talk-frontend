@@ -19,7 +19,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
     onDelete(comment.id);
   };
   return (
-    <div key={comment.id}>
+    <div key={comment.id} className="border-gray flex border-b-2">
       {editToggle ? (
         <input
           placeholder={comment.content}
@@ -29,14 +29,24 @@ const CommentItem: React.FC<ICommentItemProps> = ({
           }}
         />
       ) : (
-        <h2>{comment.content}</h2>
+        <h2 className="w-[500px]">{comment.content}</h2>
       )}
-      <button type="button" onClick={editHandler}>
-        수정
-      </button>
-      <button type="button" onClick={deleteHandler}>
-        삭제
-      </button>
+      <div>
+        <button
+          className="text-gray-600 hover:text-danger"
+          type="button"
+          onClick={editHandler}
+        >
+          수정
+        </button>
+        <button
+          type="button"
+          className="mx-3 text-gray-600 hover:text-danger"
+          onClick={deleteHandler}
+        >
+          삭제
+        </button>
+      </div>
     </div>
   );
 };

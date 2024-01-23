@@ -14,7 +14,7 @@ const Page = () => {
       id: 1,
       title: '농구화 추천해주세요',
       content: '농구화 추천 좀 해주세요~~',
-      tag: 'quetion',
+      tag: 'question',
       comment: [
         {
           id: 'c1',
