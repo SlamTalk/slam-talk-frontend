@@ -15,6 +15,14 @@ const Page = () => {
       title: '농구화 추천해주세요',
       content: '농구화 추천 좀 해주세요~~',
       tag: 'quetion',
+      comment: [
+        {
+          id: 'c1',
+          userId: 'user-1',
+          postId: '1',
+          content: '농구화 추천해드렸습니다~',
+        },
+      ],
     },
     {
       id: 2,
@@ -63,4 +71,12 @@ interface ICommunityItem {
   title: string;
   content: string;
   tag: string;
+  comment?: [
+    {
+      id: string;
+      postId: string;
+      userId: string;
+      content: string;
+    },
+  ];
 }

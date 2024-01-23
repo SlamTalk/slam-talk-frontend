@@ -6,6 +6,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { FaHeart } from 'react-icons/fa';
 
 import React from 'react';
+import CommentList from '../../components/commentList';
 
 const Page = () => {
   const router = useRouter();
@@ -54,6 +55,7 @@ const Page = () => {
             </div>
           </div>
           <input placeholder="댓글을 입력해주세요" />
+          <CommentList />
         </div>
       ) : (
         <p>404 not found</p>
@@ -69,4 +71,12 @@ interface ICommunityItem {
   title: string;
   content: string;
   tag: string;
+  comment: [
+    {
+      id: number;
+      postId: string;
+      userId: string;
+      content: string;
+    },
+  ];
 }

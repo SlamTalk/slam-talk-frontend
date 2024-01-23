@@ -18,8 +18,9 @@ const Page = () => {
   const [editedTitle, setEditedTitle] = useState('');
   const [editedContent, setEditedContent] = useState('');
   const editorHandler = () => {
-    matchedData.title = editedTitle;
-    matchedData.content = editedContent;
+    matchedData.title = editedTitle === '' ? matchedData.title : editedTitle;
+    matchedData.content =
+      editedContent !== '' ? matchedData.content : editedContent;
     communityData.splice(matchedData.id - 1, 1, {
       id: matchedData.id,
       title: editedTitle,
@@ -81,7 +82,6 @@ const Page = () => {
               </div>
             </div>
           </div>
-          <input placeholder="댓글을 입력해주세요" />
         </div>
       ) : (
         <p>404 not found</p>
