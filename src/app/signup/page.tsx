@@ -61,7 +61,7 @@ const SignUp = () => {
 
       if (response.status === 200) {
         alert('감사합니다. 회원가입에 성공했습니다!');
-        router.push('/main');
+        router.push('/');
       }
     } catch (error) {
       if (error instanceof AxiosError) {

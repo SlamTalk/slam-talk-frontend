@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { Button, Input } from '@nextui-org/react';
 import { validateEmail, validatePassword } from '@/utils/validations';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 import axiosInstance from '@/app/api/axiosInstance';
@@ -38,7 +39,7 @@ const EmailLogin = () => {
 
       if (response.status === 200) {
         alert('로그인 성공!');
-        router.push('/main');
+        router.push('/');
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -104,6 +105,11 @@ const EmailLogin = () => {
       <Button size="lg" radius="full" color="primary" onClick={handleLogin}>
         로그인
       </Button>
+      <div className="mt-4 flex justify-center gap-3 align-middle text-sm text-gray-400">
+        <Link href="email/find-password">
+          <p>비밀번호 찾기</p>
+        </Link>
+      </div>
     </div>
   );
 };
