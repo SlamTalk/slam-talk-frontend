@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 
-const CommentItem: React.FC<ICommentItemProps> = ({ comment, onEdit }) => {
+const CommentItem: React.FC<ICommentItemProps> = ({
+  comment,
+  onEdit,
+  onDelete,
+}) => {
   const [editToggle, setEditToggle] = useState(false);
   const [editedComment, setEditedComment] = useState(comment.content);
   const editHandler = () => {
@@ -10,6 +14,9 @@ const CommentItem: React.FC<ICommentItemProps> = ({ comment, onEdit }) => {
       setEditedComment('');
       setEditToggle(false);
     }
+  };
+  const deleteHandler = () => {
+    onDelete(comment.id);
   };
   return (
     <div key={comment.id}>
@@ -27,7 +34,9 @@ const CommentItem: React.FC<ICommentItemProps> = ({ comment, onEdit }) => {
       <button type="button" onClick={editHandler}>
         수정
       </button>
-      <button type="button">삭제</button>
+      <button type="button" onClick={deleteHandler}>
+        삭제
+      </button>
     </div>
   );
 };
@@ -42,4 +51,5 @@ interface ICommentItemProps {
     content: string;
   };
   onEdit: (id: string, editedComment: string) => void;
+  onDelete: (id: string) => void;
 }

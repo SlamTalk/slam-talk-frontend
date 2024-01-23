@@ -22,11 +22,29 @@ const CommentList = () => {
     );
     localStorage.setItem('community', JSON.stringify(updatedData));
   };
+  const deleteCommentHandler = (id: string) => {
+    matchedData.comment = matchedData.comment?.filter(
+      (comment: any) => comment.id !== id
+    );
+    const updatedData = [...communityData];
 
+    const matchedIndex = updatedData.findIndex(
+      (item: ICommunityItem) => item.id === matchedData.id
+    );
+    if (matchedIndex !== -1) {
+      updatedData[matchedIndex] = matchedData;
+    }
+    localStorage.setItem('community', JSON.stringify(updatedData));
+  };
   return (
     <div>
       {matchedData.comment?.map((i: ICommentItemProps) => (
-        <CommentItem key={i.id} comment={i} onEdit={editCommentHandler} />
+        <CommentItem
+          key={i.id}
+          comment={i}
+          onEdit={editCommentHandler}
+          onDelete={deleteCommentHandler}
+        />
       ))}
     </div>
   );
@@ -55,4 +73,5 @@ interface ICommentItemProps {
   content: string;
 
   onEdit: (id: string, editedComment: string) => void;
+  onDelete: (id: string, editedComment: string) => void;
 }
