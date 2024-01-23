@@ -6,43 +6,61 @@ import { Button } from '@nextui-org/button';
 import Link from 'next/link';
 import KakaoImg from './Kakao';
 import GoogleImg from './Google';
+import NaverImg from './Naver';
 
 const anton = Anton({ weight: '400', subsets: ['latin'] });
 
 const Login = () => (
   <div className="flex w-full flex-col items-center justify-center text-center">
-    <div className={`${anton.className} my-40 text-6xl sm:my-36`}>
+    <div className={`${anton.className} my-32 text-6xl sm:my-20`}>
       SLAM TALK
     </div>
-    <div className="flex flex-col font-semibold">
+    <div className="flex flex-col gap-4 font-semibold">
       <Link href="/login/kakao">
         <Button
+          size="lg"
           radius="full"
-          className="relative mb-3 w-full min-w-80 bg-kakao text-sm font-bold text-black shadow-md dark:shadow-slate-500 md:w-96"
+          className="relative w-full min-w-80 bg-kakao font-semibold text-black shadow-md dark:shadow-slate-500 md:w-96"
         >
-          <div className="absolute left-4">
+          <div className="absolute left-6">
             <KakaoImg />
           </div>
-          <span className="ml-3">카카오로 3초만에 로그인하기</span>
+          <span className="ml-3">카카오로 3초 만에 로그인하기</span>
+        </Button>
+      </Link>
+      <Link href="/login/naver">
+        <Button
+          size="lg"
+          radius="full"
+          className="relative w-full min-w-80 border-1 bg-naver font-semibold text-white shadow-md dark:shadow-slate-500 md:w-96"
+        >
+          <div className="absolute left-4">
+            <NaverImg />
+          </div>
+          <span className="ml-3">네이버로 계속하기</span>
         </Button>
       </Link>
       <Link href="/login/google">
         <Button
+          size="lg"
           radius="full"
-          className="relative mb-2.5 w-full min-w-80 border-1 border-black bg-white font-bold text-black shadow-md dark:shadow-slate-500 md:w-96"
+          className="relative mb-2.5 w-full min-w-80 border-1 border-gray-400 bg-white font-semibold text-black shadow-md dark:shadow-slate-500 md:w-96"
         >
-          <div className="absolute left-4">
+          <div className="absolute left-6">
             <GoogleImg />
           </div>
-          <span className="ml-3">구글로 간편하게 로그인하기</span>
+          <span className="ml-3">구글로 계속하기</span>
         </Button>
       </Link>
     </div>
-    <div className="mt-5 flex gap-3 align-middle text-sm text-gray-400">
+    <div>
+      <hr className="mt-4 h-px w-80 bg-gray-400" />
+    </div>
+    <div className="mt-5 flex gap-3 align-middle text-sm text-gray-500">
       <Link href="/signup">
         <p>이메일로 가입</p>
       </Link>
-      <hr className="h-4 w-px bg-gray-400" />
+      <hr className="h-4 w-px bg-gray-300" />
       <Link href="/login/email">
         <p>이메일 로그인</p>
       </Link>
