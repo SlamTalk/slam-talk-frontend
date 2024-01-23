@@ -20,11 +20,11 @@ const Header = () => {
       <div className="flex space-x-4 pr-4">
         {isLoggedIn ? (
           <Link href="/mypage">
-            <PiUserCircle size={25} />
+            <PiUserCircle aria-label="알림" size={25} />
           </Link>
         ) : (
           <Link href="/login">
-            <LuLogIn size={24} />
+            <LuLogIn aria-label="로그인" size={24} />
           </Link>
         )}
         <PiBell size={24} />
