@@ -1,8 +1,13 @@
 'use client';
 
-import React, { ChangeEvent, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, Input } from '@nextui-org/react';
-import { validateEmail, validatePassword } from '@/utils/validations';
+import {
+  validateEmail,
+  validateNickname,
+  validatePassword,
+} from '@/utils/validations';
+import { AxiosError } from 'axios';
 import { EyeSlashFilledIcon } from '../login/email/EyeSlashFilledIcon';
 import { EyeFilledIcon } from '../login/email/EyeFilledIcon';
 import axiosInstance from '../api/axiosInstance';
@@ -12,13 +17,15 @@ const SignUp = () => {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
   const [nicknameTouched, setNicknameTouched] = useState(false);
 
   const isNicknameInvalid = useMemo(
     () =>
       nicknameTouched &&
-      (!nickname || nickname.length < 2 || nickname.length > 13),
+      (!nickname ||
+        nickname.length < 2 ||
+        nickname.length > 13 ||
+        !validateNickname(nickname)),
     [nickname, nicknameTouched]
   );
   const isEmailInvalid = useMemo(() => {
@@ -51,44 +58,49 @@ const SignUp = () => {
       });
 
       if (response.status === 200) {
-        alert('회원가입 성공!');
-      } else {
-        setErrorMsg('회원가입 실패. 서버 오류 발생.');
+        alert('감사합니다. 회원가입에 성공했습니다!');
       }
-    } catch (error: any) {
-      setErrorMsg(
-        error.response?.data?.message || '회원가입 실패. 네트워크 오류 발생.'
-      );
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message || '회원가입 실패. 네트워크 오류 발생.';
+        alert(`죄송합니다. 오류가 발생했습니다. \n오류 내용: ${message}`);
+      } else {
+        alert('죄송합니다. 알 수 없는 오류가 발생했습니다.');
+      }
     }
   };
 
   const handletoggleVisibility = () => setIsVisible(!isVisible);
-  const handleemailChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setEmail(e.target.value);
-  const handlepasswordChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setPassword(e.target.value);
-  const handlenicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleemailChange = () => {};
+  const handlepasswordChange = () => {};
+  const handlenicknameChange = () => {
     if (!nicknameTouched) setNicknameTouched(true);
-    setNickname(e.target.value);
   };
 
   return (
-    <div className="mt-16 flex h-full w-full flex-col flex-wrap gap-6 p-5 sm:mt-10 md:flex-nowrap">
-      <h1 className="mb-4 text-2xl font-bold">
+    <div className="mt-14 flex h-full w-full flex-col flex-wrap gap-2 p-5 sm:mt-6 md:flex-nowrap">
+      <h1 className="mb-5 text-2xl font-bold sm:text-xl">
         이메일, 닉네임, 비밀번호를 입력해주세요.
       </h1>
       <Input
         isRequired
         label="닉네임"
+        maxLength={13}
         labelPlacement="outside"
         value={nickname}
         onChange={handlenicknameChange}
-        placeholder="2자 이상 13자 이하"
+        onValueChange={setNickname}
+        onClear={() => console.log('input cleared')}
+        placeholder="특수 문자 제외 2자 이상 13자 이하"
         isInvalid={isNicknameInvalid}
-        errorMessage={
-          isNicknameInvalid && '닉네임은 2자 이상 13자 이하이어야 합니다.'
-        }
       />
+      <div
+        className={`mb-3 h-3 text-sm text-danger ${isNicknameInvalid ? 'visible' : 'invisible'}`}
+      >
+        {isNicknameInvalid &&
+          '닉네임은 특수 문자 제외 2자 이상 13자 이하이어야 합니다.'}
+      </div>
       <Input
         isClearable
         isRequired
@@ -101,14 +113,19 @@ const SignUp = () => {
         onClear={() => console.log('input cleared')}
         placeholder="로그인시 필요"
         isInvalid={isEmailInvalid}
-        errorMessage={isEmailInvalid && '올바른 이메일을 입력해주세요.'}
       />
+      <div
+        className={`mb-3 h-3 text-sm text-danger ${isEmailInvalid ? 'visible' : 'invisible'}`}
+      >
+        {isEmailInvalid && '올바른 이메일을 입력해주세요.'}
+      </div>
       <Input
         isRequired
         type={isVisible ? 'text' : 'password'}
         labelPlacement="outside"
         label="비밀번호"
-        placeholder="영문, 숫자, 특수문자 포함 8자 이상"
+        maxLength={16}
+        placeholder="영문, 숫자, 특수문자 포함 8자 이상 16자 이하"
         endContent={
           <button
             className="focus:outline-none"
@@ -124,14 +141,16 @@ const SignUp = () => {
         }
         value={password}
         onChange={handlepasswordChange}
+        onValueChange={setPassword}
         isInvalid={isPasswordInvalid}
-        errorMessage={
-          isPasswordInvalid &&
-          '비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.'
-        }
       />
-      {errorMsg && <div style={{ color: 'red' }}>{errorMsg}</div>}
-      <Button size="md" radius="full" color="primary" onClick={handleSignup}>
+      <div
+        className={`mb-7 h-3 text-sm text-danger ${isPasswordInvalid ? 'visible' : 'invisible'}`}
+      >
+        {isPasswordInvalid &&
+          '비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상 16자 이하이어야 합니다.'}
+      </div>
+      <Button size="lg" radius="full" color="primary" onClick={handleSignup}>
         가입 완료
       </Button>
     </div>
