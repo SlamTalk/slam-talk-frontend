@@ -25,7 +25,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
     <body className={`${inter.className} flex min-h-screen flex-col`}>
       <div className="flex-grow">
         <Header />
-        <Providers>{children}</Providers>
+        <div className="pb-[48px] pt-[61px]">
+          <Providers>{children}</Providers>
+        </div>
         <Footer />
       </div>
     </body>
