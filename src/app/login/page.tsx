@@ -32,7 +32,7 @@ const Login = () => (
         <Button
           size="lg"
           radius="full"
-          className="relative w-full min-w-80 border-1 bg-naver font-semibold text-white shadow-md dark:shadow-slate-500 md:w-96"
+          className="relative w-full min-w-80 bg-naver font-semibold text-white shadow-md dark:shadow-slate-500 md:w-96"
         >
           <div className="absolute left-4">
             <NaverImg />
@@ -56,7 +56,7 @@ const Login = () => (
     <div>
       <hr className="mt-4 h-px w-80 bg-gray-400" />
     </div>
-    <div className="mt-5 flex gap-3 align-middle text-sm text-gray-500">
+    <div className="mt-5 flex gap-3 align-middle text-sm text-gray-400">
       <Link href="/signup">
         <p>이메일로 가입</p>
       </Link>
