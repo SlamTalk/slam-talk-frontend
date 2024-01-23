@@ -8,7 +8,7 @@ import {
   validatePassword,
 } from '@/utils/validations';
 import { AxiosError } from 'axios';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { EyeSlashFilledIcon } from '../login/email/EyeSlashFilledIcon';
 import { EyeFilledIcon } from '../login/email/EyeFilledIcon';
 import axiosInstance from '../api/axiosInstance';
@@ -66,8 +66,9 @@ const SignUp = () => {
     } catch (error) {
       if (error instanceof AxiosError) {
         const message =
-          error.response?.data?.message || '회원가입 실패. 네트워크 오류 발생.';
-        alert(`죄송합니다. 오류가 발생했습니다. \n오류 내용: ${message}`);
+          error.response?.data?.message ||
+          '죄송합니다. 회원가입에 실패했습니다. 서버 오류 발생.';
+        alert(message);
       } else {
         alert('죄송합니다. 알 수 없는 오류가 발생했습니다.');
       }
