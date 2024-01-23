@@ -8,11 +8,14 @@ const CommentList = () => {
   const matchedData = communityData.find(
     (item: ICommunityItem) => item.id === Number(params.id)
   );
-  console.log(matchedData.comment);
   return (
     <div>
-      {matchedData.comment.map((i: ICommunityItem) => (
-        <li>{i.content}</li>
+      {matchedData.comment?.map((i: ICommunityItem) => (
+        <div key={i.id}>
+          <h2>{i.content}</h2>
+          <button type="button">수정</button>
+          <button type="button">삭제</button>
+        </div>
       ))}
     </div>
   );

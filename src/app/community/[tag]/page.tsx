@@ -29,6 +29,7 @@ const Page = () => {
       title: '헤어밴드 팝니다',
       content: '나이키 헤어밴드입니다. 착감 거의 없습니다~~',
       tag: 'usedtrade',
+      comment: [],
     },
   ]);
 
@@ -71,12 +72,10 @@ interface ICommunityItem {
   title: string;
   content: string;
   tag: string;
-  comment?: [
-    {
-      id: string;
-      postId: string;
-      userId: string;
-      content: string;
-    },
-  ];
+  comment?: {
+    id: string;
+    postId: string;
+    userId: string;
+    content: string;
+  }[];
 }

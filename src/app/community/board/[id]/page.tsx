@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { IoIosArrowBack } from 'react-icons/io';
 import { FaHeart } from 'react-icons/fa';
 
-import React from 'react';
+import React, { useState } from 'react';
 import CommentList from '../../components/commentList';
 
 const Page = () => {
@@ -16,7 +16,23 @@ const Page = () => {
   const matchedData = communityData.find(
     (item: ICommunityItem) => item.id === Number(params.id)
   );
-
+  const [comment, setComment] = useState('');
+  const CommentHandler = () => {
+    if (comment !== '') {
+      const newComment = {
+        id: 2,
+        postId: params.id,
+        userId: 'user123',
+        content: comment,
+      };
+      matchedData.comment.push(newComment);
+      const updatedData = communityData.map((item: ICommunityItem) =>
+        item.id === matchedData.id ? matchedData : item
+      );
+      localStorage.setItem('community', JSON.stringify(updatedData));
+      setComment('');
+    }
+  };
   return (
     <div>
       {matchedData ? (
@@ -54,7 +70,16 @@ const Page = () => {
               </div>
             </div>
           </div>
-          <input placeholder="댓글을 입력해주세요" />
+          <input
+            placeholder="댓글을 입력해주세요"
+            value={comment}
+            onChange={(e) => {
+              setComment(e.target.value);
+            }}
+          />
+          <button type="button" onClick={CommentHandler}>
+            입력
+          </button>
           <CommentList />
         </div>
       ) : (
