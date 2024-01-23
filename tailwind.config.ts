@@ -29,6 +29,9 @@ const config: Config = {
             primary: {
               DEFAULT: '#FF634A',
             },
+            danger: {
+              DEFAULT: '#FF4C5E',
+            },
           },
         },
         dark: {
@@ -36,6 +39,9 @@ const config: Config = {
             background: '#000000',
             primary: {
               DEFAULT: '#FF634A',
+            },
+            danger: {
+              DEFAULT: '#FF4C5E',
             },
           },
         },
