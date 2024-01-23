@@ -54,9 +54,9 @@ const Login = () => (
       </Link>
     </div>
     <div>
-      <hr className="mt-4 h-px w-80 bg-gray-400" />
+      <hr className="mt-4 h-px w-80 bg-gray-400 sm:w-72" />
     </div>
-    <div className="mt-5 flex gap-3 align-middle text-sm text-gray-400">
+    <div className="mt-5 flex gap-3 align-middle text-sm text-gray-500 dark:text-gray-300">
       <Link href="/signup">
         <p>이메일로 가입</p>
       </Link>
