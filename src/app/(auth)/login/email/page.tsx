@@ -106,7 +106,7 @@ const EmailLogin = () => {
         로그인
       </Button>
       <div className="mt-4 flex justify-center gap-3 align-middle text-sm text-gray-400">
-        <Link href="email/find-password">
+        <Link href="/find-password">
           <p>비밀번호 찾기</p>
         </Link>
       </div>
