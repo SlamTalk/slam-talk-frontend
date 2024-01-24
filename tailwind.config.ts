@@ -30,6 +30,8 @@ const config: Config = {
             primary: {
               DEFAULT: '#FF634A',
             },
+            secondary: '#FFEF5E',
+            focus: '#FF634A',
             danger: {
               DEFAULT: '#FF4C5E',
             },
@@ -41,6 +43,8 @@ const config: Config = {
             primary: {
               DEFAULT: '#FF634A',
             },
+            secondary: '#FFEF5E',
+            focus: '#FF634A',
             danger: {
               DEFAULT: '#FF4C5E',
             },
