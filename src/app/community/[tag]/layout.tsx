@@ -26,7 +26,7 @@ const Layout = () => {
           <IoSearchSharp className="w-full text-gray-400 hover:text-black" />
         </button>
       </div>
-      <div className="flex justify-center space-x-10">
+      <div className="my-3 flex justify-center space-x-10">
         <Button
           key="all"
           radius="full"
