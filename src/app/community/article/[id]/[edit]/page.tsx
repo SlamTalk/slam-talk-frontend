@@ -4,8 +4,14 @@ import { Button } from '@nextui-org/button';
 import { useParams, useRouter } from 'next/navigation';
 import { IoIosArrowBack } from 'react-icons/io';
 import { FaHeart } from 'react-icons/fa';
-
 import React, { useState } from 'react';
+
+interface ICommunityItem {
+  id: number;
+  title: string;
+  content: string;
+  tag: string;
+}
 
 const Page = () => {
   const router = useRouter();
@@ -17,7 +23,7 @@ const Page = () => {
   );
   const [editedTitle, setEditedTitle] = useState('');
   const [editedContent, setEditedContent] = useState('');
-  const editorHandler = () => {
+  const HandleEditor = () => {
     matchedData.title = editedTitle === '' ? matchedData.title : editedTitle;
     matchedData.content =
       editedContent !== '' ? matchedData.content : editedContent;
@@ -29,7 +35,7 @@ const Page = () => {
     });
     localStorage.setItem('community', JSON.stringify(communityData));
   };
-  const deleteHandler = () => {
+  const handelDelete = () => {
     communityData.splice(matchedData.id - 1, 1);
     localStorage.setItem('community', JSON.stringify(communityData));
   };
@@ -72,13 +78,13 @@ const Page = () => {
               <div>
                 <Button
                   onClick={() => {
-                    editorHandler();
+                    HandleEditor();
                     router.push(`/community/board/${params.id}`);
                   }}
                 >
                   수정 완료
                 </Button>
-                <Button onClick={deleteHandler}>삭제</Button>
+                <Button onClick={handelDelete}>삭제</Button>
               </div>
             </div>
           </div>
@@ -91,10 +97,3 @@ const Page = () => {
 };
 
 export default Page;
-
-interface ICommunityItem {
-  id: number;
-  title: string;
-  content: string;
-  tag: string;
-}

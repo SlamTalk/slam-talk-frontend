@@ -2,6 +2,30 @@ import { useParams } from 'next/navigation';
 import React from 'react';
 import CommentItem from './commentItem';
 
+interface ICommunityItem {
+  id: number;
+  title: string;
+  content: string;
+  tag: string;
+  comment?: [
+    {
+      id: string;
+      postId: string;
+      userId: string;
+      content: string;
+    },
+  ];
+}
+interface ICommentItemProps {
+  id: string;
+  postId: string;
+  userId: string;
+  content: string;
+
+  onEdit: (id: string, editedComment: string) => void;
+  onDelete: (id: string, editedComment: string) => void;
+}
+
 const CommentList = () => {
   const params = useParams();
   const dummyData = localStorage.getItem('community');
@@ -9,7 +33,7 @@ const CommentList = () => {
   const matchedData = communityData.find(
     (item: ICommunityItem) => item.id === Number(params.id)
   );
-  const editCommentHandler = (id: string, editedComment: string) => {
+  const handleEditComment = (id: string, editedComment: string) => {
     const newComment = {
       id: 2,
       postId: params.id,
@@ -42,7 +66,7 @@ const CommentList = () => {
         <CommentItem
           key={i.id}
           comment={i}
-          onEdit={editCommentHandler}
+          onEdit={handleEditComment}
           onDelete={deleteCommentHandler}
         />
       ))}
@@ -51,27 +75,3 @@ const CommentList = () => {
 };
 
 export default CommentList;
-
-interface ICommunityItem {
-  id: number;
-  title: string;
-  content: string;
-  tag: string;
-  comment?: [
-    {
-      id: string;
-      postId: string;
-      userId: string;
-      content: string;
-    },
-  ];
-}
-interface ICommentItemProps {
-  id: string;
-  postId: string;
-  userId: string;
-  content: string;
-
-  onEdit: (id: string, editedComment: string) => void;
-  onDelete: (id: string, editedComment: string) => void;
-}

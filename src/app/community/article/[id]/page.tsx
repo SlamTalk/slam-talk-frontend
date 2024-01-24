@@ -2,11 +2,27 @@
 
 import { Button } from '@nextui-org/button';
 import { useParams, useRouter } from 'next/navigation';
-import { IoIosArrowBack } from 'react-icons/io';
+import { Avatar } from '@nextui-org/react';
+import { IoChevronBackSharp } from 'react-icons/io5';
 import { FaHeart } from 'react-icons/fa';
 
 import React, { useState } from 'react';
 import CommentList from '../../components/commentList';
+
+interface ICommunityItem {
+  id: number;
+  title: string;
+  content: string;
+  tag: string;
+  comment: [
+    {
+      id: number;
+      postId: string;
+      userId: string;
+      content: string;
+    },
+  ];
+}
 
 const Page = () => {
   const router = useRouter();
@@ -35,42 +51,57 @@ const Page = () => {
   };
 
   return (
-    <div>
+    <div className="h-[90vh]">
       {matchedData ? (
         <div>
-          <div className="flex items-center justify-center border-b-2">
-            <Button
-              className="flex-none rounded-md focus:outline-none"
-              isIconOnly
-              color="default"
-              variant="ghost"
+          <div className="flex h-[50px] items-center justify-center border-b-2">
+            <IoChevronBackSharp
+              cursor="pointer"
+              size={24}
               onClick={() => {
                 router.push('/community/all');
               }}
-            >
-              <IoIosArrowBack className="text-gray-600 hover:text-black" />
-            </Button>
-
+            />
             <h1 className="flex-grow text-center">{matchedData.title}</h1>
           </div>
 
-          <div className="flex h-40 flex-col justify-between border-b-2">
-            <p>{matchedData.content}</p>
-            <div className="flex justify-between">
-              <Button aria-label="like button" variant="ghost" isIconOnly>
-                <FaHeart />
-              </Button>
-              <div>
-                <Button
-                  variant="ghost"
-                  className=""
-                  onClick={() => {
-                    router.push(`/community/board/${params.id}/edit`);
-                  }}
-                >
-                  수정
-                </Button>
-                <Button variant="ghost">삭제</Button>
+          <div className="flex h-[295px] flex-col">
+            <div aria-label="contentsCard">
+              <div
+                aria-label="유저 아바타"
+                className="mt-1 flex items-center justify-start border-b-1"
+              >
+                <Avatar
+                  name={matchedData.userId}
+                  className="me-2 border-3 border-primary"
+                />
+                <p className="text-lg	">{matchedData.userId}</p>
+              </div>
+
+              <div className="h-[200px] border-b-2">
+                <p aria-label="게시글 컨텐츠" className="m-2">
+                  {matchedData.content}
+                </p>
+              </div>
+
+              <div className="flex justify-between">
+                <div className="m-1 text-lg text-danger">
+                  <FaHeart aria-label="like button" />
+                </div>
+                <div aria-label="수정 삭제 버튼 그룹">
+                  <button
+                    type="button"
+                    className="hover:text-primary"
+                    onClick={() => {
+                      router.push(`/community/article/${params.id}/edit`);
+                    }}
+                  >
+                    수정
+                  </button>
+                  <button type="button" className="ml-3 hover:text-primary">
+                    삭제
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -84,9 +115,7 @@ const Page = () => {
               }}
             />
             <Button
-              variant="ghost"
-              className="w-[10px]"
-              type="button"
+              className="w-[10px] hover:bg-primary hover:text-white"
               onClick={CommentHandler}
             >
               입력
@@ -102,18 +131,3 @@ const Page = () => {
 };
 
 export default Page;
-
-interface ICommunityItem {
-  id: number;
-  title: string;
-  content: string;
-  tag: string;
-  comment: [
-    {
-      id: number;
-      postId: string;
-      userId: string;
-      content: string;
-    },
-  ];
-}

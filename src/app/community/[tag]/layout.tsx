@@ -2,16 +2,15 @@
 
 import React from 'react';
 import { Button } from '@nextui-org/button';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { FaPlus } from 'react-icons/fa';
 import { IoSearchSharp } from 'react-icons/io5';
 
-import { Tab, Tabs } from '@nextui-org/react';
 import Page from './page';
 
 const Layout = () => {
   const router = useRouter();
-  const pathname = usePathname();
+
   return (
     <div className="flex flex-col">
       <div className="z-10 flex w-full transform items-center justify-center rounded-md bg-background p-1 shadow-md">
@@ -28,17 +27,56 @@ const Layout = () => {
         </button>
       </div>
       <div className="flex justify-center space-x-10">
-        <Tabs aria-label="Options" selectedKey={pathname}>
-          <Tab key="all" title="전체" href="/community/all" />
-          <Tab key="free" title="자유" href="/community/free" />
-          <Tab href="/community/usedtrade" key="usedtrade" title="중고거래" />
-          <Tab href="/community/question" key="question" title="질문" />
-          <Tab
-            href="/community/rentaltransfer"
-            key="rentaltransfer"
-            title="대관양도"
-          />
-        </Tabs>
+        <Button
+          key="all"
+          radius="full"
+          className="rounded-lg border border-slate-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          onClick={() => {
+            router.push('/community/all');
+          }}
+        >
+          전체
+        </Button>
+        <Button
+          key="free"
+          radius="full"
+          className="rounded-lg border border-slate-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          onClick={() => {
+            router.push('/community/free');
+          }}
+        >
+          자유
+        </Button>
+        <Button
+          key="usedtrade"
+          radius="full"
+          className="rounded-lg border border-slate-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          onClick={() => {
+            router.push('/community/usedtrade');
+          }}
+        >
+          중고거래
+        </Button>
+        <Button
+          key="question"
+          radius="full"
+          className="rounded-lg border border-slate-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          onClick={() => {
+            router.push('/community/question');
+          }}
+        >
+          질문
+        </Button>
+        <Button
+          key="rentaltransfer"
+          radius="full"
+          className="rounded-lg border border-slate-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          onClick={() => {
+            router.push('/community/rentaltransfer');
+          }}
+        >
+          대관양도
+        </Button>
       </div>
 
       <Page />
