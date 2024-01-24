@@ -13,6 +13,7 @@ const config: Config = {
     extend: {
       colors: {
         kakao: '#FEE500',
+        naver: '#03C75A',
       },
       screens: {
         sm: { max: '499px' }, // 499px까지는 sm으로 적용
