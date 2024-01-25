@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 import axiosInstance from '@/app/api/axiosInstance';
+import useAuthStore from '@/store/authStore';
 import { EyeSlashFilledIcon } from './EyeSlashFilledIcon';
 import { EyeFilledIcon } from './EyeFilledIcon';
 
@@ -15,6 +16,7 @@ const EmailLogin = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { setAccessToken, setLoggedIn } = useAuthStore();
 
   const isEmailInvalid = useMemo(
     () => !validateEmail(email) && email !== '',
@@ -38,6 +40,10 @@ const EmailLogin = () => {
       });
 
       if (response.status === 200) {
+        const { accessToken } = response.data;
+        setAccessToken(accessToken);
+        setLoggedIn(true);
+
         alert('로그인 성공!');
         router.push('/');
       }
