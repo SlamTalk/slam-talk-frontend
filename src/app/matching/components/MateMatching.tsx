@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Select, SelectItem, Button } from '@nextui-org/react';
+import Link from 'next/link';
 
 interface Post {
   title: string;
@@ -221,9 +222,11 @@ const MateMatching = () => {
       ))}
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
-          <Button color="primary" onClick={handleNewPostClick}>
-            새 모집글 작성
-          </Button>
+          <Link href="/matching/mate-new-post">
+            <Button color="primary" onClick={handleNewPostClick}>
+              새 모집글 작성
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
