@@ -1,15 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Anton } from 'next/font/google';
 import { PiBell, PiUserCircle } from 'react-icons/pi';
 import { LuLogIn } from 'react-icons/lu';
+import useAuthStore from '@/store/authStore';
 
 const anton = Anton({ weight: '400', subsets: ['latin'] });
 
 const Header = () => {
-  const [isLoggedIn] = useState(false);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+
   return (
     <div className="fixed z-30 flex h-[61px] w-full max-w-[600px] items-center justify-between border-b-1 bg-background pl-4">
       <div className={`${anton.className} text-2xl`}>
