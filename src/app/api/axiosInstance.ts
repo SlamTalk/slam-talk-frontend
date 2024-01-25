@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import useAuthStore from '@/store/authStore';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -16,7 +16,7 @@ axiosInstance.interceptors.response.use(
 
     if (error.response.status === 401 && !originalRequest.retryFlag) {
       originalRequest.retryFlag = true;
-      // const router = useRouter();
+      const router = useRouter();
 
       try {
         const response = await axiosInstance.post(
@@ -39,7 +39,7 @@ axiosInstance.interceptors.response.use(
           useAuthStore.getState().setAccessToken(null);
 
           // 로그아웃 처리되면 로그인 페이지로 리다이렉션
-          // router.push('/login');
+          router.push('/login');
         }
         return Promise.reject(refreshError);
       }
