@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 // import axiosInstance from '@/app/api/axiosInstance';
 import { useRouter } from 'next/navigation';
+import { Progress } from '@nextui-org/react';
 import UserSkill from './UserSkill';
 import UserPosition from './UserPosition';
 
@@ -49,6 +50,12 @@ const SignUpProcess = () => {
 
   return (
     <div>
+      <Progress
+        isStriped
+        color="primary"
+        aria-label="Loading..."
+        value={currentStep === 'skill' ? 0 : 50}
+      />
       {currentStep === 'skill' && (
         <UserSkill onSkillSelect={handleSkillSelect} />
       )}
