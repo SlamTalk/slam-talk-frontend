@@ -1,6 +1,5 @@
-import axios, { AxiosError } from 'axios';
-import useAuthStore from '@/store/authStore';
-import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import LocalStorage from '@/utils/localstorage';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -9,44 +8,31 @@ const axiosInstance = axios.create({
   timeout: 10000,
 });
 
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    if (error.response.status === 401 && !originalRequest.retryFlag) {
-      originalRequest.retryFlag = true;
-      const router = useRouter();
-
-      try {
-        const response = await axiosInstance.post(
-          '/api/token/refresh',
-          {},
-          { withCredentials: true }
-        );
-        const { accessToken } = response.data;
-
-        useAuthStore.getState().setAccessToken(accessToken);
-
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-
-        return await axiosInstance(originalRequest);
-      } catch (refreshError) {
-        if (
-          refreshError instanceof AxiosError &&
-          refreshError.response?.status === 401
-        ) {
-          useAuthStore.getState().setAccessToken(null);
-
-          // 로그아웃 처리되면 로그인 페이지로 리다이렉션
-          router.push('/login');
-        }
-        return Promise.reject(refreshError);
-      }
-    }
-
-    return Promise.reject(error);
+export const storeAccessToken = (accessToken: string) => {
+  if (accessToken) {
+    LocalStorage.setItem('slam', accessToken);
   }
+};
+
+axiosInstance.interceptors.request.use(async (config) => {
+  const accessToken = LocalStorage.getItem('slam');
+
+  if (accessToken) {
+    // eslint-disable-next-line no-param-reassign
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  return config;
+});
+
+axiosInstance.interceptors.response.use(
+  async (response) => {
+    if (response?.data?.results) {
+      const { accessToken } = response.data.results;
+      storeAccessToken(accessToken);
+    }
+    return response;
+  },
+  (error) => Promise.reject(error)
 );
 
 export default axiosInstance;

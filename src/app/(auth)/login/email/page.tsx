@@ -5,8 +5,6 @@ import { Button, Input } from '@nextui-org/react';
 import { validateEmail, validatePassword } from '@/utils/validations';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { AxiosError } from 'axios';
-import axiosInstance from '@/app/api/axiosInstance';
 import useAuthStore from '@/store/authStore';
 import { EyeSlashFilledIcon } from './EyeSlashFilledIcon';
 import { EyeFilledIcon } from './EyeFilledIcon';
@@ -16,7 +14,7 @@ const EmailLogin = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setAccessToken, setLoggedIn } = useAuthStore();
+  const { login } = useAuthStore();
 
   const isEmailInvalid = useMemo(
     () => !validateEmail(email) && email !== '',
@@ -34,33 +32,15 @@ const EmailLogin = () => {
     }
 
     try {
-      const response = await axiosInstance.post('/api/login', {
-        email,
-        password,
-      });
+      await login(email, password);
 
-      if (response.status === 200) {
-        const { accessToken } = response.data;
-        setAccessToken(accessToken);
-        setLoggedIn(true);
-
-        alert('로그인 성공!');
-        router.push('/');
-      }
+      alert('로그인 성공!');
+      router.push('/');
     } catch (error) {
-      if (error instanceof AxiosError) {
-        const message =
-          error.response?.data?.message ||
-          '죄송합니다. 로그인에 실패했습니다. 서버 오류 발생.';
-        alert(message);
-      } else {
-        alert('죄송합니다. 알 수 없는 오류가 발생했습니다.');
-      }
+      console.error('로그인 실패:', error);
     }
   };
-
   const toggleVisibility = () => setIsVisible(!isVisible);
-
   return (
     <div className="mt-14 flex h-full w-full flex-col flex-wrap justify-center gap-3 p-5 align-middle md:flex-nowrap">
       <h1 className="mb-4 text-2xl font-bold sm:text-xl">
