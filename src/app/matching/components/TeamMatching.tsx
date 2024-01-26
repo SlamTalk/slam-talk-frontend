@@ -90,10 +90,6 @@ const TeamPostCard: React.FC<Post> = ({
   </Card>
 );
 
-const handleNewPostClick = () => {
-  console.log('새 모집글 작성하기');
-};
-
 const TeamMatching = () => {
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
@@ -157,9 +153,7 @@ const TeamMatching = () => {
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Link href="/matching/team-new-post">
-            <Button color="primary" onClick={handleNewPostClick}>
-              새 모집글 작성
-            </Button>
+            <Button color="primary">새 모집글 작성</Button>
           </Link>
         </div>
       </div>

@@ -45,11 +45,13 @@ const posts: Post[] = [
       센터: 1,
       포워드: 2,
       가드: 2,
+      무관: 3,
     },
     currentParticipants: {
       센터: 0,
       포워드: 1,
       가드: 1,
+      무관: 0,
     },
   },
   {
@@ -130,10 +132,6 @@ const MatePostCard: React.FC<Post> = ({
     </div>
   </Card>
 );
-
-const handleNewPostClick = () => {
-  console.log('새 모집글 작성하기');
-};
 
 const MateMatching = () => {
   const [selectedCity, setSelectedCity] = useState<string>('');
@@ -223,9 +221,7 @@ const MateMatching = () => {
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Link href="/matching/mate-new-post">
-            <Button color="primary" onClick={handleNewPostClick}>
-              새 모집글 작성
-            </Button>
+            <Button color="primary">새 모집글 작성</Button>
           </Link>
         </div>
       </div>
