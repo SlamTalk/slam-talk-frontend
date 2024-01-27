@@ -13,6 +13,7 @@ const config: Config = {
     extend: {
       colors: {
         kakao: '#FEE500',
+        naver: '#03C75A',
       },
       screens: {
         sm: { max: '499px' }, // 499px까지는 sm으로 적용
@@ -29,6 +30,11 @@ const config: Config = {
             primary: {
               DEFAULT: '#FF634A',
             },
+            secondary: '#FFEF5E',
+            focus: '#FF634A',
+            danger: {
+              DEFAULT: '#FF4C5E',
+            },
           },
         },
         dark: {
@@ -36,6 +42,11 @@ const config: Config = {
             background: '#000000',
             primary: {
               DEFAULT: '#FF634A',
+            },
+            secondary: '#FFEF5E',
+            focus: '#FF634A',
+            danger: {
+              DEFAULT: '#FF4C5E',
             },
           },
         },

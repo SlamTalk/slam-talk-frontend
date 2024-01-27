@@ -4,8 +4,14 @@ import { Button } from '@nextui-org/button';
 import { useParams, useRouter } from 'next/navigation';
 import { IoIosArrowBack } from 'react-icons/io';
 import { FaHeart } from 'react-icons/fa';
+import React, { useState } from 'react';
 
-import React from 'react';
+interface ICommunityItem {
+  id: number;
+  title: string;
+  content: string;
+  tag: string;
+}
 
 const Page = () => {
   const router = useRouter();
@@ -15,7 +21,24 @@ const Page = () => {
   const matchedData = communityData.find(
     (item: ICommunityItem) => item.id === Number(params.id)
   );
-
+  const [editedTitle, setEditedTitle] = useState('');
+  const [editedContent, setEditedContent] = useState('');
+  const HandleEditor = () => {
+    matchedData.title = editedTitle === '' ? matchedData.title : editedTitle;
+    matchedData.content =
+      editedContent !== '' ? matchedData.content : editedContent;
+    communityData.splice(matchedData.id - 1, 1, {
+      id: matchedData.id,
+      title: editedTitle,
+      tag: matchedData.tag,
+      content: editedContent,
+    });
+    localStorage.setItem('community', JSON.stringify(communityData));
+  };
+  const handelDelete = () => {
+    communityData.splice(matchedData.id - 1, 1);
+    localStorage.setItem('community', JSON.stringify(communityData));
+  };
   return (
     <div>
       {matchedData ? (
@@ -32,11 +55,22 @@ const Page = () => {
               <IoIosArrowBack />
             </Button>
 
-            <h1 className="flex-grow text-center">{matchedData.title}</h1>
+            <input
+              className="flex-grow text-center"
+              placeholder={matchedData.title}
+              onChange={(e) => {
+                setEditedTitle(e.target.value);
+              }}
+            />
           </div>
 
           <div className="flex h-40 flex-col justify-between border-b-2">
-            <p>{matchedData.content}</p>
+            <textarea
+              placeholder={matchedData.content}
+              onChange={(e) => {
+                setEditedContent(e.target.value);
+              }}
+            />
             <div className="flex justify-between">
               <Button isIconOnly>
                 <FaHeart />
@@ -44,16 +78,16 @@ const Page = () => {
               <div>
                 <Button
                   onClick={() => {
-                    router.push(`/community/board/${params.id}/edit`);
+                    HandleEditor();
+                    router.push(`/community/board/${params.id}`);
                   }}
                 >
-                  수정
+                  수정 완료
                 </Button>
-                <Button>삭제</Button>
+                <Button onClick={handelDelete}>삭제</Button>
               </div>
             </div>
           </div>
-          <input placeholder="댓글을 입력해주세요" />
         </div>
       ) : (
         <p>404 not found</p>
@@ -63,10 +97,3 @@ const Page = () => {
 };
 
 export default Page;
-
-interface ICommunityItem {
-  id: number;
-  title: string;
-  content: string;
-  tag: string;
-}
