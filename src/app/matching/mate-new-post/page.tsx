@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import KakaoMapModal from '../components/KakaoMapModal';
 
-const Page = () => {
+const MateNewPostPage = () => {
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [address, setAddress] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(new Date());
@@ -128,7 +128,7 @@ const Page = () => {
         </div>
       </div>
       {/* 포지션 별 인원 수 필드 */}
-      <div className="mb-4">
+      <div className="relative z-0 mb-4">
         <div className="text-md mb-2 font-bold">포지션 별 인원 수</div>
         <div className="flex justify-between space-x-2">
           <Input
@@ -174,10 +174,14 @@ const Page = () => {
           className="w-full rounded-md bg-gray-100 p-2"
         >
           <option value="">실력대를 선택하세요</option>
-          <option value="BEGINNER">입문</option>
-          <option value="LOW">초보</option>
-          <option value="MID">중수</option>
-          <option value="HIGH">고수</option>
+          <option value="OVER_BEGINNER">입문 이상</option>
+          <option value="UNDER_BEGINNER">입문 이하</option>
+          <option value="OVER_LOW">초보 이상</option>
+          <option value="UNDER_LOW">초보 이하</option>
+          <option value="OVER_MID">중수 이상</option>
+          <option value="UNDER_MID">중수 이하</option>
+          <option value="OVER_HIGH">고수 이상</option>
+          <option value="UNDER_HIGH">고수 이하</option>
         </select>
       </div>
       {/* 세부사항 필드 */}
@@ -201,4 +205,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default MateNewPostPage;
