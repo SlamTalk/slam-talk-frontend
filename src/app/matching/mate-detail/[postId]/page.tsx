@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Snippet } from '@nextui-org/react';
 
 const post = {
   matePostId: 1,
@@ -118,7 +119,7 @@ const MateDetailPage = () => {
       {/* 농구장 장소와 지도 페이지 링크 */}
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <span>{post.locationDetail}</span>
+          <Snippet symbol="">{post.locationDetail}</Snippet>
         </div>
 
         <Link href="/map">
