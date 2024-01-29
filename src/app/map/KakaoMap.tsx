@@ -8,7 +8,6 @@ import { BiSolidLocationPlus } from 'react-icons/bi';
 import CourtReport from './CourtReport';
 import CourtDetails from './CourtDetail';
 import axiosInstance from '../api/axiosInstance';
-import { fetchAccessToken } from '../api/auth';
 
 declare global {
   interface Window {
@@ -26,13 +25,10 @@ const KakaoMap: FC = () => {
   const [mapLevel] = useState(3);
   const [isCourtReportVisible, setIsCourtReportVisible] = useState(false);
   const [isCourtDetailsVisible, setIsCourtDetailsVisible] = useState(false);
-  const [, setAccessToken] = useState<string | null>(null);
 
   // 백엔드 API로부터 농구장 정보 가져오기
   const fetchBasketballCourts = async () => {
     try {
-      await fetchAccessToken(setAccessToken);
-
       const response = await axiosInstance.get('/api/map');
 
       if (response.status === 200) {

@@ -11,6 +11,6 @@ export const fetchAccessToken = async (
       axiosInstance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
     }
   } catch (error) {
-    // console.log('Failed to fetch access token:', error);
+    console.log('Failed to fetch access token:', error);
   }
 };

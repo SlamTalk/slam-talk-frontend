@@ -16,7 +16,8 @@ const Header = () => {
 
   useEffect(() => {
     fetchAccessToken(setAccessToken);
-  }, [setAccessToken]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="fixed z-30 flex h-[61px] w-full max-w-[600px] items-center justify-between border-b-1 bg-background pl-4">
