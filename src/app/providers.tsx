@@ -15,5 +15,4 @@ const Providers = ({ children }: { children: React.ReactNode }) => (
     </ThemeProvider>
   </NextUIProvider>
 );
-
 export default Providers;

@@ -13,7 +13,7 @@ const Footer = () => (
           <div className="text-xs">홈</div>
         </div>
       </Link>
-      <Link href="/community">
+      <Link href="/community/all">
         <div className="grid place-items-center">
           <TbClipboardText size={24} />
           <div className="text-xs">커뮤니티</div>

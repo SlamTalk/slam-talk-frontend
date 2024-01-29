@@ -25,13 +25,13 @@ const Page = () => {
   >([]); // test code
 
   const router = useRouter();
-  const titleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const handelTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
   const contentHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
-  const tagHandler = (key: Key) => {
+  const handleTag = (key: Key) => {
     if (key === '자유') {
       setTag('free');
     }
@@ -53,7 +53,7 @@ const Page = () => {
   const handleSelectionChange = (keys: Selection) => {
     setSelectedKeys(new Set<string>(Array.from(keys).map(String)));
   };
-  const submitHandler = () => {
+  const handleSubmit = () => {
     setTitle('');
     setContent('');
     const storeData: { title: string; content: string; tag: string } = {
@@ -71,13 +71,13 @@ const Page = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex space-x-96 ">
+      <div className="flex space-x-96">
         <Dropdown>
           <DropdownTrigger>
             <Button variant="bordered">{selectedValue}</Button>
           </DropdownTrigger>
           <DropdownMenu
-            onAction={tagHandler}
+            onAction={handleTag}
             aria-label="Static Actions"
             selectionMode="single"
             selectedKeys={selectedKeys}
@@ -102,7 +102,7 @@ const Page = () => {
           <button
             className="font-bold text-orange-600"
             type="button"
-            onClick={submitHandler}
+            onClick={handleSubmit}
           >
             작성완료
           </button>
@@ -113,10 +113,10 @@ const Page = () => {
         className="border-b border-solid border-gray-200"
         placeholder="title"
         value={title}
-        onChange={titleHandler}
+        onChange={handelTitle}
       />
       <textarea
-        className="h-48 border-b border-solid border-gray-200	 "
+        className="h-48 border-b border-solid border-gray-200"
         placeholder="contents"
         value={content}
         onChange={contentHandler}

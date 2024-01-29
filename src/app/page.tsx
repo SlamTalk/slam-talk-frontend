@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const Home = () => (
   <div>
-    <div className="m-auto grid max-w-[568px] overflow-y-auto pb-[48px] scrollbar-hide">
+    <div className="m-auto grid max-w-[600px] overflow-y-auto scrollbar-hide">
       <div className="mt-4 rounded-md bg-gray-100 px-8">
         <div className="mt-2 text-center text-lg font-bold">
           임박한 약속이 있어요!
