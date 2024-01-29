@@ -5,13 +5,13 @@ import React from 'react';
 import MessageList from '../../components/messageList';
 
 const chatting = () => (
-  <div aria-label="chatt room wrapper" className="h-[765px]">
+  <div aria-label="chat room wrapper" className="min-h-[667px]">
     <MessageList />
     <div
       aria-label="chat input section"
-      className="flex w-full rounded-lg border border-slate-300"
+      className="flex min-w-[375px] rounded-lg border border-slate-300"
     >
-      <Input className="text-xl" />
+      <Input className="" />
       <Button isIconOnly className="h-auto w-14 border-none bg-transparent">
         <IoIosSend className="text-4xl text-primary" />
       </Button>
