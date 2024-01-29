@@ -2,7 +2,7 @@ import { Button, Input } from '@nextui-org/react';
 import { IoIosSend } from 'react-icons/io';
 
 import React from 'react';
-import MessageList from '../../chatComponents/messageList';
+import MessageList from '../../components/messageList';
 
 const chatting = () => (
   <div aria-label="chatt room wrapper" className="h-[765px]">
