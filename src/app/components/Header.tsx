@@ -16,8 +16,8 @@ const Header = () => {
   const { accessToken, setAccessToken } = useAuthStore();
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const handleAccessTokenFetch = async () => {
+    try {
       const response = await fetchAccessToken(setAccessToken);
       if (response && response.data && response.data.results) {
         const { firstLoginCheck } = response.data.results;
@@ -25,9 +25,13 @@ const Header = () => {
           router.push('/user-info');
         }
       }
-    };
+    } catch (error) {
+      console.error('Failed to fetch access token:', error);
+    }
+  };
 
-    fetchData();
+  useEffect(() => {
+    handleAccessTokenFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
