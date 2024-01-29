@@ -26,14 +26,12 @@ const KakaoMap: FC = () => {
   const [mapLevel] = useState(3);
   const [isCourtReportVisible, setIsCourtReportVisible] = useState(false);
   const [isCourtDetailsVisible, setIsCourtDetailsVisible] = useState(false);
-  // Define state variables for access token and refreshing flag
   const [, setAccessToken] = useState<string | null>(null);
-  const [, setIsRefreshing] = useState<boolean>(false);
 
   // 백엔드 API로부터 농구장 정보 가져오기
   const fetchBasketballCourts = async () => {
     try {
-      await fetchAccessToken(setAccessToken, setIsRefreshing);
+      await fetchAccessToken(setAccessToken);
 
       const response = await axiosInstance.get('/api/map');
 

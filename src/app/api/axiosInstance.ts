@@ -1,3 +1,4 @@
+import useAuthStore from '@/store/authStore';
 import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 
@@ -8,10 +9,9 @@ const axiosInstance = axios.create({
   timeout: 10000,
 });
 
-let accessToken: string | null = null;
-
 axiosInstance.interceptors.request.use(
   (config) => {
+    const { accessToken } = useAuthStore.getState();
     if (accessToken) {
       // eslint-disable-next-line no-param-reassign
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -37,6 +37,8 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const { setAccessToken } = useAuthStore.getState();
+
     if (error.response.status === 401 && !originalRequest.retryFlag) {
       if (isRefreshing) {
         return new Promise((resolve) => {
@@ -56,7 +58,7 @@ axiosInstance.interceptors.response.use(
         );
         const newAccessToken = refreshResponse.data.accessToken;
 
-        accessToken = newAccessToken;
+        setAccessToken(newAccessToken);
 
         processFailedRequests(newAccessToken);
 

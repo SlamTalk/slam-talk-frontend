@@ -1,22 +1,22 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { Anton } from 'next/font/google';
 import { PiBell, PiUserCircle } from 'react-icons/pi';
 import { LuLogIn } from 'react-icons/lu';
+import useAuthStore from '@/store/authStore';
 import { fetchAccessToken } from '../api/auth';
 
 // Anton 폰트 설정
 const anton = Anton({ weight: '400', subsets: ['latin'] });
 
 const Header = () => {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [, setIsRefreshing] = useState(false); // 동시다발적인 요청 방지
+  const { accessToken, setAccessToken } = useAuthStore();
 
   useEffect(() => {
-    fetchAccessToken(setAccessToken, setIsRefreshing);
-  }, [accessToken]);
+    fetchAccessToken(setAccessToken);
+  }, [setAccessToken]);
 
   return (
     <div className="fixed z-30 flex h-[61px] w-full max-w-[600px] items-center justify-between border-b-1 bg-background pl-4">
