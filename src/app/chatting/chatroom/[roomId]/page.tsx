@@ -4,7 +4,7 @@ import { Button, Input } from '@nextui-org/react';
 import { IoIosSend } from 'react-icons/io';
 import { IoChevronBackSharp } from 'react-icons/io5';
 
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
 import MessageList from '../../components/messageList';
@@ -12,6 +12,17 @@ import MessageList from '../../components/messageList';
 const Chatting = () => {
   const params = useParams();
   const router = useRouter();
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    const detectMoblieKeyboard = () => {
+      if (document.activeElement?.tagName === 'INPUT') {
+        ref.current?.scrollIntoView({ block: 'end' });
+      }
+    };
+    window.addEventListener('resize', detectMoblieKeyboard);
+    return window.removeEventListener('resize', detectMoblieKeyboard);
+  });
   return (
     <div aria-label="chat room wrapper" className="min-h-[667px]">
       <div className="fixed top-0 z-50 flex h-[61px] w-full max-w-[600px] items-center rounded-md bg-primary">
@@ -33,7 +44,7 @@ const Chatting = () => {
         aria-label="chat input section"
         className="flex min-w-[375px] rounded-lg border border-slate-300"
       >
-        <Input className="" />
+        <Input className="" innerWrapperRef={ref} />
         <Button isIconOnly className="h-auto w-14 border-none bg-transparent">
           <IoIosSend className="text-4xl text-primary" />
         </Button>
