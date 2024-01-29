@@ -14,7 +14,7 @@ const MessageList = () => {
           <div key={i.id} className="flex h-20 w-full justify-start">
             <div aria-label="userIcon">
               <p>{i.nickname}</p>
-              <Avatar className="me-2 ms-2 border-3 border-primary" />
+              <Avatar className="me-2 ms-2" />
             </div>
             <div className="my-4 max-w-sm rounded-lg bg-primary p-4 text-white">
               {i.message}
@@ -27,7 +27,7 @@ const MessageList = () => {
             </div>
             <div aria-label="userIcon">
               <p>{i.nickname}</p>
-              <Avatar className="me-2 ms-2 border-3 border-primary" />
+              <Avatar className="me-2 ms-2" />
             </div>
           </div>
         )
