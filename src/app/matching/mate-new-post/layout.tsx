@@ -1,7 +1,11 @@
 import React from 'react';
+import MateHeader from '../components/MateHeader';
 
-const layout = ({ children }: { children: React.ReactNode }) => (
-  <div>{children}</div>
+const MateNewPostLayout = ({ children }: { children: React.ReactNode }) => (
+  <div>
+    <MateHeader />
+    <div>{children}</div>
+  </div>
 );
 
-export default layout;
+export default MateNewPostLayout;
