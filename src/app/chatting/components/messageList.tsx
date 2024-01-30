@@ -8,7 +8,7 @@ const MessageList = () => {
     { id: 3, userId: '231', nickname: 'user-1', message: '잘가요~' },
   ];
   return (
-    <div className="m-1 h-[700px] w-full">
+    <div className="min-w m-1 h-[700px] w-full">
       {messages.map((i) =>
         i.userId === '123' ? (
           <div key={i.id} className="flex h-20 w-full justify-start">

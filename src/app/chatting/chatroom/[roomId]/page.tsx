@@ -20,6 +20,11 @@ const Chatting = () => {
         ref.current?.scrollIntoView({ block: 'end' });
       }
     };
+    window.addEventListener('resize', () => {
+      if (window.innerHeight < window.screen.height) {
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+    });
     window.addEventListener('resize', detectMoblieKeyboard);
     return window.removeEventListener('resize', detectMoblieKeyboard);
   });
@@ -34,7 +39,6 @@ const Chatting = () => {
             router.back();
           }}
         />
-
         <h2 className="w-[525px] text-center text-xl text-white">
           chat room {params.roomId}
         </h2>
@@ -42,7 +46,7 @@ const Chatting = () => {
       <MessageList />
       <div
         aria-label="chat input section"
-        className="flex min-w-[375px] rounded-lg border border-slate-300"
+        className="flex w-[600px] min-w-[375px] rounded-lg border border-slate-300"
       >
         <Input className="" innerWrapperRef={ref} />
         <Button isIconOnly className="h-auto w-14 border-none bg-transparent">
