@@ -6,6 +6,7 @@ import { Anton } from 'next/font/google';
 import { PiBell, PiUserCircle } from 'react-icons/pi';
 import { LuLogIn } from 'react-icons/lu';
 import useAuthStore from '@/store/authStore';
+import { useRouter } from 'next/navigation';
 import { fetchAccessToken } from '../api/auth';
 
 // Anton 폰트 설정
@@ -13,9 +14,24 @@ const anton = Anton({ weight: '400', subsets: ['latin'] });
 
 const Header = () => {
   const { accessToken, setAccessToken } = useAuthStore();
+  const router = useRouter();
+
+  const handleAccessTokenFetch = async () => {
+    try {
+      const response = await fetchAccessToken(setAccessToken);
+      if (response && response.data && response.data.results) {
+        const { firstLoginCheck } = response.data.results;
+        if (firstLoginCheck === true) {
+          router.push('/user-info');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to fetch access token:', error);
+    }
+  };
 
   useEffect(() => {
-    fetchAccessToken(setAccessToken);
+    handleAccessTokenFetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
