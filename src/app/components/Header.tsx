@@ -23,7 +23,7 @@ const Header = () => {
       <div className="flex space-x-4 pr-4">
         {accessToken ? (
           <Link href="/mypage">
-            <PiUserCircle aria-label="알림" size={25} />
+            <PiUserCircle aria-label="유저" size={25} />
           </Link>
         ) : (
           <Link href="/login">
