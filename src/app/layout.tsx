@@ -14,8 +14,6 @@ const inter = Inter({ subsets: ['latin'] });
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
 
-  console.log(pathname);
-
   return (
     <html lang="en" className="light" suppressHydrationWarning>
       <head>
@@ -27,12 +25,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body className={`${inter.className} flex min-h-screen flex-col`}>
         <Providers>
           <div className="flex-grow">
-            {pathname.includes('/matching/mate-detail') ||
-            pathname.includes('/matching/mate-new-post') ? null : (
+            {pathname.includes('details') ||
+            pathname.includes('new') ||
+            pathname.includes('mypage') ? null : (
               <Header />
             )}
             <div className="pb-[48px] pt-[61px]">{children}</div>
-            <Footer />
+            {pathname.includes('chatroom') ? null : <Footer />}
           </div>
         </Providers>
       </body>

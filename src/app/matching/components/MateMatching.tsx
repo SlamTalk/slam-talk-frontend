@@ -229,7 +229,7 @@ const MateMatching = () => {
         </div>
       </div>
       {filteredPosts.map((post) => (
-        <Link href={`/matching/mate-detail/${post.postId}`}>
+        <Link href={`/matching/mate-details/${post.postId}`}>
           <MatePostCard key={post.postId} {...post} />
         </Link>
       ))}

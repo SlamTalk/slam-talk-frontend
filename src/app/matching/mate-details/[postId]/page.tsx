@@ -82,7 +82,7 @@ const PositionRecruitment = () => (
   </div>
 );
 
-const MateDetailPage = () => {
+const MateDetailsPage = () => {
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
@@ -174,4 +174,4 @@ const MateDetailPage = () => {
   );
 };
 
-export default MateDetailPage;
+export default MateDetailsPage;
