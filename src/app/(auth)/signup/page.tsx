@@ -70,6 +70,7 @@ const SignUp = () => {
           '죄송합니다. 회원가입에 실패했습니다. 서버 오류 발생.';
         alert(message);
       } else {
+        console.log(error);
         alert('죄송합니다. 알 수 없는 오류가 발생했습니다.');
       }
     }

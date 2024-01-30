@@ -6,6 +6,8 @@ import { validateEmail, validatePassword } from '@/utils/validations';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import useAuthStore from '@/store/authStore';
+import axiosInstance from '@/app/api/axiosInstance';
+import { AxiosError } from 'axios';
 import { EyeSlashFilledIcon } from './EyeSlashFilledIcon';
 import { EyeFilledIcon } from './EyeFilledIcon';
 
@@ -14,7 +16,7 @@ const EmailLogin = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuthStore();
+  const { setAccessToken } = useAuthStore();
 
   const isEmailInvalid = useMemo(
     () => !validateEmail(email) && email !== '',
@@ -32,15 +34,34 @@ const EmailLogin = () => {
     }
 
     try {
-      await login(email, password);
+      const response = await axiosInstance.post('/api/login', {
+        email,
+        password,
+      });
 
-      alert('로그인 성공!');
-      router.push('/');
+      console.log(response);
+
+      if (response.status === 200) {
+        const { accessToken } = response.data;
+        setAccessToken(accessToken);
+
+        alert('로그인 성공!');
+        router.back();
+      }
     } catch (error) {
-      console.error('로그인 실패:', error);
+      console.log('로그인 실패:', error);
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data?.message ||
+          '죄송합니다. 로그인에 실패했습니다. 서버 오류 발생.';
+        alert(message);
+      } else {
+        alert('죄송합니다. 알 수 없는 오류가 발생했습니다.');
+      }
     }
   };
   const toggleVisibility = () => setIsVisible(!isVisible);
+
   return (
     <div className="mt-14 flex h-full w-full flex-col flex-wrap justify-center gap-3 p-5 align-middle md:flex-nowrap">
       <h1 className="mb-4 text-2xl font-bold sm:text-xl">
