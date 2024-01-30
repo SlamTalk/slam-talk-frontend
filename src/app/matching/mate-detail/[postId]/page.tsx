@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Snippet } from '@nextui-org/react';
@@ -83,18 +83,33 @@ const PositionRecruitment = () => (
 );
 
 const MateDetailPage = () => {
-  // 날짜 및 시간 포맷 변경 함수
-  const formatTime = (timeString: string) => {
-    const [datePart, timePart] = timeString.split(' ');
-    const [year, month, day] = datePart.split('-');
-    const [hour, minute] = timePart.split(':');
-    return `${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분`;
-  };
+  const [date, setDate] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+
+  useEffect(() => {
+    const formatDate = (dateString: string) => {
+      const [year, month, day] = dateString.split('-');
+      return `${year}년 ${month}월 ${day}일`;
+    };
+
+    const formatHour = (timeString: string) => {
+      const [hour, minute] = timeString.split(':');
+      return `${hour}시 ${minute}분`;
+    };
+
+    const [startDate, startTimeString] = post.startScheduledTime.split(' ');
+    const [, endTimeString] = post.endScheduledTime.split(' ');
+
+    setDate(formatDate(startDate));
+    setStartTime(formatHour(startTimeString));
+    setEndTime(formatHour(endTimeString));
+  }, []);
 
   return (
-    <div className="bg-white p-4">
+    <div className="mx-[16px] rounded-md border-b-1 bg-gray-200">
       {/* 유저 프로필 */}
-      <div className="mb-6 flex items-center space-x-4">
+      <div className="mb-4 flex items-center space-x-4 border-b-2 border-gray-400 px-8 py-2">
         <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray-300">
           <Image
             src={writer.userProfile || '/images/userprofile-default.png'}
@@ -108,16 +123,18 @@ const MateDetailPage = () => {
       </div>
 
       {/* 모집글 제목 */}
-      <h1 className="mb-4 text-xl font-bold">{post.title}</h1>
+      <h1 className="mx-6 mb-4 text-xl font-bold">{post.title}</h1>
 
       {/* 날짜와 시간 */}
-      <div className="mb-4 flex items-center justify-between">
-        <span>{formatTime(post.startScheduledTime)}</span>
-        <span>{formatTime(post.endScheduledTime)}</span>
+      <div className="mx-6 mb-4 flex items-center">
+        <span>{date}</span>
+        <span className="pl-4 font-semibold">
+          {startTime} ~ {endTime}
+        </span>
       </div>
 
       {/* 농구장 장소와 지도 페이지 링크 */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mx-4 mb-6 flex items-center justify-between">
         <div>
           <Snippet symbol="">{post.locationDetail}</Snippet>
         </div>
