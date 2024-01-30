@@ -20,14 +20,14 @@ const Header = () => (
     </div>
     <div className="flex space-x-4 pr-4">
       <Link href="/mypage">
-        <PiUserCircle aria-label="알림" size={25} />
+        <PiUserCircle aria-label="유저" size={25} />
       </Link>
       <Link href="/login">
         <LuLogIn aria-label="로그인" size={24} />
       </Link>
       {/* {isLoggedIn ? (
           <Link href="/mypage">
-            <PiUserCircle aria-label="알림" size={25} />
+            <PiUserCircle aria-label="유저" size={25} />
           </Link>
         ) : (
           <Link href="/login">
