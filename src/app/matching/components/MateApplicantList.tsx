@@ -60,8 +60,8 @@ const MateApplicantList = ({
     >
       <div className="flex items-center">
         <span
-          className="w-30 mr-2 truncate font-semibold"
-          style={{ minWidth: '80px' }}
+          className="w-30 mr-2 overflow-hidden truncate font-semibold"
+          style={{ width: '110px' }}
         >
           {applicant.participantNickname}
         </span>
