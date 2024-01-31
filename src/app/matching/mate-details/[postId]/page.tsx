@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Snippet } from '@nextui-org/react';
+import MateApplicantList from '../../components/MateApplicantList';
 
 const post = {
   matePostId: 1,
@@ -25,13 +26,15 @@ const post = {
   participants: [
     {
       participantTableId: 1,
+      participantId: 6,
       participantNickname: '행인1',
-      applyStatus: 'CANCEL',
+      applyStatus: 'CANCELED',
       position: 'FORWARD',
       skillLevel: 'HIGH',
     },
     {
       participantTableId: 2,
+      participantId: 10,
       participantNickname: '행인2',
       applyStatus: 'REJECTED',
       position: 'FORWARD',
@@ -39,6 +42,7 @@ const post = {
     },
     {
       participantTableId: 3,
+      participantId: 14,
       participantNickname: '행인3',
       applyStatus: 'WAITING',
       position: 'CENTER',
@@ -53,28 +57,34 @@ const writer = {
   userProfile: null,
 };
 
+const user = {
+  userId: 14,
+  userNickname: '스테픈커리',
+  userProfile: null,
+};
+
 const PositionRecruitment = () => (
-  <div className="mb-6">
+  <div>
     {post.maxParticipantsCenters > 0 && (
-      <div className="mb-2">
+      <div className="mb-1">
         <span className="font-semibold">센터</span>:{' '}
         {post.currentParticipantsCenters}/{post.maxParticipantsCenters} 명
       </div>
     )}
     {post.maxParticipantsGuards > 0 && (
-      <div className="mb-2">
+      <div className="mb-1">
         <span className="font-semibold">가드</span>:{' '}
         {post.currentParticipantsGuards}/{post.maxParticipantsGuards} 명
       </div>
     )}
     {post.maxParticipantsForwards > 0 && (
-      <div className="mb-2">
+      <div className="mb-1">
         <span className="font-semibold">포워드</span>:{' '}
         {post.currentParticipantsForwards}/{post.maxParticipantsForwards} 명
       </div>
     )}
     {post.maxParticipantsOthers > 0 && (
-      <div className="mb-2">
+      <div className="mb-1">
         <span className="font-semibold">무관</span>:{' '}
         {post.currentParticipantsOthers}/{post.maxParticipantsOthers} 명
       </div>
@@ -86,6 +96,7 @@ const MateDetailsPage = () => {
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const isWriter = user.userId === writer.userId;
 
   useEffect(() => {
     const formatDate = (dateString: string) => {
@@ -107,7 +118,7 @@ const MateDetailsPage = () => {
   }, []);
 
   return (
-    <div className="mx-[16px] rounded-md border-b-1 bg-gray-200">
+    <div className="mx-[16px] mt-4 rounded-md border-b-1 bg-gray-200 text-black">
       {/* 유저 프로필 */}
       <div className="mb-4 flex items-center space-x-4 border-b-2 border-gray-400 px-8 py-2">
         <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray-300">
@@ -123,51 +134,57 @@ const MateDetailsPage = () => {
       </div>
 
       {/* 모집글 제목 */}
-      <h1 className="mx-6 mb-4 text-xl font-bold">{post.title}</h1>
+      <h1 className="mx-6 mb-2 text-xl font-bold">{post.title}</h1>
 
       {/* 날짜와 시간 */}
       <div className="mx-6 mb-4 flex items-center">
-        <span>{date}</span>
-        <span className="pl-4 font-semibold">
+        <div className="text-sm">{date}</div>
+        <div className="pl-4 text-sm font-semibold">
           {startTime} ~ {endTime}
-        </span>
+        </div>
       </div>
 
       {/* 농구장 장소와 지도 페이지 링크 */}
-      <div className="mx-4 mb-6 flex items-center justify-between">
-        <div>
-          <Snippet symbol="">{post.locationDetail}</Snippet>
-        </div>
+      <div className="mx-6 mb-4">
+        <div className="text-sm font-semibold">농구장 장소</div>
+        <div className="mt-2 flex items-center justify-between rounded-md bg-gray-300">
+          <div>
+            <Snippet className="bg-gray-300 text-black" symbol="">
+              {post.locationDetail}
+            </Snippet>
+          </div>
 
-        <Link href="/map">
-          <div className="text-blue-600 hover:underline">지도 보기</div>
-        </Link>
+          <Link href="/map">
+            <div className="pr-10 text-blue-600 hover:underline">지도 보기</div>
+          </Link>
+        </div>
+      </div>
+
+      {/* 모집 정보 */}
+      <div className="mx-6 mb-4">
+        <div className="text-sm font-semibold">모집 정보</div>
+        <div className="mt-2 rounded-md bg-gray-300 p-3">
+          <PositionRecruitment />
+        </div>
       </div>
 
       {/* 상세 내용 */}
-      <p className="mb-6">{post.content}</p>
-
-      <PositionRecruitment />
+      <div className="mx-6 mb-4">
+        <div className="text-sm font-semibold">상세 내용</div>
+        <p className="mb-6 mt-2 h-[100px] overflow-y-auto break-words rounded-md bg-gray-300 p-3">
+          {post.content}
+        </p>
+      </div>
 
       {/* 지원자 리스트 */}
-      <div>
-        <h2 className="mb-4 font-bold">지원자 리스트</h2>
+      <div className="mx-6 mb-4">
+        <div className="text-sm font-semibold">지원자 리스트</div>
         {post.participants.map((participant) => (
-          <div key={participant.participantTableId} className="mb-2">
-            <div className="flex items-center justify-between">
-              <span className="font-semibold">
-                {participant.participantNickname}
-              </span>
-              <span
-                className={`text-sm ${participant.applyStatus === 'WAITING' ? 'text-yellow-500' : 'text-gray-500'}`}
-              >
-                {participant.applyStatus}
-              </span>
-            </div>
-            <div className="text-sm">
-              {`포지션: ${participant.position}, 실력: ${participant.skillLevel}`}
-            </div>
-          </div>
+          <MateApplicantList
+            user={user}
+            applicant={participant}
+            isWriter={isWriter}
+          />
         ))}
       </div>
     </div>
