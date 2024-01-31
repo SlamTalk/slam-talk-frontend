@@ -7,7 +7,7 @@ import { MdMyLocation } from 'react-icons/md';
 import { BiSolidLocationPlus } from 'react-icons/bi';
 import CourtReport from './CourtReport';
 import CourtDetails from './CourtDetail';
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
 
 declare global {
   interface Window {
