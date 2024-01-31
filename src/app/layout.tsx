@@ -22,17 +22,15 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_KEY}&autoload=false&libraries=services`}
         />
       </head>
-      <body className={`${inter.className} flex min-h-screen flex-col`}>
+      <body className={`${inter.className}`}>
         <Providers>
-          <div className="flex-grow">
-            {pathname.includes('details') ||
-            pathname.includes('new') ||
-            pathname.includes('mypage') ? null : (
-              <Header />
-            )}
-            <div className="pb-[48px] pt-[61px]">{children}</div>
-            {pathname.includes('chatroom') ? null : <Footer />}
-          </div>
+          {pathname.includes('details') ||
+          pathname.includes('new') ||
+          pathname.includes('mypage') ? null : (
+            <Header />
+          )}
+          <div className="pb-[48px] pt-[61px]">{children}</div>
+          {pathname.includes('chatroom') ? null : <Footer />}
         </Providers>
       </body>
     </html>
