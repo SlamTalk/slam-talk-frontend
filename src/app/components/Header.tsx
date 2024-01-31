@@ -6,6 +6,7 @@ import { Anton } from 'next/font/google';
 import { PiBell, PiUserCircle } from 'react-icons/pi';
 import { LuLogIn } from 'react-icons/lu';
 import useAuthStore from '@/store/authStore';
+import ThemeSwitcher from './ThemeSwitcher';
 
 // Anton 폰트 설정
 const anton = Anton({ weight: '400', subsets: ['latin'] });
@@ -20,17 +21,20 @@ const Header = () => {
           <div>SLAM TALK</div>
         </Link>
       </div>
-      <div className="flex space-x-4 pr-4">
-        {accessToken ? (
-          <Link href="/mypage">
-            <PiUserCircle aria-label="유저" size={25} />
-          </Link>
-        ) : (
-          <Link href="/login">
-            <LuLogIn aria-label="로그인" size={24} />
-          </Link>
-        )}
-        <PiBell size={24} />
+      <div className="flex gap-2 pr-4">
+        <ThemeSwitcher />
+        <div className="mr-2">
+          {accessToken ? (
+            <Link href="/mypage">
+              <PiUserCircle aria-label="유저" size={26} />
+            </Link>
+          ) : (
+            <Link href="/login">
+              <LuLogIn aria-label="로그인" size={24} />
+            </Link>
+          )}
+        </div>
+        <PiBell aria-label="알림" size={24} />
       </div>
     </div>
   );
