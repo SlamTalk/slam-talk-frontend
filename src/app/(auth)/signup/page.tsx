@@ -9,8 +9,8 @@ import {
 } from '@/utils/validations';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import { EyeSlashFilledIcon } from '../login/email/EyeSlashFilledIcon';
-import { EyeFilledIcon } from '../login/email/EyeFilledIcon';
+import { EyeSlashFilledIcon } from '../login/components/EyeSlashFilledIcon';
+import { EyeFilledIcon } from '../login/components/EyeFilledIcon';
 import axiosInstance from '../../api/axiosInstance';
 
 const SignUp = () => {
