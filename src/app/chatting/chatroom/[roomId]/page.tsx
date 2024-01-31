@@ -23,9 +23,28 @@ const chatTest = () => {
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,
   });
-  client.onStompError = function (frame) {
-    console.log({ frame });
+  const subscribe = () => {
+    client.subscribe('/sub/chat/enter/52', (frame) => {
+      const data = JSON.parse(frame.body);
+      console.log({ data });
+    });
   };
+
+  const publish = () => {
+    client.publish({
+      destination: '/pub/chat/message/52',
+      body: JSON.stringify({ userId: 'sub-0' }),
+    });
+  };
+  client.onStompError = () => {
+    console.log('erororororooror');
+  };
+  client.onConnect = () => {
+    console.log('성공~!!');
+    subscribe();
+    publish();
+  };
+
   client.activate();
 };
 
