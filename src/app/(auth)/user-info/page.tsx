@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 // import axiosInstance from '@/app/api/axiosInstance';
 import { useRouter } from 'next/navigation';
 import { Progress } from '@nextui-org/react';
-import UserSkill from './UserSkill';
-import UserPosition from './UserPosition';
+import UserSkill from './components/UserSkill';
+import UserPosition from './components/UserPosition';
 
 interface UserInfo {
   skill: string | null;

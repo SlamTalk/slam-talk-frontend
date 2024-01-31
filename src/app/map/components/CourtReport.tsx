@@ -9,7 +9,7 @@ import {
   Button,
 } from '@nextui-org/react';
 import { IoIosClose } from 'react-icons/io';
-import { basketballCourtType, basketballCourtSize } from './courtReportData';
+import { basketballCourtType, basketballCourtSize } from '../courtReportData';
 
 interface CourtReportProps {
   isVisible: boolean;

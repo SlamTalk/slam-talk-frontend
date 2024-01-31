@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Anton } from 'next/font/google';
 import { Button } from '@nextui-org/button';
 import Link from 'next/link';
-import KakaoImg from './Kakao';
-import GoogleImg from './Google';
-import NaverImg from './Naver';
+import KakaoImg from './components/Kakao';
+import GoogleImg from './components/Google';
+import NaverImg from './components/Naver';
 
 const anton = Anton({ weight: '400', subsets: ['latin'] });
 
