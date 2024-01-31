@@ -1,22 +1,25 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Button } from '@nextui-org/react';
 
-type MateApplicantListProps = {
-  user: {
-    userId: number;
-    // user 객체의 다른 필요한 타입 정의
-  };
-  applicant: {
-    participantTableId: number;
-    participantNickname: string;
-    applyStatus: string;
-    position: string;
-    skillLevel: string;
-    participantId: number;
-  };
+interface User {
+  userId: number;
+  // user 객체의 다른 필요한 타입 정의
+}
+
+interface Applicant {
+  participantTableId: number;
+  participantNickname: string;
+  applyStatus: string;
+  position: string;
+  skillLevel: string;
+  participantId: number;
+}
+
+interface MateApplicantListProps {
+  user: User;
+  applicant: Applicant;
   isWriter: boolean;
-};
+}
 
 const getStatusClassName = (status: string) => {
   switch (status) {
@@ -33,11 +36,11 @@ const getStatusClassName = (status: string) => {
   }
 };
 
-const MateApplicantList = ({
+const MateApplicantList: React.FC<MateApplicantListProps> = ({
   user,
   applicant,
   isWriter,
-}: MateApplicantListProps) => {
+}) => {
   const handleAccept = (participantTableId: number) => {
     // 수락 로직 구현
     console.log(participantTableId);
@@ -111,17 +114,6 @@ const MateApplicantList = ({
       </div>
     </div>
   );
-};
-MateApplicantList.propTypes = {
-  applicant: PropTypes.shape({
-    participantTableId: PropTypes.number.isRequired,
-    participantNickname: PropTypes.string.isRequired,
-    applyStatus: PropTypes.string.isRequired,
-    position: PropTypes.string.isRequired,
-    skillLevel: PropTypes.string.isRequired,
-    participantId: PropTypes.number.isRequired,
-  }).isRequired,
-  isWriter: PropTypes.bool.isRequired,
 };
 
 export default MateApplicantList;
