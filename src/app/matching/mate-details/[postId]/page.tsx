@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Snippet } from '@nextui-org/react';
+import { Snippet, Button } from '@nextui-org/react';
 import MateApplicantList from '../../components/MateApplicantList';
 
 const post = {
@@ -58,7 +58,7 @@ const writer = {
 };
 
 const user = {
-  userId: 14,
+  userId: 1,
   userNickname: '스테픈커리',
   userProfile: null,
 };
@@ -186,6 +186,20 @@ const MateDetailsPage = () => {
             isWriter={isWriter}
           />
         ))}
+      </div>
+      <div className="flex justify-center py-3">
+        {isWriter ? (
+          <>
+            <Button color="primary" className="mx-2">
+              모집 완료
+            </Button>
+            <Button color="default" className="mx-2 bg-gray-400">
+              모집글 수정
+            </Button>
+          </>
+        ) : (
+          <Button color="primary">지원하기</Button>
+        )}
       </div>
     </div>
   );
