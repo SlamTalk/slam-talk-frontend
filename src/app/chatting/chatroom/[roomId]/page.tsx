@@ -8,50 +8,50 @@ import * as StompJs from '@stomp/stompjs';
 import React, { useLayoutEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
+import useAuthStore from '@/store/authStore';
 import MessageList from '../../components/messageList';
 
-
+const { accessToken } = useAuthStore.getState();
 const chatTest = () => {
   console.log('chat test start');
   const client = new StompJs.Client({
-    brokerURL: `ws://localhost:8080/ws/slamtalk`,
+    brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
     connectHeaders: {
       id: 'sub-0',
-      authorization:
-        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTcwNjg5MjgzN30.jAF5XPCuOvYOg0ZoKFhSG5zUi9o398mz9En9wqNNWpg2ubA3wFvYSSStWWKowO2cuOV2I0rbDzM4SZB86YP9nw',
+      authorization: `${accessToken}`,
     },
-    debug: (msg) => {
+    onConnect: (msg) => {
+      console.log('여기');
       console.log({ msg });
+
+      client.subscribe('/sub/chat/enter/2', (frame) => {
+        const data = JSON.parse(frame.body);
+        console.log({ data });
+      });
+      client.publish({
+        destination: '/pub/enter/2',
+      });
+      client.publish({
+        destination: '/pub/chat/message/2',
+        body: JSON.stringify({
+          roomId: 2,
+          senderId: 'user',
+          content: 'HelloSTOMPWorld^_^',
+        }),
+      });
     },
     reconnectDelay: 5000,
-    heartbeatIncoming: 4000,
-    heartbeatOutgoing: 4000,
+    heartbeatIncoming: 1000,
+    heartbeatOutgoing: 1000,
   });
-  const subscribe = () => {
-    client.subscribe('/sub/chat/enter/52', (frame) => {
-      const data = JSON.parse(frame.body);
-      console.log({ data });
-    });
-  };
 
-  const publish = () => {
-    client.publish({
-      destination: '/pub/chat/message/52',
-      body: JSON.stringify({ userId: 'sub-0' }),
-    });
-  };
-  client.onStompError = () => {
-    console.log('erororororooror');
-  };
-  client.onConnect = () => {
-    console.log('성공~!!');
-    subscribe();
-    publish();
+  client.onStompError = (error) => {
+    console.log({ error });
+    client.deactivate();
   };
 
   client.activate();
 };
-
 
 const Chatting = () => {
   const params = useParams();
@@ -93,7 +93,11 @@ const Chatting = () => {
         className="flex w-[600px] min-w-[375px] rounded-lg border border-slate-300"
       >
         <Input className="" innerWrapperRef={ref} />
-        <Button isIconOnly className="h-auto w-14 border-none bg-transparent" onClick={chatTest}>
+        <Button
+          isIconOnly
+          className="h-auto w-14 border-none bg-transparent"
+          onClick={chatTest}
+        >
           <IoIosSend className="text-4xl text-primary" />
         </Button>
       </div>
