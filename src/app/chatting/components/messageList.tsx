@@ -15,7 +15,7 @@ const MessageList = () => {
             <div aria-label="userIcon">
               <Avatar className="mx-2" />
             </div>
-            <div aria-label="상대의 닉네임 && 채팅 메시지">
+            <div aria-label="상대방의 닉네임과 채팅 메시지">
               <p className="text-start">{i.nickname}</p>
               <div className="my-1 max-w-sm rounded-lg bg-slate-200 p-4 text-black">
                 {i.message}
@@ -24,7 +24,7 @@ const MessageList = () => {
           </div>
         ) : (
           <div key={i.id} className="flex h-20 w-full justify-end">
-            <div aria-label="나의 닉네임 & 채팅 메시지">
+            <div aria-label="나의 닉네임과 채팅 메시지">
               <p className="text-end">{i.nickname}</p>
               <div className="my-3 max-w-sm rounded-lg bg-primary p-4 text-white">
                 {i.message}
