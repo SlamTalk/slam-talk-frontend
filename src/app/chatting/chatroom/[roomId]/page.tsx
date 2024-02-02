@@ -21,12 +21,12 @@ const chatTest = () => {
       id: 'sub-0',
       authorization: `Bearer ${accessToken}`,
     },
-    onConnect: (msg) => {
+    onConnect: async (msg) => {
       console.log('여기');
       console.log({ msg });
 
-      client.subscribe(
-        '/sub/chat/enter/2',
+      await client.subscribe(
+        '/sub/chat/enter/1',
         (frame) => {
           const data = JSON.parse(frame.body);
           console.log({ data });
@@ -34,14 +34,14 @@ const chatTest = () => {
         { authorization: `Bearer ${accessToken}` }
       );
       client.publish({
-        destination: '/pub/enter/2',
+        destination: '/pub/enter/1',
         headers: { authorization: `Bearer ${accessToken}` },
       });
       client.publish({
-        destination: '/pub/chat/message/2',
+        destination: '/pub/chat/message/1',
         headers: { authorization: `Bearer ${accessToken}` },
         body: JSON.stringify({
-          roomId: 2,
+          roomId: 1,
           senderId: 'user',
           content: 'HelloSTOMPWorld^_^',
         }),
