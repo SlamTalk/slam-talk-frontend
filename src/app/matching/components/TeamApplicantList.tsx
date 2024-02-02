@@ -62,9 +62,13 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
       className="mb-2 mt-2 flex justify-between rounded-md bg-gray-300 px-3 py-1"
     >
       <div className="flex items-center">
-        <span className="mr-2 font-semibold">
-          {applicant.participantNickname} [{applicant.teamName}]
+        <span
+          className="w-30 mr-2 overflow-hidden truncate font-semibold"
+          style={{ width: '110px' }}
+        >
+          {applicant.participantNickname}
         </span>
+        <div className="y-1 mr-2 font-semibold">[{applicant.teamName}]</div>
         <div className="rounded-md bg-gray-200 px-2 py-1">
           {applicant.skillLevel}
         </div>
