@@ -24,15 +24,21 @@ const chatTest = () => {
       console.log('여기');
       console.log({ msg });
 
-      client.subscribe('/sub/chat/enter/2', (frame) => {
-        const data = JSON.parse(frame.body);
-        console.log({ data });
-      });
+      client.subscribe(
+        '/sub/chat/enter/2',
+        (frame) => {
+          const data = JSON.parse(frame.body);
+          console.log({ data });
+        },
+        { authorization: `${accessToken}` }
+      );
       client.publish({
         destination: '/pub/enter/2',
+        headers: { authorization: `${accessToken}` },
       });
       client.publish({
         destination: '/pub/chat/message/2',
+        headers: { authorization: `${accessToken}` },
         body: JSON.stringify({
           roomId: 2,
           senderId: 'user',
