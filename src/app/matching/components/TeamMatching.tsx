@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import { Card, Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
+import { FaPlus } from 'react-icons/fa';
 
 interface Post {
+  postId: number;
+  title: string;
+  date: string;
+  type: string;
+  location: string;
+  level: string[];
+}
+
+interface TeamPost {
   title: string;
   date: string;
   type: string;
@@ -34,6 +44,7 @@ const cities = [
 
 const posts: Post[] = [
   {
+    postId: 1,
     title: '개포동 00체육관 한 팀 구합니다!',
     date: '1월 12일 오후 2시',
     type: '5 vs 5',
@@ -41,6 +52,7 @@ const posts: Post[] = [
     level: ['입문', '초보', '중수'],
   },
   {
+    postId: 2,
     title: '구로구 7시 한 팀 구해요!',
     date: '1월 15일 오후 7시',
     type: '5 vs 5',
@@ -48,6 +60,7 @@ const posts: Post[] = [
     level: ['입문', '초보'],
   },
   {
+    postId: 3,
     title: '도봉구 간단하게 3:3 하실 분~',
     date: '1월 12일 오후 2시',
     type: '3 vs 3',
@@ -56,7 +69,7 @@ const posts: Post[] = [
   },
 ];
 
-const TeamPostCard: React.FC<Post> = ({
+const TeamPostCard: React.FC<TeamPost> = ({
   title,
   date,
   type,
@@ -148,12 +161,20 @@ const TeamMatching = () => {
         </div>
       </div>
       {filteredPosts.map((post) => (
-        <TeamPostCard key={post.title} {...post} />
+        <Link href={`/matching/team-details/${post.postId}`}>
+          <TeamPostCard key={post.title} {...post} />
+        </Link>
       ))}
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Link href="/matching/team-new-post">
-            <Button color="primary">새 모집글 작성</Button>
+            <Button
+              startContent={<FaPlus />}
+              color="primary"
+              className="rounded-full bg-primary text-white shadow-md"
+            >
+              새 모집글 작성
+            </Button>
           </Link>
         </div>
       </div>
