@@ -6,12 +6,12 @@ import { IoIosClose } from 'react-icons/io';
 import { FaPhoneAlt, FaParking, FaTag, FaRegDotCircle } from 'react-icons/fa';
 import Image from 'next/image';
 import { FaLocationDot, FaClock, FaLightbulb } from 'react-icons/fa6';
+import { PiChatsCircle } from 'react-icons/pi';
 import { CourtIcon } from './icons/CourtIcon';
 import { HoopIcon } from './icons/HoopIcon';
 import { FeeIcon } from './icons/FeeIcon';
 import { InfoIcon } from './icons/InfoIcon';
 import { WebsiteIcon } from './icons/WebsiteIcon';
-import { ChatIcon } from './icons/ChatIcon';
 
 interface CourtDetailsProps {
   isVisible: boolean;
@@ -20,7 +20,7 @@ interface CourtDetailsProps {
 }
 
 // 농구장 사진, 주소(도로명), 코트 종류, 실내외(실내/야외), 코트사이즈, 골대수, 야간 조명, 개방시간, 사용료, 주차 가능, 전화번호, 홈페이지, 기타 정보
-// [TODO] 주소 복사 넣기,
+// [TODO] 주소 복사 넣기, ✅
 // 각 컨텐츠 아이콘 넣기 ✅
 // true, false 명확히하기 ✅
 // 현재 링크 공유 만들기
@@ -37,6 +37,18 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
       );
       if (confirmDial) {
         window.location.href = `tel:${selectedPlace.phoneNum}`;
+      }
+    }
+  };
+
+  const handleCopyAddress = async () => {
+    if (selectedPlace.address) {
+      try {
+        await navigator.clipboard.writeText(selectedPlace.address);
+        alert('주소가 복사되었습니다.');
+      } catch (error) {
+        console.error('주소 복사 중 오류 발생:', error);
+        alert('주소를 복사하는 데 실패했습니다.');
       }
     }
   };
@@ -67,9 +79,16 @@ transition-all duration-300 ease-in-out ${isVisible ? '' : 'hidden'}`}
             <h2 className="mx-1 text-xl font-bold">
               {selectedPlace.courtName}
             </h2>
-            <div className="flex gap-3">
-              <ChatIcon className="text-primary" />
-            </div>
+            <Button
+              radius="full"
+              size="sm"
+              variant="bordered"
+              startContent={<PiChatsCircle />}
+              className="border-1"
+              aria-label="시설 채팅 바로가기"
+            >
+              시설 채팅
+            </Button>
           </div>
           <div className="my-4 flex w-full justify-center gap-3">
             <Button
@@ -97,6 +116,9 @@ transition-all duration-300 ease-in-out ${isVisible ? '' : 'hidden'}`}
                 className="dark:text-gray-20 text-gray-400"
               />
               <span>{selectedPlace.address}</span>
+              <button type="button" onClick={handleCopyAddress}>
+                <span className="text-blue-500">복사</span>
+              </button>
             </div>
             <div className="flex gap-2 align-middle">
               <FaClock size={14} className="text-gray-400 dark:text-gray-200" />
