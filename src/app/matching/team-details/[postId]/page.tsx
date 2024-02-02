@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Snippet, Button } from '@nextui-org/react';
+import TeamApplicantList from '../../components/TeamApplicantList';
 
 const post = {
   matePostId: 1,
@@ -37,7 +38,7 @@ const post = {
       participantTableId: 3,
       participantId: 14,
       participantNickname: '행인3',
-      teamName: '도봉구 골스',
+      teamName: '아울스',
       applyStatus: 'WAITING',
       skillLevel: 'HIGH',
     },
@@ -51,7 +52,7 @@ const writer = {
 };
 
 const user = {
-  userId: 1,
+  userId: 10,
   userNickname: '스테픈커리',
   userProfile: null,
 };
@@ -94,7 +95,9 @@ const TeamDetailsPage = () => {
             layout="responsive"
           />
         </div>
-        <span className="font-bold">{writer.userNickname}</span>
+        <span className="font-bold">
+          {writer.userNickname} [{post.teamName}]
+        </span>
       </div>
 
       {/* 모집글 제목 */}
@@ -141,7 +144,7 @@ const TeamDetailsPage = () => {
       </div>
 
       {/* 지원자 리스트 */}
-      {/* <div className="mx-6 mb-4">
+      <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">지원자 리스트</div>
         {post.participants.map((participant) => (
           <TeamApplicantList
@@ -150,7 +153,7 @@ const TeamDetailsPage = () => {
             isWriter={isWriter}
           />
         ))}
-      </div> */}
+      </div>
 
       {/* 모집 완료, 수정, 지원 버튼 */}
       <div className="flex justify-center py-3">
