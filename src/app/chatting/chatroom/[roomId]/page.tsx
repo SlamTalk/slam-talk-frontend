@@ -13,14 +13,13 @@ import MessageList from '../../components/messageList';
 
 const { accessToken } = useAuthStore.getState();
 
-
 const chatTest = () => {
   console.log('chat test start');
   const client = new StompJs.Client({
     brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
     connectHeaders: {
       id: 'sub-0',
-      authorization: `${accessToken}`,
+      authorization: `Bearer ${accessToken}`,
     },
     onConnect: (msg) => {
       console.log('여기');
@@ -32,15 +31,15 @@ const chatTest = () => {
           const data = JSON.parse(frame.body);
           console.log({ data });
         },
-        { authorization: `${accessToken}` }
+        { authorization: `Bearer ${accessToken}` }
       );
       client.publish({
         destination: '/pub/enter/2',
-        headers: { authorization: `${accessToken}` },
+        headers: { authorization: `Bearer ${accessToken}` },
       });
       client.publish({
         destination: '/pub/chat/message/2',
-        headers: { authorization: `${accessToken}` },
+        headers: { authorization: `Bearer ${accessToken}` },
         body: JSON.stringify({
           roomId: 2,
           senderId: 'user',
