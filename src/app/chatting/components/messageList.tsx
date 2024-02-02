@@ -17,7 +17,7 @@ const MessageList = () => {
             </div>
             <div aria-label="상대방의 닉네임과 채팅 메시지">
               <p className="text-start">{i.nickname}</p>
-              <div className="my-1 max-w-sm rounded-lg bg-slate-200 p-4 text-black">
+              <div className="my-1 max-w-sm rounded-lg bg-gray-200 p-4 text-black">
                 {i.message}
               </div>
             </div>

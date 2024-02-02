@@ -13,7 +13,6 @@ import MessageList from '../../components/messageList';
 
 const { accessToken } = useAuthStore.getState();
 
-
 const chatTest = () => {
   console.log('chat test start');
   const client = new StompJs.Client({
@@ -98,7 +97,7 @@ const Chatting = () => {
       <MessageList />
       <div
         aria-label="chat input section"
-        className="fixed flex w-[600px] min-w-[375px] rounded-lg border border-slate-300"
+        className="fixed flex w-[600px] min-w-[375px] rounded-lg border border-gray-300"
       >
         <Input innerWrapperRef={ref} />
         <Button
