@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Input, Button, Textarea } from '@nextui-org/react';
+import { Input, Button, Textarea, Select, SelectItem } from '@nextui-org/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import KakaoMapModal from '../components/KakaoMapModal';
@@ -77,10 +77,17 @@ const MateNewPostPage = () => {
         <div className="text-md font-bold">제목</div>
         <Input id="title" placeholder="제목을 입력하세요" />
       </div>
+
+      {/* 주소 선택 필드 */}
       <div className="mb-2.5">
         <div className="text-md font-bold">장소</div>
         <div className="relative">
-          <Input id="address" placeholder="주소를 입력하세요" value={address} />
+          <Input
+            disabled
+            id="address"
+            placeholder="주소를 입력하세요"
+            value={address}
+          />
           <Button
             className="absolute right-0 top-0 mr-[8px] mt-[8px]"
             onClick={handleOpenMap}
@@ -88,39 +95,42 @@ const MateNewPostPage = () => {
             주소 찾기
           </Button>
         </div>
-        <div className="mb-2.5">
-          <div className="text-md font-bold">날짜</div>
-          <div className="rounded-md bg-gray-100 p-2">
-            <DatePicker
-              dateFormat="MM월 dd일"
-              selected={startDate}
-              onChange={(date: Date | null) => setStartDate(date)}
-              className="w-full bg-gray-100"
-            />
-          </div>
+      </div>
+
+      {/* 날짜 선택 필드 */}
+      <div className="mb-2.5">
+        <div className="text-md font-bold">날짜</div>
+        <div className="rounded-md bg-gray-100 p-2 dark:bg-default-100">
+          <DatePicker
+            dateFormat="YYYY년 MM월 dd일"
+            selected={startDate}
+            onChange={(date: Date | null) => setStartDate(date)}
+            className="w-full bg-gray-100 dark:bg-default-100"
+          />
         </div>
       </div>
+
       {/* 시간 선택 필드 */}
       <div className="mb-4">
-        <div className="flex justify-between space-x-2">
+        <div className="flex items-center justify-between space-x-2">
           <div className="flex-1">
-            <div className="text-md mb-2 font-bold">시작 시간</div>
-            <input
+            <div className="text-md font-bold">시작 시간</div>
+            <Input
               type="time"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="w-full rounded-md bg-gray-100 p-2"
+              className="w-full"
               min="00:00"
               max="23:59"
             />
           </div>
           <div className="flex-1">
-            <div className="text-md mb-2 font-bold">종료 시간</div>
-            <input
+            <div className="text-md font-bold">종료 시간</div>
+            <Input
               type="time"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="w-full rounded-md bg-gray-100 p-2"
+              className="w-full"
               min="00:00"
               max="23:59"
             />
@@ -129,7 +139,7 @@ const MateNewPostPage = () => {
       </div>
       {/* 포지션 별 인원 수 필드 */}
       <div className="relative z-0 mb-4">
-        <div className="text-md mb-2 font-bold">포지션 별 인원 수</div>
+        <div className="text-md font-bold">포지션 별 인원 수</div>
         <div className="flex justify-between space-x-2">
           <Input
             label="센터"
@@ -168,21 +178,37 @@ const MateNewPostPage = () => {
       {/* 원하는 실력대 필드 */}
       <div className="mb-2.5">
         <div className="text-md font-bold">원하는 실력대</div>
-        <select
+        <Select
           value={skillLevel}
           onChange={(e) => setSkillLevel(e.target.value)}
-          className="w-full rounded-md bg-gray-100 p-2"
+          className="w-full"
+          placeholder="실력대를 선택하세요"
         >
-          <option value="">실력대를 선택하세요</option>
-          <option value="OVER_BEGINNER">입문 이상</option>
-          <option value="UNDER_BEGINNER">입문 이하</option>
-          <option value="OVER_LOW">초보 이상</option>
-          <option value="UNDER_LOW">초보 이하</option>
-          <option value="OVER_MID">중수 이상</option>
-          <option value="UNDER_MID">중수 이하</option>
-          <option value="OVER_HIGH">고수 이상</option>
-          <option value="UNDER_HIGH">고수 이하</option>
-        </select>
+          <SelectItem key="OVER_BEGINNER" value="OVER_BEGINNER">
+            입문 이상
+          </SelectItem>
+          <SelectItem key="UNDER_BEGINNER" value="UNDER_BEGINNER">
+            입문 이하
+          </SelectItem>
+          <SelectItem key="OVER_LOW" value="OVER_LOW">
+            초보 이상
+          </SelectItem>
+          <SelectItem key="UNDER_LOW" value="UNDER_LOW">
+            초보 이하
+          </SelectItem>
+          <SelectItem key="OVER_MID" value="OVER_MID">
+            중수 이상
+          </SelectItem>
+          <SelectItem key="UNDER_MID" value="UNDER_MID">
+            중수 이하
+          </SelectItem>
+          <SelectItem key="OVER_HIGH" value="OVER_HIGH">
+            고수 이상
+          </SelectItem>
+          <SelectItem key="UNDER_HIGH" value="UNDER_HIGH">
+            고수 이하
+          </SelectItem>
+        </Select>
       </div>
       {/* 세부사항 필드 */}
       <div className="mb-2.5">
