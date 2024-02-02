@@ -26,7 +26,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <Providers>
           {pathname.includes('details') ||
           pathname.includes('new') ||
-          pathname.includes('mypage') ? null : (
+          pathname.includes('mypage') ||
+          pathname.includes('chatroom') ? null : (
             <Header />
           )}
           <div className="pb-[48px] pt-[61px]">{children}</div>

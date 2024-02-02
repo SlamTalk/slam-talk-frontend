@@ -46,7 +46,7 @@ const EmailLogin = () => {
         setAccessToken(accessToken);
 
         alert('로그인 성공!');
-        router.back();
+        router.push('/');
       }
     } catch (error) {
       console.log('로그인 실패:', error);

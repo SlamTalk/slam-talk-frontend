@@ -31,7 +31,7 @@ const SignUpProcess = () => {
     } else {
       try {
         // await axiosInstance.patch('/api/user/update/info', userInfo);
-        router.push('/login');
+        router.push('/');
       } catch (error) {
         console.error('정보 전송 실패:', error);
       }
