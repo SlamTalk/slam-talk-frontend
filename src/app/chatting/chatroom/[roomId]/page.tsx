@@ -10,7 +10,6 @@ import { useParams, useRouter } from 'next/navigation';
 
 import MessageList from '../../components/messageList';
 
-
 const chatTest = () => {
   console.log('chat test start');
   const client = new StompJs.Client({
@@ -52,7 +51,6 @@ const chatTest = () => {
   client.activate();
 };
 
-
 const Chatting = () => {
   const params = useParams();
   const router = useRouter();
@@ -76,7 +74,7 @@ const Chatting = () => {
     <div aria-label="chat room wrapper" className="min-h-[667px]">
       <div className="fixed top-0 z-50 flex h-[61px] w-full max-w-[600px] items-center rounded-md bg-primary">
         <IoChevronBackSharp
-          className="w-[50px] justify-self-start text-xl text-white"
+          className="w-[50px] text-xl text-white"
           cursor="pointer"
           size={24}
           onClick={() => {
@@ -90,10 +88,14 @@ const Chatting = () => {
       <MessageList />
       <div
         aria-label="chat input section"
-        className="flex w-[600px] min-w-[375px] rounded-lg border border-slate-300"
+        className="fixed flex w-[600px] min-w-[375px] rounded-lg border border-slate-300"
       >
-        <Input className="" innerWrapperRef={ref} />
-        <Button isIconOnly className="h-auto w-14 border-none bg-transparent" onClick={chatTest}>
+        <Input innerWrapperRef={ref} />
+        <Button
+          isIconOnly
+          className="h-auto w-14 border-none bg-transparent"
+          onClick={chatTest}
+        >
           <IoIosSend className="text-4xl text-primary" />
         </Button>
       </div>

@@ -25,7 +25,7 @@ const Footer = () => (
           <div className="text-xs">농구장 지도</div>
         </div>
       </Link>
-      <Link href="/chatting/chatlist">
+      <Link href="/chatting/list">
         <div className="grid place-items-center">
           <PiChatsCircle size={24} />
           <div className="text-xs">채팅</div>
