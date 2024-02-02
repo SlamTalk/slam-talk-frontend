@@ -30,7 +30,7 @@ const Layout = () => {
         <Button
           key="all"
           radius="full"
-          className="rounded-lg border border-slate-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
             router.push('/community/all');
           }}
@@ -40,7 +40,7 @@ const Layout = () => {
         <Button
           key="free"
           radius="full"
-          className="rounded-lg border border-slate-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
             router.push('/community/free');
           }}
@@ -50,7 +50,7 @@ const Layout = () => {
         <Button
           key="usedtrade"
           radius="full"
-          className="rounded-lg border border-slate-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
             router.push('/community/usedtrade');
           }}
@@ -60,7 +60,7 @@ const Layout = () => {
         <Button
           key="question"
           radius="full"
-          className="rounded-lg border border-slate-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
             router.push('/community/question');
           }}
@@ -70,7 +70,7 @@ const Layout = () => {
         <Button
           key="rentaltransfer"
           radius="full"
-          className="rounded-lg border border-slate-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
             router.push('/community/rentaltransfer');
           }}

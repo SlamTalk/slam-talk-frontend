@@ -18,14 +18,14 @@ const chatList = () => {
       {testList.map((i) => (
         <div
           key={i.id}
-          className="m-1.5 rounded-xl border border-slate-300 hover:bg-primary hover:text-white"
+          className="m-1.5 rounded-xl border border-gray-300 hover:bg-primary hover:text-white"
         >
           <div className="m-1.5 flex items-center justify-between">
             <div className="flex">
               <Avatar className="m-1.5 cursor-pointer" />
               <Link href={`/chatting/chatroom/${i.id}`}>
                 <div className="text-xl">{i.title}</div>
-                <div className="text-slate-400">{i.lastMessage}</div>
+                <div className="text-gray-400">{i.lastMessage}</div>
               </Link>
             </div>
             <div className="cursor-pointer">
