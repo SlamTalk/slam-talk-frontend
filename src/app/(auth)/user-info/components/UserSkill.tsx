@@ -7,6 +7,8 @@ interface UserSkillProps {
   onSkillSelect: (skill: string) => void;
 }
 
+const skillLevels = ['고수', '중수', '하수', '입문'];
+
 const UserSkill: React.FC<UserSkillProps> = ({ onSkillSelect }) => {
   const handleSkillSelect = (selectedSkill: string) => {
     onSkillSelect(selectedSkill);
@@ -18,7 +20,7 @@ const UserSkill: React.FC<UserSkillProps> = ({ onSkillSelect }) => {
         농구 실력을 알려주세요
       </h1>
       <div className="flex flex-col gap-7 p-20 sm:p-10">
-        {['고수', '중수', '하수', '입문'].map((level) => (
+        {skillLevels.map((level) => (
           <Button
             key={level}
             size="lg"
