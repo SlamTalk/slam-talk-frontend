@@ -21,6 +21,8 @@ const MyPage = () => {
 
       if (response.status === 200) {
         setAccessToken(null);
+
+        localStorage.setItem('isLoggedIn', 'false');
         alert('로그아웃 되었습니다!');
         router.push('/');
       }

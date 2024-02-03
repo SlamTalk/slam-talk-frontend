@@ -1,6 +1,5 @@
 import useAuthStore from '@/store/authStore';
 import axios, { AxiosError } from 'axios';
-import { useRouter } from 'next/navigation';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -70,11 +69,24 @@ axiosInstance.interceptors.response.use(
         ) {
           console.log('토큰 재발급 실패');
           processFailedRequests();
-          // logout 넣기
-          const router = useRouter();
-          router.push('/login');
+          try {
+            const response = await axiosInstance.post('api/logout');
+
+            if (response.status === 200) {
+              setAccessToken(null);
+              alert('로그아웃 되었습니다!');
+              if (typeof window !== undefined) {
+                window.location.href = '/';
+                localStorage.setItem('isLoggedIn', 'false');
+              }
+            }
+          } catch (logoutError) {
+            console.log('로그아웃 실패: ', logoutError);
+            alert(
+              '죄송합니다. 로그아웃에 실패했습니다. 잠시 후 다시 시도해주세요.'
+            );
+          }
         }
-        return await Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
       }
