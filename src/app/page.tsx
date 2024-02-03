@@ -6,14 +6,12 @@ import { useSearchParams } from 'next/navigation';
 import LocalStorage from '@/utils/localstorage';
 
 const Home = () => {
-  // localhost:3000?loginsuccess=true
+  // localhost:3000?loginSuccess=true
   const searchParams = useSearchParams();
-  const search = searchParams.get('logginsuccess');
+  const search = searchParams.get('loginSuccess');
 
   if (search === 'true') {
     LocalStorage.setItem('isLoggedIn', 'true');
-  } else if (search === 'false') {
-    LocalStorage.setItem('isLoggedIn', 'false');
   }
 
   return (
