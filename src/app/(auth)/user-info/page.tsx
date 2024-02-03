@@ -17,8 +17,8 @@ const SignUpProcess = () => {
     try {
       if (selectedSkill !== null && selectedPosition !== null) {
         await axiosInstance.patch('/api/user/update/info', {
-          skill: selectedSkill,
-          position: selectedPosition,
+          basketballSkillLevel: selectedSkill,
+          basketballPosition: selectedPosition,
         });
       }
     } catch (error) {
