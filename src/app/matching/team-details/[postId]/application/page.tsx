@@ -20,6 +20,8 @@ const MateMatchingApplication = () => {
       <div className="mb-2.5">
         <div className="text-md font-bold">팀명</div>
         <Textarea
+          maxLength={30}
+          maxRows={1}
           value={teamName}
           onChange={(e) => setTeamName(e.target.value)}
           placeholder="팀명을 입력하세요"
