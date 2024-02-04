@@ -167,7 +167,9 @@ const TeamDetailsPage = () => {
             </Button>
           </>
         ) : (
-          <Button color="primary">지원하기</Button>
+          <Link href={`/matching/team-details/${post.matePostId}/application`}>
+            <Button color="primary">지원하기</Button>
+          </Link>
         )}
       </div>
     </div>

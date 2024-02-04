@@ -149,10 +149,10 @@ const TeamNewPostPage = () => {
           <SelectItem key="UNDER_LOW" value="UNDER_LOW">
             초보 이하
           </SelectItem>
-          <SelectItem key="OVER_MID" value="OVER_MID">
+          <SelectItem key="OVER_MIDDLE" value="OVER_MIDDLE">
             중수 이상
           </SelectItem>
-          <SelectItem key="UNDER_MID" value="UNDER_MID">
+          <SelectItem key="UNDER_MIDDLE" value="UNDER_MIDDLE">
             중수 이하
           </SelectItem>
           <SelectItem key="OVER_HIGH" value="OVER_HIGH">
