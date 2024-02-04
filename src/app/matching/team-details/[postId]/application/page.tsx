@@ -9,7 +9,7 @@ const MateMatchingApplication = () => {
   const [teamName, setTeamName] = useState('');
 
   return (
-    <div>
+    <div className="mx-auto mt-20 w-[450px] px-[16px]">
       <Image
         src="/images/basketball-team.png"
         width={300}
@@ -17,8 +17,8 @@ const MateMatchingApplication = () => {
         alt="Picture of the author"
         className="mx-auto mt-6"
       />
-      <div className="mb-2.5">
-        <div className="text-md font-bold">팀명</div>
+      <div className="mb-4">
+        <div className="text-md mb-2 font-bold">팀명</div>
         <Textarea
           maxLength={30}
           maxRows={1}
@@ -28,8 +28,8 @@ const MateMatchingApplication = () => {
           height={20}
         />
       </div>
-      <div className="mb-2.5">
-        <div className="text-md font-bold">원하는 실력대</div>
+      <div className="mb-4">
+        <div className="text-md mb-2 font-bold">원하는 실력대</div>
         <Select
           value={skillLevel}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -52,7 +52,11 @@ const MateMatchingApplication = () => {
           </SelectItem>
         </Select>
       </div>
-      <Button color="primary">지원하기</Button>
+      <div className="mt-10 flex w-full">
+        <Button className="mx-auto" color="primary">
+          지원하기
+        </Button>
+      </div>
     </div>
   );
 };
