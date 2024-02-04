@@ -39,12 +39,11 @@ const EmailLogin = () => {
         password,
       });
 
-      console.log(response);
-
       if (response.status === 200) {
-        const { accessToken } = response.data;
+        const accessToken = response.headers.authorization;
         setAccessToken(accessToken);
 
+        localStorage.setItem('isLoggedIn', 'true');
         alert('로그인 성공!');
         router.push('/');
       }
