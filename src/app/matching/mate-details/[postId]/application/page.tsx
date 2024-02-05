@@ -25,7 +25,7 @@ const TeamMatchingApplication = () => {
             setPosition(e.target.value)
           }
           className="w-full"
-          placeholder="실력대를 선택하세요"
+          placeholder="포지션을 선택하세요"
         >
           <SelectItem key="CENTER" value="CENTER">
             센터
