@@ -5,80 +5,105 @@ import { IoIosSend } from 'react-icons/io';
 import { IoChevronBackSharp } from 'react-icons/io5';
 
 import * as StompJs from '@stomp/stompjs';
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
 import useAuthStore from '@/store/authStore';
 import MessageList from '../../components/messageList';
 
-const { accessToken } = useAuthStore.getState();
-
-const chatTest = () => {
-  console.log('chat test start');
-  const client = new StompJs.Client({
-    brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
-    connectHeaders: {
-      id: 'sub-0',
-      authorization: `Bearer ${accessToken}`,
-    },
-    onConnect: async (msg) => {
-      console.log('여기');
-      console.log({ msg });
-
-      await client.subscribe(
-        '/sub/chat/enter/1',
-        (frame) => {
-          const data = JSON.parse(frame.body);
-          console.log({ data });
-        },
-        { authorization: `Bearer ${accessToken}` }
-      );
-      client.publish({
-        destination: '/pub/enter/1',
-        headers: { authorization: `Bearer ${accessToken}` },
-      });
-      client.publish({
-        destination: '/pub/chat/message/1',
-        headers: { authorization: `Bearer ${accessToken}` },
-        body: JSON.stringify({
-          roomId: 1,
-          senderId: 'user',
-          content: 'HelloSTOMPWorld^_^',
-        }),
-      });
-    },
-    reconnectDelay: 5000,
-    heartbeatIncoming: 1000,
-    heartbeatOutgoing: 1000,
-  });
-
-  client.onStompError = (error) => {
-    console.log({ error });
-    client.deactivate();
-  };
-
-  client.activate();
-};
-
 const Chatting = () => {
   const params = useParams();
   const router = useRouter();
-  const ref = useRef<HTMLDivElement | null>(null);
 
-  useLayoutEffect(() => {
-    const detectMoblieKeyboard = () => {
-      if (document.activeElement?.tagName === 'INPUT') {
-        ref.current?.scrollIntoView({ block: 'end' });
-      }
-    };
-    window.addEventListener('resize', () => {
-      if (window.innerHeight < window.screen.height) {
-        window.scrollTo(0, document.body.scrollHeight);
-      }
+  const [message, setMessage] = useState('');
+
+  const { accessToken } = useAuthStore.getState();
+  const { nickname } = useAuthStore().userInfo;
+
+  const client = useRef<StompJs.Client | null>(null);
+  const connect = async () => {
+    console.log({ client });
+    client.current = new StompJs.Client({
+      brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
+      connectHeaders: {
+        id: 'sub-0',
+        authorization: `Bearer ${accessToken}`,
+      },
+      onConnect: (msg) => {
+        console.log({ msg });
+        if (client.current !== null) {
+          client.current.subscribe(
+            `/sub/chat/room/${params.roomId}`,
+            (frame) => {
+              const data = JSON.parse(frame.body);
+              console.log({ data });
+            },
+            { authorization: `Bearer ${accessToken}` }
+          );
+          client.current.publish({
+            destination: `/pub/enter/${params.roomId}`,
+            headers: { authorization: `Bearer ${accessToken}` },
+          });
+        }
+      },
+      onStompError: (error) => {
+        console.log({ error });
+        if (client.current) {
+          client.current.deactivate();
+        }
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 1000,
+      heartbeatOutgoing: 1000,
     });
-    window.addEventListener('resize', detectMoblieKeyboard);
-    return window.removeEventListener('resize', detectMoblieKeyboard);
-  });
+    if (client.current !== null) {
+      await client.current.activate();
+    }
+  };
+
+  const sendMessage = () => {
+    if (client.current && client.current.connected) {
+      client.current.publish({
+        destination: `/pub/chat/message/${params.roomId}`,
+        headers: { authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({
+          roomId: params.roomId,
+          senderNickname: nickname,
+          content: message,
+        }),
+      });
+      setMessage('');
+    } else {
+      console.log('connet error');
+    }
+  };
+
+  const handleToBack = () => {
+    client.current?.publish({
+      destination: `/pub/back/${params.roomId}}`,
+      headers: { authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({
+        roomId: params.roomId,
+        senderNickname: nickname,
+      }),
+    });
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // axiosInstance.post(
+      //   `/api/chat/create`,
+      //   JSON.stringify({
+      //     roomType: '',
+      //     name: '',
+      //   })
+      // );
+      connect();
+    };
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div aria-label="chat room wrapper" className="min-h-[667px]">
       <div className="fixed top-0 z-50 flex h-[61px] w-full max-w-[600px] items-center rounded-md bg-primary">
@@ -87,6 +112,7 @@ const Chatting = () => {
           cursor="pointer"
           size={24}
           onClick={() => {
+            handleToBack();
             router.back();
           }}
         />
@@ -99,11 +125,16 @@ const Chatting = () => {
         aria-label="chat input section"
         className="fixed flex w-[600px] min-w-[375px] rounded-lg border border-gray-300"
       >
-        <Input innerWrapperRef={ref} />
+        <Input
+          value={message}
+          onChange={(e) => {
+            setMessage(e.target.value);
+          }}
+        />
         <Button
           isIconOnly
           className="h-auto w-14 border-none bg-transparent"
-          onClick={chatTest}
+          onClick={sendMessage}
         >
           <IoIosSend className="text-4xl text-primary" />
         </Button>
