@@ -20,9 +20,8 @@ const MyPage = () => {
       const response = await axiosInstance.post('api/logout');
 
       if (response.status === 200) {
-        setAccessToken(null);
-
         localStorage.setItem('isLoggedIn', 'false');
+        setAccessToken(null);
         alert('로그아웃 되었습니다!');
         router.push('/');
       }

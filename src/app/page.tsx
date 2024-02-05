@@ -2,16 +2,21 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import LocalStorage from '@/utils/localstorage';
+import useAuthStore from '@/store/authStore';
+import { fetchAccessToken } from './api/auth';
 
 const Home = () => {
-  // localhost:3000?loginSuccess=true
+  const router = useRouter();
   const searchParams = useSearchParams();
   const search = searchParams.get('loginSuccess');
+  const { setAccessToken } = useAuthStore();
 
   if (search === 'true') {
     LocalStorage.setItem('isLoggedIn', 'true');
+    router.push('/');
+    fetchAccessToken(setAccessToken);
   }
 
   return (
