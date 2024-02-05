@@ -58,7 +58,7 @@ const writer = {
 };
 
 const user = {
-  userId: 1,
+  userId: 19,
   userNickname: '스테픈커리',
   userProfile: null,
 };
@@ -198,7 +198,9 @@ const MateDetailsPage = () => {
             </Button>
           </>
         ) : (
-          <Button color="primary">지원하기</Button>
+          <Link href={`/matching/mate-details/${post.matePostId}/application`}>
+            <Button color="primary">지원하기</Button>
+          </Link>
         )}
       </div>
     </div>
