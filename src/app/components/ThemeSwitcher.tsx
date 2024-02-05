@@ -8,7 +8,6 @@ import { IoMdSunny } from 'react-icons/io';
 
 const ThemeSwitcher: React.FC = () => {
   const [mounted, setMounted] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
@@ -24,10 +23,9 @@ const ThemeSwitcher: React.FC = () => {
   };
   return (
     <Switch
-      className="my-2"
       defaultSelected
       checked={isDarkMode}
-      size="md"
+      size="sm"
       color="primary"
       onChange={() => handleThemeChange(isDarkMode ? 'light' : 'dark')}
       // eslint-disable-next-line react/no-unstable-nested-components
@@ -38,9 +36,7 @@ const ThemeSwitcher: React.FC = () => {
           <FaMoon className={className} />
         )
       }
-    >
-      화면 테마 설정
-    </Switch>
+    />
   );
 };
 

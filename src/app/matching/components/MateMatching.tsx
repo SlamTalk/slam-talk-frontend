@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
 import { Card, Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
+import { FaPlus } from 'react-icons/fa';
 
 interface Post {
+  postId: string;
   title: string;
   date: string;
   location: string;
   level: string[];
   positionNeeds: { [position: string]: number };
   currentParticipants: { [position: string]: number }; // 현재 참여 인원
+}
+
+interface MatePost {
+  title: string;
+  date: string;
+  location: string;
+  level: string[];
+  positionNeeds: { [position: string]: number };
+  currentParticipants: { [position: string]: number };
 }
 
 const levels = ['입문', '초보', '중수', '고수'];
@@ -37,6 +48,7 @@ const positions = ['센터', '포워드', '가드'];
 
 const posts: Post[] = [
   {
+    postId: '1',
     title: '서초구 주말 농구 모임!',
     date: '2월 20일 오전 10시',
     location: '서울특별시 서초구',
@@ -55,6 +67,7 @@ const posts: Post[] = [
     },
   },
   {
+    postId: '2',
     title: '강남구 친선 경기 팀원 구합니다!',
     date: '2월 25일 오후 1시',
     location: '서울특별시 강남구',
@@ -71,6 +84,7 @@ const posts: Post[] = [
     },
   },
   {
+    postId: '3',
     title: '마포구 저녁 농구 동호회원 모집',
     date: '2월 28일 오후 6시',
     location: '서울특별시 마포구',
@@ -86,7 +100,7 @@ const posts: Post[] = [
   },
 ];
 
-const MatePostCard: React.FC<Post> = ({
+const MatePostCard: React.FC<MatePost> = ({
   title,
   date,
   location,
@@ -216,12 +230,20 @@ const MateMatching = () => {
         </div>
       </div>
       {filteredPosts.map((post) => (
-        <MatePostCard key={post.title} {...post} />
+        <Link href={`/matching/mate-details/${post.postId}`}>
+          <MatePostCard key={post.postId} {...post} />
+        </Link>
       ))}
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Link href="/matching/mate-new-post">
-            <Button color="primary">새 모집글 작성</Button>
+            <Button
+              startContent={<FaPlus />}
+              color="primary"
+              className="rounded-full bg-primary text-white shadow-md"
+            >
+              새 모집글 작성
+            </Button>
           </Link>
         </div>
       </div>

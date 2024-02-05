@@ -9,8 +9,9 @@ import {
 } from '@/utils/validations';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import { EyeSlashFilledIcon } from '../login/email/EyeSlashFilledIcon';
-import { EyeFilledIcon } from '../login/email/EyeFilledIcon';
+import useAuthStore from '@/store/authStore';
+import { EyeSlashFilledIcon } from '../login/components/EyeSlashFilledIcon';
+import { EyeFilledIcon } from '../login/components/EyeFilledIcon';
 import axiosInstance from '../../api/axiosInstance';
 
 const SignUp = () => {
@@ -20,6 +21,7 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nicknameTouched, setNicknameTouched] = useState(false);
+  const { setAccessToken } = useAuthStore();
 
   const isNicknameInvalid = useMemo(
     () =>
@@ -60,6 +62,10 @@ const SignUp = () => {
       });
 
       if (response.status === 200) {
+        const accessToken = response.headers.authorization;
+        setAccessToken(accessToken);
+
+        localStorage.setItem('isLoggedIn', 'true');
         alert('감사합니다. 회원가입에 성공했습니다!');
         router.push('/user-info');
       }

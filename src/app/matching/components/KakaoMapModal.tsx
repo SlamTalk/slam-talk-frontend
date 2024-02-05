@@ -63,17 +63,18 @@ const KakaoMapModal: FC<KakaoMapModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-full max-w-[500px] rounded-lg bg-white p-6 shadow-lg">
+      <div className="w-full max-w-[500px] rounded-lg bg-white p-6 shadow-lg dark:bg-default-100">
         <h2 className="mb-4 text-xl font-bold">지도에서 주소 찾기</h2>
         <div ref={mapRef} className="h-80 w-full" />
         <div className="mt-4 flex justify-end">
           <Button
+            className="mr-2"
             color="primary"
             onClick={() => onSelectAddress(selectedAddress)}
           >
             확인
           </Button>
-          <Button className="bg-gray-200" onClick={onClose}>
+          <Button className="bg-gray-200 dark:bg-default-300" onClick={onClose}>
             닫기
           </Button>
         </div>

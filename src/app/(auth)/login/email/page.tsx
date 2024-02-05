@@ -8,8 +8,8 @@ import { useRouter } from 'next/navigation';
 import useAuthStore from '@/store/authStore';
 import axiosInstance from '@/app/api/axiosInstance';
 import { AxiosError } from 'axios';
-import { EyeSlashFilledIcon } from './EyeSlashFilledIcon';
-import { EyeFilledIcon } from './EyeFilledIcon';
+import { EyeSlashFilledIcon } from '../components/EyeSlashFilledIcon';
+import { EyeFilledIcon } from '../components/EyeFilledIcon';
 
 const EmailLogin = () => {
   const router = useRouter();
@@ -39,14 +39,13 @@ const EmailLogin = () => {
         password,
       });
 
-      console.log(response);
-
       if (response.status === 200) {
-        const { accessToken } = response.data;
+        const accessToken = response.headers.authorization;
         setAccessToken(accessToken);
 
+        localStorage.setItem('isLoggedIn', 'true');
         alert('로그인 성공!');
-        router.back();
+        router.push('/');
       }
     } catch (error) {
       console.log('로그인 실패:', error);

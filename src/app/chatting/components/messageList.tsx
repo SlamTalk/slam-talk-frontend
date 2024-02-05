@@ -8,26 +8,30 @@ const MessageList = () => {
     { id: 3, userId: '231', nickname: 'user-1', message: '잘가요~' },
   ];
   return (
-    <div className="h-[705px] w-full">
+    <div className="min-w mt-5 h-[700px] w-full">
       {messages.map((i) =>
         i.userId === '123' ? (
           <div key={i.id} className="flex h-20 w-full justify-start">
             <div aria-label="userIcon">
-              <p>{i.nickname}</p>
-              <Avatar className="me-2 ms-2 border-3 border-primary" />
+              <Avatar className="mx-2" />
             </div>
-            <div className="my-4 max-w-sm rounded-lg bg-primary p-4 text-white">
-              {i.message}
+            <div aria-label="상대방의 닉네임과 채팅 메시지">
+              <p className="text-start">{i.nickname}</p>
+              <div className="my-1 max-w-sm rounded-lg bg-gray-200 p-4 text-black">
+                {i.message}
+              </div>
             </div>
           </div>
         ) : (
           <div key={i.id} className="flex h-20 w-full justify-end">
-            <div className="right-10 my-4 max-w-sm rounded-lg bg-primary p-4 text-white">
-              {i.message}
+            <div aria-label="나의 닉네임과 채팅 메시지">
+              <p className="text-end">{i.nickname}</p>
+              <div className="my-3 max-w-sm rounded-lg bg-primary p-4 text-white">
+                {i.message}
+              </div>
             </div>
             <div aria-label="userIcon">
-              <p>{i.nickname}</p>
-              <Avatar className="me-2 ms-2 border-3 border-primary" />
+              <Avatar className="mx-2" />
             </div>
           </div>
         )
