@@ -34,10 +34,10 @@ const MessageList = () => {
   }, [messages]);
 
   return (
-    <div className="min-w mt-5 h-[700px] w-full">
+    <div className="min-w mt-5 h-[600px] w-full">
       {messages.map((i) =>
         JSON.parse(i.senderNickname) === nickname ? (
-          <div key={i.messageId} className="flex h-20 w-full justify-end">
+          <div key={i.messageId} className="mt-5 flex h-20 w-full justify-end">
             <div aria-label="나의 닉네임과 채팅 메시지">
               <p className="text-end">{JSON.parse(i.senderNickname)}</p>
               <div className="my-3 max-w-sm rounded-lg bg-primary p-4 text-white">
@@ -49,7 +49,10 @@ const MessageList = () => {
             </div>
           </div>
         ) : (
-          <div key={i.roomId} className="flex h-20 w-full justify-start">
+          <div
+            key={i.messageId}
+            className="mt-5 flex h-20 w-full justify-start"
+          >
             <div aria-label="userIcon">
               <Avatar className="mx-2" />
             </div>

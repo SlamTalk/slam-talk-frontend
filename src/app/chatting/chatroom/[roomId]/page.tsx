@@ -123,7 +123,7 @@ const Chatting = () => {
       <MessageList />
       <div
         aria-label="chat input section"
-        className="fixed flex w-[600px] min-w-[375px] rounded-lg border border-gray-300"
+        className="fixed flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"
       >
         <Input
           value={message}
