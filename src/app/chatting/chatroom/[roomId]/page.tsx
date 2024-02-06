@@ -17,7 +17,7 @@ const Chatting = () => {
 
   const [message, setMessage] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { accessToken } = useAuthStore.getState();
+  const { accessToken } = useAuthStore();
   const { nickname } = useAuthStore().userInfo;
 
   const client = useRef<StompJs.Client | null>(null);
