@@ -8,15 +8,20 @@ import { LuLogIn } from 'react-icons/lu';
 import { useQuery } from '@tanstack/react-query';
 import { fetchLoginData } from '@/utils/fetchLoginData';
 import ThemeSwitcher from './ThemeSwitcher';
+import FullLoading from './FullLoading';
 
 // Anton 폰트 설정
 const anton = Anton({ weight: '400', subsets: ['latin'] });
 
 const Header = () => {
-  const { error, data } = useQuery({
+  const { isLoading, error, data } = useQuery({
     queryKey: ['loginData'],
     queryFn: fetchLoginData,
   });
+
+  if (isLoading) {
+    return <FullLoading />;
+  }
 
   if (error) {
     console.log(error);
