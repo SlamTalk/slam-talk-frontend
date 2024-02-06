@@ -23,7 +23,6 @@ const Header = () => {
   }
 
   const accessToken = data?.accessToken;
-  console.log(accessToken);
 
   return (
     <div className="fixed z-30 flex h-[61px] w-full max-w-[600px] items-center justify-between border-b-1 bg-background pl-4">
