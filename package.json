@@ -39,6 +39,7 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.18.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-datepicker": "^4.19.5",
