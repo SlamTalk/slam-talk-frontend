@@ -1,24 +1,21 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import Script from 'next/script';
 import { usePathname } from 'next/navigation';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Providers from './providers';
-import FullLoading from './components/FullLoading';
+import Providers from '../utils/providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
+const queryClient = new QueryClient();
+
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-  const [mounted, setMouted] = useState<boolean>(false);
-
-  useEffect(() => {
-    setMouted(true);
-  }, []);
 
   return (
     <html lang="en" className="light" suppressHydrationWarning>
@@ -29,8 +26,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         />
       </head>
       <body className={`${inter.className}`}>
-        <Providers>
-          {mounted ? (
+        <QueryClientProvider client={queryClient}>
+          <Providers>
             <div>
               {pathname.includes('details') ||
               pathname.includes('new') ||
@@ -41,10 +38,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
               <div className="pb-[48px] pt-[61px]">{children}</div>
               {pathname.includes('chatroom') ? null : <Footer />}
             </div>
-          ) : (
-            <FullLoading />
-          )}
-        </Providers>
+          </Providers>
+        </QueryClientProvider>
       </body>
     </html>
   );
