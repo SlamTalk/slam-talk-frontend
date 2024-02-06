@@ -4,12 +4,24 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { IoChevronBackSharp } from 'react-icons/io5';
 import axiosInstance from '@/app/api/axiosInstance';
-import useAuthStore from '@/store/authStore';
 import { LuLogOut } from 'react-icons/lu';
+import { useQuery } from '@tanstack/react-query';
+import { fetchLoginData } from '@/utils/fetchLoginData';
 
 const MyPage = () => {
   const router = useRouter();
-  const { setAccessToken } = useAuthStore();
+
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: fetchLoginData,
+  });
+  if (!isLoading) {
+    console.log(data);
+  }
+
+  if (error) {
+    console.log(error);
+  }
 
   const handleGoBack = () => {
     router.back();
@@ -20,14 +32,12 @@ const MyPage = () => {
       const response = await axiosInstance.post('api/logout');
 
       if (response.status === 200) {
-        setAccessToken(null);
-
         localStorage.setItem('isLoggedIn', 'false');
         alert('로그아웃 되었습니다!');
         router.push('/');
       }
-    } catch (error) {
-      console.log('로그아웃 실패: ', error);
+    } catch (logoutError) {
+      console.log('로그아웃 실패: ', logoutError);
       alert('죄송합니다. 로그아웃에 실패했습니다. 잠시 후 다시 시도해주세요.');
     }
   };
@@ -47,6 +57,11 @@ const MyPage = () => {
         }}
       >
         <IoChevronBackSharp size={24} />
+      </div>
+      <div>
+        <p>{data?.nickname}</p>
+        <p>{data?.socialType}</p>
+        <p>{data?.email}</p>
       </div>
       <button type="submit" className="flex gap-2" onClick={handleLogout}>
         <LuLogOut aria-label="로그아웃" size={24} />

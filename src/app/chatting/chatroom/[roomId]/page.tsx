@@ -3,21 +3,22 @@
 import { Button, Input } from '@nextui-org/react';
 import { IoIosSend } from 'react-icons/io';
 import { IoChevronBackSharp } from 'react-icons/io5';
-
 import * as StompJs from '@stomp/stompjs';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-
-import useAuthStore from '@/store/authStore';
 import MessageList from '../../components/messageList';
+
 
 const Chatting = () => {
   const params = useParams();
   const router = useRouter();
 
+const accessToken = '';
+
+
   const [message, setMessage] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { accessToken } = useAuthStore();
+//   const { accessToken } = useAuthStore();
   const { nickname } = useAuthStore().userInfo;
 
   const client = useRef<StompJs.Client | null>(null);
