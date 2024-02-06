@@ -55,10 +55,10 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
 
   return (
     <div
-      className={`absolute inset-0 z-40 m-auto h-fit w-full max-w-md rounded-lg bg-background shadow-md
+      className={`absolute inset-0 z-40 m-auto w-full max-w-md overflow-y-scroll rounded-lg bg-background shadow-md
 transition-all duration-300 ease-in-out ${isVisible ? '' : 'hidden'}`}
     >
-      <div className="relative max-h-[96vh] w-full overflow-auto rounded-lg text-sm">
+      <div className="relative w-full overflow-auto rounded-lg text-sm">
         <div className="relative h-48 w-full">
           <Image
             layout="fill"
