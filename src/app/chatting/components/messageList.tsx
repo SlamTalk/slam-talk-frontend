@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 interface IMessage {
   messageId: string;
   roomId: string;
+  senderId: string;
   senderNickname: string;
   content: string;
   timestamp: string;
@@ -15,7 +16,7 @@ interface IMessage {
 const MessageList = () => {
   const params = useParams();
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const { nickname } = useAuthStore().userInfo;
+  const { id } = useAuthStore().userInfo;
   const messageListData = async () => {
     try {
       const res = await axiosInstance.post(
@@ -36,7 +37,7 @@ const MessageList = () => {
   return (
     <div className="min-w mt-5 h-[600px] w-full">
       {messages.map((i) =>
-        JSON.parse(i.senderNickname) === nickname ? (
+        JSON.parse(i.senderId) === id ? (
           <div key={i.messageId} className="mt-5 flex h-20 w-full justify-end">
             <div aria-label="나의 닉네임과 채팅 메시지">
               <p className="text-end">{JSON.parse(i.senderNickname)}</p>
