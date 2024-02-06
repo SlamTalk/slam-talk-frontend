@@ -5,7 +5,6 @@ import { Button, Input } from '@nextui-org/react';
 import { validateEmail, validatePassword } from '@/utils/validations';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import useAuthStore from '@/store/authStore';
 import axiosInstance from '@/app/api/axiosInstance';
 import { AxiosError } from 'axios';
 import { EyeSlashFilledIcon } from '../components/EyeSlashFilledIcon';
@@ -16,7 +15,6 @@ const EmailLogin = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setAccessToken } = useAuthStore();
 
   const isEmailInvalid = useMemo(
     () => !validateEmail(email) && email !== '',
@@ -40,9 +38,6 @@ const EmailLogin = () => {
       });
 
       if (response.status === 200) {
-        const accessToken = response.headers.authorization;
-        setAccessToken(accessToken);
-
         localStorage.setItem('isLoggedIn', 'true');
         alert('로그인 성공!');
         router.push('/');

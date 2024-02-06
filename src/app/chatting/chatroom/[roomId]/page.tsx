@@ -3,15 +3,12 @@
 import { Button, Input } from '@nextui-org/react';
 import { IoIosSend } from 'react-icons/io';
 import { IoChevronBackSharp } from 'react-icons/io5';
-
 import * as StompJs from '@stomp/stompjs';
 import React, { useLayoutEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-
-import useAuthStore from '@/store/authStore';
 import MessageList from '../../components/messageList';
 
-const { accessToken } = useAuthStore.getState();
+const accessToken = '';
 
 const chatTest = () => {
   console.log('chat test start');
