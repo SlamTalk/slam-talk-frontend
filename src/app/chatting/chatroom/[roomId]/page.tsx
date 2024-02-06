@@ -16,7 +16,7 @@ const Chatting = () => {
   const router = useRouter();
 
   const [message, setMessage] = useState('');
-
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const { accessToken } = useAuthStore.getState();
   const { nickname } = useAuthStore().userInfo;
 
@@ -90,6 +90,7 @@ const Chatting = () => {
   };
 
   useEffect(() => {
+    inputRef.current?.focus();
     const fetchData = async () => {
       // axiosInstance.post(
       //   `/api/chat/create`,
@@ -126,6 +127,7 @@ const Chatting = () => {
         className="fixed flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"
       >
         <Input
+          ref={inputRef}
           value={message}
           onChange={(e) => {
             setMessage(e.target.value);
