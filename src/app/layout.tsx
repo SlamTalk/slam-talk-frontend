@@ -6,6 +6,7 @@ import '@/styles/globals.css';
 import Script from 'next/script';
 import { usePathname } from 'next/navigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Providers from '../utils/providers';
@@ -27,6 +28,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       </head>
       <body className={`${inter.className}`}>
         <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools />
           <Providers>
             <div>
               {pathname.includes('details') ||
