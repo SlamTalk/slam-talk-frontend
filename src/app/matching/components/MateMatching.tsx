@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
+import { FaPlus } from 'react-icons/fa';
 
 interface Post {
   postId: string;
@@ -236,7 +237,13 @@ const MateMatching = () => {
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Link href="/matching/mate-new-post">
-            <Button color="primary">새 모집글 작성</Button>
+            <Button
+              startContent={<FaPlus />}
+              color="primary"
+              className="rounded-full bg-primary text-white shadow-md"
+            >
+              새 모집글 작성
+            </Button>
           </Link>
         </div>
       </div>

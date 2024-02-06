@@ -7,6 +7,8 @@ interface UserPositionProps {
   onPositionSelect: (position: string) => void;
 }
 
+const positions = ['가드', '포워드', '센터', '몰라요', '이것저것 해요'];
+
 const UserPosition: React.FC<UserPositionProps> = ({ onPositionSelect }) => {
   const handlePositionSelect = (selectedPosition: string) => {
     onPositionSelect(selectedPosition);
@@ -17,7 +19,7 @@ const UserPosition: React.FC<UserPositionProps> = ({ onPositionSelect }) => {
         포지션을 알려주세요
       </h1>
       <div className="flex flex-col gap-6 p-20 sm:p-10">
-        {['가드', '포워드', '센터', '몰라요', '이것저것 해요'].map((pos) => (
+        {positions.map((pos) => (
           <Button
             key={pos}
             size="lg"

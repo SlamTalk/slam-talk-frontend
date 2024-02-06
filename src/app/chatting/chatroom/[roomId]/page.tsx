@@ -8,50 +8,57 @@ import * as StompJs from '@stomp/stompjs';
 import React, { useLayoutEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
+import useAuthStore from '@/store/authStore';
 import MessageList from '../../components/messageList';
 
+const { accessToken } = useAuthStore.getState();
 
 const chatTest = () => {
   console.log('chat test start');
   const client = new StompJs.Client({
-    brokerURL: `ws://localhost:8080/ws/slamtalk`,
+    brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
     connectHeaders: {
       id: 'sub-0',
-      authorization:
-        'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTcwNjg5MjgzN30.jAF5XPCuOvYOg0ZoKFhSG5zUi9o398mz9En9wqNNWpg2ubA3wFvYSSStWWKowO2cuOV2I0rbDzM4SZB86YP9nw',
+      authorization: `Bearer ${accessToken}`,
     },
-    debug: (msg) => {
+    onConnect: async (msg) => {
+      console.log('여기');
       console.log({ msg });
+
+      await client.subscribe(
+        '/sub/chat/enter/1',
+        (frame) => {
+          const data = JSON.parse(frame.body);
+          console.log({ data });
+        },
+        { authorization: `Bearer ${accessToken}` }
+      );
+      client.publish({
+        destination: '/pub/enter/1',
+        headers: { authorization: `Bearer ${accessToken}` },
+      });
+      client.publish({
+        destination: '/pub/chat/message/1',
+        headers: { authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({
+          roomId: 1,
+          senderId: 'user',
+          content: 'HelloSTOMPWorld^_^',
+        }),
+      });
     },
     reconnectDelay: 5000,
-    heartbeatIncoming: 4000,
-    heartbeatOutgoing: 4000,
+    heartbeatIncoming: 1000,
+    heartbeatOutgoing: 1000,
   });
-  const subscribe = () => {
-    client.subscribe('/sub/chat/enter/52', (frame) => {
-      const data = JSON.parse(frame.body);
-      console.log({ data });
-    });
-  };
 
-  const publish = () => {
-    client.publish({
-      destination: '/pub/chat/message/52',
-      body: JSON.stringify({ userId: 'sub-0' }),
-    });
-  };
-  client.onStompError = () => {
-    console.log('erororororooror');
-  };
-  client.onConnect = () => {
-    console.log('성공~!!');
-    subscribe();
-    publish();
+  client.onStompError = (error) => {
+    console.log({ error });
+    client.deactivate();
   };
 
   client.activate();
 };
-
 
 const Chatting = () => {
   const params = useParams();
@@ -76,7 +83,7 @@ const Chatting = () => {
     <div aria-label="chat room wrapper" className="min-h-[667px]">
       <div className="fixed top-0 z-50 flex h-[61px] w-full max-w-[600px] items-center rounded-md bg-primary">
         <IoChevronBackSharp
-          className="w-[50px] justify-self-start text-xl text-white"
+          className="w-[50px] text-xl text-white"
           cursor="pointer"
           size={24}
           onClick={() => {
@@ -90,10 +97,14 @@ const Chatting = () => {
       <MessageList />
       <div
         aria-label="chat input section"
-        className="flex w-[600px] min-w-[375px] rounded-lg border border-slate-300"
+        className="fixed flex w-[600px] min-w-[375px] rounded-lg border border-gray-300"
       >
-        <Input className="" innerWrapperRef={ref} />
-        <Button isIconOnly className="h-auto w-14 border-none bg-transparent" onClick={chatTest}>
+        <Input innerWrapperRef={ref} />
+        <Button
+          isIconOnly
+          className="h-auto w-14 border-none bg-transparent"
+          onClick={chatTest}
+        >
           <IoIosSend className="text-4xl text-primary" />
         </Button>
       </div>
