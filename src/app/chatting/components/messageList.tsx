@@ -1,8 +1,7 @@
-import axiosInstance from '@/app/api/axiosInstance';
-import useAuthStore from '@/store/authStore';
 import { Avatar } from '@nextui-org/react';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import axiosInstance from '../../api/axiosInstance';
 
 interface IMessage {
   messageId: string;
@@ -16,7 +15,7 @@ interface IMessage {
 const MessageList = () => {
   const params = useParams();
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const { id } = useAuthStore().userInfo;
+  const id = '';
   const messageListData = async () => {
     try {
       const res = await axiosInstance.post(

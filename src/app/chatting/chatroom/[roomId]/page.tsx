@@ -7,8 +7,8 @@ import { IoChevronBackSharp } from 'react-icons/io5';
 import * as StompJs from '@stomp/stompjs';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import axiosInstance from '../../../api/axiosInstance';
 
-import useAuthStore from '@/store/authStore';
 import MessageList from '../../components/messageList';
 
 const Chatting = () => {
@@ -17,8 +17,8 @@ const Chatting = () => {
 
   const [message, setMessage] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { accessToken } = useAuthStore();
-  const { nickname } = useAuthStore().userInfo;
+  const accessToken = '';
+  const nickname = '';
 
   const client = useRef<StompJs.Client | null>(null);
   const connect = async () => {
@@ -103,6 +103,17 @@ const Chatting = () => {
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchToken = async () => {
+    const response = await axiosInstance.patch('/api/tokens/refresh');
+    if (response.status === 200) {
+      const newAccessToken = response.headers.authorization;
+      console.log(newAccessToken);
+    }
+  };
+  useEffect(() => {
+    fetchToken();
   }, []);
 
   return (
