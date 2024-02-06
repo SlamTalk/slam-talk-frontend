@@ -2,16 +2,21 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import LocalStorage from '@/utils/localstorage';
 
 const Home = () => {
-  // localhost:3000?loginSuccess=true
+  const router = useRouter();
   const searchParams = useSearchParams();
   const search = searchParams.get('loginSuccess');
+  const firstLoginCheck = searchParams.get('firstLoginCheck');
 
   if (search === 'true') {
     LocalStorage.setItem('isLoggedIn', 'true');
+  }
+
+  if (firstLoginCheck === 'true') {
+    router.push('user-info');
   }
 
   return (
