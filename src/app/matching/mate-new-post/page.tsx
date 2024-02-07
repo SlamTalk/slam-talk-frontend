@@ -6,10 +6,10 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import axiosInstance from '@/app/api/axiosInstance';
 import { useRouter } from 'next/navigation';
+import { createMatePost } from '@/services/matching/postNewMatePost';
 import KakaoMapModal from '../components/KakaoMapModal';
-import { NewMateData } from './type';
+import { NewMateData } from '../../../types/matching/mateNewPostType';
 
 const MateNewPostPage = () => {
   const [isMapOpen, setIsMapOpen] = useState(false);
@@ -25,21 +25,6 @@ const MateNewPostPage = () => {
   const [skillLevel, setSkillLevel] = useState('');
   const [details, setDetails] = useState('');
   const router = useRouter();
-
-  const createMatePost = async (
-    newMateData: NewMateData
-  ): Promise<AxiosResponse> => {
-    try {
-      const response = await axiosInstance.post<AxiosResponse>(
-        '/api/mate/register',
-        newMateData
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
 
   const createPostMutation = useMutation<AxiosResponse, Error, NewMateData>({
     mutationFn: createMatePost,
