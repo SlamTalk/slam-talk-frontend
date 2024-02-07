@@ -1,6 +1,6 @@
 import axiosInstance from '@/app/api/axiosInstance';
 
-interface IArticle {
+export interface IArticle {
   title: string;
   writerId: string;
   writerNickname: string;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useState, ChangeEvent, useMemo } from 'react';
+import React, { useState, ChangeEvent, useMemo, useEffect } from 'react';
 import { Key, Selection } from '@react-types/shared';
 
 import {
@@ -11,18 +11,27 @@ import {
   DropdownItem,
   Button,
 } from '@nextui-org/react';
+import { useMutation } from '@tanstack/react-query';
+import {
+  IArticle,
+  postCommunity,
+} from '@/services/community/postCommunityArticle';
 
 const Page = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [tag, setTag] = useState('');
+  const [tag, setTag] = useState('free');
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(
     new Set(['자유'])
   );
-
-  const [testList, setTestList] = useState<
-    { title: string; content: string; tag: string }[]
-  >([]); // test code
+  const [postData, setPostData] = useState<IArticle>({
+    title: '',
+    writerId: '',
+    writerNickname: '',
+    content: '',
+    tag: '',
+    comments: [{ id: '', writerId: '', content: '' }],
+  });
 
   const router = useRouter();
   const handelTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -53,22 +62,27 @@ const Page = () => {
   const handleSelectionChange = (keys: Selection) => {
     setSelectedKeys(new Set<string>(Array.from(keys).map(String)));
   };
+  const postArticle = useMutation({
+    mutationKey: ['postArticleData'],
+    mutationFn: () => postCommunity(postData),
+  });
   const handleSubmit = () => {
+    postArticle.mutate();
     setTitle('');
     setContent('');
-    const storeData: { title: string; content: string; tag: string } = {
+    router.push('/community/all');
+    console.log(postData);
+  };
+  useEffect(() => {
+    setPostData({
       title,
+      writerId: '',
+      writerNickname: '',
       content,
       tag,
-    };
-
-    setTestList((prev) => [...prev, storeData]);
-
-    localStorage.setItem('community', JSON.stringify(testList)); // test code
-
-    router.push('/community/all');
-  };
-
+      comments: [],
+    });
+  }, [title, content, tag]);
   return (
     <div className="flex flex-col">
       <div className="flex space-x-96">
