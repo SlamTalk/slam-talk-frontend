@@ -19,20 +19,20 @@
 //   };
 // }
 
-export interface Position {
-  position: string;
-  maxPosition: number;
-  currentPosition: number;
-}
+// export interface Position {
+//   position: string;
+//   maxPosition: number;
+//   currentPosition: number;
+// }
 
-export interface Participant {
-  participantTableId: number;
-  participantId: number;
-  participantNickname: string;
-  applyStatus: string;
-  position: string;
-  skillLevel: string;
-}
+// export interface Participant {
+//   participantTableId: number;
+//   participantId: number;
+//   participantNickname: string;
+//   applyStatus: string;
+//   position: string;
+//   skillLevel: string;
+// }
 
 export interface NewMateData {
   title: string;
