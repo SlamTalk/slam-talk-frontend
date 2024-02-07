@@ -9,11 +9,7 @@ const MatchingHeader = () => {
   const router = useRouter();
 
   const handleBackClick = () => {
-    if (window.history.length > 1) {
-      router.back();
-    } else {
-      router.push('/matching');
-    }
+    router.back();
   };
 
   return (
