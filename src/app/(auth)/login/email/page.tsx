@@ -38,6 +38,8 @@ const EmailLogin = () => {
       });
 
       if (response.status === 200) {
+        const accessToken = response.headers.authorization;
+        axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         localStorage.setItem('isLoggedIn', 'true');
         alert('로그인 성공!');
         router.push('/');
