@@ -59,7 +59,7 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
   return (
     <div
       key={applicant.participantTableId}
-      className="mb-2 mt-2 flex justify-between rounded-md bg-gray-300 px-3 py-1"
+      className="mb-2 mt-2 flex justify-between rounded-md border-2 px-3 py-1"
     >
       <div className="flex items-center">
         <span
@@ -69,7 +69,7 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
           {applicant.participantNickname}
         </span>
         <div className="y-1 mr-2 font-semibold">[{applicant.teamName}]</div>
-        <div className="rounded-md bg-gray-200 px-2 py-1">
+        <div className="rounded-md bg-gray-200 px-2 py-1 dark:bg-gray-400">
           {applicant.skillLevel}
         </div>
       </div>
@@ -77,6 +77,7 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
         {isWriter && applicant.applyStatus === 'WAITING' ? (
           <>
             <Button
+              className="text-black"
               size="sm"
               color="success"
               onClick={() => handleAccept(applicant.participantTableId)}
@@ -84,7 +85,7 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
               수락
             </Button>
             <Button
-              className="ml-1"
+              className="ml-1 text-black"
               size="sm"
               color="danger"
               onClick={() => handleReject(applicant.participantTableId)}
@@ -102,7 +103,7 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
         {user.userId === applicant.participantId &&
           applicant.applyStatus === 'WAITING' && (
             <Button
-              className="bg-gray-400 text-black"
+              className="bg-gray-400"
               size="sm"
               onClick={() => handleCancel(applicant.participantTableId)}
             >

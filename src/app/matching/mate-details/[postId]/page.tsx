@@ -58,7 +58,7 @@ const writer = {
 };
 
 const user = {
-  userId: 19,
+  userId: 20,
   userNickname: '스테픈커리',
   userProfile: null,
 };
@@ -118,9 +118,9 @@ const MateDetailsPage = () => {
   }, []);
 
   return (
-    <div className="mx-[16px] mt-4 rounded-md border-b-1 bg-gray-200 text-black">
+    <div className="mx-[16px] mt-4 rounded-md border-2">
       {/* 유저 프로필 */}
-      <div className="mb-4 flex items-center space-x-4 border-b-2 border-gray-400 px-8 py-2">
+      <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
         <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray-300">
           <Image
             src={writer.userProfile || '/images/userprofile-default.png'}
@@ -147,9 +147,9 @@ const MateDetailsPage = () => {
       {/* 농구장 장소와 지도 페이지 링크 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">농구장 장소</div>
-        <div className="mt-2 flex items-center justify-between rounded-md bg-gray-300">
+        <div className="mt-2 flex items-center justify-between rounded-md border-2">
           <div>
-            <Snippet className="bg-gray-300 text-black" symbol="">
+            <Snippet className="bg-background" symbol="">
               {post.locationDetail}
             </Snippet>
           </div>
@@ -163,7 +163,7 @@ const MateDetailsPage = () => {
       {/* 모집 정보 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">모집 정보</div>
-        <div className="mt-2 rounded-md bg-gray-300 p-3">
+        <div className="mt-2 rounded-md border-2 p-3">
           <PositionRecruitment />
         </div>
       </div>
@@ -171,7 +171,7 @@ const MateDetailsPage = () => {
       {/* 상세 내용 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">상세 내용</div>
-        <p className="mb-6 mt-2 h-[100px] overflow-y-auto break-words rounded-md bg-gray-300 p-3">
+        <p className="mb-6 mt-2 h-[100px] overflow-y-auto break-words rounded-md border-2 p-3">
           {post.content}
         </p>
       </div>
@@ -193,7 +193,7 @@ const MateDetailsPage = () => {
             <Button color="primary" className="mx-2">
               모집 완료
             </Button>
-            <Button color="default" className="mx-2 bg-gray-400">
+            <Button color="default" className="mx-2 bg-gray-400 text-white">
               모집글 수정
             </Button>
           </>

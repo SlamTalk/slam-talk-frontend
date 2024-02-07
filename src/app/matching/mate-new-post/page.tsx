@@ -45,7 +45,6 @@ const MateNewPostPage = () => {
     mutationFn: createMatePost,
     onSuccess: () => {
       console.log('success');
-      router.push('/matching');
     },
     onError: (error: Error) => {
       console.log(error);
@@ -88,6 +87,7 @@ const MateNewPostPage = () => {
 
     console.log({ newMateData });
     createPostMutation.mutate(newMateData);
+    router.push('/matching');
   };
 
   const handleCenterCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {

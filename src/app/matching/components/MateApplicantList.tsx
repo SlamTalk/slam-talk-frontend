@@ -59,7 +59,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
   return (
     <div
       key={applicant.participantTableId}
-      className="mb-2 mt-2 flex justify-between rounded-md bg-gray-300 px-3 py-1"
+      className="mb-2 mt-2 flex justify-between rounded-md border-2 px-3 py-1"
     >
       <div className="flex items-center">
         <span
@@ -68,10 +68,10 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
         >
           {applicant.participantNickname}
         </span>
-        <div className="mr-1 rounded-md bg-gray-200 px-2 py-1">
+        <div className="mr-1 rounded-md bg-gray-200 px-2 py-1 dark:bg-gray-400">
           {applicant.position}
         </div>
-        <div className="rounded-md bg-gray-200 px-2 py-1">
+        <div className="rounded-md bg-gray-200 px-2 py-1 dark:bg-gray-400">
           {applicant.skillLevel}
         </div>
       </div>
@@ -79,6 +79,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
         {isWriter && applicant.applyStatus === 'WAITING' ? (
           <>
             <Button
+              className="text-black"
               size="sm"
               color="success"
               onClick={() => handleAccept(applicant.participantTableId)}
@@ -86,7 +87,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
               수락
             </Button>
             <Button
-              className="ml-1"
+              className="ml-1 text-black"
               size="sm"
               color="danger"
               onClick={() => handleReject(applicant.participantTableId)}
