@@ -11,11 +11,10 @@ import {
   DropdownItem,
   Button,
 } from '@nextui-org/react';
-import { useMutation } from '@tanstack/react-query';
-import {
-  IArticle,
-  postCommunity,
-} from '@/services/community/postCommunityArticle';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { postCommunity } from '@/services/community/postCommunityArticle';
+import { getUserData } from '@/services/user/getUserData';
+import { IArticle } from '@/types/community/article';
 
 const Page = () => {
   const [title, setTitle] = useState('');
@@ -26,11 +25,18 @@ const Page = () => {
   );
   const [postData, setPostData] = useState<IArticle>({
     title: '',
-    writerId: '',
+    writerId: 0,
     writerNickname: '',
+    writerImageUrl: '',
     content: '',
     tag: '',
-    comments: [{ id: '', writerId: '', content: '' }],
+    writeImageUrl: '',
+    comments: [{ id: 0, writerId: 0, writerNickaname: '', content: '' }],
+  });
+
+  const { data: user } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: getUserData,
   });
 
   const router = useRouter();
@@ -76,12 +82,15 @@ const Page = () => {
   useEffect(() => {
     setPostData({
       title,
-      writerId: '',
-      writerNickname: '',
+      writerId: user?.id,
+      writerNickname: user?.nickname,
+      writerImageUrl: user?.imageUrl,
+      writeImageUrl: null,
       content,
       tag,
       comments: [],
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, content, tag]);
   return (
     <div className="flex flex-col">
