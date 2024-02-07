@@ -1,6 +1,8 @@
 import { Avatar } from '@nextui-org/react';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getUserData } from '@/services/user/getUserData';
 import axiosInstance from '../../api/axiosInstance';
 
 interface IMessage {
@@ -15,28 +17,34 @@ interface IMessage {
 const MessageList = () => {
   const params = useParams();
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const id = '';
+  const { error, data: user } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: getUserData,
+  });
+
+  const nickname = error ? null : user?.nickname;
+
+  // const id = '';
   const messageListData = async () => {
     try {
       const res = await axiosInstance.post(
         `/api/chat/participation?roomId=${params.roomId}`
       );
-
-      setMessages(res.data?.results || []);
-    } catch (error) {
-      console.error(error);
+      setMessages(res.data?.results);
+    } catch (err) {
+      console.error(err);
     }
   };
 
   useEffect(() => {
     messageListData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages]);
+  }, [messages.length]);
 
   return (
     <div className="min-w mt-5 h-[600px] w-full">
       {messages.map((i) =>
-        JSON.parse(i.senderId) === id ? (
+        JSON.parse(i.senderNickname) === nickname ? (
           <div key={i.messageId} className="mt-5 flex h-20 w-full justify-end">
             <div aria-label="나의 닉네임과 채팅 메시지">
               <p className="text-end">{JSON.parse(i.senderNickname)}</p>

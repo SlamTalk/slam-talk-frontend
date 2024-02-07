@@ -7,8 +7,10 @@ import * as StompJs from '@stomp/stompjs';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
-import axiosInstance from '../../../api/axiosInstance';
-
+import { useQuery } from '@tanstack/react-query';
+import { getUserData } from '@/services/user/getUserData';
+// import axiosInstance from '../../../api/axiosInstance';
+import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 import MessageList from '../../components/messageList';
 
 const Chatting = () => {
@@ -17,13 +19,20 @@ const Chatting = () => {
 
   const [message, setMessage] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const { data } = useQuery({
+    queryKey: ['tokenData'],
+    queryFn: postTokenRefresh,
+  });
+  const accessToken = data;
+  const { error, data: user } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: getUserData,
+  });
 
-  const accessToken = '';
-  const nickname = '';
+  const nickname = error ? null : user?.nickname;
 
   const client = useRef<StompJs.Client | null>(null);
   const connect = async () => {
-    console.log({ client });
     client.current = new StompJs.Client({
       brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
       connectHeaders: {
@@ -36,8 +45,8 @@ const Chatting = () => {
           client.current.subscribe(
             `/sub/chat/room/${params.roomId}`,
             (frame) => {
-              const data = JSON.parse(frame.body);
-              console.log({ data });
+              const dataMessage = JSON.parse(frame.body);
+              console.log({ dataMessage });
             },
             { authorization: `Bearer ${accessToken}` }
           );
@@ -47,8 +56,8 @@ const Chatting = () => {
           });
         }
       },
-      onStompError: (error) => {
-        console.log({ error });
+      onStompError: (err) => {
+        console.log({ err });
         if (client.current) {
           client.current.deactivate();
         }
@@ -106,16 +115,16 @@ const Chatting = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchToken = async () => {
-    const response = await axiosInstance.patch('/api/tokens/refresh');
-    if (response.status === 200) {
-      const newAccessToken = response.headers.authorization;
-      console.log(newAccessToken);
-    }
-  };
-  useEffect(() => {
-    fetchToken();
-  }, []);
+  // const fetchToken = async () => {
+  //   const response = await axiosInstance.patch('/api/tokens/refresh');
+  //   if (response.status === 200) {
+  //     const newAccessToken = response.headers.authorization;
+  //     console.log(newAccessToken);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchToken();
+  // }, []);
 
   return (
     <div aria-label="chat room wrapper" className="min-h-[667px]">
