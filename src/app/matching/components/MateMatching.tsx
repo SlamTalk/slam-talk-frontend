@@ -1,7 +1,51 @@
 import React, { useState } from 'react';
+// import { useQuery } from 'react-query';
 import { Card, Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
+// import axiosInstance from '@/app/api/axiosInstance';
+
+// type MateData = {
+//   success: boolean;
+//   status: number;
+//   message: string;
+//   results: {
+//     matePostList: [
+//       {
+//         matePostId: number;
+//         writerId: number;
+//         startScheduledTime: string;
+//         endScheduledTime: string;
+//         title: string;
+//         content: string;
+//         positionList: [
+//           {
+//             position: string;
+//             maxPosition: number;
+//             currentPosition: number;
+//           },
+//         ];
+//         skillList: [string];
+//         recruitmentStatus: string;
+//         locationDetail: string;
+//         participants: [
+//           {
+//             createdAt: string;
+//             updatedAt: string;
+//             isDeleted: true;
+//             participantTableId: number;
+//             participantId: number;
+//             applyStatus: string;
+//             position: string;
+//             skillLevel: string;
+//           },
+//         ];
+//         createdAt: string;
+//       },
+//     ];
+//     nextCursor: string;
+//   };
+// };
 
 interface Post {
   postId: string;
@@ -10,7 +54,7 @@ interface Post {
   location: string;
   level: string[];
   positionNeeds: { [position: string]: number };
-  currentParticipants: { [position: string]: number }; // 현재 참여 인원
+  currentParticipants: { [position: string]: number };
 }
 
 interface MatePost {
@@ -152,6 +196,18 @@ const MateMatching = () => {
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedPosition, setSelectedPosition] = useState<string>('');
 
+  // const fetchMateData = async (): Promise<MateData> => {
+  //   const response = await axiosInstance
+  //     .get('https://www.slam-talk.site/api/mate')
+  //     .then((res) => res.data);
+
+  //   return response;
+  // };
+
+  // const { data } = useQuery<MateData, Error>('mate', fetchMateData);
+
+  // console.log({ data });
+
   const filteredPosts = posts.filter((post) => {
     const matchesCity = selectedCity
       ? post.location.includes(selectedCity)
@@ -220,8 +276,9 @@ const MateMatching = () => {
               onChange={(e) => setSelectedLevel(e.target.value)}
               style={{ width: '80px', marginLeft: '16px', fontWeight: 'bold' }}
             >
-              {levels.map((level) => (
-                <SelectItem key={level} value={level}>
+              {levels.map((level, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <SelectItem key={index} value={level}>
                   {level}
                 </SelectItem>
               ))}
@@ -230,7 +287,7 @@ const MateMatching = () => {
         </div>
       </div>
       {filteredPosts.map((post) => (
-        <Link href={`/matching/mate-details/${post.postId}`}>
+        <Link key={post.postId} href={`/matching/mate-details/${post.postId}`}>
           <MatePostCard key={post.postId} {...post} />
         </Link>
       ))}

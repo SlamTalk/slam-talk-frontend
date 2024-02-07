@@ -4,10 +4,16 @@ import React, { useState } from 'react';
 import { Input, Button, Textarea, Select, SelectItem } from '@nextui-org/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosResponse } from 'axios';
+import axiosInstance from '@/app/api/axiosInstance';
+import { useRouter } from 'next/navigation';
 import KakaoMapModal from '../components/KakaoMapModal';
+import { NewMateData } from './type';
 
 const MateNewPostPage = () => {
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const [title, setTitle] = useState('');
   const [address, setAddress] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [startTime, setStartTime] = useState('10:00');
@@ -18,6 +24,33 @@ const MateNewPostPage = () => {
   const [unspecifiedCount, setUnspecifiedCount] = useState('0');
   const [skillLevel, setSkillLevel] = useState('');
   const [details, setDetails] = useState('');
+  const router = useRouter();
+
+  const createMatePost = async (
+    newMateData: NewMateData
+  ): Promise<AxiosResponse> => {
+    try {
+      const response = await axiosInstance.post<AxiosResponse>(
+        '/api/mate/register',
+        newMateData
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const createPostMutation = useMutation<AxiosResponse, Error, NewMateData>({
+    mutationFn: createMatePost,
+    onSuccess: () => {
+      console.log('success');
+      router.push('/matching');
+    },
+    onError: (error: Error) => {
+      console.log(error);
+    },
+  });
 
   const handleOpenMap = () => {
     setIsMapOpen(true);
@@ -32,9 +65,29 @@ const MateNewPostPage = () => {
     handleCloseMap();
   };
 
+  const formatDate = (date: Date) => date.toISOString().split('T')[0];
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // 폼 제출 로직 추가...
+
+    const formattedDate = startDate ? formatDate(startDate) : '';
+
+    const newMateData: NewMateData = {
+      title,
+      content: details,
+      scheduledDate: formattedDate,
+      startTime,
+      endTime,
+      locationDetail: address,
+      skillLevel,
+      maxParticipantsCenters: parseInt(centerCount, 10),
+      maxParticipantsGuards: parseInt(guardCount, 10),
+      maxParticipantsForwards: parseInt(forwardCount, 10),
+      maxParticipantsOthers: parseInt(unspecifiedCount, 10),
+    };
+
+    console.log({ newMateData });
+    createPostMutation.mutate(newMateData);
   };
 
   const handleCenterCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,7 +128,12 @@ const MateNewPostPage = () => {
     <form className="relative p-4" onSubmit={handleSubmit}>
       <div className="mb-4">
         <div className="text-md font-bold">제목</div>
-        <Input id="title" placeholder="제목을 입력하세요" />
+        <Input
+          id="title"
+          placeholder="제목을 입력하세요"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
       </div>
 
       {/* 주소 선택 필드 */}
@@ -187,22 +245,22 @@ const MateNewPostPage = () => {
           <SelectItem key="OVER_BEGINNER" value="OVER_BEGINNER">
             입문 이상
           </SelectItem>
-          <SelectItem key="UNDER_BEGINNER" value="UNDER_BEGINNER">
+          <SelectItem key="BEGINNER" value="BEGINNER">
             입문 이하
           </SelectItem>
           <SelectItem key="OVER_LOW" value="OVER_LOW">
-            초보 이상
+            하수 이상
           </SelectItem>
           <SelectItem key="UNDER_LOW" value="UNDER_LOW">
-            초보 이하
+            하수 이하
           </SelectItem>
-          <SelectItem key="OVER_MID" value="OVER_MID">
+          <SelectItem key="OVER_MIDDLE" value="OVER_MIDDLE">
             중수 이상
           </SelectItem>
-          <SelectItem key="UNDER_MID" value="UNDER_MID">
+          <SelectItem key="UNDER_MIDDLE" value="UNDER_MIDDLE">
             중수 이하
           </SelectItem>
-          <SelectItem key="OVER_HIGH" value="OVER_HIGH">
+          <SelectItem key="HIGH" value="HIGH">
             고수 이상
           </SelectItem>
           <SelectItem key="UNDER_HIGH" value="UNDER_HIGH">
@@ -220,7 +278,9 @@ const MateNewPostPage = () => {
         />
       </div>
       <div className="flex justify-center">
-        <Button color="primary">작성 완료</Button>
+        <Button type="submit" color="primary">
+          작성 완료
+        </Button>
       </div>
       <KakaoMapModal
         visible={isMapOpen}
