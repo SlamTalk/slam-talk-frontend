@@ -7,6 +7,18 @@ const axiosInstance = axios.create({
   timeout: 10000,
 });
 
+let isRefreshing = false;
+let failedRequests: (() => void)[] = [];
+
+const processFailedRequests = (token?: string) => {
+  failedRequests.forEach((callback) => {
+    if (token) {
+      callback();
+    }
+  });
+  failedRequests = [];
+};
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -14,13 +26,27 @@ axiosInstance.interceptors.response.use(
 
     if (error.response.status === 401 && !originalRequest.retryFlag) {
       originalRequest.retryFlag = true;
+
+      if (isRefreshing) {
+        return new Promise((resolve) => {
+          failedRequests.push(() => {
+            originalRequest.retryFlag = true;
+            resolve(axiosInstance(originalRequest));
+          });
+        });
+      }
+      isRefreshing = true;
+      originalRequest.retryFlag = true;
+
       try {
-        const refreshResponse = await axiosInstance.patch(
+        const refreshResponse = await axiosInstance.post(
           '/api/tokens/refresh',
           {}
         );
         const newAccessToken = refreshResponse.data.accessToken;
         axiosInstance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+
+        processFailedRequests(newAccessToken);
 
         return await axiosInstance(originalRequest);
       } catch (refreshError) {
@@ -33,7 +59,7 @@ axiosInstance.interceptors.response.use(
             const response = await axiosInstance.post('/api/logout');
 
             if (response.status === 200) {
-              alert('로그아웃 되었습니다!');
+              alert('로그아웃되었습니다!');
               if (typeof window !== undefined) {
                 localStorage.setItem('isLoggedIn', 'false');
                 window.location.href = '/login';
@@ -42,11 +68,12 @@ axiosInstance.interceptors.response.use(
           } catch (logoutError) {
             console.log('로그아웃 실패: ', logoutError);
             alert(
-              '죄송합니다. 로그아웃에 실패했습니다. 잠시 후 다시 시도해주세요.'
+              '죄송합니다. 로그아웃에 실패했습니다. 잠시 후 다시 시도해 주세요.'
             );
           }
         }
-        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
       }
     }
     return Promise.reject(error);
