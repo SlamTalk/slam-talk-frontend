@@ -2,7 +2,6 @@ export interface UserInfo {
   email: string;
   socialType: string;
   id: number;
-  // firstLoginCheck: boolean;
   nickname: string;
   imageUrl: string;
   selfIntroduction: string | null;
@@ -12,5 +11,4 @@ export interface UserInfo {
   levelScore: number;
   mateCompleteParticipationCount: number;
   teamMatchingCompleteParticipationCount: number;
-  accessToken: string | null;
 }
