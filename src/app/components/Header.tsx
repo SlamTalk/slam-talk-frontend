@@ -36,7 +36,7 @@ const Header = () => {
           <ThemeSwitcher />
           <div className="mr-2">
             {isLoggedIn === 'true' && (
-              <Link href="/mypage">
+              <Link href="/my-page">
                 <PiUserCircle aria-label="유저" size={26} />
               </Link>
             )}
