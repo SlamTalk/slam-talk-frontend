@@ -18,6 +18,12 @@ const queryClient = new QueryClient();
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
 
+  const withoutHeader =
+    pathname.includes('details') ||
+    pathname.includes('new') ||
+    pathname.includes('my-page') ||
+    pathname.includes('chatroom');
+
   return (
     <html lang="en" className="light" suppressHydrationWarning>
       <head>
@@ -30,16 +36,11 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools />
           <Providers>
-            <div>
-              {pathname.includes('details') ||
-              pathname.includes('new') ||
-              pathname.includes('mypage') ||
-              pathname.includes('chatroom') ? null : (
-                <Header />
-              )}
-              <div className="pb-[48px] pt-[61px]">{children}</div>
-              {pathname.includes('chatroom') ? null : <Footer />}
+            {withoutHeader ? null : <Header />}
+            <div className={withoutHeader ? '' : 'pb-[48px] pt-[61px]'}>
+              {children}
             </div>
+            {pathname.includes('chatroom') ? null : <Footer />}
           </Providers>
         </QueryClientProvider>
       </body>
