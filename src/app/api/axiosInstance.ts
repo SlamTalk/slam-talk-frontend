@@ -43,7 +43,7 @@ axiosInstance.interceptors.response.use(
           '/api/tokens/refresh',
           {}
         );
-        const newAccessToken = refreshResponse.data.accessToken;
+        const newAccessToken = refreshResponse.headers.authorization;
         axiosInstance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
 
         processFailedRequests(newAccessToken);
