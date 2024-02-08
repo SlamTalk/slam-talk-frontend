@@ -26,7 +26,7 @@ const Header = () => {
   if (!isLoading) {
     const isLoggedIn = LocalStorage.getItem('isLoggedIn');
     return (
-      <div className="fixed z-30 flex h-[61px] w-full max-w-[600px] items-center justify-between border-b-1 bg-background pl-4">
+      <div className="sticky top-0 z-30 flex h-[61px] w-full max-w-[600px] items-center justify-between border-b-1 bg-background pl-4">
         <div className={`${anton.className} text-2xl`}>
           <Link href="/">
             <div>SLAM TALK</div>

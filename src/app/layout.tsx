@@ -37,9 +37,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <ReactQueryDevtools />
           <Providers>
             {withoutHeader ? null : <Header />}
-            <div className={withoutHeader ? '' : 'pb-[48px] pt-[61px]'}>
-              {children}
-            </div>
+            <main>{children}</main>
             {pathname.includes('chatroom') ? null : <Footer />}
           </Providers>
         </QueryClientProvider>

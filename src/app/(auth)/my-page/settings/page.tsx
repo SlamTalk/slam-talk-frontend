@@ -32,7 +32,7 @@ const MyPageSettings = () => {
   };
 
   return (
-    <div className="md:h-100 sm:h-100 fixed left-0 top-0 h-full w-full">
+    <div className="md:h-100 sm:h-100 h-full w-full">
       <div
         aria-label="뒤로가기"
         role="link"
