@@ -39,16 +39,16 @@ const MessageList = () => {
   useEffect(() => {
     messageListData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages.length]);
+  }, [messages]);
 
   return (
-    <div className="min-w mt-5 h-[600px] w-full">
+    <div className="min-w mt-5 h-[720px] w-full overflow-y-scroll	">
       {messages.map((i) =>
         JSON.parse(i.senderNickname) === nickname ? (
           <div key={i.messageId} className="mt-5 flex h-20 w-full justify-end">
             <div aria-label="나의 닉네임과 채팅 메시지">
               <p className="text-end">{JSON.parse(i.senderNickname)}</p>
-              <div className="my-3 max-w-sm rounded-lg bg-primary p-4 text-white">
+              <div className="my-3 max-w-sm rounded-lg bg-primary px-3 py-2 text-white">
                 {JSON.parse(i.content)}
               </div>
             </div>
@@ -66,7 +66,7 @@ const MessageList = () => {
             </div>
             <div aria-label="상대방의 닉네임과 채팅 메시지">
               <p className="text-start">{JSON.parse(i.senderNickname)}</p>
-              <div className="my-1 max-w-sm rounded-lg bg-gray-200 p-4 text-black">
+              <div className="my-1 max-w-sm rounded-lg bg-gray-200 px-3 py-2 text-black">
                 {JSON.parse(i.content)}
               </div>
             </div>

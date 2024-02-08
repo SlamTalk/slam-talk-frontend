@@ -72,19 +72,21 @@ const Chatting = () => {
   };
 
   const sendMessage = () => {
-    if (client.current && client.current.connected) {
-      client.current.publish({
-        destination: `/pub/chat/message/${params.roomId}`,
-        headers: { authorization: `Bearer ${accessToken}` },
-        body: JSON.stringify({
-          roomId: params.roomId,
-          senderNickname: nickname,
-          content: message,
-        }),
-      });
-      setMessage('');
-    } else {
-      console.log('connet error');
+    if (message !== '') {
+      if (client.current && client.current.connected) {
+        client.current.publish({
+          destination: `/pub/chat/message/${params.roomId}`,
+          headers: { authorization: `Bearer ${accessToken}` },
+          body: JSON.stringify({
+            roomId: params.roomId,
+            senderNickname: nickname,
+            content: message,
+          }),
+        });
+        setMessage('');
+      } else {
+        console.log('connet error');
+      }
     }
   };
 
@@ -145,7 +147,7 @@ const Chatting = () => {
       <MessageList />
       <div
         aria-label="chat input section"
-        className="fixed flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"
+        className="b-0 fixed flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"
       >
         <Input
           ref={inputRef}
