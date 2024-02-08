@@ -32,7 +32,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <Providers>
             <div>
               {pathname.includes('details') ||
-              pathname.includes('new') ||
+              // pathname.includes('new') ||
               pathname.includes('mypage') ||
               pathname.includes('chatroom') ? null : (
                 <Header />
