@@ -148,7 +148,7 @@ const Chatting = () => {
     <div aria-label="chat room wrapper" className="min-h-[667px]">
       <div className="fixed top-0 z-50 flex h-[61px] w-full max-w-[600px] items-center rounded-md bg-primary">
         <IoChevronBackSharp
-          className="w-[50px] text-xl text-white"
+          className="left-[20px] top-[20px] w-[50px] text-xl text-white"
           cursor="pointer"
           size={24}
           onClick={() => {
