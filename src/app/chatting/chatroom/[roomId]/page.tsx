@@ -9,8 +9,9 @@ import { useParams, useRouter } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
-// import axiosInstance from '../../../api/axiosInstance';
 import { postTokenRefresh } from '@/services/token/postTokenRefresh';
+import IMessage from '@/types/chat/message';
+import axiosInstance from '../../../api/axiosInstance';
 import MessageList from '../../components/messageList';
 
 const Chatting = () => {
@@ -18,6 +19,7 @@ const Chatting = () => {
   const router = useRouter();
 
   const [message, setMessage] = useState('');
+  const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { data } = useQuery({
     queryKey: ['tokenData'],
@@ -32,6 +34,18 @@ const Chatting = () => {
   const nickname = error ? null : user?.nickname;
 
   const client = useRef<StompJs.Client | null>(null);
+  const messageListData = async () => {
+    try {
+      const res = await axiosInstance.post(
+        `/api/chat/participation?roomId=${params.roomId}`
+      );
+      const listData = JSON.stringify(res.data.results);
+      console.log(typeof listData);
+      setMessageListState(JSON.parse(listData));
+    } catch (err) {
+      console.error(err);
+    }
+  };
   const connect = async () => {
     client.current = new StompJs.Client({
       brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
@@ -47,6 +61,7 @@ const Chatting = () => {
             (frame) => {
               const dataMessage = JSON.parse(frame.body);
               console.log({ dataMessage });
+              setMessageListState((prev: IMessage[]) => [...prev, dataMessage]);
             },
             { authorization: `Bearer ${accessToken}` }
           );
@@ -54,6 +69,7 @@ const Chatting = () => {
             destination: `/pub/enter/${params.roomId}`,
             headers: { authorization: `Bearer ${accessToken}` },
           });
+          messageListData();
         }
       },
       onStompError: (err) => {
@@ -144,7 +160,7 @@ const Chatting = () => {
           chat room {params.roomId}
         </h2>
       </div>
-      <MessageList />
+      <MessageList list={messageListState} />
       <div
         aria-label="chat input section"
         className="b-0 fixed flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"

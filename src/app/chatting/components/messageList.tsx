@@ -1,21 +1,11 @@
 import { Avatar } from '@nextui-org/react';
-import { useParams } from 'next/navigation';
+
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
-import axiosInstance from '../../api/axiosInstance';
+import IMessage from '@/types/chat/message';
 
-interface IMessage {
-  messageId: string;
-  roomId: string;
-  senderId: string;
-  senderNickname: string;
-  content: string;
-  timestamp: string;
-}
-
-const MessageList = () => {
-  const params = useParams();
+const MessageList = ({ list }: { list: IMessage[] }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
@@ -24,32 +14,22 @@ const MessageList = () => {
 
   const nickname = error ? null : user?.nickname;
 
-  // const id = '';
-  const messageListData = async () => {
-    try {
-      const res = await axiosInstance.post(
-        `/api/chat/participation?roomId=${params.roomId}`
-      );
-      setMessages(res.data?.results);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
-    messageListData();
+    // messageListData();
+    setMessages(list);
+    console.log({ list });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages]);
+  }, [list]);
 
   return (
-    <div className="min-w mt-5 h-[720px] w-full overflow-y-scroll	">
+    <div className="min-w mt-5 h-[730px] w-full overflow-y-scroll	">
       {messages.map((i) =>
-        JSON.parse(i.senderNickname) === nickname ? (
-          <div key={i.messageId} className="mt-5 flex h-20 w-full justify-end">
+        i.senderNickname.replace(/"/g, '') === nickname ? (
+          <div key={i.messageId} className="mt-14 flex h-20 w-full justify-end">
             <div aria-label="나의 닉네임과 채팅 메시지">
-              <p className="text-end">{JSON.parse(i.senderNickname)}</p>
+              <p className="text-end">{i.senderNickname.replace(/"/g, '')}</p>
               <div className="my-3 max-w-sm rounded-lg bg-primary px-3 py-2 text-white">
-                {JSON.parse(i.content)}
+                {i.content.replace(/"/g, '')}
               </div>
             </div>
             <div aria-label="userIcon">
@@ -65,9 +45,10 @@ const MessageList = () => {
               <Avatar className="mx-2" />
             </div>
             <div aria-label="상대방의 닉네임과 채팅 메시지">
-              <p className="text-start">{JSON.parse(i.senderNickname)}</p>
+              <p className="text-start">{i.senderNickname.replace(/"/g, '')}</p>
+
               <div className="my-1 max-w-sm rounded-lg bg-gray-200 px-3 py-2 text-black">
-                {JSON.parse(i.content)}
+                {i.content.replace(/"/g, '')}
               </div>
             </div>
           </div>
