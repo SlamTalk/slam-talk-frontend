@@ -95,7 +95,7 @@ const MyPage = () => {
 
           <hr className="w-90 my-4 h-px bg-gray-300" />
 
-          <p className="my-3 font-semibold">설정</p>
+          <p className="my-3 font-semibold">기타</p>
           <div className="mb-4 flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <MdOutlineShareLocation className="text-text" size={20} />
