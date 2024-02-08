@@ -132,6 +132,7 @@ const MateNewPostPage = () => {
             value={address}
           />
           <Button
+            aria-label="주소 찾기"
             className="absolute right-0 top-0 mr-[8px] mt-[8px]"
             onClick={handleOpenMap}
           >
@@ -149,6 +150,7 @@ const MateNewPostPage = () => {
             selected={startDate}
             onChange={(date: Date | null) => setStartDate(date)}
             className="w-full bg-gray-100 dark:bg-default-100"
+            aria-label="날짜 선택"
           />
         </div>
       </div>
@@ -165,6 +167,7 @@ const MateNewPostPage = () => {
               className="w-full"
               min="00:00"
               max="23:59"
+              aria-label="시작 시간 선택"
             />
           </div>
           <div className="flex-1">
@@ -176,6 +179,7 @@ const MateNewPostPage = () => {
               className="w-full"
               min="00:00"
               max="23:59"
+              aria-label="종료 시간 선택"
             />
           </div>
         </div>
@@ -191,6 +195,7 @@ const MateNewPostPage = () => {
             onChange={handleCenterCountChange}
             min="0"
             className="flex-1"
+            aria-label="센터 포지션 인원 수"
           />
           <Input
             label="포워드"
@@ -199,6 +204,7 @@ const MateNewPostPage = () => {
             onChange={handleForwardCountChange}
             min="0"
             className="flex-1"
+            aria-label="포워드 포지션 인원 수"
           />
           <Input
             label="가드"
@@ -207,6 +213,7 @@ const MateNewPostPage = () => {
             onChange={handleGuardCountChange}
             min="0"
             className="flex-1"
+            aria-label="가드 포지션 인원 수"
           />
           <Input
             label="무관"
@@ -215,6 +222,7 @@ const MateNewPostPage = () => {
             onChange={handleUnspecifiedCountChange}
             min="0"
             className="flex-1"
+            aria-label="포지션 무관 인원 수"
           />
         </div>
       </div>
@@ -226,6 +234,7 @@ const MateNewPostPage = () => {
           onChange={(e) => setSkillLevel(e.target.value)}
           className="w-full"
           placeholder="실력대를 선택하세요"
+          aria-label="원하는 실력대 선택"
         >
           <SelectItem key="OVER_BEGINNER" value="OVER_BEGINNER">
             입문 이상
