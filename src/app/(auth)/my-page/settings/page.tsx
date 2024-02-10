@@ -4,9 +4,15 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { IoChevronBackSharp } from 'react-icons/io5';
 import axiosInstance from '@/app/api/axiosInstance';
+import LocalStorage from '@/utils/localstorage';
 
 const MyPageSettings = () => {
   const router = useRouter();
+  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+
+  if (isLoggedIn === 'false') {
+    router.push('/login');
+  }
 
   const handleGoBack = () => {
     router.back();
@@ -32,12 +38,12 @@ const MyPageSettings = () => {
   };
 
   return (
-    <div className="md:h-100 sm:h-100 h-full w-full">
+    <div className="relative">
       <div
         aria-label="뒤로가기"
         role="link"
         tabIndex={0}
-        className="fixed left-4 top-4"
+        className="absolute left-4 top-4"
         onClick={handleGoBack}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
@@ -47,9 +53,9 @@ const MyPageSettings = () => {
       >
         <IoChevronBackSharp size={24} />
       </div>
-      <h2 className="mt-4 text-center text-lg font-semibold">설정</h2>
+      <h2 className="pt-4 text-center text-lg font-semibold">설정</h2>
       <hr className="w-90 my-4 h-px bg-gray-300" />
-      <div className="flex flex-col px-5">
+      <div className="flex flex-col px-4">
         <p className="my-3 font-semibold">알림 설정</p>
         <span>알림 수신 설정</span>
         <hr className="w-90 my-4 h-px bg-gray-300" />
