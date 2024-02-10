@@ -95,8 +95,10 @@ const Chatting = () => {
           headers: { authorization: `Bearer ${accessToken}` },
           body: JSON.stringify({
             roomId: params.roomId,
-            senderNickname: nickname,
+            senderNickname: user?.nickname,
             content: message,
+            senderId: user?.id,
+            senderImageUrl: user?.imageUrl,
           }),
         });
         setMessage('');

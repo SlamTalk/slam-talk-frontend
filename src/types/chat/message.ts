@@ -5,5 +5,6 @@ interface IMessage {
   senderNickname: string;
   content: string;
   timestamp: string;
+  senderImageUrl?: string;
 }
 export default IMessage;

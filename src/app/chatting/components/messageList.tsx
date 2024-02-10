@@ -33,7 +33,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
               </div>
             </div>
             <div aria-label="userIcon">
-              <Avatar className="mx-2" />
+              <Avatar className="mx-2" alt="my-profile" src={user?.imageUrl} />
             </div>
           </div>
         ) : (
@@ -42,7 +42,11 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
             className="mt-5 flex h-20 w-full justify-start"
           >
             <div aria-label="userIcon">
-              <Avatar className="mx-2" />
+              <Avatar
+                className="mx-2"
+                alt="others-profile"
+                src={user?.imageUrl}
+              />
             </div>
             <div aria-label="상대방의 닉네임과 채팅 메시지">
               <p className="text-start">{i.senderNickname.replace(/"/g, '')}</p>
