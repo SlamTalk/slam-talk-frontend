@@ -3,7 +3,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { IoSettingsOutline } from 'react-icons/io5';
+import { IoChevronBackSharp, IoSettingsOutline } from 'react-icons/io5';
 import axiosInstance from '@/app/api/axiosInstance';
 import { LuClipboardList } from 'react-icons/lu';
 import { useQuery } from '@tanstack/react-query';
@@ -21,6 +21,10 @@ const MyPage = () => {
   if (isLoggedIn === 'false') {
     router.push('/login');
   }
+
+  const handleGoBack = () => {
+    router.back();
+  };
 
   const handleAttend = async () => {
     try {
@@ -52,13 +56,26 @@ const MyPage = () => {
 
   if (user) {
     return (
-      <div className="md:h-100 sm:h-100 h-8 w-full px-5">
-        <div className="absolute right-4 top-4">
+      <div className="p-4">
+        <div className="flex w-full justify-between">
+          <div
+            aria-label="뒤로가기"
+            role="link"
+            tabIndex={0}
+            onClick={handleGoBack}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleGoBack();
+              }
+            }}
+          >
+            <IoChevronBackSharp size={24} />
+          </div>
           <Link href="/my-page/settings">
             <IoSettingsOutline aria-label="settings" size={24} />
           </Link>
         </div>
-        <div className="mt-14 flex items-center justify-between">
+        <div className="mt-7 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Avatar alt="profile-img" src={user.imageUrl} />
             <p className="text-lg font-semibold">{user.nickname}</p>
