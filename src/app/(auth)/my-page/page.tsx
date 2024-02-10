@@ -56,7 +56,7 @@ const MyPage = () => {
 
   if (user) {
     return (
-      <div className="p-5">
+      <div className="p-4">
         <div className="flex w-full justify-between">
           <div
             aria-label="뒤로가기"

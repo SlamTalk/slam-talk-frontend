@@ -43,7 +43,7 @@ const MyPageSettings = () => {
         aria-label="뒤로가기"
         role="link"
         tabIndex={0}
-        className="absolute left-5 top-5"
+        className="absolute left-4 top-4"
         onClick={handleGoBack}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
@@ -53,9 +53,9 @@ const MyPageSettings = () => {
       >
         <IoChevronBackSharp size={24} />
       </div>
-      <h2 className="pt-5 text-center text-lg font-semibold">설정</h2>
+      <h2 className="pt-4 text-center text-lg font-semibold">설정</h2>
       <hr className="w-90 my-4 h-px bg-gray-300" />
-      <div className="flex flex-col px-5">
+      <div className="flex flex-col px-4">
         <p className="my-3 font-semibold">알림 설정</p>
         <span>알림 수신 설정</span>
         <hr className="w-90 my-4 h-px bg-gray-300" />
