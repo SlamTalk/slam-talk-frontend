@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 const chatList = () => {
   const testList = [
-    { id: '2', title: 'test chat room1', lastMessage: '~~' },
+    { id: '6', title: 'test chat room1', lastMessage: '~~' },
     { id: '3', title: 'test chat room2', lastMessage: '@@' },
   ];
 
