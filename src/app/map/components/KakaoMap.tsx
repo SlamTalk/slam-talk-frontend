@@ -5,10 +5,10 @@ import { Button } from '@nextui-org/button';
 import { IoSearchSharp } from 'react-icons/io5';
 import { MdMyLocation } from 'react-icons/md';
 import { BiSolidLocationPlus } from 'react-icons/bi';
+import { useQuery } from '@tanstack/react-query';
+import getCourts from '@/services/basketballCourt/getCourts';
 import CourtReport from './CourtReport';
-import CourtDetails from './CourtDetail';
-// import axiosInstance from '../../api/axiosInstance';
-import { results } from '../fakeMapData';
+import CourtDetails from './CourtDetails';
 
 declare global {
   interface Window {
@@ -21,28 +21,26 @@ const KakaoMap: FC = () => {
   const [map, setMap] = useState<any>(null);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [userLocation, setUserLocation] = useState<any>(null);
-  const [selectedPlace, setSelectedPlace] = useState<any>(null);
   const [, setIsLoading] = useState<boolean>(true);
-  const [mapLevel] = useState(3);
+  const [mapLevel] = useState(8);
   const [isCourtReportVisible, setIsCourtReportVisible] = useState(false);
+  const [selectedCourtId, setSelectedCourtId] = useState<string>('');
   const [isCourtDetailsVisible, setIsCourtDetailsVisible] = useState(false);
 
-  // 백엔드 API로부터 농구장 정보 가져오기
-  //   const fetchBasketballCourts = async () => {
-  //     try {
-  //       const response = await axiosInstance.get('/api/map/courts');
+  const {
+    error,
+    data: courts,
+    isLoading,
+  } = useQuery({
+    queryKey: ['courts'],
+    queryFn: getCourts,
+  });
 
-  //       if (response.status === 200) {
-  //         // 성공적으로 데이터를 가져왔을 경우
-  //         console.log(response);
-  //         const courtData = response.data;
-  //         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  //         displayBasketballCourts(courtData);
-  //       }
-  //     } catch (error) {
-  //       console.error('농구장 정보를 불러오는데 실패했습니다:', error);
-  //     }
-  //   };
+  if (error) {
+    console.log('농구장 정보를 불러오는데 실패했습니다:', error);
+  }
+
+  console.log(courts);
 
   useEffect(() => {
     if (!window.kakao || !window.kakao.maps) {
@@ -62,16 +60,15 @@ const KakaoMap: FC = () => {
           const { latitude, longitude } = position.coords;
           const userLatLng = new window.kakao.maps.LatLng(latitude, longitude);
           setUserLocation(userLatLng);
-          const options = { center: userLatLng, level: mapLevel };
+          const seoulLatLng = new window.kakao.maps.LatLng(37.50827, 126.99315);
+          const options = { center: seoulLatLng, level: mapLevel };
           const kakaoMap = new window.kakao.maps.Map(mapRef.current, options);
           setMap(kakaoMap);
           setIsLoading(false);
-
-          // fetchBasketballCourts();
         },
-        (error) => {
-          console.error(`Error: ${error.message}`);
-          if (error.code === error.PERMISSION_DENIED) {
+        (locationError) => {
+          console.error(`Error: ${locationError.message}`);
+          if (locationError.code === locationError.PERMISSION_DENIED) {
             alert(
               '이 기능을 사용하려면 기기의 위치 서비스를 활성화해야 합니다. 설정에서 위치 서비스를 켜주세요.'
             );
@@ -82,12 +79,11 @@ const KakaoMap: FC = () => {
         }
       );
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapLevel]);
 
   const moveToLocation = () => {
     if (userLocation && map) {
-      map.setLevel(mapLevel);
+      map.setLevel(4);
       map.panTo(userLocation);
     } else {
       alert('사용자 위치 정보가 설정되지 않았습니다.');
@@ -110,8 +106,12 @@ const KakaoMap: FC = () => {
         searchKeyword,
         (data: any, status: any) => {
           if (status === window.kakao.maps.services.Status.OK) {
-            // eslint-disable-next-line @typescript-eslint/no-use-before-define
-            displayPlaces(results);
+            const firstResult = data[0];
+            if (firstResult) {
+              const { x, y } = firstResult;
+              const position = new window.kakao.maps.LatLng(y, x);
+              map.panTo(position);
+            }
           } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
             alert('검색 결과가 존재하지 않습니다.');
           } else if (status === window.kakao.maps.services.Status.ERROR) {
@@ -122,47 +122,6 @@ const KakaoMap: FC = () => {
       );
     }
   };
-
-  //   const displayBasketballCourts = (courts: any) => {
-  //     if (!map) return;
-
-  //     const bounds = new window.kakao.maps.LatLngBounds();
-  //     const markerImageSrc = '/icons/marker-img.png';
-  //     const imageSize = new window.kakao.maps.Size(48);
-  //     const markerImage = new window.kakao.maps.MarkerImage(
-  //       markerImageSrc,
-  //       imageSize
-  //     );
-
-  //     courts.forEach((court: any) => {
-  //       const { latitude, longitude, name } = court;
-  //       const marker = new window.kakao.maps.Marker({
-  //         map,
-  //         position: new window.kakao.maps.LatLng(latitude, longitude),
-  //         image: markerImage,
-  //       });
-
-  //       const content = `<div class="flex items-center px-2 py-1 bg-white text-black border border-gray-300 rounded text-sm font-medium shadow-sm ml-12">${name}</div>`;
-
-  //       // eslint-disable-next-line no-new
-  //       new window.kakao.maps.CustomOverlay({
-  //         map,
-  //         position: new window.kakao.maps.LatLng(latitude, longitude),
-  //         content,
-  //         yAnchor: 1,
-  //         xAnchor: 0.5,
-  //       });
-
-  //       window.kakao.maps.event.addListener(marker, 'click', () => {
-  //         setSelectedPlace(court);
-  //         setIsCourtDetailsVisible(true);
-  //       });
-
-  //       bounds.extend(new window.kakao.maps.LatLng(latitude, longitude));
-  //     });
-
-  //     map.setBounds(bounds);
-  //   };
 
   const displayPlaces = (places: any) => {
     if (!map) return;
@@ -194,7 +153,7 @@ const KakaoMap: FC = () => {
       });
 
       window.kakao.maps.event.addListener(marker, 'click', () => {
-        setSelectedPlace(place);
+        setSelectedCourtId(place.courtId);
         setIsCourtDetailsVisible(true);
       });
 
@@ -205,6 +164,30 @@ const KakaoMap: FC = () => {
 
     map.setBounds(bounds);
   };
+
+  useEffect(() => {
+    if (!map || isLoading || error) return;
+
+    displayPlaces(courts);
+
+    // if (courts) {
+    //   courts.forEach((court: any) => {
+    //     const marker = new window.kakao.maps.Marker({
+    //       map,
+    //       position: new window.kakao.maps.LatLng(
+    //         court.latitude,
+    //         court.longitude
+    //       ),
+    //     });
+
+    //     window.kakao.maps.event.addListener(marker, 'click', () => {
+    //       setSelectedCourtId(court.courtId);
+    //       setIsCourtDetailsVisible(true);
+    //     });
+    //   });
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [courts, isLoading, error, map]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -250,10 +233,9 @@ const KakaoMap: FC = () => {
             onClose={hideCourtReport}
           />
         )}
-        {selectedPlace && isCourtDetailsVisible && (
+        {isCourtDetailsVisible && (
           <CourtDetails
-            selectedPlace={selectedPlace}
-            isVisible={isCourtDetailsVisible}
+            courtId={selectedCourtId}
             onClose={() => setIsCourtDetailsVisible(false)}
           />
         )}
