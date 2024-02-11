@@ -10,6 +10,13 @@ export interface Participant {
   isDeleted: boolean;
   participantTableId: number;
   participantId: number;
+  participantNickname: string;
+  applyStatus: string;
+  position: string;
+  skillLevel: string;
+}
+
+export interface ParticipantApplication {
   applyStatus: string;
   position: string;
   skillLevel: string;

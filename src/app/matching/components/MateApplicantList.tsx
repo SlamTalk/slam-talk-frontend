@@ -58,7 +58,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
           className="w-30 mr-2 overflow-hidden truncate font-semibold"
           style={{ width: '110px' }}
         >
-          {applicant.participantId} {/* participantNickname으로 수정 예정 */}
+          {applicant.participantNickname}
         </span>
         <div className="mr-1 rounded-md bg-gray-200 px-2 py-1 dark:bg-gray-400">
           {applicant.position}

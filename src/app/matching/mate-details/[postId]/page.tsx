@@ -11,27 +11,27 @@ import MateApplicantList from '../../components/MateApplicantList';
 import { MatePost } from '../../components/MateDataType';
 
 const user = {
-  userId: 20,
+  userId: 12,
   userNickname: '스테픈커리',
   userProfile: null,
 };
 
 const MateDetailsPage = () => {
-  const params = useParams().postId;
+  const { postId } = useParams();
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
 
   const fetchMateDetailsData = async (): Promise<MatePost> => {
     const response = await axiosInstance
-      .get(`/api/mate/${params}`)
+      .get(`/api/mate/${postId}`)
       .then((res) => res.data.results);
 
     return response;
   };
 
   const { data } = useQuery<MatePost, Error>({
-    queryKey: ['mate', params],
+    queryKey: ['mate', postId],
     queryFn: fetchMateDetailsData,
   });
 
