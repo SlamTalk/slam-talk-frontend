@@ -1,23 +1,15 @@
 import React from 'react';
 import { Button } from '@nextui-org/react';
+import { Participant } from './MateDataType';
 
 interface User {
   userId: number;
   // user 객체의 다른 필요한 타입 정의
 }
 
-interface Applicant {
-  participantTableId: number;
-  participantNickname: string;
-  applyStatus: string;
-  position: string;
-  skillLevel: string;
-  participantId: number;
-}
-
 interface MateApplicantListProps {
   user: User;
-  applicant: Applicant;
+  applicant: Participant;
   isWriter: boolean;
 }
 
@@ -66,7 +58,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
           className="w-30 mr-2 overflow-hidden truncate font-semibold"
           style={{ width: '110px' }}
         >
-          {applicant.participantNickname}
+          {applicant.participantId} {/* participantNickname으로 수정 예정 */}
         </span>
         <div className="mr-1 rounded-md bg-gray-200 px-2 py-1 dark:bg-gray-400">
           {applicant.position}
