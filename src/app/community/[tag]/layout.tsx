@@ -103,7 +103,7 @@ const Layout = () => {
         </Button>
       </div>
 
-      <Page searchWord={searchData} />
+      <Page searchword={searchData} />
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Button
