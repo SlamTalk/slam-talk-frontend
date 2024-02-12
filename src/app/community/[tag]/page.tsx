@@ -27,7 +27,7 @@ interface ICommunityItem {
   }[];
 }
 
-const Page = () => {
+const Page = ({ searchWord }: { searchWord: string }) => {
   const router = useRouter();
   const params = useParams<{ tag: string }>();
   const [data, setData] = useState<ICommunityItem[]>([
@@ -67,26 +67,33 @@ const Page = () => {
     router.push(`/community/article/${id}`);
   };
   return (
-    <Table color="primary">
+    <Table color="primary" aria-label="게시글 목록">
       <TableHeader>
         <TableColumn>TITLE</TableColumn>
         <TableColumn>USER</TableColumn>
       </TableHeader>
       <TableBody>
         {params.tag === 'all'
-          ? data.map((item) => (
-              <TableRow
-                className="cursor-pointer hover:bg-primary hover:text-white"
-                onClick={() => handleLink(item.id)}
-                key={item.id}
-                aria-labelledby={`title-${item.id}`}
-              >
-                <TableCell className="flex-grow">{item.title}</TableCell>
-                <TableCell>{item.userId}</TableCell>
-              </TableRow>
-            ))
+          ? data
+              .filter(
+                (item) => searchWord === '' || item.title.includes(searchWord)
+              )
+              .map((item) => (
+                <TableRow
+                  className="cursor-pointer hover:bg-primary hover:text-white"
+                  onClick={() => handleLink(item.id)}
+                  key={item.id}
+                  aria-labelledby={`title-${item.id}`}
+                >
+                  <TableCell className="flex-grow">{item.title}</TableCell>
+                  <TableCell>{item.userId}</TableCell>
+                </TableRow>
+              ))
           : data
               .filter((item) => item.tag === params.tag)
+              .filter(
+                (item) => searchWord === '' || item.title.includes(searchWord)
+              )
               .map((item) => (
                 <TableRow key={item.id}>
                   <TableCell className="flex-grow">{item.title}</TableCell>
