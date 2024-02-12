@@ -1,6 +1,15 @@
 import React from 'react';
 import { Button } from '@nextui-org/react';
+import { useParams } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosResponse } from 'axios';
+import axiosInstance from '@/app/api/axiosInstance';
 import { Participant } from './MateDataType';
+
+interface PatchParticipantStatusParams {
+  participantTableId: number;
+  status: string;
+}
 
 interface User {
   userId: number;
@@ -33,19 +42,62 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
   applicant,
   isWriter,
 }) => {
+  const { postId } = useParams();
+
+  const patchParticipantStatus = async ({
+    participantTableId,
+    status,
+  }: PatchParticipantStatusParams): Promise<AxiosResponse> => {
+    try {
+      const response = await axiosInstance.patch<AxiosResponse>(
+        `/api/mate/${postId}/participants/${participantTableId}?applyStatus=${status}`
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const patchStatusMutation = useMutation<
+    AxiosResponse,
+    Error,
+    PatchParticipantStatusParams
+  >({
+    mutationFn: patchParticipantStatus,
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: (error: Error) => {
+      console.log(error);
+    },
+  });
+
   const handleAccept = (participantTableId: number) => {
-    // 수락 로직 구현
-    console.log(participantTableId);
+    const status = 'ACCEPTED';
+    patchStatusMutation.mutate({
+      participantTableId,
+      status,
+    });
+    window.location.reload();
   };
 
   const handleReject = (participantTableId: number) => {
-    // 거절 로직 구현
-    console.log(participantTableId);
+    const status = 'REJECTED';
+    patchStatusMutation.mutate({
+      participantTableId,
+      status,
+    });
+    window.location.reload();
   };
 
   const handleCancel = (participantTableId: number) => {
-    // 취소 로직 구현
-    console.log(participantTableId);
+    const status = 'CANCELED';
+    patchStatusMutation.mutate({
+      participantTableId,
+      status,
+    });
+    window.location.reload();
   };
 
   return (

@@ -5,9 +5,6 @@ export interface Position {
 }
 
 export interface Participant {
-  createdAt: string;
-  updatedAt: string;
-  isDeleted: boolean;
   participantTableId: number;
   participantId: number;
   participantNickname: string;
