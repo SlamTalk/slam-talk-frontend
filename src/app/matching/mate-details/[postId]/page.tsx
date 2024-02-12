@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { Snippet, Button } from '@nextui-org/react';
 import axiosInstance from '@/app/api/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { AxiosResponse } from 'axios';
 import MateApplicantList from '../../components/MateApplicantList';
 import { MatePost } from '../../components/MateDataType';
 
@@ -21,6 +22,7 @@ const MateDetailsPage = () => {
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const router = useRouter();
 
   const fetchMateDetailsData = async (): Promise<MatePost> => {
     const response = await axiosInstance
@@ -28,6 +30,25 @@ const MateDetailsPage = () => {
       .then((res) => res.data.results);
 
     return response;
+  };
+
+  const deleteRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.delete<AxiosResponse>(
+      `/api/mate/${postId}`
+    );
+
+    return response;
+  };
+
+  const handleFinishRecruitment = async () => {
+    try {
+      deleteRecruitment();
+      alert('모집이 완료되었습니다.');
+      router.push('/matching');
+    } catch (error) {
+      console.error(error);
+      alert('모집 완료 처리 중 오류가 발생했습니다.');
+    }
   };
 
   const { data } = useQuery<MatePost, Error>({
@@ -118,8 +139,9 @@ const MateDetailsPage = () => {
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">모집 정보</div>
         <div className="mt-2 rounded-md border-2 p-3">
-          {data?.positionList.map((position) => (
-            <div key={position.position} className="mb-1">
+          {data?.positionList.map((position, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <div key={index} className="mb-1">
               <span className="font-semibold">{position.position}</span>:{' '}
               {position.currentPosition}/{position.maxPosition} 명
             </div>
@@ -138,8 +160,10 @@ const MateDetailsPage = () => {
       {/* 지원자 리스트 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">지원자 리스트</div>
-        {data?.participants.map((participant) => (
+        {data?.participants.map((participant, index) => (
           <MateApplicantList
+            // eslint-disable-next-line react/no-array-index-key
+            key={index}
             user={user}
             applicant={participant}
             isWriter={isWriter}
@@ -149,7 +173,11 @@ const MateDetailsPage = () => {
       <div className="flex justify-center py-3">
         {isWriter ? (
           <>
-            <Button color="primary" className="mx-2">
+            <Button
+              color="primary"
+              className="mx-2"
+              onClick={handleFinishRecruitment}
+            >
               모집 완료
             </Button>
             <Link href={`/matching/mate-details/${data?.matePostId}/revise`}>
