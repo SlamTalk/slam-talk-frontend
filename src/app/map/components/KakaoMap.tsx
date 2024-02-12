@@ -21,11 +21,13 @@ const KakaoMap: FC = () => {
   const [map, setMap] = useState<any>(null);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [userLocation, setUserLocation] = useState<any>(null);
-  const [, setIsLoading] = useState<boolean>(true);
+  // const [, setIsLoading] = useState<boolean>(true);
   const [mapLevel] = useState(8);
   const [isCourtReportVisible, setIsCourtReportVisible] = useState(false);
   const [selectedCourtId, setSelectedCourtId] = useState<string>('');
   const [isCourtDetailsVisible, setIsCourtDetailsVisible] = useState(false);
+  const [location, setLocation] = useState<any>(null);
+  const [markerEventEnabled, setMarkerEventEnabled] = useState(false);
 
   const {
     error,
@@ -51,7 +53,7 @@ const KakaoMap: FC = () => {
     window.kakao.maps.load(() => {
       if (!('geolocation' in navigator)) {
         alert('이 브라우저는 위치 서비스를 지원하지 않습니다.');
-        setIsLoading(false);
+        // setIsLoading(false);
         return;
       }
 
@@ -64,7 +66,7 @@ const KakaoMap: FC = () => {
           const options = { center: seoulLatLng, level: mapLevel };
           const kakaoMap = new window.kakao.maps.Map(mapRef.current, options);
           setMap(kakaoMap);
-          setIsLoading(false);
+          // setIsLoading(false);
         },
         (locationError) => {
           console.error(`Error: ${locationError.message}`);
@@ -75,7 +77,7 @@ const KakaoMap: FC = () => {
           } else {
             alert('위치 정보를 가져오는데 실패했습니다.');
           }
-          setIsLoading(false);
+          // setIsLoading(false);
         }
       );
     });
@@ -122,6 +124,59 @@ const KakaoMap: FC = () => {
       );
     }
   };
+
+  const handleMapClick = (mouseEvent: any) => {
+    const markerImageSrc = '/icons/marker-img.png';
+    const imageSize = new window.kakao.maps.Size(48);
+    const markerImage = new window.kakao.maps.MarkerImage(
+      markerImageSrc,
+      imageSize
+    );
+    if (map) {
+      const latlng = mouseEvent.latLng;
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.coord2Address(
+        latlng.getLng(),
+        latlng.getLat(),
+        (result: any, status: any) => {
+          if (status === window.kakao.maps.services.Status.OK) {
+            const address = result[0].address.address_name;
+            const courtInfo = {
+              address,
+              latitude: latlng.getLat(),
+              longitude: latlng.getLng(),
+            };
+            setIsCourtReportVisible(true);
+            setLocation(courtInfo);
+            // Set marker on the map
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const marker = new window.kakao.maps.Marker({
+              position: latlng,
+              map,
+              image: markerImage,
+            });
+            // Pass the courtInfo to the CourtReport component
+            console.log(courtInfo);
+            // You can set the courtInfo state here and pass it to CourtReport component
+          } else {
+            alert('주소를 가져오지 못했습니다.');
+          }
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (map && markerEventEnabled) {
+      window.kakao.maps.event.addListener(map, 'click', handleMapClick);
+    }
+    return () => {
+      if (map && markerEventEnabled) {
+        window.kakao.maps.event.removeListener(map, 'click', handleMapClick);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, markerEventEnabled]);
 
   const displayPlaces = (places: any) => {
     if (!map) return;
@@ -195,12 +250,24 @@ const KakaoMap: FC = () => {
     }
   };
 
-  const showCourtReport = () => {
-    setIsCourtReportVisible(true);
+  // const showCourtReport = () => {
+  //   handleMapClick();
+  //   setIsCourtReportVisible(true);
+  // };
+
+  const handleMarkerEventActivation = () => {
+    setMarkerEventEnabled(true);
+    // setIsCourtReportVisible(true);
   };
 
   const hideCourtReport = () => {
     setIsCourtReportVisible(false);
+    setMarkerEventEnabled(false);
+    // Remove the marker from the map when closing the report modal
+    // if (location) {
+    //   location.setMap(null);
+    //   setLocation(null); // 마커 상태 초기화
+    // }
   };
 
   return (
@@ -229,6 +296,7 @@ const KakaoMap: FC = () => {
       >
         {isCourtReportVisible && (
           <CourtReport
+            location={location}
             isVisible={isCourtReportVisible}
             onClose={hideCourtReport}
           />
@@ -240,6 +308,7 @@ const KakaoMap: FC = () => {
           />
         )}
       </div>
+
       <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
         <Button
           isIconOnly
@@ -255,7 +324,9 @@ const KakaoMap: FC = () => {
           aria-label="Court Report"
           type="button"
           className="justify-center rounded-full bg-primary text-white shadow-md"
-          onClick={showCourtReport}
+          onClick={handleMarkerEventActivation}
+          // onClick={() => setMarkerEventEnabled(true)}
+          // onClick={showCourtReport}
         >
           농구장 제보
         </Button>

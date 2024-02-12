@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Textarea,
   Input,
@@ -9,15 +9,56 @@ import {
   Button,
 } from '@nextui-org/react';
 import { IoIosClose } from 'react-icons/io';
+import { FaTrashCan } from 'react-icons/fa6';
 import { basketballCourtType, basketballCourtSize } from '../courtReportData';
+import { CameraIcon } from './icons/CameraIcon';
 
 interface CourtReportProps {
+  location: { address: string; latitude: string; longitude: string };
   isVisible: boolean;
   onClose: () => void;
 }
 
-const CourtReport: React.FC<CourtReportProps> = ({ isVisible, onClose }) => {
-  const [value, setValue] = React.useState('');
+// 농구장 사진(1MB) ✅
+// (마커 정보→ 위도, 경도, 주소) ✅
+// 농구장명(필수), 주소(필수), 코트 종류, 실내외(실내/야외), 코트사이즈, 골대수,
+// 야간 조명, 개방시간(제한/24시), 사용료, 주차 가능, 기타 정보, 전화번호, 홈페이지(링크)
+// 편의시설
+
+const CourtReport: React.FC<CourtReportProps> = ({
+  location,
+  isVisible,
+  onClose,
+}) => {
+  const [value, setValue] = useState('');
+  const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  const MAX_FILE_SIZE_MB = 1;
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files && e.target.files[0];
+    if (selectedFile) {
+      console.log(selectedFile.size);
+      if (selectedFile.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+        alert(`파일 크기는 ${MAX_FILE_SIZE_MB}MB를 초과할 수 없습니다.`);
+        e.target.value = '';
+      } else {
+        setFile(selectedFile);
+        const imageUrl = URL.createObjectURL(selectedFile);
+        setPreviewUrl(imageUrl);
+      }
+    }
+  };
+
+  const resetPreview = () => {
+    setFile(null);
+    setPreviewUrl(null);
+  };
+
+  const handleFileDelete = () => {
+    resetPreview();
+  };
 
   return (
     <div
@@ -36,6 +77,65 @@ const CourtReport: React.FC<CourtReportProps> = ({ isVisible, onClose }) => {
       <div className="h-full overflow-auto">
         <div className="flex flex-col gap-4">
           <p className="text-center text-lg font-semibold">농구장 제보하기</p>
+          <div className="relative flex h-48 w-full items-center justify-center bg-gray-200">
+            <div className="absolute top-0 z-20 flex h-8 w-full items-center justify-between bg-yellow-200 px-4 font-semibold">
+              <p className="text-sm text-black">
+                숨겨진 농구장을 제보해주시면 레벨 점수를 드립니다.
+              </p>
+              <Button
+                color="primary"
+                radius="full"
+                size="sm"
+                className="h-4 w-fit min-w-8 p-0 text-xs"
+              >
+                30점
+              </Button>
+            </div>
+            <div>
+              <Button
+                className="z-20 mt-2"
+                color="primary"
+                radius="full"
+                startContent={
+                  // eslint-disable-next-line jsx-a11y/label-has-associated-control
+                  <label htmlFor="fileInput">
+                    <CameraIcon />
+                  </label>
+                }
+              >
+                <label htmlFor="fileInput">
+                  {file ? '사진 변경' : '사진 추가'}
+                </label>
+              </Button>
+            </div>
+            <input
+              id="fileInput"
+              name="fileInput"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+            />
+            {previewUrl && (
+              <>
+                <Button
+                  size="sm"
+                  radius="full"
+                  aria-label="삭제"
+                  startContent={<FaTrashCan size={16} />}
+                  className="absolute bottom-2 right-2 z-30 gap-1 bg-gray-400 p-1 font-bold text-white"
+                  onClick={handleFileDelete}
+                >
+                  삭제
+                </Button>
+                <img
+                  src={previewUrl}
+                  alt="미리보기"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </>
+            )}
+          </div>
           <Input
             isRequired
             labelPlacement="outside"
@@ -44,6 +144,12 @@ const CourtReport: React.FC<CourtReportProps> = ({ isVisible, onClose }) => {
             label="농구장명"
             placeholder="농구장명을 입력해주세요."
           />
+          <div>
+            <p className="text-md font-semibold">주소</p>
+            <p>{location.address}</p>
+            <p>{location.latitude}</p>
+            <p>{location.longitude}</p>
+          </div>
           <div className="flex gap-4 md:flex-nowrap">
             <Select
               labelPlacement="outside"
