@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Card, Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';

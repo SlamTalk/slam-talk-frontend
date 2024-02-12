@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Card } from '@nextui-org/react';
 import { MateCardInfo } from './MateDataType';
@@ -50,7 +52,7 @@ const MatePostCard: React.FC<MateCardInfo> = ({
         <div className="my-1 flex items-center justify-between">
           <p className="text-sm">{`${formattedDate} ${formattedTime}`}</p>
           <div className="flex flex-wrap">
-            {level.map((lvl) => (
+            {level?.map((lvl) => (
               <div
                 key={lvl}
                 className="mx-1 rounded border bg-gray-300 p-1 text-xs font-bold text-black"

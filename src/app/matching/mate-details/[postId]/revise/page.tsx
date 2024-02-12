@@ -66,7 +66,7 @@ const MatePostRevisePage = () => {
       });
 
       // 실력대 설정
-      const skillLevels = new Set(data.skillLevelList);
+      const skillLevels = new Set(data.skillList);
       let level = '';
 
       // 실력대에 따른 level 값 설정 로직

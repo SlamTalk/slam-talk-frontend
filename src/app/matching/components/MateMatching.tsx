@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
@@ -48,8 +50,6 @@ const MateMatching = () => {
     queryKey: ['mate'],
     queryFn: fetchMateData,
   });
-
-  console.log(data);
 
   const filteredMatePost =
     data?.filter((post: MatePost) => {
@@ -135,7 +135,6 @@ const MateMatching = () => {
               }}
             >
               {levels.map((level) => (
-                // eslint-disable-next-line react/no-array-index-key
                 <SelectItem key={level} value={level}>
                   {level}
                 </SelectItem>

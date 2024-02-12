@@ -29,7 +29,7 @@ export interface MatePost {
   title: string;
   content: string;
   positionList: Position[];
-  skillLevelList: string[];
+  skillList: string[];
   recruitmentStatus: string;
   locationDetail: string;
   participants: Participant[];
