@@ -11,8 +11,8 @@ import MateApplicantList from '../../components/MateApplicantList';
 import { MatePost } from '../../components/MateDataType';
 
 const user = {
-  userId: 12,
-  userNickname: '스테픈커리',
+  userId: 27,
+  userNickname: '동기만세',
   userProfile: null,
 };
 
@@ -152,9 +152,11 @@ const MateDetailsPage = () => {
             <Button color="primary" className="mx-2">
               모집 완료
             </Button>
-            <Button color="default" className="mx-2 bg-gray-400 text-white">
-              모집글 수정
-            </Button>
+            <Link href={`/matching/mate-details/${data?.matePostId}/revise`}>
+              <Button color="default" className="mx-2 bg-gray-400 text-white">
+                모집글 수정
+              </Button>
+            </Link>
           </>
         ) : (
           <Link href={`/matching/mate-details/${data?.matePostId}/application`}>
