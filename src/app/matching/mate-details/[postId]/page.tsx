@@ -8,16 +8,28 @@ import axiosInstance from '@/app/api/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { AxiosResponse } from 'axios';
+import LocalStorage from '@/utils/localstorage';
 import MateApplicantList from '../../components/MateApplicantList';
 import { MatePost } from '../../components/MateDataType';
 
-const user = {
-  userId: 27,
-  userNickname: '동기만세',
-  userProfile: null,
-};
+interface User {
+  userId: number;
+  email: string;
+  name: string;
+  profileImage: string;
+}
 
 const MateDetailsPage = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const userDataString = LocalStorage.getItem('user');
+
+    if (userDataString) {
+      setUser(JSON.parse(userDataString));
+    }
+  }, []);
+
   const { postId } = useParams();
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -61,7 +73,7 @@ const MateDetailsPage = () => {
     userNickname: data?.writerNickname,
     userProfile: null,
   };
-  const isWriter = user.userId === writer.userId;
+  const isWriter = user?.userId === writer.userId;
 
   useEffect(() => {
     if (data) {
@@ -91,6 +103,16 @@ const MateDetailsPage = () => {
       setEndTime(endTimeFormatted);
     }
   }, [data]);
+
+  const handleApply = () => {
+    const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+    if (isLoggedIn)
+      router.push(`/matching/mate-details/${data?.matePostId}/application`);
+    else {
+      alert('로그인 후 이용할 수 있습니다.');
+      router.push(`/login`);
+    }
+  };
 
   return (
     <div className="mx-[16px] mt-4 rounded-md border-2">
@@ -187,9 +209,9 @@ const MateDetailsPage = () => {
             </Link>
           </>
         ) : (
-          <Link href={`/matching/mate-details/${data?.matePostId}/application`}>
-            <Button color="primary">지원하기</Button>
-          </Link>
+          <Button color="primary" onClick={handleApply}>
+            지원하기
+          </Button>
         )}
       </div>
     </div>

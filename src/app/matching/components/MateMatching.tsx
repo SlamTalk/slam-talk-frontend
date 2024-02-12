@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
 import axiosInstance from '@/app/api/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
+import LocalStorage from '@/utils/localstorage';
+import { useRouter } from 'next/navigation';
 import MatePostCard from './MatePostCard';
 import { MatePost } from './MateDataType';
 
@@ -34,6 +36,7 @@ const cities = [
 const positions = ['CENTER', 'FORWARD', 'GUARD'];
 
 const MateMatching = () => {
+  const router = useRouter();
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedPosition, setSelectedPosition] = useState<string>('');
@@ -74,6 +77,15 @@ const MateMatching = () => {
 
       return matchesCity && matchesLevel && matchesPosition;
     }) || [];
+
+  const handleCreateNewPost = () => {
+    const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+    if (isLoggedIn) router.push(`/matching/mate-new-post`);
+    else {
+      alert('로그인 후 이용할 수 있습니다.');
+      router.push(`/login`);
+    }
+  };
 
   return (
     <div className="relative mx-auto max-w-[600px] pb-[80px]">
@@ -161,15 +173,14 @@ const MateMatching = () => {
       ))}
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
-          <Link href="/matching/mate-new-post">
-            <Button
-              startContent={<FaPlus />}
-              color="primary"
-              className="rounded-full bg-primary text-white shadow-md"
-            >
-              새 모집글 작성
-            </Button>
-          </Link>
+          <Button
+            startContent={<FaPlus />}
+            color="primary"
+            className="rounded-full bg-primary text-white shadow-md"
+            onClick={handleCreateNewPost}
+          >
+            새 모집글 작성
+          </Button>
         </div>
       </div>
     </div>

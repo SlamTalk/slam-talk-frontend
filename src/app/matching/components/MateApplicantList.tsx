@@ -13,11 +13,13 @@ interface PatchParticipantStatusParams {
 
 interface User {
   userId: number;
-  // user 객체의 다른 필요한 타입 정의
+  email: string;
+  name: string;
+  profileImage: string;
 }
 
 interface MateApplicantListProps {
-  user: User;
+  user: User | null;
   applicant: Participant;
   isWriter: boolean;
 }
@@ -146,7 +148,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
             </span>
           </div>
         )}
-        {user.userId === applicant.participantId &&
+        {user?.userId === applicant.participantId &&
           applicant.applyStatus === 'WAITING' && (
             <Button
               className="bg-gray-400 text-black"
