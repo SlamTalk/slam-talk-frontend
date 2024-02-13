@@ -80,7 +80,7 @@ const MateMatching = () => {
 
   const handleCreateNewPost = () => {
     const isLoggedIn = LocalStorage.getItem('isLoggedIn');
-    if (isLoggedIn) router.push(`/matching/mate-new-post`);
+    if (isLoggedIn === 'true') router.push(`/matching/mate-new-post`);
     else {
       alert('로그인 후 이용할 수 있습니다.');
       router.push(`/login`);

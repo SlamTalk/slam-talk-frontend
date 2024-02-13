@@ -106,7 +106,7 @@ const MateDetailsPage = () => {
 
   const handleApply = () => {
     const isLoggedIn = LocalStorage.getItem('isLoggedIn');
-    if (isLoggedIn)
+    if (isLoggedIn === 'true')
       router.push(`/matching/mate-details/${data?.matePostId}/application`);
     else {
       alert('로그인 후 이용할 수 있습니다.');
