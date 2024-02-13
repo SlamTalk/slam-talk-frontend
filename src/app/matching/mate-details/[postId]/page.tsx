@@ -1,40 +1,26 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { Snippet, Button } from '@nextui-org/react';
+import { Snippet, Button, Avatar } from '@nextui-org/react';
 import axiosInstance from '@/app/api/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { AxiosResponse } from 'axios';
 import LocalStorage from '@/utils/localstorage';
+import { getUserData } from '@/services/user/getUserData';
 import MateApplicantList from '../../components/MateApplicantList';
 import { MatePost } from '../../components/MateDataType';
 
-interface User {
-  userId: number;
-  email: string;
-  nickname: string;
-  profileImage: string;
-}
-
 const MateDetailsPage = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const { error, data: user } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: getUserData,
+  });
 
-  useEffect(() => {
-    axiosInstance
-      .get('/api/user/my-info')
-      .then((res) => res.data.results)
-      .then((data) =>
-        setUser({
-          userId: data.id,
-          email: data.email,
-          nickname: data.nickname,
-          profileImage: data.imageUrl,
-        })
-      );
-  }, []);
+  if (error) {
+    console.log({ error });
+  }
 
   const { postId } = useParams();
   const [date, setDate] = useState('');
@@ -63,8 +49,8 @@ const MateDetailsPage = () => {
       deleteRecruitment();
       alert('모집이 완료되었습니다.');
       router.push('/matching');
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
       alert('모집 완료 처리 중 오류가 발생했습니다.');
     }
   };
@@ -79,7 +65,7 @@ const MateDetailsPage = () => {
     userNickname: data?.writerNickname,
     userProfile: null,
   };
-  const isWriter = user?.userId === writer.userId;
+  const isWriter = user?.id === writer.userId;
 
   useEffect(() => {
     if (data) {
@@ -125,12 +111,9 @@ const MateDetailsPage = () => {
       {/* 유저 프로필 */}
       <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
         <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray-300">
-          <Image
+          <Avatar
+            alt="profile-img"
             src={writer.userProfile || '/images/userprofile-default.png'}
-            alt="프로필"
-            width={40}
-            height={40}
-            layout="responsive"
           />
         </div>
         <span className="font-bold">{writer.userNickname}</span>

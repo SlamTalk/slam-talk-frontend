@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import axiosInstance from '@/app/api/axiosInstance';
+import { UserInfo } from '@/types/user/userInfo';
 import { Participant } from './MateDataType';
 
 interface PatchParticipantStatusParams {
@@ -11,15 +12,8 @@ interface PatchParticipantStatusParams {
   status: string;
 }
 
-interface User {
-  userId: number;
-  email: string;
-  nickname: string;
-  profileImage: string;
-}
-
 interface MateApplicantListProps {
-  user: User | null;
+  user: UserInfo | null | undefined;
   applicant: Participant;
   isWriter: boolean;
 }
@@ -148,7 +142,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
             </span>
           </div>
         )}
-        {user?.userId === applicant.participantId &&
+        {user?.id === applicant.participantId &&
           applicant.applyStatus === 'WAITING' && (
             <Button
               className="bg-gray-400 text-black"
