@@ -28,7 +28,7 @@ const MatchingPage = () => {
 
   return (
     <div>
-      <div className="mt-2 flex justify-between px-4 ">
+      <div className="mt-2 flex justify-between px-4">
         <div className="flex flex-wrap gap-4">
           <Tabs
             variant="underlined"
@@ -44,7 +44,7 @@ const MatchingPage = () => {
           <input
             type="search"
             placeholder="제목, 작성자, 장소 등"
-            className="flex-grow rounded-md border-0 px-2 text-sm focus:outline-none focus:ring-0"
+            className="flex-grow rounded-md border-0 bg-background px-2 text-sm focus:outline-none focus:ring-0"
             onChange={handleInputChange}
           />
           <button

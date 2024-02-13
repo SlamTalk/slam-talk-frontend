@@ -175,7 +175,6 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
           href={`/matching/mate-details/${post.matePostId}`}
         >
           <MatePostCard
-            key={post.matePostId}
             title={post.title}
             date={post.scheduledDate}
             startTime={post.startTime}
