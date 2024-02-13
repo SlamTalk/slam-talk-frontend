@@ -14,7 +14,7 @@ interface PatchParticipantStatusParams {
 interface User {
   userId: number;
   email: string;
-  name: string;
+  nickname: string;
   profileImage: string;
 }
 

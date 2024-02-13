@@ -15,7 +15,7 @@ import { MatePost } from '../../components/MateDataType';
 interface User {
   userId: number;
   email: string;
-  name: string;
+  nickname: string;
   profileImage: string;
 }
 
@@ -23,11 +23,17 @@ const MateDetailsPage = () => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const userDataString = LocalStorage.getItem('user');
-
-    if (userDataString) {
-      setUser(JSON.parse(userDataString));
-    }
+    axiosInstance
+      .get('/api/user/my-info')
+      .then((res) => res.data.results)
+      .then((data) =>
+        setUser({
+          userId: data.id,
+          email: data.email,
+          nickname: data.nickname,
+          profileImage: data.imageUrl,
+        })
+      );
   }, []);
 
   const { postId } = useParams();
