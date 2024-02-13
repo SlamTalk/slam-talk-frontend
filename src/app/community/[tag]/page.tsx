@@ -27,9 +27,9 @@ interface ICommunityItem {
   }[];
 }
 interface PageProps {
-  props: { searchword: string };
+  searchword: string;
 }
-const Page = ({ props }: PageProps) => {
+const Page: React.FC<PageProps> = ({ searchword }) => {
   const router = useRouter();
   const params = useParams<{ tag: string }>();
   const [data, setData] = useState<ICommunityItem[]>([
@@ -78,10 +78,7 @@ const Page = ({ props }: PageProps) => {
         {params.tag === 'all'
           ? data
               .filter(
-                /* eslint-disable */
-                (item) =>
-                  props.searchword === '' ||
-                  item.title.includes(props.searchword)
+                (item) => searchword === '' || item.title.includes(searchword)
               )
               .map((item) => (
                 <TableRow
@@ -97,9 +94,7 @@ const Page = ({ props }: PageProps) => {
           : data
               .filter((item) => item.tag === params.tag)
               .filter(
-                (item) =>
-                  props.searchword === '' ||
-                  item.title.includes(props.searchword)
+                (item) => searchword === '' || item.title.includes(searchword)
               )
               .map((item) => (
                 <TableRow key={item.id}>
