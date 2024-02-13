@@ -35,7 +35,11 @@ const cities = [
 
 const positions = ['CENTER', 'FORWARD', 'GUARD'];
 
-const MateMatching = () => {
+interface MateMatchingProps {
+  keywordProp: string | null;
+}
+
+const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   const router = useRouter();
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
@@ -75,7 +79,17 @@ const MateMatching = () => {
         ? post.skillList.includes(selectedLevel)
         : true;
 
-      return matchesCity && matchesLevel && matchesPosition;
+      // 검색어 필터링
+
+      const keyword = keywordProp?.toLowerCase();
+      const matchesKeyword = keyword
+        ? post.title.toLowerCase().includes(keyword) ||
+          post.content.toLowerCase().includes(keyword) ||
+          post.locationDetail.toLowerCase().includes(keyword) ||
+          post.writerNickname.toLowerCase().includes(keyword)
+        : true;
+
+      return matchesCity && matchesLevel && matchesPosition && matchesKeyword;
     }) || [];
 
   const handleCreateNewPost = () => {
