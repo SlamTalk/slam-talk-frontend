@@ -1,7 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useState, ChangeEvent, useMemo, useEffect } from 'react';
+import React, {
+  useState,
+  ChangeEvent,
+  useMemo,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react';
 import { Key, Selection } from '@react-types/shared';
 
 import {
@@ -11,39 +18,62 @@ import {
   DropdownItem,
   Button,
 } from '@nextui-org/react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { postCommunity } from '@/services/community/postCommunityArticle';
-import { getUserData } from '@/services/user/getUserData';
+// import { getUserData } from '@/services/user/getUserData';
 import { IArticle } from '@/types/community/article';
 
 const Page = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tag, setTag] = useState('free');
+  const [images, setImages] = useState<string[]>([]);
+  const imageInput = useRef<HTMLInputElement>(document.createElement('input'));
+
+  const onClickImageUpload = useCallback(() => {
+    if (imageInput.current) {
+      imageInput.current.click();
+    }
+  }, [imageInput]);
+  const handleImageUpload = () => {
+    if (imageInput.current.files) {
+      const selectedImage = imageInput.current.files[0];
+      if (!selectedImage) return;
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const imageUrl = reader.result as string;
+        setImages((prevUploadImage) => [...prevUploadImage, imageUrl]);
+      };
+
+      reader.readAsDataURL(selectedImage);
+    }
+  };
+
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(
     new Set(['자유'])
   );
-  const [postData, setPostData] = useState<IArticle>({
+  const [postData, setPostData] = useState<IArticle | FormData>({
     title: '',
-    writerId: 0,
-    writerNickname: '',
-    writerImageUrl: '',
+    // writerId: 0,
+    // writerNickname: '',
+    // writerImageUrl: '',
     content: '',
     tag: '',
-    writeImageUrl: '',
-    comments: [{ id: 0, writerId: 0, writerNickaname: '', content: '' }],
+    images: [],
+    // comments: [{ id: 0, writerId: 0, writerNickaname: '', content: '' }],
   });
 
-  const { data: user } = useQuery({
-    queryKey: ['loginData'],
-    queryFn: getUserData,
-  });
+  // const { data: user } = useQuery({
+  //   queryKey: ['loginData'],
+  //   queryFn: getUserData,
+  // });
 
   const router = useRouter();
-  const handelTitle = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
-  const contentHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleContent = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
   const handleTag = (key: Key) => {
@@ -73,6 +103,20 @@ const Page = () => {
     mutationFn: () => postCommunity(postData),
   });
   const handleSubmit = () => {
+    if (images) {
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('content', content);
+      formData.append('tag', tag);
+      for (let i = 0; i < images.length; i += 1) {
+        formData.append('images', images[i]);
+      }
+      setPostData(formData);
+      postArticle.mutate();
+      setTitle('');
+      setContent('');
+      router.push('/community/all');
+    }
     postArticle.mutate();
     setTitle('');
     setContent('');
@@ -82,70 +126,89 @@ const Page = () => {
   useEffect(() => {
     setPostData({
       title,
-      writerId: user?.id,
-      writerNickname: user?.nickname,
-      writerImageUrl: user?.imageUrl,
-      writeImageUrl: null,
+      // writerId: user?.id,
+      // writerNickname: user?.nickname,
+      // writerImageUrl: user?.imageUrl,
+      images,
       content,
       tag,
-      comments: [],
+      // comments: [],
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [title, content, tag]);
+  }, [title, content, tag, images]);
   return (
-    <div className="flex flex-col">
-      <div className="flex space-x-96">
-        <Dropdown>
-          <DropdownTrigger>
-            <Button variant="bordered">{selectedValue}</Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            onAction={handleTag}
-            aria-label="Static Actions"
-            selectionMode="single"
-            selectedKeys={selectedKeys}
-            onSelectionChange={handleSelectionChange}
-          >
-            <DropdownItem key="자유" value="free">
-              자유
-            </DropdownItem>
-            <DropdownItem key="중고 거래" value="usedtrade">
-              중고 거래
-            </DropdownItem>
-            <DropdownItem key="질문" value="question">
-              질문
-            </DropdownItem>
-            <DropdownItem key="대관 양도" value="rentaltransfer">
-              대관 양도
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-        <div className="space-x-4">
-          <button type="button">임시저장</button>
-          <button
-            className="font-bold text-orange-600"
-            type="button"
-            onClick={handleSubmit}
-          >
-            작성완료
-          </button>
+    <form>
+      <div className="flex flex-col">
+        <div className="flex space-x-96">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button variant="bordered">{selectedValue}</Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              onAction={handleTag}
+              aria-label="Static Actions"
+              selectionMode="single"
+              selectedKeys={selectedKeys}
+              onSelectionChange={handleSelectionChange}
+            >
+              <DropdownItem key="자유" value="free">
+                자유
+              </DropdownItem>
+              <DropdownItem key="중고 거래" value="usedtrade">
+                중고 거래
+              </DropdownItem>
+              <DropdownItem key="질문" value="question">
+                질문
+              </DropdownItem>
+              <DropdownItem key="대관 양도" value="rentaltransfer">
+                대관 양도
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+          <div className="space-x-4">
+            <button
+              className="font-bold text-orange-600"
+              type="button"
+              onClick={handleSubmit}
+            >
+              작성완료
+            </button>
+          </div>
         </div>
-      </div>
 
-      <input
-        className="border-b border-solid border-gray-200"
-        placeholder="title"
-        value={title}
-        onChange={handelTitle}
-      />
-      <textarea
-        className="h-48 border-b border-solid border-gray-200"
-        placeholder="contents"
-        value={content}
-        onChange={contentHandler}
-        style={{ resize: 'none' }}
-      />
-    </div>
+        <input
+          className="border-b border-solid border-gray-200"
+          placeholder="title"
+          value={title}
+          onChange={handleTitle}
+        />
+        <textarea
+          className="h-48 border-b border-solid border-gray-200"
+          placeholder="contents"
+          value={content}
+          onChange={handleContent}
+          style={{ resize: 'none' }}
+        />
+        <input
+          type="file"
+          multiple
+          hidden
+          ref={imageInput}
+          onChange={handleImageUpload}
+          accept="image/*"
+        />
+        <button type="button" onClick={onClickImageUpload}>
+          이미지 업로드
+        </button>
+        {images.map((url, index) => (
+          <img
+            src={url}
+            alt={`Preview ${index}`}
+            style={{ width: '200px', height: '200px' }}
+          />
+        ))}
+      </div>
+    </form>
   );
 };
 export default Page;
