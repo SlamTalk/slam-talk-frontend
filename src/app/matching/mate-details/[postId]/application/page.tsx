@@ -72,7 +72,7 @@ const MateMatchingApplication = () => {
         </Select>
       </div>
       <div className="mb-4">
-        <div className="text-md mb-2 font-bold">원하는 실력대</div>
+        <div className="text-md mb-2 font-bold">내 실력</div>
         <Select
           aria-label="내 실력 선택"
           value={skillLevel}
