@@ -22,11 +22,12 @@ import { postCommunity } from '@/services/community/postCommunityArticle';
 // import { getUserData } from '@/services/user/getUserData';
 // import { IArticle } from '@/types/community/article';
 import { postTokenRefresh } from '@/services/token/postTokenRefresh';
+import Image from 'next/image';
 
 const Page = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [tag, setTag] = useState('free');
+  const [tag, setTag] = useState('FREE');
   const [images, setImages] = useState<File[]>([]);
   const imageInput = useRef<HTMLInputElement>(document.createElement('input'));
   const [postData, setPostData] = useState<FormData>(new FormData());
@@ -40,11 +41,7 @@ const Page = () => {
   const handleImageUpload = () => {
     if (imageInput.current && imageInput.current.files) {
       const selectedImages = Array.from(imageInput.current.files);
-      // const formDataCopy = new FormData();
-      // selectedImages.forEach((file) => {
-      //   formDataCopy.append('images', file);
-      // });
-      // setPostData(formDataCopy);
+
       console.log({ images });
       setImages((prevImages) => [...prevImages, ...selectedImages]);
     }
@@ -63,16 +60,16 @@ const Page = () => {
   };
   const handleTag = (key: Key) => {
     if (key === '자유') {
-      setTag('free');
+      setTag('FREE');
     }
     if (key === '질문') {
-      setTag('question');
+      setTag('QUESTION');
     }
     if (key === '중고 거래') {
-      setTag('usedtrade');
+      setTag('USED');
     }
     if (key === '대관 양도') {
-      setTag('rentaltransfer');
+      setTag('TRANSFER');
     }
   };
 
@@ -102,15 +99,15 @@ const Page = () => {
     const formData = new FormData();
     formData.append(
       'requestDTO',
-      JSON.stringify({
-        title,
-        content,
-        category: tag,
+      new Blob([JSON.stringify({ title, content, category: tag })], {
+        type: 'application/json',
       })
     );
     // 이미지가 있는 경우에만 이미지 추가
     if (images && images.length > 0) {
-      formData.append('images', JSON.stringify(images));
+      for (let i = 0; i < images.length; i += 1) {
+        formData.append('images', images[i]);
+      }
     }
     console.log({ formData });
 
@@ -183,15 +180,15 @@ const Page = () => {
         <button type="button" onClick={onClickImageUpload}>
           이미지 업로드
         </button>
-        {/* {images.map((file, index) => (
+        {images.map((file, index) => (
           <Image
-            key={index}
+            key={URL.createObjectURL(file)}
             src={URL.createObjectURL(file)}
             alt={`Preview ${index}`}
             width={200}
             height={200}
           />
-        ))} */}
+        ))}
       </div>
     </form>
   );
