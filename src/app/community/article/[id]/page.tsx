@@ -4,13 +4,13 @@ import { Button } from '@nextui-org/button';
 import { useParams, useRouter } from 'next/navigation';
 import { Avatar } from '@nextui-org/react';
 import { IoChevronBackSharp } from 'react-icons/io5';
-import { FaHeart } from 'react-icons/fa';
+// import { FaHeart } from 'react-icons/fa';
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getCommunityArticle } from '@/services/community/getCommunityArticle';
+
 import CommentList from '../../components/commentList';
-// import { getUserData } from '@/services/user/getUserData';
 
 interface ICommunityItem {
   id: number;
@@ -39,10 +39,7 @@ const Page = () => {
     queryKey: ['articleData'],
     queryFn: () => getCommunityArticle(params.id),
   });
-  // const { data: loginData } = useQuery({
-  //   queryKey: ['loginData'],
-  //   queryFn: getUserData,
-  // });
+
   const [comment, setComment] = useState('');
   const CommentHandler = () => {
     if (comment !== '') {
@@ -82,10 +79,7 @@ const Page = () => {
                 aria-label="유저 아바타"
                 className="mt-1 flex items-center justify-start border-b-1"
               >
-                <Avatar
-                  name={articleData.userNickname}
-                  className="me-2 border-3 border-primary"
-                />
+                <Avatar name={articleData.userNickname} className="me-2" />
                 <p className="text-lg	">{articleData.userNickname}</p>
               </div>
 
@@ -96,9 +90,9 @@ const Page = () => {
               </div>
 
               <div className="flex justify-between">
-                <div className="m-1 text-lg text-danger">
+                {/* <div className="m-1 text-lg text-danger">
                   <FaHeart aria-label="like button" />
-                </div>
+                </div> */}
                 <div aria-label="수정 삭제 버튼 그룹">
                   <button
                     type="button"
