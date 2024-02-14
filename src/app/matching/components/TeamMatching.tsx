@@ -1,120 +1,69 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, Select, SelectItem, Button } from '@nextui-org/react';
+import { Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
-
-interface Post {
-  postId: number;
-  title: string;
-  date: string;
-  type: string;
-  location: string;
-  level: string[];
-}
-
-interface TeamPost {
-  title: string;
-  date: string;
-  type: string;
-  location: string;
-  level: string[];
-}
+import { TeamPost } from '@/types/matching/teamDataType';
+import { useQuery } from '@tanstack/react-query';
+import axiosInstance from '@/app/api/axiosInstance';
+import TeamPostCard from './TeamPostCard';
 
 const levels = ['입문', '초보', '중수', '고수'];
 
 const cities = [
-  '서울특별시',
-  '부산광역시',
-  '대구광역시',
-  '인천광역시',
-  '광주광역시',
-  '대전광역시',
-  '울산광역시',
-  '세종특별자치시',
-  '경기도',
-  '강원도',
-  '충청북도',
-  '충청남도',
-  '전라북도',
-  '전라남도',
-  '경상북도',
-  '경상남도',
-  '제주특별자치도',
+  '서울',
+  '부산',
+  '대구',
+  '인천',
+  '광주',
+  '대전',
+  '울산',
+  '세종',
+  '경기',
+  '강원',
+  '충북',
+  '충남',
+  '전북',
+  '전남',
+  '경북',
+  '경남',
+  '제주',
 ];
-
-const posts: Post[] = [
-  {
-    postId: 1,
-    title: '개포동 00체육관 한 팀 구합니다!',
-    date: '1월 12일 오후 2시',
-    type: '5 vs 5',
-    location: '서울특별시 강남구',
-    level: ['입문', '초보', '중수'],
-  },
-  {
-    postId: 2,
-    title: '구로구 7시 한 팀 구해요!',
-    date: '1월 15일 오후 7시',
-    type: '5 vs 5',
-    location: '서울특별시 구로구',
-    level: ['입문', '초보'],
-  },
-  {
-    postId: 3,
-    title: '도봉구 간단하게 3:3 하실 분~',
-    date: '1월 12일 오후 2시',
-    type: '3 vs 3',
-    location: '서울특별시 도봉구',
-    level: ['입문', '초보', '중수', '고수'],
-  },
-];
-
-const TeamPostCard: React.FC<TeamPost> = ({
-  title,
-  date,
-  type,
-  location,
-  level,
-}) => (
-  <Card className="m-3">
-    <div className="p-4">
-      <h4 className="text-md font-bold">{title}</h4>
-      <div className="mb-1 mt-2 flex items-center justify-between">
-        <p className="text-sm">{location}</p>
-        <p className="mx-4 ">{type}</p>
-      </div>
-      <div className="my-1 flex items-center justify-between">
-        <p className="text-sm">{date}</p>
-        <div className="flex flex-wrap">
-          {level.map((lvl) => (
-            <div
-              key={lvl}
-              className="mx-1 rounded border bg-gray-300 p-1 
-              text-xs
-              font-bold
-              text-black"
-            >
-              {lvl}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </Card>
-);
 
 const TeamMatching = () => {
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
 
-  const filteredPosts = posts.filter((post) => {
+  const fetchMateData = async (): Promise<TeamPost[]> => {
+    const response = await axiosInstance
+      .get('/api/mate')
+      .then((res) => res.data.results);
+
+    return response;
+  };
+
+  const { data } = useQuery<TeamPost[], Error>({
+    queryKey: ['team'],
+    queryFn: fetchMateData,
+  });
+
+  if (!Array.isArray(data)) {
+    return (
+      <div className="mx-auto mt-10 max-w-[250px]">
+        게시글이 존재하지 않습니다.
+      </div>
+    );
+  }
+
+  console.log({ data });
+
+  const filteredPosts = data?.filter((post) => {
     const matchesCity = selectedCity
-      ? post.location.includes(selectedCity)
+      ? post.locationDetail.includes(selectedCity)
       : true;
     const matchesLevel = selectedLevel
-      ? post.level.includes(selectedLevel)
+      ? post.skillLevel.includes(selectedLevel)
       : true;
     return matchesCity && matchesLevel;
   });
@@ -164,10 +113,22 @@ const TeamMatching = () => {
           </Select>
         </div>
       </div>
-      {filteredPosts.map((post) => (
-        <Link key={post.postId} href={`/matching/team-details/${post.postId}`}>
+      {filteredPosts?.map((post) => (
+        <Link
+          key={post.teamMatchingId}
+          href={`/matching/team-details/${post.teamMatchingId}`}
+        >
           {/* eslint-disable-next-line react/no-array-index-key */}
-          <TeamPostCard key={post.postId} {...post} />
+          <TeamPostCard
+            key={post.teamMatchingId}
+            title={post.title}
+            teamName={post.teamName}
+            date={post.scheduledDate}
+            startTime={post.startTime}
+            location={post.locationDetail}
+            level={post.skillLevel}
+            numberOfMembers={post.numberOfMembers}
+          />
         </Link>
       ))}
       <div className="fixed bottom-14 w-full max-w-[600px]">

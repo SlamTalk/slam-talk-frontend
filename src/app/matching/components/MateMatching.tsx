@@ -58,6 +58,14 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
     queryFn: fetchMateData,
   });
 
+  if (!Array.isArray(data)) {
+    return (
+      <div className="mx-auto mt-10 max-w-[250px]">
+        게시글이 존재하지 않습니다.
+      </div>
+    );
+  }
+
   const filteredMatePost =
     data?.filter((post: MatePost) => {
       // 장소 필터
