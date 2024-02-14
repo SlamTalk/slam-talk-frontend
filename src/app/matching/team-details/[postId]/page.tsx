@@ -10,6 +10,7 @@ import { getUserData } from '@/services/user/getUserData';
 import axiosInstance from '@/app/api/axiosInstance';
 import { TeamPost } from '@/types/matching/teamDataType';
 import LocalStorage from '@/utils/localstorage';
+import { AxiosResponse } from 'axios';
 import TeamApplicantList from '../../components/TeamApplicantList';
 
 const TeamDetailsPage = () => {
@@ -34,6 +35,24 @@ const TeamDetailsPage = () => {
       .then((res) => res.data.results);
 
     return response;
+  };
+
+  const deleteRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.delete<AxiosResponse>(
+      `/api/match/${postId}`
+    );
+
+    return response;
+  };
+  const handleFinishRecruitment = async () => {
+    try {
+      deleteRecruitment();
+      alert('모집이 완료되었습니다.');
+      router.push('/matching');
+    } catch (err) {
+      console.error(err);
+      alert('모집 완료 처리 중 오류가 발생했습니다.');
+    }
   };
 
   const { data } = useQuery<TeamPost, Error>({
@@ -164,7 +183,11 @@ const TeamDetailsPage = () => {
       <div className="flex justify-center py-3">
         {isWriter ? (
           <>
-            <Button color="primary" className="mx-2">
+            <Button
+              color="primary"
+              className="mx-2"
+              onClick={handleFinishRecruitment}
+            >
               모집 완료
             </Button>
             <Link
