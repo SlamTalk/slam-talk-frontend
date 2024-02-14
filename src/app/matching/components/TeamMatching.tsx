@@ -35,38 +35,53 @@ const TeamMatching = () => {
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
 
-  const fetchMateData = async (): Promise<TeamPost[]> => {
+  const fetchTeamData = async (): Promise<TeamPost[]> => {
     const response = await axiosInstance
-      .get('/api/mate')
-      .then((res) => res.data.results);
+      .get('/api/match')
+      .then((res) => res.data.results.teamMatchingList);
 
     return response;
   };
 
   const { data } = useQuery<TeamPost[], Error>({
     queryKey: ['team'],
-    queryFn: fetchMateData,
+    queryFn: fetchTeamData,
   });
+
+  const filteredPosts = Array.isArray(data)
+    ? data.filter((post) => {
+        const matchesCity = selectedCity
+          ? post.locationDetail.includes(selectedCity)
+          : true;
+        const matchesLevel = selectedLevel
+          ? post.skillLevel.includes(selectedLevel)
+          : true;
+        return matchesCity && matchesLevel;
+      })
+    : [];
 
   if (!Array.isArray(data)) {
     return (
-      <div className="mx-auto mt-10 max-w-[250px]">
-        게시글이 존재하지 않습니다.
+      <div>
+        <div className="mx-auto mt-10 max-w-[250px]">
+          게시글이 존재하지 않습니다.
+        </div>
+        <div className="fixed bottom-14 w-full max-w-[600px]">
+          <div className="mr-4 flex justify-end">
+            <Link href="/matching/team-new-post">
+              <Button
+                startContent={<FaPlus />}
+                color="primary"
+                className="rounded-full bg-primary text-white shadow-md"
+              >
+                새 모집글 작성
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }
-
-  console.log({ data });
-
-  const filteredPosts = data?.filter((post) => {
-    const matchesCity = selectedCity
-      ? post.locationDetail.includes(selectedCity)
-      : true;
-    const matchesLevel = selectedLevel
-      ? post.skillLevel.includes(selectedLevel)
-      : true;
-    return matchesCity && matchesLevel;
-  });
 
   return (
     <div className="relative mx-auto max-w-[600px] pb-[80px]">
