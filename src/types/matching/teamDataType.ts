@@ -9,6 +9,12 @@ export interface TeamApplied {
   teamMatchingId: number;
 }
 
+export interface TeamApplication {
+  applyStatus: string;
+  teamName: string;
+  skillLevel: string;
+}
+
 export interface NewTeamData {
   teamName: string;
   title: string;
