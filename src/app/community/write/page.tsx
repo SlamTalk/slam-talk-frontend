@@ -42,7 +42,6 @@ const Page = () => {
     if (imageInput.current && imageInput.current.files) {
       const selectedImages = Array.from(imageInput.current.files);
 
-      console.log({ images });
       setImages((prevImages) => [...prevImages, ...selectedImages]);
     }
   };
@@ -109,10 +108,9 @@ const Page = () => {
         formData.append('images', images[i]);
       }
     }
-    console.log({ formData });
 
     setPostData(formData);
-    console.log(postData);
+
     postArticle.mutate();
   };
 
