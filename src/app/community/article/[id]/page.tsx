@@ -7,7 +7,10 @@ import { IoChevronBackSharp } from 'react-icons/io5';
 import { FaHeart } from 'react-icons/fa';
 
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getCommunityArticle } from '@/services/community/getCommunityArticle';
 import CommentList from '../../components/commentList';
+// import { getUserData } from '@/services/user/getUserData';
 
 interface ICommunityItem {
   id: number;
@@ -32,6 +35,14 @@ const Page = () => {
   const matchedData = communityData.find(
     (item: ICommunityItem) => item.id === Number(params.id)
   );
+  const { data: articleData } = useQuery({
+    queryKey: ['articleData'],
+    queryFn: () => getCommunityArticle(params.id),
+  });
+  // const { data: loginData } = useQuery({
+  //   queryKey: ['loginData'],
+  //   queryFn: getUserData,
+  // });
   const [comment, setComment] = useState('');
   const CommentHandler = () => {
     if (comment !== '') {
@@ -52,7 +63,7 @@ const Page = () => {
 
   return (
     <div className="h-[90vh]">
-      {matchedData ? (
+      {articleData ? (
         <div>
           <div className="flex h-[50px] items-center justify-center border-b-2">
             <IoChevronBackSharp
@@ -62,7 +73,7 @@ const Page = () => {
                 router.push('/community/all');
               }}
             />
-            <h1 className="flex-grow text-center">{matchedData.title}</h1>
+            <h1 className="flex-grow text-center">{articleData.title}</h1>
           </div>
 
           <div className="flex h-[295px] flex-col">
@@ -72,15 +83,15 @@ const Page = () => {
                 className="mt-1 flex items-center justify-start border-b-1"
               >
                 <Avatar
-                  name={matchedData.userId}
+                  name={articleData.userNickname}
                   className="me-2 border-3 border-primary"
                 />
-                <p className="text-lg	">{matchedData.userId}</p>
+                <p className="text-lg	">{articleData.userNickname}</p>
               </div>
 
               <div className="h-[200px] border-b-2">
                 <p aria-label="게시글 컨텐츠" className="m-2">
-                  {matchedData.content}
+                  {articleData.content}
                 </p>
               </div>
 
