@@ -1,6 +1,6 @@
 import axiosInstance from '@/app/api/axiosInstance';
 import { AxiosResponse } from 'axios';
-import { NewMateData } from '@/types/matching/mateNewPostType';
+import { NewMateData } from '@/types/matching/mateDataType';
 
 export const createMatePost = async (
   newMateData: NewMateData
