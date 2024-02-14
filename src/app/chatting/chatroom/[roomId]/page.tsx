@@ -11,6 +11,9 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 import IMessage from '@/types/chat/message';
+import { IChatRoomListItem } from '@/types/chat/\bchatRoomListItem';
+import { getChatList } from '@/services/chatting/getChatList';
+
 import axiosInstance from '../../../api/axiosInstance';
 import MessageList from '../../components/messageList';
 
@@ -21,26 +24,31 @@ const Chatting = () => {
   const [message, setMessage] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { data } = useQuery({
+  const { data: token } = useQuery({
     queryKey: ['tokenData'],
     queryFn: postTokenRefresh,
   });
-  const accessToken = data;
+  const { data: myChatList } = useQuery<IChatRoomListItem[]>({
+    queryKey: ['myChatlist'],
+    queryFn: getChatList,
+  });
+  const accessToken = token;
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
-
+  const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
   const nickname = error ? null : user?.nickname;
 
   const client = useRef<StompJs.Client | null>(null);
+
   const messageListData = async () => {
     try {
       const res = await axiosInstance.post(
         `/api/chat/participation?roomId=${params.roomId}`
       );
       const listData = JSON.stringify(res.data.results);
-      console.log(typeof listData);
+
       setMessageListState(JSON.parse(listData));
     } catch (err) {
       console.error(err);
@@ -122,13 +130,6 @@ const Chatting = () => {
   useEffect(() => {
     inputRef.current?.focus();
     const fetchData = async () => {
-      // axiosInstance.post(
-      //   `/api/chat/create`,
-      //   JSON.stringify({
-      //     roomType: '',
-      //     name: '',
-      //   })
-      // );
       connect();
     };
     fetchData();
@@ -159,7 +160,12 @@ const Chatting = () => {
           }}
         />
         <h2 className="w-[525px] text-center text-xl text-white">
-          chat room {params.roomId}
+          {roomInfo?.roomType === 'DIRECT' && roomInfo?.partnerId}
+          {roomInfo?.roomType === 'BASEKETBALL' && roomInfo?.courtId}
+          {roomInfo?.roomType === 'TOGETHER' && roomInfo?.courtId}
+          {roomInfo?.roomType === 'MATCHING' && roomInfo?.courtId}
+          {!roomInfo?.roomType && 'testroom'}
+          chatroom
         </h2>
       </div>
       <MessageList list={messageListState} />
