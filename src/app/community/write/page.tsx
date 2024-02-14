@@ -5,7 +5,6 @@ import React, {
   useState,
   ChangeEvent,
   useMemo,
-  useEffect,
   useRef,
   useCallback,
 } from 'react';
@@ -18,56 +17,42 @@ import {
   DropdownItem,
   Button,
 } from '@nextui-org/react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { postCommunity } from '@/services/community/postCommunityArticle';
 // import { getUserData } from '@/services/user/getUserData';
-import { IArticle } from '@/types/community/article';
+// import { IArticle } from '@/types/community/article';
+import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 
 const Page = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tag, setTag] = useState('free');
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
   const imageInput = useRef<HTMLInputElement>(document.createElement('input'));
+  const [postData, setPostData] = useState<FormData>(new FormData());
 
   const onClickImageUpload = useCallback(() => {
     if (imageInput.current) {
       imageInput.current.click();
     }
   }, [imageInput]);
+
   const handleImageUpload = () => {
-    if (imageInput.current.files) {
-      const selectedImage = imageInput.current.files[0];
-      if (!selectedImage) return;
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const imageUrl = reader.result as string;
-        setImages((prevUploadImage) => [...prevUploadImage, imageUrl]);
-      };
-
-      reader.readAsDataURL(selectedImage);
+    if (imageInput.current && imageInput.current.files) {
+      const selectedImages = Array.from(imageInput.current.files);
+      // const formDataCopy = new FormData();
+      // selectedImages.forEach((file) => {
+      //   formDataCopy.append('images', file);
+      // });
+      // setPostData(formDataCopy);
+      console.log({ images });
+      setImages((prevImages) => [...prevImages, ...selectedImages]);
     }
   };
 
   const [selectedKeys, setSelectedKeys] = useState<Set<string>>(
     new Set(['자유'])
   );
-  const [postData, setPostData] = useState<IArticle | FormData>({
-    title: '',
-    // writerId: 0,
-    // writerNickname: '',
-    // writerImageUrl: '',
-    content: '',
-    tag: '',
-    images: [],
-    // comments: [{ id: 0, writerId: 0, writerNickaname: '', content: '' }],
-  });
-
-  // const { data: user } = useQuery({
-  //   queryKey: ['loginData'],
-  //   queryFn: getUserData,
-  // });
 
   const router = useRouter();
   const handleTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -98,46 +83,44 @@ const Page = () => {
   const handleSelectionChange = (keys: Selection) => {
     setSelectedKeys(new Set<string>(Array.from(keys).map(String)));
   };
+
+  const { data } = useQuery({
+    queryKey: ['tokenData'],
+    queryFn: postTokenRefresh,
+  });
   const postArticle = useMutation({
     mutationKey: ['postArticleData'],
-    mutationFn: () => postCommunity(postData),
-  });
-  const handleSubmit = () => {
-    if (images) {
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('content', content);
-      formData.append('tag', tag);
-      for (let i = 0; i < images.length; i += 1) {
-        formData.append('images', images[i]);
-      }
-      setPostData(formData);
-      postArticle.mutate();
+    mutationFn: () => postCommunity(postData, data),
+
+    onSuccess: () => {
       setTitle('');
       setContent('');
       router.push('/community/all');
+    },
+  });
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append(
+      'requestDTO',
+      JSON.stringify({
+        title,
+        content,
+        category: tag,
+      })
+    );
+    // 이미지가 있는 경우에만 이미지 추가
+    if (images && images.length > 0) {
+      formData.append('images', JSON.stringify(images));
     }
-    postArticle.mutate();
-    setTitle('');
-    setContent('');
-    router.push('/community/all');
+    console.log({ formData });
+
+    setPostData(formData);
     console.log(postData);
+    postArticle.mutate();
   };
-  useEffect(() => {
-    setPostData({
-      title,
-      // writerId: user?.id,
-      // writerNickname: user?.nickname,
-      // writerImageUrl: user?.imageUrl,
-      images,
-      content,
-      tag,
-      // comments: [],
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [title, content, tag, images]);
+
   return (
-    <form>
+    <form method="post" encType="multipart/form-data">
       <div className="flex flex-col">
         <div className="flex space-x-96">
           <Dropdown>
@@ -200,13 +183,15 @@ const Page = () => {
         <button type="button" onClick={onClickImageUpload}>
           이미지 업로드
         </button>
-        {images.map((url, index) => (
-          <img
-            src={url}
+        {/* {images.map((file, index) => (
+          <Image
+            key={index}
+            src={URL.createObjectURL(file)}
             alt={`Preview ${index}`}
-            style={{ width: '200px', height: '200px' }}
+            width={200}
+            height={200}
           />
-        ))}
+        ))} */}
       </div>
     </form>
   );
