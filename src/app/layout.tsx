@@ -28,6 +28,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en" className="light" suppressHydrationWarning>
       <head>
         <Script
+          type="module"
           strategy="beforeInteractive"
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_KEY}&autoload=false&libraries=services`}
         />

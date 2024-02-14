@@ -9,6 +9,7 @@ import { LuLogIn } from 'react-icons/lu';
 import { useQuery } from '@tanstack/react-query';
 import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 import ThemeSwitcher from './ThemeSwitcher';
+import FullLoading from './FullLoading';
 
 // Anton 폰트 설정
 const anton = Anton({ weight: '400', subsets: ['latin'] });
@@ -21,6 +22,10 @@ const Header = () => {
 
   if (error) {
     console.log(error);
+  }
+
+  if (isLoading) {
+    return <FullLoading />;
   }
 
   if (!isLoading) {
