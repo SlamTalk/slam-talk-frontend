@@ -167,9 +167,13 @@ const TeamDetailsPage = () => {
             <Button color="primary" className="mx-2">
               모집 완료
             </Button>
-            <Button color="default" className="mx-2 bg-gray-400 text-white">
-              모집글 수정
-            </Button>
+            <Link
+              href={`/matching/team-details/${data?.teamMatchingId}/revise`}
+            >
+              <Button color="default" className="mx-2 bg-gray-400 text-white">
+                모집글 수정
+              </Button>
+            </Link>
           </>
         ) : (
           <Link
