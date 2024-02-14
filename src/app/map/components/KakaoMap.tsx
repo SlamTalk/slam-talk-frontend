@@ -190,7 +190,7 @@ const KakaoMap = () => {
   useEffect(() => {
     if (!map) return;
 
-    const clickHandler = (mouseEvent: MouseEventWithLatLng) => {
+    const handleCreateMarker = (mouseEvent: MouseEventWithLatLng) => {
       const latlng = mouseEvent.latLng;
 
       const markerImageSrc = '/icons/marker-img.png';
@@ -250,18 +250,18 @@ const KakaoMap = () => {
 
     if (mode === true) {
       // 이벤트 등록
-      window.kakao.maps.event.addListener(map, 'click', clickHandler);
+      window.kakao.maps.event.addListener(map, 'click', handleCreateMarker);
     }
 
     // 클린업 함수 실행
     // eslint-disable-next-line consistent-return
     return () => {
-      window.kakao.maps.event.removeListener(map, 'click', clickHandler);
+      window.kakao.maps.event.removeListener(map, 'click', handleCreateMarker);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
-  const ToggleMarkerEventActivation = () => {
+  const handleToggleMapClickEvent = () => {
     setMode((prev) => !prev);
   };
 
@@ -319,7 +319,7 @@ const KakaoMap = () => {
           aria-label="Court Report"
           type="button"
           className="justify-center rounded-full bg-primary text-white shadow-md"
-          onClick={ToggleMarkerEventActivation}
+          onClick={handleToggleMapClickEvent}
         >
           {mode ? '취소' : '농구장 제보'}
         </Button>
