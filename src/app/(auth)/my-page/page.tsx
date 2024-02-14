@@ -9,7 +9,7 @@ import { LuClipboardList } from 'react-icons/lu';
 import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import { Avatar, Button } from '@nextui-org/react';
-import { FaRegHeart } from 'react-icons/fa6';
+// import { FaRegHeart } from 'react-icons/fa6';
 import { MdOutlineShareLocation } from 'react-icons/md';
 import Link from 'next/link';
 import LocalStorage from '@/utils/localstorage';
@@ -56,7 +56,7 @@ const MyPage = () => {
 
   if (user) {
     return (
-      <div className="p-4">
+      <div className="relative h-screen w-full p-4">
         <div className="flex w-full justify-between">
           <div
             aria-label="뒤로가기"
@@ -96,10 +96,10 @@ const MyPage = () => {
         <div>
           <p className="mb-3 font-semibold">나의 활동</p>
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <FaRegHeart className="text-text" aria-label="like button" />
               <span>게시물 좋아요 목록</span>
-            </div>
+            </div> */}
             <div className="flex items-center gap-2">
               <LuClipboardList className="text-text" />
               <span>팀 매칭 내역</span>
@@ -126,6 +126,19 @@ const MyPage = () => {
             <span>문의하기</span>
           </div>
         </div>
+        {user.role === 'ADMIN' && (
+          <div className="absolute bottom-16 right-4">
+            <Link href="/admin">
+              <Button
+                radius="sm"
+                color="success"
+                className="font-medium text-white"
+              >
+                관리자 페이지
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
     );
   }
