@@ -19,6 +19,20 @@ export interface ParticipantApplication {
   skillLevel: string;
 }
 
+export interface NewMateData {
+  title: string;
+  content: string;
+  scheduledDate: string;
+  startTime: string;
+  endTime: string;
+  locationDetail: string;
+  skillLevel: string;
+  maxParticipantsCenters: number;
+  maxParticipantsGuards: number;
+  maxParticipantsForwards: number;
+  maxParticipantsOthers: number;
+}
+
 export interface MatePost {
   matePostId: number;
   writerId: number;
@@ -36,19 +50,16 @@ export interface MatePost {
   createdAt: string;
 }
 
+export interface MatePostLists {
+  matePostList: MatePost[];
+  nextCursor: string | null;
+}
+
 export interface MateData {
   success: boolean;
   status: number;
   message: string;
-  results: {
-    matePostList: MatePost[];
-    nextCursor: string | null;
-  };
-}
-
-export interface MatePostLists {
-  matePostList: MatePost[];
-  nextCursor: string | null;
+  results: MatePostLists;
 }
 
 export interface MateCardInfo {

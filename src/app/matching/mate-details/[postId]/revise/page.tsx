@@ -9,8 +9,7 @@ import { AxiosResponse } from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import axiosInstance from '@/app/api/axiosInstance';
 import KakaoMapModal from '@/app/matching/components/KakaoMapModal';
-import { NewMateData } from '@/types/matching/mateNewPostType';
-import { MatePost } from '@/app/matching/components/MateDataType';
+import { MatePost, NewMateData } from '@/types/matching/mateDataType';
 
 const MatePostRevisePage = () => {
   const [isMapOpen, setIsMapOpen] = useState(false);

@@ -10,7 +10,7 @@ import { AxiosResponse } from 'axios';
 import LocalStorage from '@/utils/localstorage';
 import { getUserData } from '@/services/user/getUserData';
 import MateApplicantList from '../../components/MateApplicantList';
-import { MatePost } from '../../components/MateDataType';
+import { MatePost } from '../../../../types/matching/mateDataType';
 
 const MateDetailsPage = () => {
   const { error, data: user } = useQuery({

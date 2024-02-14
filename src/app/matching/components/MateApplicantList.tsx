@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import axiosInstance from '@/app/api/axiosInstance';
 import { UserInfo } from '@/types/user/userInfo';
-import { Participant } from './MateDataType';
+import { Participant } from '../../../types/matching/mateDataType';
 
 interface PatchParticipantStatusParams {
   participantTableId: number;

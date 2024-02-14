@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { ParticipantApplication } from '@/app/matching/components/MateDataType';
+import { ParticipantApplication } from '@/types/matching/mateDataType';
 import axiosInstance from '@/app/api/axiosInstance';
 
 export const postNewApplication = async (

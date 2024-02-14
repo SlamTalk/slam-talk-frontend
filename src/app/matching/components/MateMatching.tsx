@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import LocalStorage from '@/utils/localstorage';
 import { useRouter } from 'next/navigation';
 import MatePostCard from './MatePostCard';
-import { MatePost } from './MateDataType';
+import { MatePost } from '../../../types/matching/mateDataType';
 
 const levels = ['입문', '초보', '중수', '고수'];
 

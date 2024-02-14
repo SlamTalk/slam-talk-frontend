@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Card } from '@nextui-org/react';
-import { MateCardInfo } from './MateDataType';
+import { MateCardInfo } from '../../../types/matching/mateDataType';
 
 const formatTime = (time: string) => {
   const [hours, minutes] = time.split(':').map(Number);

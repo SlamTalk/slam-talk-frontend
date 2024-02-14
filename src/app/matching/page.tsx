@@ -13,6 +13,7 @@ const MatchingPage = () => {
 
   const handleSelectionChange = (key: React.Key) => {
     setSearchKeyword('');
+    setKeywordProp('');
     if (typeof key === 'string') {
       setSelectedTab(key);
     }
@@ -42,6 +43,7 @@ const MatchingPage = () => {
         </div>
         <div className="flex items-center rounded-md border-2">
           <input
+            value={searchKeyword}
             type="search"
             placeholder="제목, 작성자, 장소 등"
             className="flex-grow rounded-md border-0 bg-background px-2 text-sm focus:outline-none focus:ring-0"
@@ -55,7 +57,7 @@ const MatchingPage = () => {
           >
             <IoSearchSharp
               size={20}
-              className="text-gray-400 hover:text-black"
+              className="text-gray-400 hover:text-black dark:hover:text-white"
             />
           </button>
         </div>

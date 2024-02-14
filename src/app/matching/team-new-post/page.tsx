@@ -85,7 +85,7 @@ const TeamNewPostPage = () => {
       {/* 날짜 선택 필드 */}
       <div className="mb-2.5">
         <div className="text-md font-bold">날짜</div>
-        <div className="rounded-md bg-gray-100 p-2 dark:bg-default-100">
+        <div className="rounded-medium bg-gray-100 p-2 dark:bg-default-100">
           <DatePicker
             dateFormat="YYYY년 MM월 dd일"
             selected={startDate}
