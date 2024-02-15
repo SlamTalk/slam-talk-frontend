@@ -17,7 +17,7 @@ const MatePostRevisePage = () => {
   const router = useRouter();
   const fetchMateDetailsData = async (): Promise<MatePost> => {
     const response = await axiosInstance
-      .get(`/api/mate/${postId}`)
+      .get(`/api/mate/read/${postId}`)
       .then((res) => res.data.results);
 
     return response;
@@ -37,7 +37,7 @@ const MatePostRevisePage = () => {
   const [forwardCount, setForwardCount] = useState('0');
   const [guardCount, setGuardCount] = useState('0');
   const [unspecifiedCount, setUnspecifiedCount] = useState('0');
-  const [skillLevel, setSkillLevel] = useState('');
+  const [skillLevel, setSkillLevel] = useState<string>('');
   const [details, setDetails] = useState('');
 
   useEffect(() => {
@@ -48,13 +48,14 @@ const MatePostRevisePage = () => {
       setStartTime(data.startTime);
       setEndTime(data.endTime);
       setDetails(data.content);
+      setSkillLevel(data.skillLevel);
 
       // 포지션 별 인원 수 설정
       const positionMap = {
-        FORWARD: setForwardCount,
-        GUARD: setGuardCount,
-        CENTER: setCenterCount,
-        UNSPECIFIED: setUnspecifiedCount,
+        포워드: setForwardCount,
+        가드: setGuardCount,
+        센터: setCenterCount,
+        무관: setUnspecifiedCount,
       };
       data.positionList.forEach(({ position, maxPosition }) => {
         const key = position.toUpperCase();
@@ -63,47 +64,6 @@ const MatePostRevisePage = () => {
           setPositionCount(String(maxPosition));
         }
       });
-
-      // 실력대 설정
-      const skillLevels = new Set(data.skillList);
-      let level = '';
-
-      // 실력대에 따른 level 값 설정 로직
-      if (skillLevels.has('고수') && skillLevels.size === 1) {
-        level = 'HIGH';
-      } else if (skillLevels.size === 4) {
-        level = 'OVER_BEGINNER';
-      } else if (
-        skillLevels.has('고수') &&
-        skillLevels.has('중수') &&
-        skillLevels.size === 2
-      ) {
-        level = 'OVER_MIDDLE';
-      } else if (
-        skillLevels.has('중수') &&
-        skillLevels.has('하수') &&
-        skillLevels.size === 2
-      ) {
-        level = 'OVER_LOW';
-      } else if (
-        skillLevels.has('하수') &&
-        skillLevels.has('입문') &&
-        skillLevels.size === 2
-      ) {
-        level = 'UNDER_LOW';
-      } else if (
-        skillLevels.has('중수') &&
-        skillLevels.has('하수') &&
-        skillLevels.has('입문')
-      ) {
-        level = 'UNDER_MIDDLE';
-      } else if (skillLevels.has('고수') && !skillLevels.has('입문')) {
-        level = 'UNDER_HIGH';
-      } else if (skillLevels.size === 1 && skillLevels.has('입문')) {
-        level = 'BEGINNER';
-      }
-      // 실력대 상태 업데이트
-      setSkillLevel(level);
     }
   }, [data]);
 
@@ -332,29 +292,29 @@ const MatePostRevisePage = () => {
           placeholder="실력대를 선택하세요"
           aria-label="원하는 실력대 선택"
         >
-          <SelectItem key="OVER_BEGINNER" value="OVER_BEGINNER">
-            입문 이상
-          </SelectItem>
           <SelectItem key="BEGINNER" value="BEGINNER">
             입문
           </SelectItem>
-          <SelectItem key="OVER_LOW" value="OVER_LOW">
-            하수 이상
+          <SelectItem key="OVER_BEGINNER" value="OVER_BEGINNER">
+            입문 이상
           </SelectItem>
           <SelectItem key="UNDER_LOW" value="UNDER_LOW">
             하수 이하
           </SelectItem>
-          <SelectItem key="OVER_MIDDLE" value="OVER_MIDDLE">
-            중수 이상
+          <SelectItem key="OVER_LOW" value="OVER_LOW">
+            하수 이상
           </SelectItem>
           <SelectItem key="UNDER_MIDDLE" value="UNDER_MIDDLE">
             중수 이하
           </SelectItem>
-          <SelectItem key="HIGH" value="HIGH">
-            고수
+          <SelectItem key="OVER_MIDDLE" value="OVER_MIDDLE">
+            중수 이상
           </SelectItem>
           <SelectItem key="UNDER_HIGH" value="UNDER_HIGH">
             고수 이하
+          </SelectItem>
+          <SelectItem key="HIGH" value="HIGH">
+            고수
           </SelectItem>
         </Select>
       </div>

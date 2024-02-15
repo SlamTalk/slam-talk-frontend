@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/app/api/axiosInstance';
 import TeamPostCard from './TeamPostCard';
 
-const levels = ['입문', '초보', '중수', '고수'];
+const levels = ['입문', '하수', '중수', '고수'];
 
 const cities = [
   '서울',
@@ -41,7 +41,7 @@ const TeamMatching = () => {
 
   const fetchTeamData = async (): Promise<TeamPost[]> => {
     const response = await axiosInstance
-      .get('/api/match')
+      .get('/api/match/list')
       .then((res) => res.data.results.teamMatchingList);
 
     return response;
@@ -58,10 +58,10 @@ const TeamMatching = () => {
           ? post.locationDetail.includes(selectedCity)
           : true;
         const matchesLevel = selectedLevel
-          ? post.skillLevel.includes(selectedLevel)
+          ? post.skillLevelList.includes(selectedLevel)
           : true;
         const matchesNumberOfMembers = selectedNumberOfMembers
-          ? post.numberOfMembers.toString() === selectedNumberOfMembers
+          ? post.numberOfMembers === selectedNumberOfMembers
           : true;
         return matchesCity && matchesLevel && matchesNumberOfMembers;
       })
@@ -109,9 +109,8 @@ const TeamMatching = () => {
             }}
             className="text-bold"
           >
-            {cities.map((city, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <SelectItem key={index} value={city}>
+            {cities.map((city) => (
+              <SelectItem key={city} value={city}>
                 {city}
               </SelectItem>
             ))}
@@ -126,9 +125,8 @@ const TeamMatching = () => {
             onChange={(e) => setSelectedNumberOfMembers(e.target.value)}
             style={{ width: '100px', fontWeight: 'bold' }}
           >
-            {scale.map((number, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <SelectItem key={index} value={number}>
+            {scale.map((number) => (
+              <SelectItem key={number} value={number}>
                 {`${number} vs ${number}`}
               </SelectItem>
             ))}
@@ -141,9 +139,8 @@ const TeamMatching = () => {
             onChange={(e) => setSelectedLevel(e.target.value)}
             style={{ width: '80px', marginLeft: '16px', fontWeight: 'bold' }}
           >
-            {levels.map((level, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <SelectItem key={index} value={level}>
+            {levels.map((level) => (
+              <SelectItem key={level} value={level}>
                 {level}
               </SelectItem>
             ))}
@@ -163,8 +160,9 @@ const TeamMatching = () => {
             date={post.scheduledDate}
             startTime={post.startTime}
             location={post.locationDetail}
-            level={post.skillLevel}
+            level={post.skillLevelList}
             numberOfMembers={post.numberOfMembers}
+            recruitmentStatusType={post.recruitmentStatusType}
           />
         </Link>
       ))}

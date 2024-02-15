@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import MatePostCard from './MatePostCard';
 import { MatePost } from '../../../types/matching/mateDataType';
 
-const levels = ['입문', '초보', '중수', '고수'];
+const levels = ['입문', '하수', '중수', '고수'];
 
 const cities = [
   '서울',
@@ -33,7 +33,7 @@ const cities = [
   '제주',
 ];
 
-const positions = ['CENTER', 'FORWARD', 'GUARD'];
+const positions = ['센터', '포워드', '가드'];
 
 interface MateMatchingProps {
   keywordProp: string | null;
@@ -47,7 +47,7 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
 
   const fetchMateData = async (): Promise<MatePost[]> => {
     const response = await axiosInstance
-      .get('/api/mate')
+      .get('/api/mate/list')
       .then((res) => res.data.results.matePostList);
 
     return response;
@@ -70,13 +70,13 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
           ? post.positionList.some(
               (position) =>
                 position.position === selectedPosition ||
-                position.position === 'UNSPECIFIED'
+                position.position === '무관'
             )
           : true;
 
         // 실력 필터
         const matchesLevel = selectedLevel
-          ? post.skillList.includes(selectedLevel)
+          ? post.skillLevelList.includes(selectedLevel)
           : true;
 
         // 검색어 필터링
@@ -102,7 +102,7 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
     }
   };
 
-  if (!Array.isArray(data)) {
+  if (data?.length === 0) {
     return (
       <div>
         <div className="mx-auto mt-10 max-w-[250px]">
@@ -202,8 +202,9 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
             date={post.scheduledDate}
             startTime={post.startTime}
             location={post.locationDetail}
-            level={post.skillList}
+            level={post.skillLevelList}
             positionNeeds={post.positionList}
+            recruitmentStatus={post.recruitmentStatus}
           />
         </Link>
       ))}
