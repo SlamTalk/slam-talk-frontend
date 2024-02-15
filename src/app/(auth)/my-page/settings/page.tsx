@@ -38,46 +38,49 @@ const MyPageSettings = () => {
   };
 
   return (
-    <div className="relative">
-      <div
-        aria-label="뒤로가기"
-        role="link"
-        tabIndex={0}
-        className="absolute left-4 top-4"
-        onClick={handleGoBack}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleGoBack();
-          }
-        }}
-      >
-        <IoChevronBackSharp size={24} />
-      </div>
-      <h2 className="pt-4 text-center text-lg font-semibold">설정</h2>
-      <hr className="w-90 my-4 h-px bg-gray-300" />
-      <div className="flex flex-col px-4">
-        <p className="my-3 font-semibold">알림 설정</p>
-        <span>알림 수신 설정</span>
-        <hr className="w-90 my-4 h-px bg-gray-300" />
-        <p className="my-3 font-semibold">기타</p>
+    <>
+      <title>슬램톡 | 마이페이지 - 설정</title>
+      <div className="relative">
         <div
-          className="flex items-center gap-2"
-          onClick={handleLogout}
-          role="button"
+          aria-label="뒤로가기"
+          role="link"
           tabIndex={0}
+          className="absolute left-4 top-4"
+          onClick={handleGoBack}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              handleLogout();
+              handleGoBack();
             }
           }}
         >
-          <div className="flex flex-col gap-4">
-            <span>로그아웃</span>
-            <span>탈퇴하기</span>
+          <IoChevronBackSharp size={24} />
+        </div>
+        <h2 className="pt-4 text-center text-lg font-semibold">설정</h2>
+        <hr className="w-90 my-4 h-px bg-gray-300" />
+        <div className="flex flex-col px-4">
+          <p className="my-3 font-semibold">알림 설정</p>
+          <span>알림 수신 설정</span>
+          <hr className="w-90 my-4 h-px bg-gray-300" />
+          <p className="my-3 font-semibold">기타</p>
+          <div
+            className="flex items-center gap-2"
+            onClick={handleLogout}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleLogout();
+              }
+            }}
+          >
+            <div className="flex flex-col gap-4">
+              <span>로그아웃</span>
+              <span>탈퇴하기</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
