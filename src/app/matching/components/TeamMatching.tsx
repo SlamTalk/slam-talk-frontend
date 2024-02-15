@@ -33,7 +33,11 @@ const cities = [
 
 const scale = ['2', '3', '4', '5'];
 
-const TeamMatching = () => {
+interface MateMatchingProps {
+  keywordProp: string | null;
+}
+
+const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedNumberOfMembers, setSelectedNumberOfMembers] =
@@ -63,7 +67,20 @@ const TeamMatching = () => {
         const matchesNumberOfMembers = selectedNumberOfMembers
           ? post.numberOfMembers === selectedNumberOfMembers
           : true;
-        return matchesCity && matchesLevel && matchesNumberOfMembers;
+        const keyword = keywordProp?.toLowerCase();
+        const matchesKeyword = keyword
+          ? post.title.toLowerCase().includes(keyword) ||
+            post.content.toLowerCase().includes(keyword) ||
+            post.locationDetail.toLowerCase().includes(keyword) ||
+            post.writerNickname.toLowerCase().includes(keyword)
+          : true;
+
+        return (
+          matchesCity &&
+          matchesLevel &&
+          matchesNumberOfMembers &&
+          matchesKeyword
+        );
       })
     : [];
 

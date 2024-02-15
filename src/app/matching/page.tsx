@@ -64,7 +64,7 @@ const MatchingPage = () => {
       </div>
 
       {selectedTab === 'team' ? (
-        <TeamMatching />
+        <TeamMatching keywordProp={keywordProp} />
       ) : (
         <MateMatching keywordProp={keywordProp} />
       )}
