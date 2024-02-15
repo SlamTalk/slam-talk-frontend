@@ -66,8 +66,6 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
       }
     };
 
-    selectedPlace.convenience = ['화장실', '휴게시설'];
-
     const handleClose = () => {
       onClose();
     };
@@ -75,7 +73,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
     return (
       <div
         className={`sticky inset-0 z-40 m-auto h-fit w-full max-w-md rounded-lg bg-background shadow-md
-transition-all duration-300 ease-in-out`}
+          transition-all duration-300 ease-in-out`}
       >
         <div className="relative max-h-[96vh] w-full overflow-auto rounded-lg text-sm">
           <div className="relative h-60 w-full sm:h-48">

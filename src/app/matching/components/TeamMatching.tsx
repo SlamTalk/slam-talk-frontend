@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Card, Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
@@ -136,8 +138,9 @@ const TeamMatching = () => {
             }}
             className="text-bold"
           >
-            {cities.map((city) => (
-              <SelectItem key={city} value={city}>
+            {cities.map((city, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <SelectItem key={index} value={city}>
                 {city}
               </SelectItem>
             ))}
@@ -152,8 +155,9 @@ const TeamMatching = () => {
             onChange={(e) => setSelectedLevel(e.target.value)}
             style={{ width: '80px', marginLeft: '16px', fontWeight: 'bold' }}
           >
-            {levels.map((level) => (
-              <SelectItem key={level} value={level}>
+            {levels.map((level, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <SelectItem key={index} value={level}>
                 {level}
               </SelectItem>
             ))}
@@ -161,8 +165,9 @@ const TeamMatching = () => {
         </div>
       </div>
       {filteredPosts.map((post) => (
-        <Link href={`/matching/team-details/${post.postId}`}>
-          <TeamPostCard key={post.title} {...post} />
+        <Link key={post.postId} href={`/matching/team-details/${post.postId}`}>
+          {/* eslint-disable-next-line react/no-array-index-key */}
+          <TeamPostCard key={post.postId} {...post} />
         </Link>
       ))}
       <div className="fixed bottom-14 w-full max-w-[600px]">

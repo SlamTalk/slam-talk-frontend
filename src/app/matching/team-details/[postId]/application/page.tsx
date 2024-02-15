@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Button, Select, SelectItem, Textarea } from '@nextui-org/react';
 
-const MateMatchingApplication = () => {
+const TeamMatchingApplication = () => {
   const [skillLevel, setSkillLevel] = useState('');
   const [teamName, setTeamName] = useState('');
 
@@ -61,4 +61,4 @@ const MateMatchingApplication = () => {
   );
 };
 
-export default MateMatchingApplication;
+export default TeamMatchingApplication;

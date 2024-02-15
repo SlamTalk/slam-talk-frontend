@@ -1,4 +1,5 @@
 export interface UserInfo {
+  role: string;
   email: string;
   socialType: string;
   id: number;
