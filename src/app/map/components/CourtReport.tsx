@@ -28,7 +28,7 @@ interface CourtReportProps {
 }
 
 interface CourtReportData {
-  file: any | null;
+  file: File | null;
   courtName: string;
   address: string;
   latitude: number;
