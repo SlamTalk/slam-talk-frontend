@@ -48,7 +48,7 @@ const Chatting = () => {
         `/api/chat/participation?roomId=${params.roomId}`
       );
       const listData = JSON.stringify(res.data.results);
-
+      console.log(typeof listData);
       setMessageListState(JSON.parse(listData));
     } catch (err) {
       console.error(err);
