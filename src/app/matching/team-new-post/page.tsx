@@ -7,6 +7,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import KakaoMapModal from '../components/KakaoMapModal';
 
 const TeamNewPostPage = () => {
+  const [title, setTitle] = useState('');
+  const [teamName, setTeamName] = useState('');
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [address, setAddress] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(new Date());
@@ -40,10 +42,27 @@ const TeamNewPostPage = () => {
 
   return (
     <form className="relative p-4" onSubmit={handleSubmit}>
+      {/* 제목 필드 */}
       <div className="mb-4">
         <div className="text-md font-bold">제목</div>
-        <Input id="title" placeholder="제목을 입력하세요" />
+        <Input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="제목을 입력하세요"
+        />
       </div>
+      {/* 팀명 필드 */}
+      <div className="mb-4">
+        <div className="text-md mb-2 font-bold">팀명</div>
+        <Input
+          maxLength={30}
+          value={teamName}
+          onChange={(e) => setTeamName(e.target.value)}
+          placeholder="팀명을 입력하세요"
+          height={20}
+        />
+      </div>
+
       {/* 주소 선택 필드 */}
       <div className="mb-2.5">
         <div className="text-md font-bold">장소</div>
@@ -64,7 +83,6 @@ const TeamNewPostPage = () => {
       </div>
 
       {/* 날짜 선택 필드 */}
-
       <div className="mb-2.5">
         <div className="text-md font-bold">날짜</div>
         <div className="rounded-md bg-gray-100 p-2 dark:bg-default-100">
@@ -140,14 +158,14 @@ const TeamNewPostPage = () => {
           <SelectItem key="OVER_BEGINNER" value="OVER_BEGINNER">
             입문 이상
           </SelectItem>
-          <SelectItem key="UNDER_BEGINNER" value="UNDER_BEGINNER">
+          <SelectItem key="BEGINNER" value="BEGINNER">
             입문 이하
           </SelectItem>
           <SelectItem key="OVER_LOW" value="OVER_LOW">
-            초보 이상
+            하수 이상
           </SelectItem>
           <SelectItem key="UNDER_LOW" value="UNDER_LOW">
-            초보 이하
+            하수 이하
           </SelectItem>
           <SelectItem key="OVER_MIDDLE" value="OVER_MIDDLE">
             중수 이상
@@ -155,7 +173,7 @@ const TeamNewPostPage = () => {
           <SelectItem key="UNDER_MIDDLE" value="UNDER_MIDDLE">
             중수 이하
           </SelectItem>
-          <SelectItem key="OVER_HIGH" value="OVER_HIGH">
+          <SelectItem key="HIGH" value="HIGH">
             고수 이상
           </SelectItem>
           <SelectItem key="UNDER_HIGH" value="UNDER_HIGH">

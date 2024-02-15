@@ -1,169 +1,105 @@
+'use client';
+
 import React, { useState } from 'react';
-import { Card, Select, SelectItem, Button } from '@nextui-org/react';
+import { Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
-
-interface Post {
-  postId: string;
-  title: string;
-  date: string;
-  location: string;
-  level: string[];
-  positionNeeds: { [position: string]: number };
-  currentParticipants: { [position: string]: number }; // 현재 참여 인원
-}
-
-interface MatePost {
-  title: string;
-  date: string;
-  location: string;
-  level: string[];
-  positionNeeds: { [position: string]: number };
-  currentParticipants: { [position: string]: number };
-}
+import axiosInstance from '@/app/api/axiosInstance';
+import { useQuery } from '@tanstack/react-query';
+import LocalStorage from '@/utils/localstorage';
+import { useRouter } from 'next/navigation';
+import MatePostCard from './MatePostCard';
+import { MatePost } from './MateDataType';
 
 const levels = ['입문', '초보', '중수', '고수'];
 
 const cities = [
-  '서울특별시',
-  '부산광역시',
-  '대구광역시',
-  '인천광역시',
-  '광주광역시',
-  '대전광역시',
-  '울산광역시',
-  '세종특별자치시',
-  '경기도',
-  '강원도',
-  '충청북도',
-  '충청남도',
-  '전라북도',
-  '전라남도',
-  '경상북도',
-  '경상남도',
-  '제주특별자치도',
+  '서울',
+  '부산',
+  '대구',
+  '인천',
+  '광주',
+  '대전',
+  '울산',
+  '세종',
+  '경기',
+  '강원',
+  '충북',
+  '충남',
+  '전북',
+  '전남',
+  '경북',
+  '경남',
+  '제주',
 ];
 
-const positions = ['센터', '포워드', '가드'];
+const positions = ['CENTER', 'FORWARD', 'GUARD'];
 
-const posts: Post[] = [
-  {
-    postId: '1',
-    title: '서초구 주말 농구 모임!',
-    date: '2월 20일 오전 10시',
-    location: '서울특별시 서초구',
-    level: ['입문', '초보'],
-    positionNeeds: {
-      센터: 1,
-      포워드: 2,
-      가드: 2,
-      무관: 3,
-    },
-    currentParticipants: {
-      센터: 0,
-      포워드: 1,
-      가드: 1,
-      무관: 0,
-    },
-  },
-  {
-    postId: '2',
-    title: '강남구 친선 경기 팀원 구합니다!',
-    date: '2월 25일 오후 1시',
-    location: '서울특별시 강남구',
-    level: ['중수', '고수'],
-    positionNeeds: {
-      센터: 2,
-      포워드: 1,
-      가드: 1,
-    },
-    currentParticipants: {
-      센터: 1,
-      포워드: 0,
-      가드: 0,
-    },
-  },
-  {
-    postId: '3',
-    title: '마포구 저녁 농구 동호회원 모집',
-    date: '2월 28일 오후 6시',
-    location: '서울특별시 마포구',
-    level: ['초보', '중수'],
-    positionNeeds: {
-      포워드: 1,
-      가드: 3,
-    },
-    currentParticipants: {
-      포워드: 1,
-      가드: 2,
-    },
-  },
-];
+interface MateMatchingProps {
+  keywordProp: string | null;
+}
 
-const MatePostCard: React.FC<MatePost> = ({
-  title,
-  date,
-  location,
-  level,
-  positionNeeds,
-  currentParticipants,
-}) => (
-  <Card className="m-3">
-    <div className="p-4">
-      <h4 className="text-md font-bold">{title}</h4>
-      <div className="mb-1 mt-2 flex items-center justify-between">
-        <p className="text-sm">{location}</p>
-        <div className="flex flex-wrap">
-          {Object.entries(positionNeeds).map(([position, need]) => {
-            const current = currentParticipants[position] || 0;
-            return (
-              <div
-                key={position}
-                className="mx-1 rounded border bg-gray-300 p-1 text-xs font-bold text-black"
-              >
-                {`${position}:  ${current}/${need}`}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div className="my-1 flex items-center justify-between">
-        <p className="text-sm">{date}</p>
-        <div className="flex flex-wrap">
-          {level.map((lvl) => (
-            <div
-              key={lvl}
-              className="mx-1 rounded border bg-gray-300 p-1 
-              text-xs
-              font-bold
-              text-black"
-            >
-              {lvl}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </Card>
-);
-
-const MateMatching = () => {
+const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
+  const router = useRouter();
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedPosition, setSelectedPosition] = useState<string>('');
 
-  const filteredPosts = posts.filter((post) => {
-    const matchesCity = selectedCity
-      ? post.location.includes(selectedCity)
-      : true;
-    const matchesLevel = selectedLevel
-      ? post.level.includes(selectedLevel)
-      : true;
-    const matchesPosition = selectedPosition
-      ? Object.keys(post.positionNeeds).includes(selectedPosition)
-      : true;
-    return matchesCity && matchesLevel && matchesPosition;
+  const fetchMateData = async (): Promise<MatePost[]> => {
+    const response = await axiosInstance
+      .get('/api/mate')
+      .then((res) => res.data.results.matePostList);
+
+    return response;
+  };
+
+  const { data } = useQuery<MatePost[], Error>({
+    queryKey: ['mate'],
+    queryFn: fetchMateData,
   });
+
+  const filteredMatePost =
+    data?.filter((post: MatePost) => {
+      // 장소 필터
+      const matchesCity = selectedCity
+        ? post.locationDetail.includes(selectedCity)
+        : true;
+
+      // 포지션 필터
+      const matchesPosition = selectedPosition
+        ? post.positionList.some(
+            (position) =>
+              position.position === selectedPosition ||
+              position.position === 'UNSPECIFIED'
+          )
+        : true;
+
+      // 실력 필터
+      const matchesLevel = selectedLevel
+        ? post.skillList.includes(selectedLevel)
+        : true;
+
+      // 검색어 필터링
+
+      const keyword = keywordProp?.toLowerCase();
+      const matchesKeyword = keyword
+        ? post.title.toLowerCase().includes(keyword) ||
+          post.content.toLowerCase().includes(keyword) ||
+          post.locationDetail.toLowerCase().includes(keyword) ||
+          post.writerNickname.toLowerCase().includes(keyword)
+        : true;
+
+      return matchesCity && matchesLevel && matchesPosition && matchesKeyword;
+    }) || [];
+
+  const handleCreateNewPost = () => {
+    const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true') router.push(`/matching/mate-new-post`);
+    else {
+      alert('로그인 후 이용할 수 있습니다.');
+      router.push(`/login`);
+    }
+  };
 
   return (
     <div className="relative mx-auto max-w-[600px] pb-[80px]">
@@ -173,7 +109,7 @@ const MateMatching = () => {
             classNames={{
               value: 'text-xl font-semibold',
             }}
-            aria-label="시/도 선택"
+            aria-label="지역(시/도) 필터"
             variant="underlined"
             placeholder="시/도 선택"
             size="lg"
@@ -194,7 +130,7 @@ const MateMatching = () => {
         <div className="flex">
           <div>
             <Select
-              aria-label="포지션 선택"
+              aria-label="포지션 필터"
               variant="underlined"
               placeholder="포지션별"
               size="sm"
@@ -213,12 +149,16 @@ const MateMatching = () => {
           </div>
           <div>
             <Select
-              aria-label="실력"
+              aria-label="실력 필터"
               variant="underlined"
               placeholder="실력별"
               size="sm"
               onChange={(e) => setSelectedLevel(e.target.value)}
-              style={{ width: '80px', marginLeft: '16px', fontWeight: 'bold' }}
+              style={{
+                width: '80px',
+                marginLeft: '16px',
+                fontWeight: 'bold',
+              }}
             >
               {levels.map((level) => (
                 <SelectItem key={level} value={level}>
@@ -229,22 +169,31 @@ const MateMatching = () => {
           </div>
         </div>
       </div>
-      {filteredPosts.map((post) => (
-        <Link href={`/matching/mate-details/${post.postId}`}>
-          <MatePostCard key={post.postId} {...post} />
+      {filteredMatePost.map((post: MatePost) => (
+        <Link
+          key={post.matePostId}
+          href={`/matching/mate-details/${post.matePostId}`}
+        >
+          <MatePostCard
+            title={post.title}
+            date={post.scheduledDate}
+            startTime={post.startTime}
+            location={post.locationDetail}
+            level={post.skillList}
+            positionNeeds={post.positionList}
+          />
         </Link>
       ))}
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
-          <Link href="/matching/mate-new-post">
-            <Button
-              startContent={<FaPlus />}
-              color="primary"
-              className="rounded-full bg-primary text-white shadow-md"
-            >
-              새 모집글 작성
-            </Button>
-          </Link>
+          <Button
+            startContent={<FaPlus />}
+            color="primary"
+            className="rounded-full bg-primary text-white shadow-md"
+            onClick={handleCreateNewPost}
+          >
+            새 모집글 작성
+          </Button>
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@ export const getUserData = async (): Promise<UserInfo | null> => {
     const user = result.data.results;
 
     const userData: UserInfo = {
+      role: user.role,
       email: user.email,
       socialType: user.socialType,
       id: user.id,

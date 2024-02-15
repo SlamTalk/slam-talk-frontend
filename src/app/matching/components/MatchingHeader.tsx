@@ -9,15 +9,11 @@ const MatchingHeader = () => {
   const router = useRouter();
 
   const handleBackClick = () => {
-    if (window.history.length > 1) {
-      router.back();
-    } else {
-      router.push('/matching');
-    }
+    router.back();
   };
 
   return (
-    <div className="fixed top-0 z-40 flex h-[61px] w-full max-w-[600px] items-center border-b-1 bg-background">
+    <div className="sticky top-0 z-40 flex h-[61px] w-full max-w-[600px] items-center border-b-1 bg-background">
       <div className="flex w-1/3 justify-start pl-4">
         <IoChevronBackSharp
           cursor="pointer"

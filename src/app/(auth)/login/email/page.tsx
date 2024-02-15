@@ -61,12 +61,13 @@ const EmailLogin = () => {
   return (
     <>
       <title>슬램톡 | 로그인</title>
-      <div className="mt-14 flex h-full w-full flex-col flex-wrap justify-center gap-3 p-5 align-middle md:flex-nowrap">
+      <div className="mt-14 flex h-full w-full flex-col flex-wrap justify-center gap-3 p-4 align-middle md:flex-nowrap">
         <h1 className="mb-4 text-2xl font-bold sm:text-xl">
           이메일과 비밀번호를 입력해주세요.
         </h1>
 
         <Input
+          radius="sm"
           isClearable
           isRequired
           type="email"
@@ -85,6 +86,7 @@ const EmailLogin = () => {
         </div>
 
         <Input
+          radius="sm"
           isRequired
           type={isVisible ? 'text' : 'password'}
           labelPlacement="outside"
@@ -107,7 +109,7 @@ const EmailLogin = () => {
           onValueChange={setPassword}
         />
         <div className="mb-3 h-3 text-sm text-danger" />
-        <Button size="lg" radius="full" color="primary" onClick={handleLogin}>
+        <Button size="lg" radius="sm" color="primary" onClick={handleLogin}>
           로그인
         </Button>
         <div className="mt-4 flex justify-center gap-3 align-middle text-sm text-gray-400">
