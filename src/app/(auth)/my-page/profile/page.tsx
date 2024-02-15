@@ -12,7 +12,12 @@ const MyProfile = () => {
     router.push('/login');
   }
 
-  return <div>프로필</div>;
+  return (
+    <>
+      <title>슬램톡 | 내 프로필</title>
+      <div>프로필</div>
+    </>
+  );
 };
 
 export default MyProfile;

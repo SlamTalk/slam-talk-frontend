@@ -10,7 +10,12 @@ const CourtDetailsModal = () => {
 
   if (!courtId) return null;
 
-  return <CourtDetailsFull courtId={courtId} />;
+  return (
+    <>
+      <title>슬램톡 | 농구장 지도</title>
+      <CourtDetailsFull courtId={courtId} />
+    </>
+  );
 };
 
 export default CourtDetailsModal;
