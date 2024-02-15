@@ -1,6 +1,8 @@
+/* eslint-disable no-new */
+
 'use client';
 
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@nextui-org/button';
 import { IoSearchSharp } from 'react-icons/io5';
 import { MdMyLocation } from 'react-icons/md';
@@ -16,16 +18,28 @@ declare global {
   }
 }
 
-const KakaoMap: FC = () => {
+interface MouseEventWithLatLng {
+  latLng: {
+    La: number; // 경도
+    Ma: number; // 위도
+  };
+  point: {
+    x: number;
+    y: number;
+  };
+}
+
+const KakaoMap = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<any>(null);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [userLocation, setUserLocation] = useState<any>(null);
-  const [, setIsLoading] = useState<boolean>(true);
   const [mapLevel] = useState(8);
   const [isCourtReportVisible, setIsCourtReportVisible] = useState(false);
   const [selectedCourtId, setSelectedCourtId] = useState<string>('');
   const [isCourtDetailsVisible, setIsCourtDetailsVisible] = useState(false);
+  const [location, setLocation] = useState<any>(null);
+  const [mode, setMode] = useState(false);
 
   const {
     error,
@@ -40,8 +54,6 @@ const KakaoMap: FC = () => {
     console.log('농구장 정보를 불러오는데 실패했습니다:', error);
   }
 
-  console.log(courts);
-
   useEffect(() => {
     if (!window.kakao || !window.kakao.maps) {
       console.error('Kakao Maps API를 불러오는데 실패했습니다.');
@@ -51,7 +63,6 @@ const KakaoMap: FC = () => {
     window.kakao.maps.load(() => {
       if (!('geolocation' in navigator)) {
         alert('이 브라우저는 위치 서비스를 지원하지 않습니다.');
-        setIsLoading(false);
         return;
       }
 
@@ -64,7 +75,6 @@ const KakaoMap: FC = () => {
           const options = { center: seoulLatLng, level: mapLevel };
           const kakaoMap = new window.kakao.maps.Map(mapRef.current, options);
           setMap(kakaoMap);
-          setIsLoading(false);
         },
         (locationError) => {
           console.error(`Error: ${locationError.message}`);
@@ -75,7 +85,6 @@ const KakaoMap: FC = () => {
           } else {
             alert('위치 정보를 가져오는데 실패했습니다.');
           }
-          setIsLoading(false);
         }
       );
     });
@@ -169,23 +178,6 @@ const KakaoMap: FC = () => {
     if (!map || isLoading || error) return;
 
     displayPlaces(courts);
-
-    // if (courts) {
-    //   courts.forEach((court: any) => {
-    //     const marker = new window.kakao.maps.Marker({
-    //       map,
-    //       position: new window.kakao.maps.LatLng(
-    //         court.latitude,
-    //         court.longitude
-    //       ),
-    //     });
-
-    //     window.kakao.maps.event.addListener(marker, 'click', () => {
-    //       setSelectedCourtId(court.courtId);
-    //       setIsCourtDetailsVisible(true);
-    //     });
-    //   });
-    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courts, isLoading, error, map]);
 
@@ -195,12 +187,82 @@ const KakaoMap: FC = () => {
     }
   };
 
-  const showCourtReport = () => {
-    setIsCourtReportVisible(true);
-  };
+  useEffect(() => {
+    if (!map) return;
 
-  const hideCourtReport = () => {
-    setIsCourtReportVisible(false);
+    const handleCreateMarker = (mouseEvent: MouseEventWithLatLng) => {
+      const latlng = mouseEvent.latLng;
+
+      const markerImageSrc = '/icons/marker-img.png';
+      const imageSize = new window.kakao.maps.Size(48);
+      const markerImage = new window.kakao.maps.MarkerImage(
+        markerImageSrc,
+        imageSize
+      );
+
+      const newMarker = new window.kakao.maps.Marker({
+        position: latlng,
+        map,
+        image: markerImage,
+        clickable: true,
+      });
+
+      newMarker.setPosition(latlng);
+
+      const content = `<div class="flex items-center px-2 py-1 bg-white text-black border border-primary rounded text-sm font-medium shadow-sm ml-12">이 곳 제보하기</div>`;
+
+      const overlay = new window.kakao.maps.CustomOverlay({
+        map,
+        position: latlng,
+        content,
+        yAnchor: 1,
+        xAnchor: 0.5,
+      });
+
+      window.kakao.maps.event.addListener(newMarker, 'click', () => {
+        const geocoder = new window.kakao.maps.services.Geocoder();
+        geocoder.coord2Address(
+          latlng.La,
+          latlng.Ma,
+          (result: any, status: any) => {
+            if (status === window.kakao.maps.services.Status.OK) {
+              const address = result[0].address.address_name;
+              const courtInfo = {
+                address,
+                latitude: latlng.La,
+                longitude: latlng.Ma,
+              };
+
+              setLocation(courtInfo);
+              setIsCourtReportVisible(true);
+            } else {
+              alert('주소를 가져오지 못했습니다.');
+            }
+          }
+        );
+      });
+
+      setTimeout(() => {
+        newMarker.setMap(null);
+        overlay.setMap(null);
+      }, 40000);
+    };
+
+    if (mode === true) {
+      // 이벤트 등록
+      window.kakao.maps.event.addListener(map, 'click', handleCreateMarker);
+    }
+
+    // 클린업 함수 실행
+    // eslint-disable-next-line consistent-return
+    return () => {
+      window.kakao.maps.event.removeListener(map, 'click', handleCreateMarker);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode]);
+
+  const handleToggleMapClickEvent = () => {
+    setMode((prev) => !prev);
   };
 
   return (
@@ -234,8 +296,9 @@ const KakaoMap: FC = () => {
         >
           {isCourtReportVisible && (
             <CourtReport
+              location={location}
               isVisible={isCourtReportVisible}
-              onClose={hideCourtReport}
+              onClose={() => setIsCourtReportVisible(false)}
             />
           )}
           {isCourtDetailsVisible && (
@@ -245,6 +308,7 @@ const KakaoMap: FC = () => {
             />
           )}
         </div>
+
         <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
           <Button
             isIconOnly
@@ -260,9 +324,9 @@ const KakaoMap: FC = () => {
             aria-label="Court Report"
             type="button"
             className="justify-center rounded-full bg-primary text-white shadow-md"
-            onClick={showCourtReport}
+            onClick={handleToggleMapClickEvent}
           >
-            농구장 제보
+            {mode ? '취소' : '농구장 제보'}
           </Button>
         </div>
       </div>
