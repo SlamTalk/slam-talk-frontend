@@ -9,7 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import LocalStorage from '@/utils/localstorage';
 import { useRouter } from 'next/navigation';
 import MatePostCard from './MatePostCard';
-import { MatePost } from './MateDataType';
+import { MatePost } from '../../../types/matching/mateDataType';
 
 const levels = ['입문', '초보', '중수', '고수'];
 
@@ -58,39 +58,40 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
     queryFn: fetchMateData,
   });
 
-  const filteredMatePost =
-    data?.filter((post: MatePost) => {
-      // 장소 필터
-      const matchesCity = selectedCity
-        ? post.locationDetail.includes(selectedCity)
-        : true;
+  const filteredMatePost = Array.isArray(data)
+    ? data.filter((post: MatePost) => {
+        // 장소 필터
+        const matchesCity = selectedCity
+          ? post.locationDetail.includes(selectedCity)
+          : true;
 
-      // 포지션 필터
-      const matchesPosition = selectedPosition
-        ? post.positionList.some(
-            (position) =>
-              position.position === selectedPosition ||
-              position.position === 'UNSPECIFIED'
-          )
-        : true;
+        // 포지션 필터
+        const matchesPosition = selectedPosition
+          ? post.positionList.some(
+              (position) =>
+                position.position === selectedPosition ||
+                position.position === 'UNSPECIFIED'
+            )
+          : true;
 
-      // 실력 필터
-      const matchesLevel = selectedLevel
-        ? post.skillList.includes(selectedLevel)
-        : true;
+        // 실력 필터
+        const matchesLevel = selectedLevel
+          ? post.skillList.includes(selectedLevel)
+          : true;
 
-      // 검색어 필터링
+        // 검색어 필터링
 
-      const keyword = keywordProp?.toLowerCase();
-      const matchesKeyword = keyword
-        ? post.title.toLowerCase().includes(keyword) ||
-          post.content.toLowerCase().includes(keyword) ||
-          post.locationDetail.toLowerCase().includes(keyword) ||
-          post.writerNickname.toLowerCase().includes(keyword)
-        : true;
+        const keyword = keywordProp?.toLowerCase();
+        const matchesKeyword = keyword
+          ? post.title.toLowerCase().includes(keyword) ||
+            post.content.toLowerCase().includes(keyword) ||
+            post.locationDetail.toLowerCase().includes(keyword) ||
+            post.writerNickname.toLowerCase().includes(keyword)
+          : true;
 
-      return matchesCity && matchesLevel && matchesPosition && matchesKeyword;
-    }) || [];
+        return matchesCity && matchesLevel && matchesPosition && matchesKeyword;
+      })
+    : [];
 
   const handleCreateNewPost = () => {
     const isLoggedIn = LocalStorage.getItem('isLoggedIn');
@@ -100,6 +101,28 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
       router.push(`/login`);
     }
   };
+
+  if (!Array.isArray(data)) {
+    return (
+      <div>
+        <div className="mx-auto mt-10 max-w-[250px]">
+          게시글이 존재하지 않습니다.
+        </div>
+        <div className="fixed bottom-14 w-full max-w-[600px]">
+          <div className="mr-4 flex justify-end">
+            <Button
+              startContent={<FaPlus />}
+              color="primary"
+              className="rounded-full bg-primary text-white shadow-md"
+              onClick={handleCreateNewPost}
+            >
+              새 모집글 작성
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative mx-auto max-w-[600px] pb-[80px]">

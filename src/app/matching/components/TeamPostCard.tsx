@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Card } from '@nextui-org/react';
-import { MateCardInfo } from '../../../types/matching/mateDataType';
+import { TeamCardInfo } from '@/types/matching/teamDataType';
 
 const formatTime = (time: string) => {
   const [hours, minutes] = time.split(':').map(Number);
@@ -14,13 +14,14 @@ const formatTime = (time: string) => {
   return `${period} ${formattedHour}시${formattedMinutes.length > 0 ? ` ${formattedMinutes}` : ''}`;
 };
 
-const MatePostCard: React.FC<MateCardInfo> = ({
+const TeamPostCard: React.FC<TeamCardInfo> = ({
   title,
+  teamName,
   date,
   startTime,
   location,
   level,
-  positionNeeds,
+  numberOfMembers,
 }) => {
   const formattedDate = new Date(date).toLocaleDateString('ko-KR', {
     month: 'long',
@@ -34,28 +35,25 @@ const MatePostCard: React.FC<MateCardInfo> = ({
   return (
     <Card className="m-3">
       <div className="p-4">
-        <h4 className="text-md font-bold">{title}</h4>
+        <h4 className="text-md font-bold">
+          [{teamName}]{title}
+        </h4>
         <div className="mb-1 mt-2 flex items-center justify-between">
           <p className="text-sm">{simplifiedLocation}</p>{' '}
-          {/* 수정된 주소 사용 */}
-          <div className="flex flex-wrap">
-            {positionNeeds.map(({ position, maxPosition, currentPosition }) => (
-              <div
-                key={position}
-                className="mx-1 rounded border bg-gray-300 p-1 text-xs font-bold text-black"
-              >
-                {`${position}: ${currentPosition}/${maxPosition}`}
-              </div>
-            ))}
-          </div>
+          <p className="mx-4 ">
+            {numberOfMembers} vs {numberOfMembers}
+          </p>
         </div>
         <div className="my-1 flex items-center justify-between">
           <p className="text-sm">{`${formattedDate} ${formattedTime}`}</p>
           <div className="flex flex-wrap">
-            {level?.map((lvl) => (
+            {level.map((lvl) => (
               <div
                 key={lvl}
-                className="mx-1 rounded border bg-gray-300 p-1 text-xs font-bold text-black"
+                className="mx-1 rounded border bg-gray-300 p-1 
+              text-xs
+              font-bold
+              text-black"
               >
                 {lvl}
               </div>
@@ -67,4 +65,4 @@ const MatePostCard: React.FC<MateCardInfo> = ({
   );
 };
 
-export default MatePostCard;
+export default TeamPostCard;
