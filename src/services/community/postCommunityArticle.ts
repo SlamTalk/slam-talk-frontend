@@ -1,21 +1,12 @@
-import axios from 'axios';
+import axiosInstance from '@/app/api/axiosInstance';
 
-export const postCommunity = async (
-  article: any,
-  accessToken: string | null
-) => {
+export const postCommunity = async (article: FormData) => {
   try {
-    await axios.post(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/community/new-form`,
-      article,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        withCredentials: true,
-        timeout: 10000,
-      }
-    );
+    await axiosInstance.post('/api/community/new-form', article, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
   } catch (error) {
     console.error(error);
   }

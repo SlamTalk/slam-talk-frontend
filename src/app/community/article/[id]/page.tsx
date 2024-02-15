@@ -9,54 +9,43 @@ import { IoChevronBackSharp } from 'react-icons/io5';
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getCommunityArticle } from '@/services/community/getCommunityArticle';
+import Image from 'next/image';
 
-import CommentList from '../../components/commentList';
-
-interface ICommunityItem {
-  id: number;
-  title: string;
-  content: string;
-  tag: string;
-  comment: [
-    {
-      id: number;
-      postId: string;
-      userId: string;
-      content: string;
-    },
-  ];
-}
+// interface ICommunityItem {
+//   id: number;
+//   title: string;
+//   content: string;
+//   tag: string;
+//   comment: [
+//     {
+//       id: number;
+//       postId: string;
+//       userId: string;
+//       content: string;
+//     },
+//   ];
+// }
 
 const Page = () => {
   const router = useRouter();
   const params = useParams<{ id: string }>();
-  const dummyData = localStorage.getItem('community');
-  const communityData = dummyData ? JSON.parse(dummyData) : [];
-  const matchedData = communityData.find(
-    (item: ICommunityItem) => item.id === Number(params.id)
-  );
   const { data: articleData } = useQuery({
     queryKey: ['articleData'],
     queryFn: () => getCommunityArticle(params.id),
   });
 
   const [comment, setComment] = useState('');
-  const CommentHandler = () => {
-    if (comment !== '') {
-      const newComment = {
-        id: 2,
-        postId: params.id,
-        userId: 'user123',
-        content: comment,
-      };
-      matchedData.comment.push(newComment);
-      const updatedData = communityData.map((item: ICommunityItem) =>
-        item.id === matchedData.id ? matchedData : item
-      );
-      localStorage.setItem('community', JSON.stringify(updatedData));
-      setComment('');
-    }
-  };
+  // const CommentHandler = () => {
+  //   if (comment !== '') {
+  //     const newComment = {
+  //       id: 2,
+  //       postId: params.id,
+  //       userId: 'user123',
+  //       content: comment,
+  //     };
+  //     setComment('');
+  //   }
+  // };
 
   return (
     <div className="h-[90vh]">
@@ -87,6 +76,17 @@ const Page = () => {
                 <p aria-label="게시글 컨텐츠" className="m-2">
                   {articleData.content}
                 </p>
+                {articleData.imageUrls
+                  ? articleData.imageUrls.map((i: string) => (
+                      <Image
+                        key={i}
+                        src={i}
+                        alt="images"
+                        width={200}
+                        height={200}
+                      />
+                    ))
+                  : null}
               </div>
 
               <div className="flex justify-between">
@@ -121,12 +121,11 @@ const Page = () => {
             />
             <Button
               className="w-[10px] hover:bg-primary hover:text-white"
-              onClick={CommentHandler}
+              // onClick={CommentHandler}
             >
               입력
             </Button>
           </div>
-          <CommentList />
         </div>
       ) : (
         <p>404 not found</p>

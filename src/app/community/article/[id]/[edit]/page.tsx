@@ -1,63 +1,93 @@
 'use client';
 
-import { Button } from '@nextui-org/button';
 import { useParams, useRouter } from 'next/navigation';
-import { IoIosArrowBack } from 'react-icons/io';
-import { FaHeart } from 'react-icons/fa';
-import React, { useState } from 'react';
-
-interface ICommunityItem {
-  id: number;
-  title: string;
-  content: string;
-  tag: string;
-}
+import { IoChevronBackSharp } from 'react-icons/io5';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { patchCommunityArticle } from '@/services/community/patchCommunityArticle';
+import React, { useState, useCallback, useRef } from 'react';
+import { getCommunityArticle } from '@/services/community/getCommunityArticle';
+import Image from 'next/image';
 
 const Page = () => {
-  const router = useRouter();
-  const params = useParams<{ id: string }>();
-  const dummyData = localStorage.getItem('community');
-  const communityData = dummyData ? JSON.parse(dummyData) : [];
-  const matchedData = communityData.find(
-    (item: ICommunityItem) => item.id === Number(params.id)
-  );
   const [editedTitle, setEditedTitle] = useState('');
   const [editedContent, setEditedContent] = useState('');
-  const HandleEditor = () => {
-    matchedData.title = editedTitle === '' ? matchedData.title : editedTitle;
-    matchedData.content =
-      editedContent !== '' ? matchedData.content : editedContent;
-    communityData.splice(matchedData.id - 1, 1, {
-      id: matchedData.id,
-      title: editedTitle,
-      tag: matchedData.tag,
-      content: editedContent,
-    });
-    localStorage.setItem('community', JSON.stringify(communityData));
+  const [images, setImages] = useState<File[]>([]);
+  const [postData, setPostData] = useState<FormData>(new FormData());
+  const imageInput = useRef<HTMLInputElement>(document.createElement('input'));
+  const router = useRouter();
+  const params = useParams<{ id: string }>();
+  const { data: articleData } = useQuery({
+    queryKey: ['articleData'],
+    queryFn: () => getCommunityArticle(params.id),
+  });
+  const patchArticle: any = useMutation({
+    mutationKey: ['patchedArtcle'],
+    mutationFn: () => patchCommunityArticle(+params.id, postData),
+    onSuccess: () => {
+      setEditedTitle('');
+      setEditedContent('');
+      router.push(`/community/article/${params.id}`);
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+
+  const onClickImageUpload = useCallback(() => {
+    if (imageInput.current) {
+      imageInput.current.click();
+    }
+  }, [imageInput]);
+
+  const handleImageUpload = () => {
+    if (imageInput.current && imageInput.current.files) {
+      const selectedImages = Array.from(imageInput.current.files);
+
+      setImages((prevImages) => [...prevImages, ...selectedImages]);
+    }
   };
-  const handelDelete = () => {
-    communityData.splice(matchedData.id - 1, 1);
-    localStorage.setItem('community', JSON.stringify(communityData));
+
+  const HandleEditor = async () => {
+    const formData = new FormData();
+    formData.append(
+      'requsetDTO',
+      new Blob(
+        [
+          JSON.stringify({
+            title: editedTitle,
+            content: editedContent,
+            category: articleData.category,
+            imageUrl: articleData.imageUrl,
+          }),
+        ],
+        { type: 'application/json' }
+      )
+    );
+    if (images && images.length > 0) {
+      for (let i = 0; i < images.length; i += 1) {
+        formData.append('images', images[i]);
+      }
+    }
+    setPostData(formData);
+    patchArticle.mutate();
   };
+  // const handelDelete = () => {};
   return (
     <div>
-      {matchedData ? (
+      {articleData ? (
         <div>
-          <div className="flex items-center justify-center border-b-2">
-            <Button
-              className="flex-none border-2"
-              isIconOnly
-              color="default"
+          <div className="flex h-[50px] items-center justify-center border-b-2">
+            <IoChevronBackSharp
+              cursor="pointer"
+              size={24}
               onClick={() => {
-                router.push('/community/all');
+                router.push(`/community/${params.id}`);
               }}
-            >
-              <IoIosArrowBack />
-            </Button>
+            />
 
             <input
               className="flex-grow text-center"
-              placeholder={matchedData.title}
+              placeholder={articleData.title}
               onChange={(e) => {
                 setEditedTitle(e.target.value);
               }}
@@ -66,25 +96,45 @@ const Page = () => {
 
           <div className="flex h-40 flex-col justify-between border-b-2">
             <textarea
-              placeholder={matchedData.content}
+              placeholder={articleData.content}
               onChange={(e) => {
                 setEditedContent(e.target.value);
               }}
             />
             <div className="flex justify-between">
-              <Button isIconOnly>
-                <FaHeart />
-              </Button>
-              <div>
-                <Button
+              <div aria-label="수정 삭제 버튼 그룹">
+                <button
+                  type="button"
+                  className="hover:text-primary"
                   onClick={() => {
                     HandleEditor();
-                    router.push(`/community/board/${params.id}`);
                   }}
                 >
-                  수정 완료
-                </Button>
-                <Button onClick={handelDelete}>삭제</Button>
+                  수정
+                </button>
+                <button type="button" className="ml-3 hover:text-primary">
+                  삭제
+                </button>
+                <input
+                  type="file"
+                  multiple
+                  hidden
+                  ref={imageInput}
+                  onChange={handleImageUpload}
+                  accept="image/*"
+                />
+                <button type="button" onClick={onClickImageUpload}>
+                  이미지 업로드
+                </button>
+                {images.map((file, index) => (
+                  <Image
+                    key={URL.createObjectURL(file)}
+                    src={URL.createObjectURL(file)}
+                    alt={`Preview ${index}`}
+                    width={200}
+                    height={200}
+                  />
+                ))}
               </div>
             </div>
           </div>

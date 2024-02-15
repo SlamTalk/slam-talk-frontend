@@ -17,11 +17,11 @@ import {
   DropdownItem,
   Button,
 } from '@nextui-org/react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { postCommunity } from '@/services/community/postCommunityArticle';
 // import { getUserData } from '@/services/user/getUserData';
 // import { IArticle } from '@/types/community/article';
-import { postTokenRefresh } from '@/services/token/postTokenRefresh';
+// import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 import Image from 'next/image';
 
 const Page = () => {
@@ -80,13 +80,13 @@ const Page = () => {
     setSelectedKeys(new Set<string>(Array.from(keys).map(String)));
   };
 
-  const { data } = useQuery({
-    queryKey: ['tokenData'],
-    queryFn: postTokenRefresh,
-  });
+  // const { data } = useQuery({
+  //   queryKey: ['tokenData'],
+  //   queryFn: postTokenRefresh,
+  // });
   const postArticle = useMutation({
     mutationKey: ['postArticleData'],
-    mutationFn: () => postCommunity(postData, data),
+    mutationFn: () => postCommunity(postData),
 
     onSuccess: () => {
       setTitle('');

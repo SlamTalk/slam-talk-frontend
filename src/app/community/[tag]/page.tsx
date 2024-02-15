@@ -17,26 +17,11 @@ import { useQuery } from '@tanstack/react-query';
 import { getCommunityBoard } from '@/services/community/getCommunityBoard';
 import { IBoard } from '@/types/community/board';
 
-// interface ICommunityItem {
-//   id: number;
-//   userId: string;
-//   title: string;
-//   content: string;
-//   tag: string;
-//   comment?: {
-//     id: string;
-//     postId: string;
-//     userId: string;
-//     content: string;
-//   }[];
-// }
-
 const Page = () => {
   // const params = useParams<{ tag: string }>();
 
   const router = useRouter();
   const [inputData, setInputData] = useState('');
-  // const [searchData, setSearchData] = useState('');
   const [isFocus, setIsFocus] = useState(false);
   const [searchKey, setSearchKey] = useState('');
   const { data: communityBoard } = useQuery<IBoard[]>({
@@ -94,44 +79,44 @@ const Page = () => {
         </Button>
         <Button
           aria-label="태그 버튼 free"
-          key="free"
+          key="FREE"
           radius="full"
           className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
-            router.push('/community/free');
+            router.push('/community/FREE');
           }}
         >
           자유
         </Button>
         <Button
           aria-label="태그 버튼 usedtrade"
-          key="usedtrade"
+          key="USED"
           radius="full"
           className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
-            router.push('/community/usedtrade');
+            router.push('/community/USED');
           }}
         >
           중고거래
         </Button>
         <Button
           aria-label="태그 버튼 question"
-          key="question"
+          key="QUESTION"
           radius="full"
           className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
-            router.push('/community/question');
+            router.push('/community/QUESTION');
           }}
         >
           질문
         </Button>
         <Button
           aria-label="태그 버튼 rentaltransfer"
-          key="rentaltransfer"
+          key="TRANSFER"
           radius="full"
           className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
-            router.push('/community/rentaltransfer');
+            router.push('/community/TRANSFER');
           }}
         >
           대관양도
