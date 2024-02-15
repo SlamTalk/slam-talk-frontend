@@ -9,7 +9,8 @@ const MatchingHeader = () => {
   const router = useRouter();
 
   const handleBackClick = () => {
-    router.back();
+    if (pathname.includes('revise' || 'application')) router.back();
+    else router.push('/matching');
   };
 
   return (
