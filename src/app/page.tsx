@@ -5,6 +5,7 @@ import Image from 'next/image';
 
 const Home = () => (
   <div>
+    <title>슬램톡 | 농구 플랫폼</title>
     <div className="m-auto grid max-w-[600px] overflow-y-auto scrollbar-hide">
       <div className="mt-4 rounded-md bg-gray-100 px-8">
         <div className="mt-2 text-center text-lg font-bold">

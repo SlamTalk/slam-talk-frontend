@@ -56,77 +56,80 @@ const MyPage = () => {
 
   if (user) {
     return (
-      <div className="p-4">
-        <div className="flex w-full justify-between">
-          <div
-            aria-label="뒤로가기"
-            role="link"
-            tabIndex={0}
-            onClick={handleGoBack}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleGoBack();
-              }
-            }}
+      <>
+        <title>슬램톡 | 마이페이지</title>
+        <div className="p-4">
+          <div className="flex w-full justify-between">
+            <div
+              aria-label="뒤로가기"
+              role="link"
+              tabIndex={0}
+              onClick={handleGoBack}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleGoBack();
+                }
+              }}
+            >
+              <IoChevronBackSharp size={24} />
+            </div>
+            <Link href="/my-page/settings">
+              <IoSettingsOutline aria-label="settings" size={24} />
+            </Link>
+          </div>
+          <div className="mt-7 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Avatar alt="profile-img" src={user.imageUrl} />
+              <p className="text-lg font-semibold">{user.nickname}</p>
+            </div>
+            <Link href="/my-page/profile">
+              <Button size="sm">프로필 보기</Button>
+            </Link>
+          </div>
+          <Button
+            type="submit"
+            color="primary"
+            className="my-6 w-full"
+            radius="sm"
+            onClick={handleAttend}
           >
-            <IoChevronBackSharp size={24} />
-          </div>
-          <Link href="/my-page/settings">
-            <IoSettingsOutline aria-label="settings" size={24} />
-          </Link>
-        </div>
-        <div className="mt-7 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Avatar alt="profile-img" src={user.imageUrl} />
-            <p className="text-lg font-semibold">{user.nickname}</p>
-          </div>
-          <Link href="/my-page/profile">
-            <Button size="sm">프로필 보기</Button>
-          </Link>
-        </div>
-        <Button
-          type="submit"
-          color="primary"
-          className="my-6 w-full"
-          radius="sm"
-          onClick={handleAttend}
-        >
-          출석하기
-        </Button>
-        <div>
-          <p className="mb-3 font-semibold">나의 활동</p>
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2">
-              <FaRegHeart className="text-text" aria-label="like button" />
-              <span>게시물 좋아요 목록</span>
+            출석하기
+          </Button>
+          <div>
+            <p className="mb-3 font-semibold">나의 활동</p>
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-2">
+                <FaRegHeart className="text-text" aria-label="like button" />
+                <span>게시물 좋아요 목록</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <LuClipboardList className="text-text" />
+                <span>팀 매칭 내역</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <LuClipboardList className="text-text" />
+                <span>농구 메이트 찾기 내역</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <LuClipboardList className="text-text" />
-              <span>팀 매칭 내역</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <LuClipboardList className="text-text" />
-              <span>농구 메이트 찾기 내역</span>
-            </div>
-          </div>
 
-          <hr className="w-90 my-4 h-px bg-gray-300" />
+            <hr className="w-90 my-4 h-px bg-gray-300" />
 
-          <p className="my-3 font-semibold">기타</p>
-          <div className="mb-4 flex flex-col gap-4">
-            <div className="flex items-center gap-2">
-              <MdOutlineShareLocation className="text-text" size={20} />
-              <span>내 동네 설정</span>
+            <p className="my-3 font-semibold">기타</p>
+            <div className="mb-4 flex flex-col gap-4">
+              <div className="flex items-center gap-2">
+                <MdOutlineShareLocation className="text-text" size={20} />
+                <span>내 동네 설정</span>
+              </div>
             </div>
-          </div>
 
-          <hr className="w-90 my-4 h-px bg-gray-300" />
-          <div className="mb-4 flex flex-col gap-4">
-            <span>자주 묻는 질문</span>
-            <span>문의하기</span>
+            <hr className="w-90 my-4 h-px bg-gray-300" />
+            <div className="mb-4 flex flex-col gap-4">
+              <span>자주 묻는 질문</span>
+              <span>문의하기</span>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
   return null;

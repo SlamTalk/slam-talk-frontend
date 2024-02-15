@@ -204,63 +204,69 @@ const KakaoMap: FC = () => {
   };
 
   return (
-    <div className="relative h-full w-full">
-      <div className="absolute left-1/2 top-4 z-10 flex w-4/5 max-w-lg -translate-x-1/2 transform items-center justify-center rounded-md bg-background p-1 shadow-md">
-        <input
-          type="text"
-          placeholder="장소 검색"
-          className="flex-grow rounded-md border-0 p-2 focus:outline-none focus:ring-0"
-          value={searchKeyword}
-          onChange={handleSearchChange}
-          onKeyDown={handleKeyDown}
-        />
-        <button
-          aria-label="Search"
-          type="button"
-          onClick={handleSearch}
-          className="ml-2 mr-2 flex h-full items-center justify-center rounded-md focus:outline-none"
-        >
-          <IoSearchSharp size={20} className="text-gray-400 hover:text-black" />
-        </button>
-      </div>
-      <div
-        ref={mapRef}
-        className="relative h-[calc(100vh-109px)] w-full overflow-y-hidden"
-      >
-        {isCourtReportVisible && (
-          <CourtReport
-            isVisible={isCourtReportVisible}
-            onClose={hideCourtReport}
+    <>
+      <title>슬램톡 | 농구장 지도</title>
+      <div className="relative h-full w-full">
+        <div className="absolute left-1/2 top-4 z-10 flex w-4/5 max-w-lg -translate-x-1/2 transform items-center justify-center rounded-md bg-background p-1 shadow-md">
+          <input
+            type="text"
+            placeholder="장소 검색"
+            className="flex-grow rounded-md border-0 p-2 focus:outline-none focus:ring-0"
+            value={searchKeyword}
+            onChange={handleSearchChange}
+            onKeyDown={handleKeyDown}
           />
-        )}
-        {isCourtDetailsVisible && (
-          <CourtDetails
-            courtId={selectedCourtId}
-            onClose={() => setIsCourtDetailsVisible(false)}
-          />
-        )}
-      </div>
-      <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
-        <Button
-          isIconOnly
-          aria-label="Current Location"
-          type="button"
-          className="justify-center rounded-full bg-primary shadow-md"
-          onClick={moveToLocation}
+          <button
+            aria-label="Search"
+            type="button"
+            onClick={handleSearch}
+            className="ml-2 mr-2 flex h-full items-center justify-center rounded-md focus:outline-none"
+          >
+            <IoSearchSharp
+              size={20}
+              className="text-gray-400 hover:text-black"
+            />
+          </button>
+        </div>
+        <div
+          ref={mapRef}
+          className="relative h-[calc(100vh-109px)] w-full overflow-y-hidden"
         >
-          <MdMyLocation size={22} className="text-white" />
-        </Button>
-        <Button
-          startContent={<BiSolidLocationPlus size={20} />}
-          aria-label="Court Report"
-          type="button"
-          className="justify-center rounded-full bg-primary text-white shadow-md"
-          onClick={showCourtReport}
-        >
-          농구장 제보
-        </Button>
+          {isCourtReportVisible && (
+            <CourtReport
+              isVisible={isCourtReportVisible}
+              onClose={hideCourtReport}
+            />
+          )}
+          {isCourtDetailsVisible && (
+            <CourtDetails
+              courtId={selectedCourtId}
+              onClose={() => setIsCourtDetailsVisible(false)}
+            />
+          )}
+        </div>
+        <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
+          <Button
+            isIconOnly
+            aria-label="Current Location"
+            type="button"
+            className="justify-center rounded-full bg-primary shadow-md"
+            onClick={moveToLocation}
+          >
+            <MdMyLocation size={22} className="text-white" />
+          </Button>
+          <Button
+            startContent={<BiSolidLocationPlus size={20} />}
+            aria-label="Court Report"
+            type="button"
+            className="justify-center rounded-full bg-primary text-white shadow-md"
+            onClick={showCourtReport}
+          >
+            농구장 제보
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
