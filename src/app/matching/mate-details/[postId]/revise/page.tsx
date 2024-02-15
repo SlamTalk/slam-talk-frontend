@@ -28,8 +28,6 @@ const MatePostRevisePage = () => {
     queryFn: fetchMateDetailsData,
   });
 
-  console.log({ data });
-
   const [title, setTitle] = useState('');
   const [address, setAddress] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(new Date());

@@ -86,7 +86,6 @@ const TeamNewPostPage = () => {
       content: details,
     };
 
-    console.log({ newTeamData });
     createPostMutation.mutate(newTeamData);
     router.push('/matching');
   };

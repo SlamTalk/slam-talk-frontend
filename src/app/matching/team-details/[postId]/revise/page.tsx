@@ -114,7 +114,6 @@ const TeamPostRevisePage = () => {
       content: details,
     };
 
-    console.log({ newTeamData });
     patchPostMutation.mutate(newTeamData);
     router.push(`/matching/team-details/${postId}`);
   };

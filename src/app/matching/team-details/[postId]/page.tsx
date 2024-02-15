@@ -68,8 +68,6 @@ const TeamDetailsPage = () => {
     queryFn: fetchTeamDetailsData,
   });
 
-  console.log({ data });
-
   useEffect(() => {
     if (data) {
       const formatDate = (dateString: string) => {

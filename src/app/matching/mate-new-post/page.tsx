@@ -70,7 +70,6 @@ const MateNewPostPage = () => {
       maxParticipantsOthers: parseInt(unspecifiedCount, 10),
     };
 
-    console.log({ newMateData });
     createPostMutation.mutate(newMateData);
     router.push('/matching');
   };

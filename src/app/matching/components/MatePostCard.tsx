@@ -39,9 +39,11 @@ const MatePostCard: React.FC<MateCardInfo> = ({
     <Card className="m-3">
       <div className="p-4">
         <div className="flex justify-between">
-          <h4 className="text-md font-bold">{title}</h4>
+          <h4 className="text-md max-w-[450px] overflow-hidden text-ellipsis whitespace-nowrap font-bold">
+            {title}
+          </h4>
           <span
-            className={`rounded-full px-2 py-1 text-xs font-semibold text-white ${recruitmentStatus === 'COMPLETED' ? 'bg-danger' : 'bg-success'}`}
+            className={`max-w-[70px] rounded-full px-2 py-1 text-xs font-semibold text-white ${recruitmentStatus === 'COMPLETED' ? 'bg-danger' : 'bg-success'}`}
           >
             {recruitmentStatusText}
           </span>

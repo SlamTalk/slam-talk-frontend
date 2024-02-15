@@ -58,8 +58,6 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
     queryFn: fetchMateData,
   });
 
-  console.log({ data });
-
   const filteredMatePost = Array.isArray(data)
     ? data.filter((post: MatePost) => {
         // 장소 필터
