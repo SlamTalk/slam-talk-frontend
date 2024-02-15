@@ -169,13 +169,15 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
 
               <div className="flex gap-2 align-middle">
                 <WebsiteIcon className="text-gray-400 dark:text-gray-200" />
-                {selectedPlace.website ? (
-                  <Link href={selectedPlace.website} target="_blank">
-                    {selectedPlace.website}
-                  </Link>
-                ) : (
-                  '-'
-                )}
+                <span className="text-blue-500">
+                  {selectedPlace.website ? (
+                    <Link href={selectedPlace.website} target="_blank">
+                      {selectedPlace.website}
+                    </Link>
+                  ) : (
+                    '-'
+                  )}
+                </span>
               </div>
               <div className="flex gap-2 align-middle">
                 <CourtIcon className="text-gray-400 dark:text-gray-200" />
