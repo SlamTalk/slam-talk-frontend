@@ -20,6 +20,7 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nicknameTouched, setNicknameTouched] = useState(false);
+  const [code, setCode] = useState('');
 
   const isNicknameInvalid = useMemo(
     () =>
@@ -84,6 +85,47 @@ const SignUp = () => {
     if (!nicknameTouched) setNicknameTouched(true);
   };
 
+  const handleSendEmailCode = async () => {
+    if (!email) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+    try {
+      const response = await axiosInstance.post('/api/send-mail', {
+        email,
+      });
+      if (response.status === 200) {
+        alert(
+          '이메일 인증 요청을 보냈습니다. 5분 안에 인증코드를 입력해주세요.'
+        );
+      }
+    } catch (error) {
+      alert('이메일 인증 요청에 실패했습니다.');
+    }
+  };
+
+  const handleValidateEmailCode = async () => {
+    if (!email) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+    if (!code) {
+      alert('인증 코드를 입력해주세요.');
+      return;
+    }
+    try {
+      const response = await axiosInstance.get(
+        `/api/mail-check?email=${email}&code=${code}`
+      );
+      if (response.status === 200) {
+        alert('이메일 인증에 성공했습니다!');
+      }
+    } catch (error) {
+      console.log('이메일 인증 실패:', error);
+      alert('이메일 인증에 실패했습니다.');
+    }
+  };
+
   return (
     <>
       <title>슬램톡 | 회원가입</title>
@@ -110,24 +152,57 @@ const SignUp = () => {
           {isNicknameInvalid &&
             '닉네임은 특수 문자 제외 2자 이상 13자 이하이어야 합니다.'}
         </div>
-        <Input
-          radius="sm"
-          isClearable
-          isRequired
-          type="email"
-          labelPlacement="outside"
-          label="이메일"
-          value={email}
-          onChange={handleemailChange}
-          onValueChange={setEmail}
-          onClear={() => console.log('input cleared')}
-          placeholder="로그인시 필요"
-          isInvalid={isEmailInvalid}
-        />
+        <div className="flex items-center gap-3">
+          <Input
+            radius="sm"
+            isClearable
+            isRequired
+            type="email"
+            labelPlacement="outside"
+            label="이메일"
+            value={email}
+            onChange={handleemailChange}
+            onValueChange={setEmail}
+            onClear={() => console.log('input cleared')}
+            placeholder="로그인시 필요"
+            isInvalid={isEmailInvalid}
+          />
+          <Button
+            type="submit"
+            variant="ghost"
+            radius="sm"
+            className="top-3 max-w-xs font-medium"
+            color="danger"
+            onClick={handleSendEmailCode}
+          >
+            이메일 인증 요청
+          </Button>
+        </div>
         <div
           className={`mb-3 h-3 text-sm text-danger ${isEmailInvalid ? 'visible' : 'invisible'}`}
         >
           {isEmailInvalid && '올바른 이메일을 입력해주세요.'}
+        </div>
+        <div className="mb-6 flex items-center justify-end gap-3">
+          <Input
+            radius="sm"
+            isRequired
+            isClearable
+            labelPlacement="outside"
+            label="인증코드"
+            placeholder="인증코드 입력"
+            onValueChange={setCode}
+          />
+          <Button
+            type="submit"
+            variant="ghost"
+            radius="sm"
+            className="top-3 max-w-xs font-medium"
+            color="danger"
+            onClick={handleValidateEmailCode}
+          >
+            확인
+          </Button>
         </div>
         <Input
           radius="sm"
