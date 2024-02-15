@@ -50,7 +50,7 @@ const Page = () => {
   const HandleEditor = async () => {
     const formData = new FormData();
     formData.append(
-      'requsetDTO',
+      'requestDTO',
       new Blob(
         [
           JSON.stringify({
@@ -112,9 +112,7 @@ const Page = () => {
                 >
                   수정
                 </button>
-                <button type="button" className="ml-3 hover:text-primary">
-                  삭제
-                </button>
+
                 <input
                   type="file"
                   multiple

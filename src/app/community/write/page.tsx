@@ -29,7 +29,7 @@ const Page = () => {
   const [content, setContent] = useState('');
   const [tag, setTag] = useState('FREE');
   const [images, setImages] = useState<File[]>([]);
-  const imageInput = useRef<HTMLInputElement>(document.createElement('input'));
+  const imageInput = useRef<HTMLInputElement>(null);
   const [postData, setPostData] = useState<FormData>(new FormData());
 
   const onClickImageUpload = useCallback(() => {
