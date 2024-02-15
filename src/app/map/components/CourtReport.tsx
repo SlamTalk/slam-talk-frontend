@@ -18,7 +18,7 @@ import {
   basketballCourtType,
   basketballCourtSize,
   basketballConvenience,
-} from '../courtReportData';
+} from '@/constants/courtReportData';
 import { CameraIcon } from './icons/CameraIcon';
 
 interface CourtReportProps {
