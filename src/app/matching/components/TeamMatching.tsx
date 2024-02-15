@@ -31,9 +31,13 @@ const cities = [
   '제주',
 ];
 
+const scale = ['2', '3', '4', '5'];
+
 const TeamMatching = () => {
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
+  const [selectedNumberOfMembers, setSelectedNumberOfMembers] =
+    useState<string>('');
 
   const fetchTeamData = async (): Promise<TeamPost[]> => {
     const response = await axiosInstance
@@ -56,7 +60,10 @@ const TeamMatching = () => {
         const matchesLevel = selectedLevel
           ? post.skillLevel.includes(selectedLevel)
           : true;
-        return matchesCity && matchesLevel;
+        const matchesNumberOfMembers = selectedNumberOfMembers
+          ? post.numberOfMembers.toString() === selectedNumberOfMembers
+          : true;
+        return matchesCity && matchesLevel && matchesNumberOfMembers;
       })
     : [];
 
@@ -110,7 +117,22 @@ const TeamMatching = () => {
             ))}
           </Select>
         </div>
-        <div>
+        <div className="flex">
+          <Select
+            aria-label="게임 유형"
+            variant="underlined"
+            placeholder="유형별"
+            size="sm"
+            onChange={(e) => setSelectedNumberOfMembers(e.target.value)}
+            style={{ width: '100px', fontWeight: 'bold' }}
+          >
+            {scale.map((number, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <SelectItem key={index} value={number}>
+                {`${number} vs ${number}`}
+              </SelectItem>
+            ))}
+          </Select>
           <Select
             aria-label="실력"
             variant="underlined"
