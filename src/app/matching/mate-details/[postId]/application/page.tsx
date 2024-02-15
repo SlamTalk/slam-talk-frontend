@@ -6,7 +6,7 @@ import { Button, Select, SelectItem } from '@nextui-org/react';
 import { useMutation } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { postNewApplication } from '@/services/matching/postNewApplication';
-import { ParticipantApplication } from '@/app/matching/components/MateDataType';
+import { ParticipantApplication } from '@/types/matching/mateDataType';
 
 const MateMatchingApplication = () => {
   const [skillLevel, setSkillLevel] = useState('');

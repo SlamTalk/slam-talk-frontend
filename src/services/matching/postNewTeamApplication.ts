@@ -1,14 +1,14 @@
 import { AxiosResponse } from 'axios';
-import { ParticipantApplication } from '@/types/matching/mateDataType';
+import { TeamApplication } from '@/types/matching/teamDataType';
 import axiosInstance from '@/app/api/axiosInstance';
 
-export const postNewApplication = async (
-  newApplication: ParticipantApplication,
-  matePostId: string
+export const postNewTeamApplication = async (
+  newApplication: TeamApplication,
+  teamPostId: string
 ): Promise<AxiosResponse> => {
   try {
     const response = await axiosInstance.post<AxiosResponse>(
-      `/api/mate/${matePostId}/participants/register`,
+      `/api/match/${teamPostId}/apply`,
       newApplication
     );
 
