@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
-import { Snippet, Button } from '@nextui-org/react';
+import { Snippet, Button, Avatar } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import axiosInstance from '@/app/api/axiosInstance';
@@ -31,22 +30,31 @@ const TeamDetailsPage = () => {
 
   const fetchTeamDetailsData = async (): Promise<TeamPost> => {
     const response = await axiosInstance
-      .get(`/api/match/${postId}`)
+      .get(`/api/match/read/${postId}`)
       .then((res) => res.data.results);
 
     return response;
   };
 
-  const deleteRecruitment = async (): Promise<AxiosResponse> => {
-    const response = await axiosInstance.delete<AxiosResponse>(
-      `/api/match/${postId}`
+  // const deleteRecruitment = async (): Promise<AxiosResponse> => {
+  //   const response = await axiosInstance.delete<AxiosResponse>(
+  //     `/api/match/read/${postId}`
+  //   );
+
+  //   return response;
+  // };
+
+  const completeRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.patch<AxiosResponse>(
+      `/api/match/${postId}/complete`
     );
 
     return response;
   };
+
   const handleFinishRecruitment = async () => {
     try {
-      deleteRecruitment();
+      completeRecruitment();
       alert('모집이 완료되었습니다.');
       router.push('/matching');
     } catch (err) {
@@ -59,6 +67,8 @@ const TeamDetailsPage = () => {
     queryKey: ['team', postId],
     queryFn: fetchTeamDetailsData,
   });
+
+  console.log({ data });
 
   useEffect(() => {
     if (data) {
@@ -91,8 +101,8 @@ const TeamDetailsPage = () => {
 
   const writer = {
     userId: data?.writerId,
-    userNickname: data?.nickname,
-    userProfile: null,
+    userNickname: data?.writerNickname,
+    userProfile: data?.writerImageUrl,
   };
   const isWriter = user?.id === writer.userId;
 
@@ -110,13 +120,10 @@ const TeamDetailsPage = () => {
     <div className="mx-[16px] mt-4 rounded-md border-2">
       {/* 유저 프로필 */}
       <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
-        <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray-300">
-          <Image
+        <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gray-300">
+          <Avatar
+            alt="profile-img"
             src={writer.userProfile || '/images/userprofile-default.png'}
-            alt="프로필"
-            width={40}
-            height={40}
-            layout="responsive"
           />
         </div>
         <span className="font-bold">
@@ -125,7 +132,18 @@ const TeamDetailsPage = () => {
       </div>
 
       {/* 모집글 제목 */}
-      <h1 className="mx-6 mb-2 text-xl font-bold">{data?.title}</h1>
+      <div className="mx-6 mb-2 flex items-start">
+        <h1 className="mr-4 max-w-[420px] text-xl font-bold">{data?.title}</h1>
+        <div
+          className={`mt-0.5 rounded-full px-3 py-1 text-xs text-white ${
+            data?.recruitmentStatusType === 'COMPLETED'
+              ? 'bg-danger'
+              : 'bg-success'
+          }`}
+        >
+          {data?.recruitmentStatusType === 'COMPLETED' ? '모집 완료' : '모집중'}
+        </div>
+      </div>
 
       {/* 날짜와 시간 */}
       <div className="mx-6 mb-4 flex items-center">
@@ -170,7 +188,7 @@ const TeamDetailsPage = () => {
       {/* 지원자 리스트 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">지원자 리스트</div>
-        {data?.teamApplicantsDto.map((applicant) => (
+        {data?.teamApplicants.map((applicant) => (
           <TeamApplicantList
             user={user}
             applicant={applicant}
@@ -182,30 +200,32 @@ const TeamDetailsPage = () => {
       {/* 모집 완료, 수정, 지원 버튼 */}
       <div className="flex justify-center py-3">
         {isWriter ? (
-          <>
-            <Button
-              color="primary"
-              className="mx-2"
-              onClick={handleFinishRecruitment}
-            >
-              모집 완료
-            </Button>
-            <Link
-              href={`/matching/team-details/${data?.teamMatchingId}/revise`}
-            >
-              <Button color="default" className="mx-2 bg-gray-400 text-white">
-                모집글 수정
+          data?.recruitmentStatusType !== 'COMPLETED' && (
+            <>
+              <Button
+                color="primary"
+                className="mx-2"
+                onClick={handleFinishRecruitment}
+              >
+                모집 완료
               </Button>
-            </Link>
-          </>
+              <Link
+                href={`/matching/mate-details/${data?.teamMatchingId}/revise`}
+              >
+                <Button color="default" className="mx-2 bg-gray-400 text-white">
+                  모집글 수정
+                </Button>
+              </Link>
+            </>
+          )
         ) : (
-          <Link
-            href={`/matching/team-details/${data?.teamMatchingId}/application`}
+          <Button
+            color="primary"
+            onClick={handleApply}
+            disabled={data?.recruitmentStatusType === 'COMPLETED'}
           >
-            <Button color="primary" onClick={handleApply}>
-              지원하기
-            </Button>
-          </Link>
+            지원하기
+          </Button>
         )}
       </div>
     </div>
