@@ -9,21 +9,50 @@ import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { getChatList } from '@/services/chatting/getChatList';
 import { IChatRoomListItem } from '@/types/chat/\bchatRoomListItem';
+import axiosInstance from '@/app/api/axiosInstance';
+import { getUserData } from '@/services/user/getUserData';
 
 const ChatList = () => {
+  const { data: loginData } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: getUserData,
+  });
+  const createData = {
+    creator_id: loginData?.id,
+    participants: [12],
+    roomType: 'DM',
+    basket_ball_id: 0,
+    name: '',
+  };
+  const postChatRoom = async () => {
+    const res = await axiosInstance.post(
+      `/api/chat/create`,
+      JSON.stringify(createData)
+    );
+    return res.data.results;
+  };
   const { data: myChatList, isLoading } = useQuery<IChatRoomListItem[]>({
     queryKey: ['myChatlist'],
-    queryFn: getChatList,
-    gcTime: 5000,
+    queryFn: async () => {
+      const data = await getChatList();
+      return data;
+    },
   });
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
   if (!myChatList) {
     return (
       <div>
-        nothing
-        <Link href="/chatting/chatroom/12">testroom</Link>
+        <button
+          type="button"
+          onClick={() => {
+            // postChatRoom();
+          }}
+        >
+          testroom
+        </button>
       </div>
     );
   }
@@ -45,10 +74,10 @@ const ChatList = () => {
               />
               <Link href={`/chatting/chatroom/${i.roomId}`}>
                 <div className="text-xl">
-                  {i.roomType === 'DIRECT' && i.partnerId}
-                  {i.roomType === 'BASEKETBALL' && i.courtId}
-                  {i.roomType === 'TOGETHER' && i.courtId}
-                  {i.roomType === 'MATCHING' && i.courtId}
+                  {i.roomType === 'DIRECT' && i.name}
+                  {i.roomType === 'BASEKETBALL' && i.name}
+                  {i.roomType === 'TOGHTHER' && i.name}
+                  {i.roomType === 'MATCHING' && i.name}
                   {!i.roomType && 'testroom'}
                 </div>
                 <div className="text-gray-400">
@@ -62,6 +91,16 @@ const ChatList = () => {
           </div>
         </div>
       ))}
+      <div>
+        <button
+          type="button"
+          onClick={() => {
+            postChatRoom();
+          }}
+        >
+          testroom
+        </button>
+      </div>
     </div>
   );
 };
