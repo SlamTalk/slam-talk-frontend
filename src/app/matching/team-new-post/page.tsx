@@ -4,17 +4,51 @@ import React, { useState } from 'react';
 import { Input, Button, Textarea, Select, SelectItem } from '@nextui-org/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useMutation } from '@tanstack/react-query';
+import axiosInstance from '@/app/api/axiosInstance';
+import { AxiosResponse } from 'axios';
+import { NewTeamData } from '@/types/matching/teamDataType';
+import { useRouter } from 'next/navigation';
 import KakaoMapModal from '../components/KakaoMapModal';
 
 const TeamNewPostPage = () => {
+  const router = useRouter();
+  const [title, setTitle] = useState('');
+  const [teamName, setTeamName] = useState('');
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [address, setAddress] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [startTime, setStartTime] = useState('10:00');
   const [endTime, setEndTime] = useState('11:00');
-  const [gameSize, setGameSize] = useState('');
+  const [gameSize, setGameSize] = useState<number>(0);
   const [skillLevel, setSkillLevel] = useState('');
   const [details, setDetails] = useState('');
+
+  const createTeamPost = async (
+    newTeamData: NewTeamData
+  ): Promise<AxiosResponse> => {
+    try {
+      const response = await axiosInstance.post<AxiosResponse>(
+        '/api/match/register',
+        newTeamData
+      );
+      console.log({ response });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const createPostMutation = useMutation<AxiosResponse, Error, NewTeamData>({
+    mutationFn: createTeamPost,
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: (error: Error) => {
+      console.log(error);
+    },
+  });
 
   const handleOpenMap = () => {
     setIsMapOpen(true);
@@ -30,20 +64,57 @@ const TeamNewPostPage = () => {
   };
 
   const handleGameSizeChange = (value: string) => {
-    setGameSize(value);
+    if (value) setGameSize(parseInt(value, 10));
+    else setGameSize(0);
   };
+
+  const formatDate = (date: Date) => date.toISOString().split('T')[0];
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // 폼 제출 로직 추가...
+
+    const formattedDate = startDate ? formatDate(startDate) : '';
+
+    const newTeamData: NewTeamData = {
+      teamName,
+      title,
+      scheduledDate: formattedDate,
+      startTime,
+      endTime,
+      locationDetail: address,
+      numberOfMembers: gameSize,
+      skillLevel,
+      content: details,
+    };
+
+    console.log({ newTeamData });
+    createPostMutation.mutate(newTeamData);
+    router.push('/matching');
   };
 
   return (
     <form className="relative p-4" onSubmit={handleSubmit}>
+      {/* 제목 필드 */}
       <div className="mb-4">
         <div className="text-md font-bold">제목</div>
-        <Input id="title" placeholder="제목을 입력하세요" />
+        <Input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="제목을 입력하세요"
+        />
       </div>
+      {/* 팀명 필드 */}
+      <div className="mb-4">
+        <div className="text-md mb-2 font-bold">팀명</div>
+        <Input
+          maxLength={30}
+          value={teamName}
+          onChange={(e) => setTeamName(e.target.value)}
+          placeholder="팀명을 입력하세요"
+          height={20}
+        />
+      </div>
+
       {/* 주소 선택 필드 */}
       <div className="mb-2.5">
         <div className="text-md font-bold">장소</div>
@@ -64,10 +135,9 @@ const TeamNewPostPage = () => {
       </div>
 
       {/* 날짜 선택 필드 */}
-
       <div className="mb-2.5">
         <div className="text-md font-bold">날짜</div>
-        <div className="rounded-md bg-gray-100 p-2 dark:bg-default-100">
+        <div className="rounded-medium bg-gray-100 p-2 dark:bg-default-100">
           <DatePicker
             dateFormat="YYYY년 MM월 dd일"
             selected={startDate}
@@ -113,16 +183,16 @@ const TeamNewPostPage = () => {
           className="w-full"
           placeholder="규모를 선택하세요"
         >
-          <SelectItem key="2vs2" value="2vs2">
+          <SelectItem key="2" value="2">
             2vs2
           </SelectItem>
-          <SelectItem key="3vs3" value="3vs3">
+          <SelectItem key="3" value="3">
             3vs3
           </SelectItem>
-          <SelectItem key="4vs4" value="4vs4">
+          <SelectItem key="4" value="4">
             4vs4
           </SelectItem>
-          <SelectItem key="5vs5" value="5vs5">
+          <SelectItem key="5" value="5">
             5vs5
           </SelectItem>
         </Select>
@@ -140,14 +210,14 @@ const TeamNewPostPage = () => {
           <SelectItem key="OVER_BEGINNER" value="OVER_BEGINNER">
             입문 이상
           </SelectItem>
-          <SelectItem key="UNDER_BEGINNER" value="UNDER_BEGINNER">
-            입문 이하
+          <SelectItem key="BEGINNER" value="BEGINNER">
+            입문
           </SelectItem>
           <SelectItem key="OVER_LOW" value="OVER_LOW">
-            초보 이상
+            하수 이상
           </SelectItem>
           <SelectItem key="UNDER_LOW" value="UNDER_LOW">
-            초보 이하
+            하수 이하
           </SelectItem>
           <SelectItem key="OVER_MIDDLE" value="OVER_MIDDLE">
             중수 이상
@@ -155,8 +225,8 @@ const TeamNewPostPage = () => {
           <SelectItem key="UNDER_MIDDLE" value="UNDER_MIDDLE">
             중수 이하
           </SelectItem>
-          <SelectItem key="OVER_HIGH" value="OVER_HIGH">
-            고수 이상
+          <SelectItem key="HIGH" value="HIGH">
+            고수
           </SelectItem>
           <SelectItem key="UNDER_HIGH" value="UNDER_HIGH">
             고수 이하
@@ -173,7 +243,9 @@ const TeamNewPostPage = () => {
         />
       </div>
       <div className="flex justify-center">
-        <Button color="primary">작성 완료</Button>
+        <Button type="submit" color="primary">
+          작성 완료
+        </Button>
       </div>
       <KakaoMapModal
         visible={isMapOpen}

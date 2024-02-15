@@ -16,7 +16,7 @@ const SignUplayout = ({ children }: { children: React.ReactNode }) => {
         aria-label="뒤로가기"
         role="link"
         tabIndex={0}
-        className="absolute left-1 top-px"
+        className="absolute left-4 top-0"
         onClick={handleGoBack}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {

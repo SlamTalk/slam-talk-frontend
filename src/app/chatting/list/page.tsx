@@ -9,9 +9,10 @@ import Link from 'next/link';
 
 const chatList = () => {
   const testList = [
-    { id: '1', title: 'user1', lastMessage: '안녕하세요~~' },
-    { id: '2', title: '한강 공원 농구장', lastMessage: '아직 공사중인가요???' },
+    { id: '6', title: 'test chat room1', lastMessage: '~~' },
+    { id: '3', title: 'test chat room2', lastMessage: '@@' },
   ];
+
   return (
     <div>
       <div className="text-xl">나의 채팅 목록</div>

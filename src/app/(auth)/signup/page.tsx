@@ -9,7 +9,6 @@ import {
 } from '@/utils/validations';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import useAuthStore from '@/store/authStore';
 import { EyeSlashFilledIcon } from '../login/components/EyeSlashFilledIcon';
 import { EyeFilledIcon } from '../login/components/EyeFilledIcon';
 import axiosInstance from '../../api/axiosInstance';
@@ -21,7 +20,6 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nicknameTouched, setNicknameTouched] = useState(false);
-  const { setAccessToken } = useAuthStore();
 
   const isNicknameInvalid = useMemo(
     () =>
@@ -62,9 +60,6 @@ const SignUp = () => {
       });
 
       if (response.status === 200) {
-        const accessToken = response.headers.authorization;
-        setAccessToken(accessToken);
-
         localStorage.setItem('isLoggedIn', 'true');
         alert('감사합니다. 회원가입에 성공했습니다!');
         router.push('/user-info');
@@ -90,81 +85,87 @@ const SignUp = () => {
   };
 
   return (
-    <div className="mt-14 flex h-full w-full flex-col flex-wrap gap-2 p-5 sm:mt-6 md:flex-nowrap">
-      <h1 className="mb-5 text-2xl font-bold sm:text-xl">
-        이메일, 닉네임, 비밀번호를 입력해주세요.
-      </h1>
-      <Input
-        isRequired
-        label="닉네임"
-        maxLength={13}
-        labelPlacement="outside"
-        value={nickname}
-        onChange={handlenicknameChange}
-        onValueChange={setNickname}
-        onClear={() => console.log('input cleared')}
-        placeholder="특수 문자 제외 2자 이상 13자 이하"
-        isInvalid={isNicknameInvalid}
-      />
-      <div
-        className={`mb-3 h-3 text-sm text-danger ${isNicknameInvalid ? 'visible' : 'invisible'}`}
-      >
-        {isNicknameInvalid &&
-          '닉네임은 특수 문자 제외 2자 이상 13자 이하이어야 합니다.'}
+    <>
+      <title>슬램톡 | 회원가입</title>
+      <div className="mt-14 flex h-full w-full flex-col flex-wrap gap-2 p-4 sm:mt-6 md:flex-nowrap">
+        <h1 className="mb-5 text-2xl font-bold sm:text-xl">
+          이메일, 닉네임, 비밀번호를 입력해주세요.
+        </h1>
+        <Input
+          radius="sm"
+          isRequired
+          label="닉네임"
+          maxLength={13}
+          labelPlacement="outside"
+          value={nickname}
+          onChange={handlenicknameChange}
+          onValueChange={setNickname}
+          onClear={() => console.log('input cleared')}
+          placeholder="특수 문자 제외 2자 이상 13자 이하"
+          isInvalid={isNicknameInvalid}
+        />
+        <div
+          className={`mb-3 h-3 text-sm text-danger ${isNicknameInvalid ? 'visible' : 'invisible'}`}
+        >
+          {isNicknameInvalid &&
+            '닉네임은 특수 문자 제외 2자 이상 13자 이하이어야 합니다.'}
+        </div>
+        <Input
+          radius="sm"
+          isClearable
+          isRequired
+          type="email"
+          labelPlacement="outside"
+          label="이메일"
+          value={email}
+          onChange={handleemailChange}
+          onValueChange={setEmail}
+          onClear={() => console.log('input cleared')}
+          placeholder="로그인시 필요"
+          isInvalid={isEmailInvalid}
+        />
+        <div
+          className={`mb-3 h-3 text-sm text-danger ${isEmailInvalid ? 'visible' : 'invisible'}`}
+        >
+          {isEmailInvalid && '올바른 이메일을 입력해주세요.'}
+        </div>
+        <Input
+          radius="sm"
+          isRequired
+          type={isVisible ? 'text' : 'password'}
+          labelPlacement="outside"
+          label="비밀번호"
+          maxLength={16}
+          placeholder="영문, 숫자, 특수문자 포함 8자 이상 16자 이하"
+          endContent={
+            <button
+              className="focus:outline-none"
+              type="button"
+              onClick={handletoggleVisibility}
+            >
+              {isVisible ? (
+                <EyeSlashFilledIcon className="pointer-events-none text-2xl text-default-400" />
+              ) : (
+                <EyeFilledIcon className="pointer-events-none text-2xl text-default-400" />
+              )}
+            </button>
+          }
+          value={password}
+          onChange={handlepasswordChange}
+          onValueChange={setPassword}
+          isInvalid={isPasswordInvalid}
+        />
+        <div
+          className={`mb-7 h-3 text-sm text-danger ${isPasswordInvalid ? 'visible' : 'invisible'}`}
+        >
+          {isPasswordInvalid &&
+            '비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상 16자 이하이어야 합니다.'}
+        </div>
+        <Button size="lg" radius="sm" color="primary" onClick={handleSignup}>
+          가입 완료
+        </Button>
       </div>
-      <Input
-        isClearable
-        isRequired
-        type="email"
-        labelPlacement="outside"
-        label="이메일"
-        value={email}
-        onChange={handleemailChange}
-        onValueChange={setEmail}
-        onClear={() => console.log('input cleared')}
-        placeholder="로그인시 필요"
-        isInvalid={isEmailInvalid}
-      />
-      <div
-        className={`mb-3 h-3 text-sm text-danger ${isEmailInvalid ? 'visible' : 'invisible'}`}
-      >
-        {isEmailInvalid && '올바른 이메일을 입력해주세요.'}
-      </div>
-      <Input
-        isRequired
-        type={isVisible ? 'text' : 'password'}
-        labelPlacement="outside"
-        label="비밀번호"
-        maxLength={16}
-        placeholder="영문, 숫자, 특수문자 포함 8자 이상 16자 이하"
-        endContent={
-          <button
-            className="focus:outline-none"
-            type="button"
-            onClick={handletoggleVisibility}
-          >
-            {isVisible ? (
-              <EyeSlashFilledIcon className="pointer-events-none text-2xl text-default-400" />
-            ) : (
-              <EyeFilledIcon className="pointer-events-none text-2xl text-default-400" />
-            )}
-          </button>
-        }
-        value={password}
-        onChange={handlepasswordChange}
-        onValueChange={setPassword}
-        isInvalid={isPasswordInvalid}
-      />
-      <div
-        className={`mb-7 h-3 text-sm text-danger ${isPasswordInvalid ? 'visible' : 'invisible'}`}
-      >
-        {isPasswordInvalid &&
-          '비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상 16자 이하이어야 합니다.'}
-      </div>
-      <Button size="lg" radius="full" color="primary" onClick={handleSignup}>
-        가입 완료
-      </Button>
-    </div>
+    </>
   );
 };
 

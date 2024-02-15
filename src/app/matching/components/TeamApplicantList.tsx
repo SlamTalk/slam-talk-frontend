@@ -1,23 +1,22 @@
+'use client';
+
 import React from 'react';
 import { Button } from '@nextui-org/react';
+import { UserInfo } from '@/types/user/userInfo';
+import { TeamApplied } from '@/types/matching/teamDataType';
+import { useMutation } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
+import { AxiosResponse } from 'axios';
+import axiosInstance from '@/app/api/axiosInstance';
 
-interface User {
-  userId: number;
-  // 여기에 User 객체의 다른 필요한 타입 정의
-}
-
-interface Applicant {
-  participantTableId: number;
-  participantNickname: string;
-  teamName: string;
-  applyStatus: string;
-  skillLevel: string;
-  participantId: number;
+interface PatchTeamApplicantStatusParams {
+  teamApplicantTableId: number;
+  status: string;
 }
 
 interface TeamApplicantListProps {
-  user: User;
-  applicant: Applicant;
+  user: UserInfo | null | undefined;
+  applicant: TeamApplied;
   isWriter: boolean;
 }
 
@@ -41,70 +40,114 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
   applicant,
   isWriter,
 }) => {
-  const handleAccept = (participantTableId: number) => {
-    // 수락 로직 구현
-    console.log(`Accepted: ${participantTableId}`);
+  const { postId } = useParams();
+
+  const patchTeamApplicantStatus = async ({
+    teamApplicantTableId,
+    status,
+  }: PatchTeamApplicantStatusParams): Promise<AxiosResponse> => {
+    try {
+      const response = await axiosInstance.patch<AxiosResponse>(
+        `/api/match/${postId}/participants/${teamApplicantTableId}?applyStatus=${status}`
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   };
 
-  const handleReject = (participantTableId: number) => {
-    // 거절 로직 구현
-    console.log(`Rejected: ${participantTableId}`);
+  const patchStatusMutation = useMutation<
+    AxiosResponse,
+    Error,
+    PatchTeamApplicantStatusParams
+  >({
+    mutationFn: patchTeamApplicantStatus,
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: (error: Error) => {
+      console.log(error);
+    },
+  });
+
+  const handleAccept = (teamApplicantTableId: number) => {
+    const status = 'ACCEPTED';
+    patchStatusMutation.mutate({
+      teamApplicantTableId,
+      status,
+    });
+    window.location.reload();
   };
 
-  const handleCancel = (participantTableId: number) => {
-    // 취소 로직 구현
-    console.log(`Canceled: ${participantTableId}`);
+  const handleReject = (teamApplicantTableId: number) => {
+    const status = 'REJECTED';
+    patchStatusMutation.mutate({
+      teamApplicantTableId,
+      status,
+    });
+    window.location.reload();
+  };
+
+  const handleCancel = (teamApplicantTableId: number) => {
+    const status = 'CANCELED';
+    patchStatusMutation.mutate({
+      teamApplicantTableId,
+      status,
+    });
+    window.location.reload();
   };
 
   return (
     <div
-      key={applicant.participantTableId}
-      className="mb-2 mt-2 flex justify-between rounded-md bg-gray-300 px-3 py-1"
+      key={applicant.applicantId}
+      className="mb-2 mt-2 flex justify-between rounded-md border-2 px-3 py-1"
     >
       <div className="flex items-center">
         <span
           className="w-30 mr-2 overflow-hidden truncate font-semibold"
           style={{ width: '110px' }}
         >
-          {applicant.participantNickname}
+          {applicant.applicantNickname}
         </span>
         <div className="y-1 mr-2 font-semibold">[{applicant.teamName}]</div>
-        <div className="rounded-md bg-gray-200 px-2 py-1">
+        <div className="rounded-md bg-gray-200 px-2 py-1 dark:bg-gray-400">
           {applicant.skillLevel}
         </div>
       </div>
       <div className="flex items-center">
-        {isWriter && applicant.applyStatus === 'WAITING' ? (
+        {isWriter && applicant.applyStatusType === 'WAITING' ? (
           <>
             <Button
+              className="text-black"
               size="sm"
               color="success"
-              onClick={() => handleAccept(applicant.participantTableId)}
+              onClick={() => handleAccept(applicant.teamApplicantTableId)}
             >
               수락
             </Button>
             <Button
-              className="ml-1"
+              className="ml-1 text-black"
               size="sm"
               color="danger"
-              onClick={() => handleReject(applicant.participantTableId)}
+              onClick={() => handleReject(applicant.teamApplicantTableId)}
             >
               거절
             </Button>
           </>
         ) : (
           <div className="mr-2 text-sm">
-            <span className={getStatusClassName(applicant.applyStatus)}>
-              {applicant.applyStatus}
+            <span className={getStatusClassName(applicant.applyStatusType)}>
+              {applicant.applyStatusType}
             </span>
           </div>
         )}
-        {user.userId === applicant.participantId &&
-          applicant.applyStatus === 'WAITING' && (
+        {user?.id === applicant.applicantId &&
+          applicant.applyStatusType === 'WAITING' && (
             <Button
-              className="bg-gray-400 text-black"
+              className="bg-gray-400"
               size="sm"
-              onClick={() => handleCancel(applicant.participantTableId)}
+              onClick={() => handleCancel(applicant.teamApplicantTableId)}
             >
               취소
             </Button>
