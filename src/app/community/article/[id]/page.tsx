@@ -7,9 +7,10 @@ import { IoChevronBackSharp } from 'react-icons/io5';
 // import { FaHeart } from 'react-icons/fa';
 
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { getCommunityArticle } from '@/services/community/getCommunityArticle';
 import Image from 'next/image';
+import { deleteCommunityArticle } from '@/services/community/deleteCommunityArticle';
 
 // interface ICommunityItem {
 //   id: number;
@@ -46,6 +47,16 @@ const Page = () => {
   //     setComment('');
   //   }
   // };
+  const deleteArticle: any = useMutation({
+    mutationKey: ['deleteArticle'],
+    mutationFn: () => deleteCommunityArticle(params.id),
+    onSuccess: () => {
+      router.push('/community/all');
+    },
+  });
+  const handelDelete = () => {
+    deleteArticle.mutate();
+  };
 
   return (
     <div className="h-[90vh]">
@@ -82,8 +93,8 @@ const Page = () => {
                         key={i}
                         src={i}
                         alt="images"
-                        width={200}
-                        height={200}
+                        width={100}
+                        height={100}
                       />
                     ))
                   : null}
@@ -103,7 +114,11 @@ const Page = () => {
                   >
                     수정
                   </button>
-                  <button type="button" className="ml-3 hover:text-primary">
+                  <button
+                    onClick={handelDelete}
+                    type="button"
+                    className="ml-3 hover:text-primary"
+                  >
                     삭제
                   </button>
                 </div>
