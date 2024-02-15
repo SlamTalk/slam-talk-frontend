@@ -1,140 +1,126 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { Snippet, Button } from '@nextui-org/react';
+import { Snippet, Button, Avatar } from '@nextui-org/react';
+import axiosInstance from '@/app/api/axiosInstance';
+import { useQuery } from '@tanstack/react-query';
+import { useParams, useRouter } from 'next/navigation';
+import { AxiosResponse } from 'axios';
+import LocalStorage from '@/utils/localstorage';
+import { getUserData } from '@/services/user/getUserData';
 import MateApplicantList from '../../components/MateApplicantList';
-
-const post = {
-  matePostId: 1,
-  writerId: 1,
-  title: '농구 같이 하실 분!!',
-  content: '5시에 잠깐 공 던지실 분 구해요~',
-  startScheduledTime: '2024-01-25 17:00',
-  endScheduledTime: '2024-01-25 19:00',
-  locationDetail: '서울 동남구',
-  skillLevel: 'BEGINNER',
-  maxParticipantsCenters: 1,
-  currentParticipantsCenters: 0,
-  maxParticipantsGuards: 0,
-  currentParticipantsGuards: 0,
-  maxParticipantsForwards: 1,
-  currentParticipantsForwards: 0,
-  maxParticipantsOthers: 1,
-  currentParticipantsOthers: 0,
-  participants: [
-    {
-      participantTableId: 1,
-      participantId: 6,
-      participantNickname: '행인1',
-      applyStatus: 'CANCELED',
-      position: 'FORWARD',
-      skillLevel: 'HIGH',
-    },
-    {
-      participantTableId: 2,
-      participantId: 10,
-      participantNickname: '행인2',
-      applyStatus: 'REJECTED',
-      position: 'FORWARD',
-      skillLevel: 'HIGH',
-    },
-    {
-      participantTableId: 3,
-      participantId: 14,
-      participantNickname: '행인3',
-      applyStatus: 'WAITING',
-      position: 'CENTER',
-      skillLevel: 'HIGH',
-    },
-  ],
-};
-
-const writer = {
-  userId: 1,
-  userNickname: '농구하자',
-  userProfile: null,
-};
-
-const user = {
-  userId: 19,
-  userNickname: '스테픈커리',
-  userProfile: null,
-};
-
-const PositionRecruitment = () => (
-  <div>
-    {post.maxParticipantsCenters > 0 && (
-      <div className="mb-1">
-        <span className="font-semibold">센터</span>:{' '}
-        {post.currentParticipantsCenters}/{post.maxParticipantsCenters} 명
-      </div>
-    )}
-    {post.maxParticipantsGuards > 0 && (
-      <div className="mb-1">
-        <span className="font-semibold">가드</span>:{' '}
-        {post.currentParticipantsGuards}/{post.maxParticipantsGuards} 명
-      </div>
-    )}
-    {post.maxParticipantsForwards > 0 && (
-      <div className="mb-1">
-        <span className="font-semibold">포워드</span>:{' '}
-        {post.currentParticipantsForwards}/{post.maxParticipantsForwards} 명
-      </div>
-    )}
-    {post.maxParticipantsOthers > 0 && (
-      <div className="mb-1">
-        <span className="font-semibold">무관</span>:{' '}
-        {post.currentParticipantsOthers}/{post.maxParticipantsOthers} 명
-      </div>
-    )}
-  </div>
-);
+import { MatePost } from '../../../../types/matching/mateDataType';
 
 const MateDetailsPage = () => {
+  const { error, data: user } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: getUserData,
+  });
+
+  if (error) {
+    console.log({ error });
+  }
+
+  const { postId } = useParams();
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
-  const isWriter = user.userId === writer.userId;
+  const router = useRouter();
+
+  const fetchMateDetailsData = async (): Promise<MatePost> => {
+    const response = await axiosInstance
+      .get(`/api/mate/${postId}`)
+      .then((res) => res.data.results);
+
+    return response;
+  };
+
+  const deleteRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.delete<AxiosResponse>(
+      `/api/mate/${postId}`
+    );
+
+    return response;
+  };
+
+  const handleFinishRecruitment = async () => {
+    try {
+      deleteRecruitment();
+      alert('모집이 완료되었습니다.');
+      router.push('/matching');
+    } catch (err) {
+      console.error(err);
+      alert('모집 완료 처리 중 오류가 발생했습니다.');
+    }
+  };
+
+  const { data } = useQuery<MatePost, Error>({
+    queryKey: ['mate', postId],
+    queryFn: fetchMateDetailsData,
+  });
+
+  const writer = {
+    userId: data?.writerId,
+    userNickname: data?.writerNickname,
+    userProfile: null,
+  };
+  const isWriter = user?.id === writer.userId;
 
   useEffect(() => {
-    const formatDate = (dateString: string) => {
-      const [year, month, day] = dateString.split('-');
-      return `${year}년 ${month}월 ${day}일`;
-    };
+    if (data) {
+      const formatDate = (dateString: string) => {
+        const [year, month, day] = dateString.split('-');
+        return `${year}년 ${month}월 ${day}일`;
+      };
 
-    const formatHour = (timeString: string) => {
-      const [hour, minute] = timeString.split(':');
-      return `${hour}시 ${minute}분`;
-    };
+      const formatHour = (timeString: string) => {
+        const [hour, minuteString] = timeString.split(':');
+        const hours = parseInt(hour, 10);
+        const minutes = parseInt(minuteString, 10);
+        const suffix = hours >= 12 ? '오후' : '오전';
+        const formattedHour = ((hours + 11) % 12) + 1;
+        const paddedHour =
+          formattedHour < 10 ? `0${formattedHour}` : formattedHour;
+        const paddedMinute = minutes < 10 ? `0${minutes}` : minutes.toString();
+        return `${suffix} ${paddedHour}시 ${paddedMinute}분`;
+      };
 
-    const [startDate, startTimeString] = post.startScheduledTime.split(' ');
-    const [, endTimeString] = post.endScheduledTime.split(' ');
+      const startDate = formatDate(data.scheduledDate);
+      const startTimeFormatted = formatHour(data.startTime);
+      const endTimeFormatted = formatHour(data.endTime);
 
-    setDate(formatDate(startDate));
-    setStartTime(formatHour(startTimeString));
-    setEndTime(formatHour(endTimeString));
-  }, []);
+      setDate(startDate);
+      setStartTime(startTimeFormatted);
+      setEndTime(endTimeFormatted);
+    }
+  }, [data]);
+
+  const handleApply = () => {
+    const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true')
+      router.push(`/matching/mate-details/${data?.matePostId}/application`);
+    else {
+      alert('로그인 후 이용할 수 있습니다.');
+      router.push(`/login`);
+    }
+  };
 
   return (
-    <div className="mx-[16px] mt-4 rounded-md border-b-1 bg-gray-200 text-black">
+    <div className="mx-[16px] mt-4 rounded-md border-2">
       {/* 유저 프로필 */}
-      <div className="mb-4 flex items-center space-x-4 border-b-2 border-gray-400 px-8 py-2">
+      <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
         <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray-300">
-          <Image
+          <Avatar
+            alt="profile-img"
             src={writer.userProfile || '/images/userprofile-default.png'}
-            alt="프로필"
-            width={40}
-            height={40}
-            layout="responsive"
           />
         </div>
         <span className="font-bold">{writer.userNickname}</span>
       </div>
 
       {/* 모집글 제목 */}
-      <h1 className="mx-6 mb-2 text-xl font-bold">{post.title}</h1>
+      <h1 className="mx-6 mb-2 text-xl font-bold">{data?.title}</h1>
 
       {/* 날짜와 시간 */}
       <div className="mx-6 mb-4 flex items-center">
@@ -147,10 +133,10 @@ const MateDetailsPage = () => {
       {/* 농구장 장소와 지도 페이지 링크 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">농구장 장소</div>
-        <div className="mt-2 flex items-center justify-between rounded-md bg-gray-300">
+        <div className="mt-2 flex items-center justify-between rounded-md border-2">
           <div>
-            <Snippet className="bg-gray-300 text-black" symbol="">
-              {post.locationDetail}
+            <Snippet className="bg-background" symbol="">
+              {data?.locationDetail}
             </Snippet>
           </div>
 
@@ -163,24 +149,32 @@ const MateDetailsPage = () => {
       {/* 모집 정보 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">모집 정보</div>
-        <div className="mt-2 rounded-md bg-gray-300 p-3">
-          <PositionRecruitment />
+        <div className="mt-2 rounded-md border-2 p-3">
+          {data?.positionList.map((position, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <div key={index} className="mb-1">
+              <span className="font-semibold">{position.position}</span>:{' '}
+              {position.currentPosition}/{position.maxPosition} 명
+            </div>
+          ))}
         </div>
       </div>
 
       {/* 상세 내용 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">상세 내용</div>
-        <p className="mb-6 mt-2 h-[100px] overflow-y-auto break-words rounded-md bg-gray-300 p-3">
-          {post.content}
+        <p className="mb-6 mt-2 h-[100px] overflow-y-auto break-words rounded-md border-2 p-3">
+          {data?.content}
         </p>
       </div>
 
       {/* 지원자 리스트 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">지원자 리스트</div>
-        {post.participants.map((participant) => (
+        {data?.participants.map((participant, index) => (
           <MateApplicantList
+            // eslint-disable-next-line react/no-array-index-key
+            key={index}
             user={user}
             applicant={participant}
             isWriter={isWriter}
@@ -190,17 +184,23 @@ const MateDetailsPage = () => {
       <div className="flex justify-center py-3">
         {isWriter ? (
           <>
-            <Button color="primary" className="mx-2">
+            <Button
+              color="primary"
+              className="mx-2"
+              onClick={handleFinishRecruitment}
+            >
               모집 완료
             </Button>
-            <Button color="default" className="mx-2 bg-gray-400">
-              모집글 수정
-            </Button>
+            <Link href={`/matching/mate-details/${data?.matePostId}/revise`}>
+              <Button color="default" className="mx-2 bg-gray-400 text-white">
+                모집글 수정
+              </Button>
+            </Link>
           </>
         ) : (
-          <Link href={`/matching/mate-details/${post.matePostId}/application`}>
-            <Button color="primary">지원하기</Button>
-          </Link>
+          <Button color="primary" onClick={handleApply}>
+            지원하기
+          </Button>
         )}
       </div>
     </div>

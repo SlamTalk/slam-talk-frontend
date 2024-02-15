@@ -12,3 +12,11 @@ export const basketballCourtType = [
 ];
 
 export const basketballCourtSize = [{ value: '풀코트' }, { value: '반코트' }];
+
+export const basketballConvenience = [
+  { value: '샤워실' },
+  { value: '화장실' },
+  { value: '탈의실' },
+  { value: '매점' },
+  { value: '음수대' },
+];

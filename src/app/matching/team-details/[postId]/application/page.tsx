@@ -3,10 +3,38 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Button, Select, SelectItem, Textarea } from '@nextui-org/react';
+import { useParams, useRouter } from 'next/navigation';
+import { TeamApplication } from '@/types/matching/teamDataType';
+import { useMutation } from '@tanstack/react-query';
+import { postNewTeamApplication } from '@/services/matching/postNewTeamApplication';
 
-const MateMatchingApplication = () => {
+const TeamMatchingApplication = () => {
   const [skillLevel, setSkillLevel] = useState('');
   const [teamName, setTeamName] = useState('');
+  const { postId } = useParams();
+  const teamPostId = postId as string;
+  const router = useRouter();
+
+  const newApplyMutation = useMutation({
+    mutationFn: (newApplication: TeamApplication) =>
+      postNewTeamApplication(newApplication, teamPostId),
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: (error: Error) => {
+      console.log(error);
+    },
+  });
+
+  const handleSubmit = () => {
+    newApplyMutation.mutate({
+      applyStatus: 'WAITING',
+      teamName,
+      skillLevel,
+    });
+
+    router.back();
+  };
 
   return (
     <div className="mx-auto mt-20 w-[450px] px-[16px]">
@@ -53,7 +81,7 @@ const MateMatchingApplication = () => {
         </Select>
       </div>
       <div className="mt-10 flex w-full">
-        <Button className="mx-auto" color="primary">
+        <Button className="mx-auto" color="primary" onClick={handleSubmit}>
           지원하기
         </Button>
       </div>
@@ -61,4 +89,4 @@ const MateMatchingApplication = () => {
   );
 };
 
-export default MateMatchingApplication;
+export default TeamMatchingApplication;

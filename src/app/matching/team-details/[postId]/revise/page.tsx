@@ -1,21 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Button, Textarea, Select, SelectItem } from '@nextui-org/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/app/api/axiosInstance';
 import { AxiosResponse } from 'axios';
-import { NewTeamData } from '@/types/matching/teamDataType';
-import { useRouter } from 'next/navigation';
-import KakaoMapModal from '../components/KakaoMapModal';
+import { NewTeamData, TeamPost } from '@/types/matching/teamDataType';
+import { useParams, useRouter } from 'next/navigation';
+import KakaoMapModal from '@/app/matching/components/KakaoMapModal';
 
-const TeamNewPostPage = () => {
+const TeamPostRevisePage = () => {
+  const [isMapOpen, setIsMapOpen] = useState(false);
+  const { postId } = useParams();
   const router = useRouter();
+
+  const fetchTeamDetailsData = async (): Promise<TeamPost> => {
+    const response = await axiosInstance
+      .get(`/api/match/${postId}`)
+      .then((res) => res.data.results);
+
+    return response;
+  };
+
+  const { data } = useQuery<TeamPost, Error>({
+    queryKey: ['mate', postId],
+    queryFn: fetchTeamDetailsData,
+  });
+
   const [title, setTitle] = useState('');
   const [teamName, setTeamName] = useState('');
-  const [isMapOpen, setIsMapOpen] = useState(false);
   const [address, setAddress] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [startTime, setStartTime] = useState('10:00');
@@ -24,15 +39,68 @@ const TeamNewPostPage = () => {
   const [skillLevel, setSkillLevel] = useState('');
   const [details, setDetails] = useState('');
 
-  const createTeamPost = async (
+  useEffect(() => {
+    if (data) {
+      setTitle(data.title);
+      setTeamName(data.teamName);
+      setAddress(data.locationDetail);
+      setStartDate(new Date(data.scheduledDate));
+      setStartTime(data.startTime);
+      setEndTime(data.endTime);
+      setGameSize(data.numberOfMembers);
+      setDetails(data.content);
+
+      // 실력대 설정
+      const skillLevels = new Set(data.skillLevel);
+      let level = '';
+
+      // 실력대에 따른 level 값 설정 로직
+      if (skillLevels.has('고수') && skillLevels.size === 1) {
+        level = 'HIGH';
+      } else if (skillLevels.size === 4) {
+        level = 'OVER_BEGINNER';
+      } else if (
+        skillLevels.has('고수') &&
+        skillLevels.has('중수') &&
+        skillLevels.size === 2
+      ) {
+        level = 'OVER_MIDDLE';
+      } else if (
+        skillLevels.has('중수') &&
+        skillLevels.has('하수') &&
+        skillLevels.size === 2
+      ) {
+        level = 'OVER_LOW';
+      } else if (
+        skillLevels.has('하수') &&
+        skillLevels.has('입문') &&
+        skillLevels.size === 2
+      ) {
+        level = 'UNDER_LOW';
+      } else if (
+        skillLevels.has('중수') &&
+        skillLevels.has('하수') &&
+        skillLevels.has('입문')
+      ) {
+        level = 'UNDER_MIDDLE';
+      } else if (skillLevels.has('고수') && !skillLevels.has('입문')) {
+        level = 'UNDER_HIGH';
+      } else if (skillLevels.size === 1 && skillLevels.has('입문')) {
+        level = 'BEGINNER';
+      }
+      // 실력대 상태 업데이트
+      setSkillLevel(level);
+    }
+  }, [data]);
+
+  const patchTeamPost = async (
     newTeamData: NewTeamData
   ): Promise<AxiosResponse> => {
     try {
-      const response = await axiosInstance.post<AxiosResponse>(
-        '/api/match/register',
+      const response = await axiosInstance.patch<AxiosResponse>(
+        `/api/match/${postId}`,
         newTeamData
       );
-      console.log({ response });
       return response.data;
     } catch (error) {
       console.log(error);
@@ -40,8 +108,8 @@ const TeamNewPostPage = () => {
     }
   };
 
-  const createPostMutation = useMutation<AxiosResponse, Error, NewTeamData>({
-    mutationFn: createTeamPost,
+  const patchPostMutation = useMutation<AxiosResponse, Error, NewTeamData>({
+    mutationFn: patchTeamPost,
     onSuccess: () => {
       console.log('success');
     },
@@ -88,8 +156,8 @@ const TeamNewPostPage = () => {
     };
 
     console.log({ newTeamData });
-    createPostMutation.mutate(newTeamData);
-    router.push('/matching');
+    patchPostMutation.mutate(newTeamData);
+    router.push(`/matching/team-details/${postId}`);
   };
 
   return (
@@ -244,7 +312,7 @@ const TeamNewPostPage = () => {
       </div>
       <div className="flex justify-center">
         <Button type="submit" color="primary">
-          작성 완료
+          수정 완료
         </Button>
       </div>
       <KakaoMapModal
@@ -255,5 +323,4 @@ const TeamNewPostPage = () => {
     </form>
   );
 };
-
-export default TeamNewPostPage;
+export default TeamPostRevisePage;

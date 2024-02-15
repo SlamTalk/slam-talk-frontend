@@ -1,33 +1,129 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input, Button, Textarea, Select, SelectItem } from '@nextui-org/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import { useRouter } from 'next/navigation';
-import { createMatePost } from '@/services/matching/postNewMatePost';
-import KakaoMapModal from '../components/KakaoMapModal';
-import { NewMateData } from '../../../types/matching/mateDataType';
+import { useParams, useRouter } from 'next/navigation';
+import axiosInstance from '@/app/api/axiosInstance';
+import KakaoMapModal from '@/app/matching/components/KakaoMapModal';
+import { MatePost, NewMateData } from '@/types/matching/mateDataType';
 
-const MateNewPostPage = () => {
+const MatePostRevisePage = () => {
   const [isMapOpen, setIsMapOpen] = useState(false);
+  const { postId } = useParams();
+  const router = useRouter();
+  const fetchMateDetailsData = async (): Promise<MatePost> => {
+    const response = await axiosInstance
+      .get(`/api/mate/${postId}`)
+      .then((res) => res.data.results);
+
+    return response;
+  };
+
+  const { data } = useQuery<MatePost, Error>({
+    queryKey: ['mate', postId],
+    queryFn: fetchMateDetailsData,
+  });
+
   const [title, setTitle] = useState('');
   const [address, setAddress] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [startTime, setStartTime] = useState('10:00');
-  const [endTime, setEndTime] = useState('11:00');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
   const [centerCount, setCenterCount] = useState('0');
   const [forwardCount, setForwardCount] = useState('0');
   const [guardCount, setGuardCount] = useState('0');
   const [unspecifiedCount, setUnspecifiedCount] = useState('0');
   const [skillLevel, setSkillLevel] = useState('');
   const [details, setDetails] = useState('');
-  const router = useRouter();
 
-  const createPostMutation = useMutation<AxiosResponse, Error, NewMateData>({
-    mutationFn: createMatePost,
+  useEffect(() => {
+    if (data) {
+      setTitle(data.title);
+      setAddress(data.locationDetail);
+      setStartDate(new Date(data.scheduledDate));
+      setStartTime(data.startTime);
+      setEndTime(data.endTime);
+      setDetails(data.content);
+
+      // 포지션 별 인원 수 설정
+      const positionMap = {
+        FORWARD: setForwardCount,
+        GUARD: setGuardCount,
+        CENTER: setCenterCount,
+        UNSPECIFIED: setUnspecifiedCount,
+      };
+      data.positionList.forEach(({ position, maxPosition }) => {
+        const key = position.toUpperCase();
+        if (key in positionMap) {
+          const setPositionCount = positionMap[key as keyof typeof positionMap];
+          setPositionCount(String(maxPosition));
+        }
+      });
+
+      // 실력대 설정
+      const skillLevels = new Set(data.skillList);
+      let level = '';
+
+      // 실력대에 따른 level 값 설정 로직
+      if (skillLevels.has('고수') && skillLevels.size === 1) {
+        level = 'HIGH';
+      } else if (skillLevels.size === 4) {
+        level = 'OVER_BEGINNER';
+      } else if (
+        skillLevels.has('고수') &&
+        skillLevels.has('중수') &&
+        skillLevels.size === 2
+      ) {
+        level = 'OVER_MIDDLE';
+      } else if (
+        skillLevels.has('중수') &&
+        skillLevels.has('하수') &&
+        skillLevels.size === 2
+      ) {
+        level = 'OVER_LOW';
+      } else if (
+        skillLevels.has('하수') &&
+        skillLevels.has('입문') &&
+        skillLevels.size === 2
+      ) {
+        level = 'UNDER_LOW';
+      } else if (
+        skillLevels.has('중수') &&
+        skillLevels.has('하수') &&
+        skillLevels.has('입문')
+      ) {
+        level = 'UNDER_MIDDLE';
+      } else if (skillLevels.has('고수') && !skillLevels.has('입문')) {
+        level = 'UNDER_HIGH';
+      } else if (skillLevels.size === 1 && skillLevels.has('입문')) {
+        level = 'BEGINNER';
+      }
+      // 실력대 상태 업데이트
+      setSkillLevel(level);
+    }
+  }, [data]);
+
+  const patchMatePost = async (
+    newMateData: NewMateData
+  ): Promise<AxiosResponse> => {
+    try {
+      const response = await axiosInstance.patch<AxiosResponse>(
+        `/api/mate/${postId}`,
+        newMateData
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const patchPostMutation = useMutation<AxiosResponse, Error, NewMateData>({
+    mutationFn: patchMatePost,
     onSuccess: () => {
       console.log('success');
     },
@@ -71,8 +167,8 @@ const MateNewPostPage = () => {
     };
 
     console.log({ newMateData });
-    createPostMutation.mutate(newMateData);
-    router.push('/matching');
+    patchPostMutation.mutate(newMateData);
+    router.push(`/matching/mate-details/${postId}`);
   };
 
   const handleCenterCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,7 +240,7 @@ const MateNewPostPage = () => {
       {/* 날짜 선택 필드 */}
       <div className="mb-2.5">
         <div className="text-md font-bold">날짜</div>
-        <div className="rounded-medium bg-gray-100 p-2 dark:bg-default-100">
+        <div className="rounded-md bg-gray-100 p-2 dark:bg-default-100">
           <DatePicker
             dateFormat="YYYY년 MM월 dd일"
             selected={startDate}
@@ -240,7 +336,7 @@ const MateNewPostPage = () => {
             입문 이상
           </SelectItem>
           <SelectItem key="BEGINNER" value="BEGINNER">
-            입문 이하
+            입문
           </SelectItem>
           <SelectItem key="OVER_LOW" value="OVER_LOW">
             하수 이상
@@ -255,7 +351,7 @@ const MateNewPostPage = () => {
             중수 이하
           </SelectItem>
           <SelectItem key="HIGH" value="HIGH">
-            고수 이상
+            고수
           </SelectItem>
           <SelectItem key="UNDER_HIGH" value="UNDER_HIGH">
             고수 이하
@@ -273,7 +369,7 @@ const MateNewPostPage = () => {
       </div>
       <div className="flex justify-center">
         <Button type="submit" color="primary">
-          작성 완료
+          수정 완료
         </Button>
       </div>
       <KakaoMapModal
@@ -285,4 +381,4 @@ const MateNewPostPage = () => {
   );
 };
 
-export default MateNewPostPage;
+export default MatePostRevisePage;
