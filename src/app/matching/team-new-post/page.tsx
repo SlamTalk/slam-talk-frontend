@@ -20,7 +20,7 @@ const TeamNewPostPage = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [startTime, setStartTime] = useState('10:00');
   const [endTime, setEndTime] = useState('11:00');
-  const [gameSize, setGameSize] = useState<number>(0);
+  const [gameSize, setGameSize] = useState<string>('');
   const [skillLevel, setSkillLevel] = useState('');
   const [details, setDetails] = useState('');
 
@@ -64,8 +64,7 @@ const TeamNewPostPage = () => {
   };
 
   const handleGameSizeChange = (value: string) => {
-    if (value) setGameSize(parseInt(value, 10));
-    else setGameSize(0);
+    setGameSize(value);
   };
 
   const formatDate = (date: Date) => date.toISOString().split('T')[0];
@@ -87,7 +86,6 @@ const TeamNewPostPage = () => {
       content: details,
     };
 
-    console.log({ newTeamData });
     createPostMutation.mutate(newTeamData);
     router.push('/matching');
   };
@@ -207,29 +205,29 @@ const TeamNewPostPage = () => {
           className="w-full"
           placeholder="실력대를 선택하세요"
         >
-          <SelectItem key="OVER_BEGINNER" value="OVER_BEGINNER">
-            입문 이상
-          </SelectItem>
           <SelectItem key="BEGINNER" value="BEGINNER">
             입문
           </SelectItem>
-          <SelectItem key="OVER_LOW" value="OVER_LOW">
-            하수 이상
+          <SelectItem key="OVER_BEGINNER" value="OVER_BEGINNER">
+            입문 이상
           </SelectItem>
           <SelectItem key="UNDER_LOW" value="UNDER_LOW">
             하수 이하
           </SelectItem>
-          <SelectItem key="OVER_MIDDLE" value="OVER_MIDDLE">
-            중수 이상
+          <SelectItem key="OVER_LOW" value="OVER_LOW">
+            하수 이상
           </SelectItem>
           <SelectItem key="UNDER_MIDDLE" value="UNDER_MIDDLE">
             중수 이하
           </SelectItem>
-          <SelectItem key="HIGH" value="HIGH">
-            고수
+          <SelectItem key="OVER_MIDDLE" value="OVER_MIDDLE">
+            중수 이상
           </SelectItem>
           <SelectItem key="UNDER_HIGH" value="UNDER_HIGH">
             고수 이하
+          </SelectItem>
+          <SelectItem key="HIGH" value="HIGH">
+            고수
           </SelectItem>
         </Select>
       </div>
