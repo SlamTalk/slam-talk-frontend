@@ -72,6 +72,11 @@ const CourtReport: React.FC<CourtReportProps> = ({
       formData.append('image', file);
     }
 
+    if (data.convenience?.length === 0) {
+      // eslint-disable-next-line no-param-reassign
+      data.convenience = '';
+    }
+
     const finalData = {
       ...data,
       address: location.address,
@@ -85,24 +90,12 @@ const CourtReport: React.FC<CourtReportProps> = ({
         type: 'application/json',
       })
     );
-    // for (const pair of formData.entries()) {
-    //   console.log(pair[0], pair[1]);
-    // }
 
-    // const blob = new Blob([JSON.stringify(finalData)], {
-    //   type: 'application/json',
-    // });
-
-    // FileReader를 사용하여 Blob의 내용을 읽습니다.
-    // const reader = new FileReader();
-    // reader.onload = function () {
-    //   console.log('Blob data:', reader.result);
-    // };
-    // reader.readAsText(blob);
-
-    // console.log(formData);
-
-    await axiosInstance.post('/api/map/report', formData);
+    await axiosInstance.post('/api/map/report', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
   };
 
   const MAX_FILE_SIZE_MB = 1;
