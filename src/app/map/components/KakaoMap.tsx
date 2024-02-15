@@ -235,6 +235,9 @@ const KakaoMap = () => {
 
               setLocation(courtInfo);
               setIsCourtReportVisible(true);
+              setMode(false);
+              newMarker.setMap(null);
+              overlay.setMap(null);
             } else {
               alert('주소를 가져오지 못했습니다.');
             }
@@ -245,7 +248,7 @@ const KakaoMap = () => {
       setTimeout(() => {
         newMarker.setMap(null);
         overlay.setMap(null);
-      }, 40000);
+      }, 30000);
     };
 
     if (mode === true) {
