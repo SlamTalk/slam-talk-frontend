@@ -31,7 +31,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
     },
   });
   const { data: writerUserInfo } = useQuery<OtherUserInfo | null>({
-    queryKey: ['getWriterInfo'],
+    queryKey: [`getWriterInfo${userId}`],
     queryFn: () => getOtherUserData({ userId }),
   });
   const { data: loginUserData } = useQuery({

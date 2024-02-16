@@ -34,7 +34,6 @@ const Page = () => {
     router.push(`/community/article/${id}`);
   };
   useEffect(() => {
-    console.log({ isLoggedIn });
     if (isFocus) {
       setTimeout(() => {
         setSearchKey(inputData);
