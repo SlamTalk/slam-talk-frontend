@@ -18,14 +18,14 @@ const TeamPostRevisePage = () => {
 
   const fetchTeamDetailsData = async (): Promise<TeamPost> => {
     const response = await axiosInstance
-      .get(`/api/match/${postId}`)
+      .get(`/api/match/read/${postId}`)
       .then((res) => res.data.results);
 
     return response;
   };
 
   const { data } = useQuery<TeamPost, Error>({
-    queryKey: ['mate', postId],
+    queryKey: ['team', postId],
     queryFn: fetchTeamDetailsData,
   });
 
@@ -35,7 +35,7 @@ const TeamPostRevisePage = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [startTime, setStartTime] = useState('10:00');
   const [endTime, setEndTime] = useState('11:00');
-  const [gameSize, setGameSize] = useState<number>(0);
+  const [gameSize, setGameSize] = useState<string>('');
   const [skillLevel, setSkillLevel] = useState('');
   const [details, setDetails] = useState('');
 
@@ -48,48 +48,8 @@ const TeamPostRevisePage = () => {
       setStartTime(data.startTime);
       setEndTime(data.endTime);
       setGameSize(data.numberOfMembers);
+      setSkillLevel(data.skillLevel);
       setDetails(data.content);
-
-      // 실력대 설정
-      const skillLevels = new Set(data.skillLevel);
-      let level = '';
-
-      // 실력대에 따른 level 값 설정 로직
-      if (skillLevels.has('고수') && skillLevels.size === 1) {
-        level = 'HIGH';
-      } else if (skillLevels.size === 4) {
-        level = 'OVER_BEGINNER';
-      } else if (
-        skillLevels.has('고수') &&
-        skillLevels.has('중수') &&
-        skillLevels.size === 2
-      ) {
-        level = 'OVER_MIDDLE';
-      } else if (
-        skillLevels.has('중수') &&
-        skillLevels.has('하수') &&
-        skillLevels.size === 2
-      ) {
-        level = 'OVER_LOW';
-      } else if (
-        skillLevels.has('하수') &&
-        skillLevels.has('입문') &&
-        skillLevels.size === 2
-      ) {
-        level = 'UNDER_LOW';
-      } else if (
-        skillLevels.has('중수') &&
-        skillLevels.has('하수') &&
-        skillLevels.has('입문')
-      ) {
-        level = 'UNDER_MIDDLE';
-      } else if (skillLevels.has('고수') && !skillLevels.has('입문')) {
-        level = 'UNDER_HIGH';
-      } else if (skillLevels.size === 1 && skillLevels.has('입문')) {
-        level = 'BEGINNER';
-      }
-      // 실력대 상태 업데이트
-      setSkillLevel(level);
     }
   }, [data]);
 
@@ -132,8 +92,7 @@ const TeamPostRevisePage = () => {
   };
 
   const handleGameSizeChange = (value: string) => {
-    if (value) setGameSize(parseInt(value, 10));
-    else setGameSize(0);
+    setGameSize(value);
   };
 
   const formatDate = (date: Date) => date.toISOString().split('T')[0];
@@ -155,7 +114,6 @@ const TeamPostRevisePage = () => {
       content: details,
     };
 
-    console.log({ newTeamData });
     patchPostMutation.mutate(newTeamData);
     router.push(`/matching/team-details/${postId}`);
   };
@@ -246,6 +204,7 @@ const TeamPostRevisePage = () => {
       <div className="mb-2.5">
         <div className="text-md font-bold">규모</div>
         <Select
+          defaultSelectedKeys={data?.numberOfMembers}
           value={gameSize}
           onChange={(e) => handleGameSizeChange(e.target.value)}
           className="w-full"
@@ -270,6 +229,7 @@ const TeamPostRevisePage = () => {
       <div className="mb-2.5">
         <div className="text-md font-bold">원하는 실력대</div>
         <Select
+          defaultSelectedKeys={data?.skillLevel}
           value={skillLevel}
           onChange={(e) => setSkillLevel(e.target.value)}
           className="w-full"

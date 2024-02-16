@@ -48,7 +48,7 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
   }: PatchTeamApplicantStatusParams): Promise<AxiosResponse> => {
     try {
       const response = await axiosInstance.patch<AxiosResponse>(
-        `/api/match/${postId}/participants/${teamApplicantTableId}?applyStatus=${status}`
+        `/api/match/${postId}/apply/${teamApplicantTableId}?applyStatus=${status}`
       );
       return response.data;
     } catch (error) {

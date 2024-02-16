@@ -70,7 +70,6 @@ const MateNewPostPage = () => {
       maxParticipantsOthers: parseInt(unspecifiedCount, 10),
     };
 
-    console.log({ newMateData });
     createPostMutation.mutate(newMateData);
     router.push('/matching');
   };
@@ -236,29 +235,29 @@ const MateNewPostPage = () => {
           placeholder="실력대를 선택하세요"
           aria-label="원하는 실력대 선택"
         >
+          <SelectItem key="BEGINNER" value="BEGINNER">
+            입문
+          </SelectItem>
           <SelectItem key="OVER_BEGINNER" value="OVER_BEGINNER">
             입문 이상
-          </SelectItem>
-          <SelectItem key="BEGINNER" value="BEGINNER">
-            입문 이하
-          </SelectItem>
-          <SelectItem key="OVER_LOW" value="OVER_LOW">
-            하수 이상
           </SelectItem>
           <SelectItem key="UNDER_LOW" value="UNDER_LOW">
             하수 이하
           </SelectItem>
-          <SelectItem key="OVER_MIDDLE" value="OVER_MIDDLE">
-            중수 이상
+          <SelectItem key="OVER_LOW" value="OVER_LOW">
+            하수 이상
           </SelectItem>
           <SelectItem key="UNDER_MIDDLE" value="UNDER_MIDDLE">
             중수 이하
           </SelectItem>
-          <SelectItem key="HIGH" value="HIGH">
-            고수 이상
+          <SelectItem key="OVER_MIDDLE" value="OVER_MIDDLE">
+            중수 이상
           </SelectItem>
           <SelectItem key="UNDER_HIGH" value="UNDER_HIGH">
             고수 이하
+          </SelectItem>
+          <SelectItem key="HIGH" value="HIGH">
+            고수
           </SelectItem>
         </Select>
       </div>

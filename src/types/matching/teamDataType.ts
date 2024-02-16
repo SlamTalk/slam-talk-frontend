@@ -22,7 +22,7 @@ export interface NewTeamData {
   startTime: string;
   endTime: string;
   locationDetail: string;
-  numberOfMembers: number;
+  numberOfMembers: string;
   skillLevel: string;
   content: string;
 }
@@ -30,19 +30,21 @@ export interface NewTeamData {
 export interface TeamPost {
   teamMatchingId: number;
   teamName: string;
-  nickname: string;
   title: string;
   writerId: number;
+  writerNickname: string;
+  writerImageUrl: string;
   content: string;
   locationDetail: string;
-  numberOfMembers: number;
-  skillLevel: string[];
+  numberOfMembers: string;
+  skillLevel: string;
+  skillLevelList: string[];
   scheduledDate: string;
   startTime: string;
   endTime: string;
   createdAt: string;
   recruitmentStatusType: string;
-  teamApplicantsDto: TeamApplied[];
+  teamApplicants: TeamApplied[];
 }
 
 export interface TeamData {
@@ -59,5 +61,6 @@ export interface TeamCardInfo {
   startTime: string;
   location: string;
   level: string[];
-  numberOfMembers: number;
+  numberOfMembers: string;
+  recruitmentStatusType: string;
 }
