@@ -26,6 +26,9 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   const patchArticleComment = useMutation({
     mutationKey: ['patchComment'],
     mutationFn: () => patchComment(communityId, editedComment, commentId),
+    onSuccess: () => {
+      window.location.reload();
+    },
   });
   const { data: writerUserInfo } = useQuery<OtherUserInfo | null>({
     queryKey: ['getWriterInfo'],
@@ -41,16 +44,17 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       console.log(editedComment);
       patchArticleComment.mutate();
       setEditToggle(false);
-      window.location.reload();
     }
   };
   const deleteArticleComment = useMutation({
     mutationKey: ['deleteComment'],
     mutationFn: () => deleteComment(communityId, commentId),
+    onSuccess: () => {
+      window.location.reload();
+    },
   });
   const handleDelete = () => {
     deleteArticleComment.mutate();
-    window.location.reload();
   };
   return (
     <div
