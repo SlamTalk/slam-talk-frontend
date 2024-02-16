@@ -4,14 +4,12 @@ import React, { useMemo, useState } from 'react';
 import { Button, Input } from '@nextui-org/react';
 import { validateEmail, validatePassword } from '@/utils/validations';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import axiosInstance from '@/app/api/axiosInstance';
 import { AxiosError } from 'axios';
 import { EyeSlashFilledIcon } from '../components/EyeSlashFilledIcon';
 import { EyeFilledIcon } from '../components/EyeFilledIcon';
 
 const EmailLogin = () => {
-  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -42,7 +40,13 @@ const EmailLogin = () => {
         axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         localStorage.setItem('isLoggedIn', 'true');
         alert('로그인 성공!');
-        router.push('/');
+        const currentUrl = window.location.href;
+        const domain = new URL(currentUrl).origin;
+        if (domain === 'http://localhost:3000') {
+          window.location.href = 'http://localhost:3000';
+        } else {
+          window.location.href = 'https://slam-talk.vercel.app';
+        }
       }
     } catch (error) {
       console.log('로그인 실패:', error);
