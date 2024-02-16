@@ -1,7 +1,11 @@
 import { deleteComment } from '@/services/community/comment/deleteComment';
 import { patchComment } from '@/services/community/comment/patchComment';
-import { useMutation } from '@tanstack/react-query';
+
+import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
+import { getOtherUserData } from '@/services/user/getOtherUserData';
+import { OtherUserInfo } from '@/types/user/otherUserInfo';
+import { Avatar } from '@nextui-org/react';
 
 interface ICommentItemProps {
   commentId: number;
@@ -21,6 +25,10 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   const patchArticleComment = useMutation({
     mutationKey: ['patchComment'],
     mutationFn: () => patchComment(communityId, editedComment, commentId),
+  });
+  const { data: writerUserInfo } = useQuery<OtherUserInfo | null>({
+    queryKey: ['getWriterInfo'],
+    queryFn: () => getOtherUserData({ userId }),
   });
   const handleEdit = () => {
     setEditToggle(!editToggle);
@@ -44,8 +52,11 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       key={commentId}
       className="border-gray mt-2 flex items-center border-b-2"
     >
-      <p className="m-2 w-14 text-sm">{commentId}</p>
-      <p>{userId}</p>
+      <div aria-label="작성자 정보">
+        <Avatar src={writerUserInfo?.imageUrl} />
+        <p className="text-center">{writerUserInfo?.nickname}</p>
+      </div>
+
       {editToggle ? (
         <input
           className="ml-2 mt-2 h-10 w-[750px]"
@@ -55,7 +66,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
           }}
         />
       ) : (
-        <h2 className="ml-2 mt-2 h-10 w-[750px]">{content}</h2>
+        <h2 className="ml-2 ms-5 mt-2 h-10 w-[750px]">{content}</h2>
       )}
       <div aria-label="comment button group" className="w-40">
         <button
