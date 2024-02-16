@@ -35,12 +35,11 @@ const Header = () => {
       <div className="flex gap-2 pr-4">
         <ThemeSwitcher />
         <div className="mr-2">
-          {(isLoggedIn === 'true' || data) && (
+          {isLoggedIn === 'true' || data ? (
             <Link href="/my-page">
               <PiUserCircle aria-label="유저" size={26} />
             </Link>
-          )}
-          {isLoggedIn === 'false' && (
+          ) : (
             <Link href="/login">
               <LuLogIn aria-label="로그인" size={24} />
             </Link>
