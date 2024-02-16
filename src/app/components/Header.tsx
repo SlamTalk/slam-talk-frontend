@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import LocalStorage from '@/utils/localstorage';
 import { Anton } from 'next/font/google';
 import { PiBell, PiUserCircle } from 'react-icons/pi';
 import { LuLogIn } from 'react-icons/lu';
@@ -14,9 +13,7 @@ import ThemeSwitcher from './ThemeSwitcher';
 const anton = Anton({ weight: '400', subsets: ['latin'] });
 
 const Header = () => {
-  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
-
-  const { error, data } = useQuery({
+  const { error, data: user } = useQuery({
     queryKey: ['tokenData'],
     queryFn: postTokenRefresh,
   });
@@ -35,7 +32,7 @@ const Header = () => {
       <div className="flex gap-2 pr-4">
         <ThemeSwitcher />
         <div className="mr-2">
-          {isLoggedIn === 'true' || data ? (
+          {user ? (
             <Link href="/my-page">
               <PiUserCircle aria-label="유저" size={26} />
             </Link>
