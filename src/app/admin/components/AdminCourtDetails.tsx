@@ -1,0 +1,161 @@
+import React from 'react';
+import Image from 'next/image';
+import { Button } from '@nextui-org/react';
+import { IoIosClose } from 'react-icons/io';
+import axiosInstance from '@/app/api/axiosInstance';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosResponse } from 'axios';
+import {
+  AdminCourtDetailsProps,
+  CourtData,
+  PutCourtData,
+} from './adminDataType';
+
+const AdminCourtDetails: React.FC<AdminCourtDetailsProps> = ({
+  data,
+  onClose,
+}) => {
+  const putReportedCourt = async (acceptedCourtData: PutCourtData) => {
+    const response = await axiosInstance.put(
+      `/api/admin/update/${data.courtId}`,
+      acceptedCourtData
+    );
+    console.log({ response });
+    return response;
+  };
+
+  const convertToPutCourtData = (courtData: CourtData): PutCourtData => {
+    const {
+      courtType,
+      indoorOutdoor,
+      courtSize,
+      hoopCount,
+      nightLighting,
+      openingHours,
+      fee,
+      parkingAvailable,
+      phoneNum,
+      website,
+      convenience, // 이 부분을 배열에서 문자열로 변환
+      additionalInfo,
+      photoUrl,
+      informerId,
+    } = courtData;
+
+    return {
+      courtType,
+      indoorOutdoor,
+      courtSize,
+      hoopCount,
+      nightLighting,
+      openingHours,
+      fee,
+      parkingAvailable,
+      phoneNum,
+      website,
+      convenience: convenience.join(', '), // 배열을 콤마로 구분된 문자열로 변환
+      additionalInfo,
+      photoUrl,
+      informerId,
+    };
+  };
+
+  const putReportCourtMutation = useMutation<
+    AxiosResponse,
+    Error,
+    PutCourtData
+  >({
+    mutationFn: putReportedCourt,
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: (error: Error) => {
+      console.log(error);
+    },
+  });
+
+  const onAccept = () => {
+    const newData = convertToPutCourtData(data);
+    putReportCourtMutation.mutate(newData);
+    onClose();
+  };
+
+  const onCancel = () => {
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 p-4 ">
+      <div className="max-h-[800px] min-w-[400px] overflow-y-auto rounded-lg bg-background shadow-lg">
+        <div className="relative">
+          {/* 코트 상세 정보 제목 및 닫기 버튼 */}
+          <div className="flex items-center justify-between p-4">
+            <h2 className="flex-grow text-center text-xl font-bold">
+              코트 상세 정보
+            </h2>
+            <Button
+              isIconOnly
+              className="ml-4"
+              onClick={onClose}
+              aria-label="Close"
+            >
+              <IoIosClose
+                size={30}
+                className="text-gray-600 dark:text-gray-200"
+              />
+            </Button>
+          </div>
+          <div className="relative h-60 w-full">
+            {data.photoUrl ? (
+              <Image
+                layout="fill"
+                alt="농구장 사진"
+                src={data.photoUrl}
+                objectFit="cover"
+              />
+            ) : (
+              <Image
+                layout="fill"
+                alt="농구장 기본 사진"
+                src="/images/han-river-park-court.png"
+                objectFit="cover"
+              />
+            )}
+          </div>
+        </div>
+        <div className="p-4">
+          <h2 className="text-xl font-bold">{data.courtName}</h2>
+          <p>{data.address}</p>
+          <p>코트 종류: {data.courtType}</p>
+          <p>실내/야외: {data.indoorOutdoor}</p>
+          <p>코트 사이즈: {data.courtSize}</p>
+          <p>골대 수: {data.hoopCount}</p>
+          <p>야간 조명: {data.nightLighting ? '있음' : '없음'}</p>
+          <p>개방 시간: {data.openingHours ? '24시간' : '제한 있음'}</p>
+          <p>사용료: {data.fee ? '유료' : '무료'}</p>
+          <p>주차 가능: {data.parkingAvailable ? '가능' : '불가능'}</p>
+          <p>전화번호: {data.phoneNum || '-'}</p>
+          <p>
+            웹사이트:{' '}
+            {data.website ? (
+              <a href={data.website} target="_blank" rel="noopener noreferrer">
+                {data.website}
+              </a>
+            ) : (
+              '-'
+            )}
+          </p>
+          <p>편의 시설: {data.convenience.join(', ')}</p>
+          <p>추가 정보: {data.additionalInfo || '없음'}</p>
+        </div>
+        {/* 수락 및 취소 버튼 */}
+        <div className="flex justify-end space-x-2 p-4">
+          <Button onClick={onAccept}>승인</Button>
+          <Button onClick={onCancel}>취소</Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AdminCourtDetails;
