@@ -8,7 +8,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { getChatList } from '@/services/chatting/getChatList';
-import { IChatRoomListItem } from '@/types/chat/\bchatRoomListItem';
+import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
 import axiosInstance from '@/app/api/axiosInstance';
 import { getUserData } from '@/services/user/getUserData';
 
