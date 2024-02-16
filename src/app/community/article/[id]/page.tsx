@@ -11,6 +11,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { getCommunityArticle } from '@/services/community/getCommunityArticle';
 import Image from 'next/image';
 import { deleteCommunityArticle } from '@/services/community/deleteCommunityArticle';
+import { postComment } from '@/services/community/comment/postComment';
+import CommentList from '../../components/commentList';
 
 // interface ICommunityItem {
 //   id: number;
@@ -34,19 +36,28 @@ const Page = () => {
     queryKey: ['articleData'],
     queryFn: () => getCommunityArticle(params.id),
   });
-
+  const [commentData, setCommentData] = useState({
+    communityId: 0,
+    content: '',
+  });
   const [comment, setComment] = useState('');
-  // const CommentHandler = () => {
-  //   if (comment !== '') {
-  //     const newComment = {
-  //       id: 2,
-  //       postId: params.id,
-  //       userId: 'user123',
-  //       content: comment,
-  //     };
-  //     setComment('');
-  //   }
-  // };
+  const postCommunityComment: any = useMutation({
+    mutationKey: ['postComment'],
+    mutationFn: () => postComment(commentData),
+  });
+  const handlePostComment = () => {
+    if (comment !== '') {
+      setCommentData({
+        communityId: +params.id,
+        content: comment,
+      });
+      postCommunityComment.mutate();
+
+      setComment('');
+
+      window.location.reload();
+    }
+  };
   const deleteArticle: any = useMutation({
     mutationKey: ['deleteArticle'],
     mutationFn: () => deleteCommunityArticle(params.id),
@@ -54,6 +65,7 @@ const Page = () => {
       router.push('/community/all');
     },
   });
+
   const handelDelete = () => {
     deleteArticle.mutate();
   };
@@ -136,11 +148,12 @@ const Page = () => {
             />
             <Button
               className="w-[10px] hover:bg-primary hover:text-white"
-              // onClick={CommentHandler}
+              onClick={handlePostComment}
             >
               입력
             </Button>
           </div>
+          <CommentList />
         </div>
       ) : (
         <p>404 not found</p>

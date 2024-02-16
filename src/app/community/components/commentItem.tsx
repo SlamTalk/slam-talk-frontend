@@ -1,63 +1,74 @@
+import { deleteComment } from '@/services/community/comment/deleteComment';
+import { patchComment } from '@/services/community/comment/patchComment';
+import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 
 interface ICommentItemProps {
-  comment: {
-    id: string;
-    postId: string;
-    userId: string;
-    content: string;
-  };
-  onEdit: (id: string, editedComment: string) => void;
-  onDelete: (id: string) => void;
+  commentId: number;
+  communityId: number;
+  userId: number;
+  content: string;
 }
 
 const CommentItem: React.FC<ICommentItemProps> = ({
-  comment,
-  onEdit,
-  onDelete,
+  userId,
+  communityId,
+  content,
+  commentId,
 }) => {
   const [editToggle, setEditToggle] = useState(false);
-  const [editedComment, setEditedComment] = useState(comment.content);
+  const [editedComment, setEditedComment] = useState('');
+  const patchArticleComment = useMutation({
+    mutationKey: ['patchComment'],
+    mutationFn: () => patchComment(communityId, editedComment, commentId),
+  });
   const handleEdit = () => {
     setEditToggle(!editToggle);
-    if (editToggle) {
-      onEdit(comment.id, editedComment);
-      setEditedComment('');
+    if (editToggle && editedComment !== '') {
+      console.log(editedComment);
+      patchArticleComment.mutate();
       setEditToggle(false);
+      window.location.reload();
     }
   };
+  const deleteArticleComment = useMutation({
+    mutationKey: ['deleteComment'],
+    mutationFn: () => deleteComment(communityId, commentId),
+  });
   const handleDelete = () => {
-    onDelete(comment.id);
+    deleteArticleComment.mutate();
+    window.location.reload();
   };
   return (
     <div
-      key={comment.id}
+      key={commentId}
       className="border-gray mt-2 flex items-center border-b-2"
     >
-      <p className="m-2 w-14 text-sm">{comment.userId}</p>
+      <p className="m-2 w-14 text-sm">{commentId}</p>
+      <p>{userId}</p>
       {editToggle ? (
         <input
-          placeholder={comment.content}
-          value={editedComment}
+          className="ml-2 mt-2 h-10 w-[750px]"
+          placeholder={content}
           onChange={(e) => {
             setEditedComment(e.target.value);
           }}
         />
       ) : (
-        <h2 className="ml-2 mt-2 h-10 w-[750px]">{comment.content}</h2>
+        <h2 className="ml-2 mt-2 h-10 w-[750px]">{content}</h2>
       )}
       <div aria-label="comment button group" className="w-40">
         <button
+          onClick={handleEdit}
           className="text-gray-600 hover:text-primary"
           type="button"
-          onClick={handleEdit}
         >
           수정
         </button>
         <button
+          onClick={handleDelete}
           type="button"
           className="mx-3 text-gray-600 hover:text-primary"
-          onClick={handleDelete}
         >
           삭제
         </button>
