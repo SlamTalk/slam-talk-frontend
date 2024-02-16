@@ -1,7 +1,7 @@
 import { useParams } from 'next/navigation';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getComment } from '@/services/community/comment/getCommnet';
+import { getComment } from '@/services/community/comment/getCommentt';
 import CommentItem from './commentItem';
 
 interface ICommentItemProps {

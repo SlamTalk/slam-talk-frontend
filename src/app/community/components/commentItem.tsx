@@ -1,3 +1,4 @@
+import { deleteComment } from '@/services/community/comment/deleteComment';
 import { patchComment } from '@/services/community/comment/patchComment';
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
@@ -21,14 +22,22 @@ const CommentItem: React.FC<ICommentItemProps> = ({
     mutationKey: ['patchComment'],
     mutationFn: () => patchComment(communityId, editedComment, commentId),
   });
-  const handleEdit = async () => {
+  const handleEdit = () => {
     setEditToggle(!editToggle);
     if (editToggle && editedComment !== '') {
       console.log(editedComment);
-      await patchArticleComment.mutate();
+      patchArticleComment.mutate();
       setEditToggle(false);
       window.location.reload();
     }
+  };
+  const deleteArticleComment = useMutation({
+    mutationKey: ['deleteComment'],
+    mutationFn: () => deleteComment(communityId, commentId),
+  });
+  const handleDelete = () => {
+    deleteArticleComment.mutate();
+    window.location.reload();
   };
   return (
     <div
@@ -56,7 +65,11 @@ const CommentItem: React.FC<ICommentItemProps> = ({
         >
           수정
         </button>
-        <button type="button" className="mx-3 text-gray-600 hover:text-primary">
+        <button
+          onClick={handleDelete}
+          type="button"
+          className="mx-3 text-gray-600 hover:text-primary"
+        >
           삭제
         </button>
       </div>
