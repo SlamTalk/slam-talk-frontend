@@ -12,6 +12,7 @@ import { getCommunityArticle } from '@/services/community/getCommunityArticle';
 import Image from 'next/image';
 import { deleteCommunityArticle } from '@/services/community/deleteCommunityArticle';
 import { postComment } from '@/services/community/comment/postComment';
+import CommentList from '../../components/commentList';
 
 // interface ICommunityItem {
 //   id: number;
@@ -51,7 +52,10 @@ const Page = () => {
         content: comment,
       });
       postCommunityComment.mutate();
+
       setComment('');
+
+      window.location.reload();
     }
   };
   const deleteArticle: any = useMutation({
@@ -149,6 +153,7 @@ const Page = () => {
               입력
             </Button>
           </div>
+          <CommentList />
         </div>
       ) : (
         <p>404 not found</p>
