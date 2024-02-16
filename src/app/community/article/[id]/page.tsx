@@ -59,9 +59,6 @@ const Page = () => {
         content: comment,
       });
       postCommunityComment.mutate();
-
-      setComment('');
-
       window.location.reload();
     }
   };
@@ -146,7 +143,8 @@ const Page = () => {
               </div>
             </div>
           </div>
-          <div className="flex">
+
+          <div className="flex" aria-label="댓글 입력">
             <input
               placeholder="댓글을 입력해주세요"
               className="w-11/12 rounded-md bg-background p-1 p-2 shadow-md focus:outline-none focus:ring-0"
