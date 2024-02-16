@@ -7,15 +7,19 @@ import Script from 'next/script';
 import { usePathname } from 'next/navigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import LocalStorage from '@/utils/localstorage';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Providers from '../utils/providers';
+import Providers from './components/Providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
 const queryClient = new QueryClient();
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
+  if (LocalStorage.getItem('isLoggedIn') === null) {
+    LocalStorage.setItem('isLoggedIn', 'false');
+  }
   const pathname = usePathname();
 
   const withoutHeader =
@@ -28,6 +32,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en" className="light" suppressHydrationWarning>
       <head>
         <Script
+          type="module"
           strategy="beforeInteractive"
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_KEY}&autoload=false&libraries=services`}
         />

@@ -18,7 +18,7 @@ import {
   basketballCourtType,
   basketballCourtSize,
   basketballConvenience,
-} from '../courtReportData';
+} from '@/constants/courtReportData';
 import { CameraIcon } from './icons/CameraIcon';
 
 interface CourtReportProps {
@@ -91,11 +91,20 @@ const CourtReport: React.FC<CourtReportProps> = ({
       })
     );
 
-    await axiosInstance.post('/api/map/report', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    try {
+      const response = await axiosInstance.post('/api/map/report', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      if (response.status === 200) {
+        alert('농구장이 제보되었습니다. 감사합니다!');
+        onClose();
+      }
+    } catch (error) {
+      console.log('제보 실패: ', error);
+      alert('농구장 제보에 실패했습니다.');
+    }
   };
 
   const MAX_FILE_SIZE_MB = 1;
@@ -144,7 +153,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="relative flex h-48 w-full items-center justify-center bg-gray-200">
             <div className="absolute top-0 z-10 flex h-8 w-full items-center justify-between bg-yellow-200 px-4 font-semibold">
-              <p className="text-sm text-black">
+              <p className="text-sm text-black sm:text-xs">
                 숨겨진 농구장을 제보해주시면 레벨 점수를 드립니다.
               </p>
               <Button
