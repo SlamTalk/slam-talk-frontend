@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { getOtherUserData } from '@/services/user/getOtherUserData';
 import { OtherUserInfo } from '@/types/user/otherUserInfo';
 import { Avatar } from '@nextui-org/react';
+import { getUserData } from '@/services/user/getUserData';
 
 interface ICommentItemProps {
   commentId: number;
@@ -29,6 +30,10 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   const { data: writerUserInfo } = useQuery<OtherUserInfo | null>({
     queryKey: ['getWriterInfo'],
     queryFn: () => getOtherUserData({ userId }),
+  });
+  const { data: loginUserData } = useQuery({
+    queryKey: ['getLoginData'],
+    queryFn: getUserData,
   });
   const handleEdit = () => {
     setEditToggle(!editToggle);
@@ -68,22 +73,24 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       ) : (
         <h2 className="ml-2 ms-5 mt-2 h-10 w-[750px]">{content}</h2>
       )}
-      <div aria-label="comment button group" className="w-40">
-        <button
-          onClick={handleEdit}
-          className="text-gray-600 hover:text-primary"
-          type="button"
-        >
-          수정
-        </button>
-        <button
-          onClick={handleDelete}
-          type="button"
-          className="mx-3 text-gray-600 hover:text-primary"
-        >
-          삭제
-        </button>
-      </div>
+      {loginUserData?.id === writerUserInfo?.id ? (
+        <div aria-label="comment button group" className="w-40">
+          <button
+            onClick={handleEdit}
+            className="text-gray-600 hover:text-primary"
+            type="button"
+          >
+            수정
+          </button>
+          <button
+            onClick={handleDelete}
+            type="button"
+            className="mx-3 text-gray-600 hover:text-primary"
+          >
+            삭제
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };
