@@ -4,20 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getComment } from '@/services/community/comment/getCommnet';
 import CommentItem from './commentItem';
 
-// interface ICommunityItem {
-//   id: number;
-//   title: string;
-//   content: string;
-//   tag: string;
-//   comment?: [
-//     {
-//       id: string;
-//       postId: string;
-//       userId: string;
-//       content: string;
-//     },
-//   ];
-// }
 interface ICommentItemProps {
   commentId: string;
   communityId: string;
@@ -34,13 +20,6 @@ const CommentList = () => {
     queryKey: ['getComment'],
     queryFn: () => getComment(+params.id),
   });
-  // const handleEditComment = (id: string, editedComment: string) => {
-  //   const newComment = {
-  //     id: 2,
-  //     postId: params.id,
-  //     userId: 'user123',
-  //     content: editedComment,
-  //   };
 
   return (
     <div className=" h-[400px] overflow-y-auto">
@@ -51,6 +30,7 @@ const CommentList = () => {
             commentId={+i.commentId}
             userId={+i.userId}
             content={i.content}
+            communityId={+i.communityId}
           />
         </div>
       ))}
