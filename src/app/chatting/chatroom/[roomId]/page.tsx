@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 import IMessage from '@/types/chat/message';
-import { IChatRoomListItem } from '@/types/chat/\bchatRoomListItem';
+import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
 import { getChatList } from '@/services/chatting/getChatList';
 
 import axiosInstance from '../../../api/axiosInstance';
