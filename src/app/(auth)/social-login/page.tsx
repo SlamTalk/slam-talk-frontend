@@ -29,7 +29,13 @@ const SocialLogin = () => {
         if (firstLoginCheck === 'true') {
           router.push('user-info');
         } else {
-          router.push('/');
+          const currentUrl = window.location.href;
+          const domain = new URL(currentUrl).origin;
+          if (domain === 'http://localhost:3000') {
+            window.location.href = 'http://localhost:3000';
+          } else {
+            window.location.href = 'https://slam-talk.vercel.app';
+          }
         }
       }
     });
