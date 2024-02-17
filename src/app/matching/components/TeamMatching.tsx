@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
 import { TeamPost } from '@/types/matching/teamDataType';
 import { useQuery } from '@tanstack/react-query';
+import LocalStorage from '@/utils/localstorage';
+import { useRouter } from 'next/navigation';
 import axiosInstance from '@/app/api/axiosInstance';
 import TeamPostCard from './TeamPostCard';
 
@@ -38,6 +40,7 @@ interface MateMatchingProps {
 }
 
 const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
+  const router = useRouter();
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedNumberOfMembers, setSelectedNumberOfMembers] =
@@ -84,23 +87,31 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
       })
     : [];
 
+  const handleCreateNewPost = () => {
+    const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true') router.push(`/matching/team-new-post`);
+    else {
+      alert('로그인 후 이용할 수 있습니다.');
+      router.push(`/login`);
+    }
+  };
+
   if (!Array.isArray(data)) {
     return (
       <div>
-        <div className="mx-auto mt-10 max-w-[250px]">
+        <div className="mt-30 mx-auto max-w-[250px]">
           게시글이 존재하지 않습니다.
         </div>
         <div className="fixed bottom-14 w-full max-w-[600px]">
           <div className="mr-4 flex justify-end">
-            <Link href="/matching/team-new-post">
-              <Button
-                startContent={<FaPlus />}
-                color="primary"
-                className="rounded-full bg-primary text-white shadow-md"
-              >
-                새 모집글 작성
-              </Button>
-            </Link>
+            <Button
+              startContent={<FaPlus />}
+              color="primary"
+              className="rounded-full bg-primary text-white shadow-md"
+              onClick={handleCreateNewPost}
+            >
+              새 모집글 작성
+            </Button>
           </div>
         </div>
       </div>
@@ -185,15 +196,14 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
       ))}
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
-          <Link href="/matching/team-new-post">
-            <Button
-              startContent={<FaPlus />}
-              color="primary"
-              className="rounded-full bg-primary text-white shadow-md"
-            >
-              새 모집글 작성
-            </Button>
-          </Link>
+          <Button
+            startContent={<FaPlus />}
+            color="primary"
+            className="rounded-full bg-primary text-white shadow-md"
+            onClick={handleCreateNewPost}
+          >
+            새 모집글 작성
+          </Button>
         </div>
       </div>
     </div>
