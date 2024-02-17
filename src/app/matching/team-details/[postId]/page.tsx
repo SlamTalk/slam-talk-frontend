@@ -186,8 +186,10 @@ const TeamDetailsPage = () => {
       {/* 지원자 리스트 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">지원자 리스트</div>
-        {data?.teamApplicants.map((applicant) => (
+        {data?.teamApplicants.map((applicant, index) => (
           <TeamApplicantList
+            // eslint-disable-next-line react/no-array-index-key
+            key={index}
             user={user}
             applicant={applicant}
             isWriter={isWriter}
