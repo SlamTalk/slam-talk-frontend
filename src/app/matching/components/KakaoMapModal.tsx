@@ -20,13 +20,12 @@ const KakaoMapModal: FC<KakaoMapModalProps> = ({
   const markerRef = useRef<any>(null);
 
   useEffect(() => {
-    if (visible && mapRef.current) {
+    const initMap = (lat = 37.5665, lng = 126.978) => {
       window.kakao.maps.load(() => {
         const mapOption = {
-          center: new window.kakao.maps.LatLng(37.5665, 126.978), // 서울시청 주소
-          level: 3,
+          center: new window.kakao.maps.LatLng(lat, lng),
+          level: 4,
         };
-
         const map = new window.kakao.maps.Map(mapRef.current, mapOption);
 
         window.kakao.maps.event.addListener(map, 'click', (mouseEvent: any) => {
@@ -56,6 +55,23 @@ const KakaoMapModal: FC<KakaoMapModalProps> = ({
           );
         });
       });
+    };
+
+    if (visible && mapRef.current) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            initMap(latitude, longitude); // 사용자의 위치를 기준으로 지도 초기화
+          },
+          () => {
+            initMap(); // 위치 정보를 가져오는 데 실패한 경우 기본 위치 사용
+          }
+        );
+      } else {
+        console.log('Geolocation is not supported by this browser.');
+        initMap(); // Geolocation이 지원되지 않는 경우 기본 위치 사용
+      }
     }
   }, [visible]);
 
