@@ -2,41 +2,15 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { TeamPost } from '@/types/matching/teamDataType';
-import { MatePost } from '@/types/matching/mateDataType';
+
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
+import {
+  Schedule,
+  ScheduleItem,
+  ScheduleResponse,
+} from '@/types/home/scheduleType';
 import axiosInstance from './api/axiosInstance';
-
-interface Schedule {
-  postId: number;
-  scheduledDate: string;
-  startTime: string;
-  title: string;
-  locationDetail: string;
-  source: 'team' | 'mate';
-}
-
-interface CommonScheduleFields {
-  scheduledDate: string;
-  startTime: string;
-  title: string;
-  locationDetail: string;
-}
-
-type ScheduleItem =
-  | (CommonScheduleFields & { teamMatchingId: number })
-  | (CommonScheduleFields & { matePostId: number });
-
-interface ScheduleResponse {
-  message: string;
-  results: {
-    teamMatchingList: TeamPost[];
-    mateList: MatePost[];
-  };
-  status: number;
-  success: boolean;
-}
 
 const fetchScheduleList = async (): Promise<ScheduleResponse['results']> => {
   const { data } = await axiosInstance.get<ScheduleResponse>(
@@ -68,8 +42,8 @@ const convertToSchedule = (
 
 const Home = () => {
   const { data } = useQuery<ScheduleResponse['results'], Error>({
-    queryKey: ['scheduleList'], // Use an object with a queryKey property
-    queryFn: fetchScheduleList, // Directly assign the fetching function
+    queryKey: ['scheduleList'],
+    queryFn: fetchScheduleList,
   });
 
   // 가장 임박한 스케줄을 계산하는 로직
