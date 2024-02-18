@@ -16,10 +16,11 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { getCommunityBoard } from '@/services/community/getCommunityBoard';
 import { IBoard } from '@/types/community/board';
+import LocalStorage from '@/utils/localstorage';
 
 const Page = () => {
   // const params = useParams<{ tag: string }>();
-
+  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
   const router = useRouter();
   const [inputData, setInputData] = useState('');
   const [isFocus, setIsFocus] = useState(false);
@@ -46,6 +47,7 @@ const Page = () => {
   };
   return (
     <div className="flex flex-col">
+      <title>슬램톡 | 커뮤니티</title>
       <div className="z-10 flex w-full transform items-center justify-center rounded-md bg-background p-1 shadow-md">
         <input
           aria-label="검색창"
@@ -156,7 +158,10 @@ const Page = () => {
             startContent={<FaPlus />}
             className="rounded-full bg-primary text-white shadow-md"
             onClick={() => {
-              router.push('/community/write');
+              if (isLoggedIn === 'true') {
+                return router.push('/community/write');
+              }
+              return router.push('/login');
             }}
           >
             글 작성하기

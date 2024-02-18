@@ -105,7 +105,7 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   if (data?.length === 0) {
     return (
       <div>
-        <div className="mx-auto mt-10 max-w-[250px]">
+        <div className="mt-30 mx-auto max-w-[250px]">
           게시글이 존재하지 않습니다.
         </div>
         <div className="fixed bottom-14 w-full max-w-[600px]">
