@@ -18,8 +18,18 @@ import { MdMyLocation } from 'react-icons/md';
 import { BiSolidLocationPlus } from 'react-icons/bi';
 import { IoSearchSharp } from 'react-icons/io5';
 import { BasketballCourts } from '@/types/basketballCourt/basketballCourts';
+import CourtDetails from './CourtDetails';
+
+// [TO DO]
+// 제보하기 이벤트 구현
+// 모달 알림 넣기
+// 컨트롤 커스텀
+// 공유하기 똑같은 UI 반영
+// 농구장 상세정보 UI 수정
+// 제보 모달 UI 수정 - 제보하기 Btn Fix
 
 const KakaoMap = () => {
+  const [map, setMap] = useState<any>();
   const userLocation = userLocationStore((state) => state.userLocation);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [location, setLocation] = useState({
@@ -29,8 +39,9 @@ const KakaoMap = () => {
       lng: userLocation ? userLocation.longitude : 127.0484,
     },
   });
+  const [isCourtDetailsOpen, setIsCourtDetailsOpen] = useState<boolean>(false);
+  const [selectedCourtId, setSelectedCourtId] = useState<number>('');
   const [mode, setMode] = useState(false);
-  const [map, setMap] = useState<any>();
   // const [markers, setMarkers] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
 
@@ -123,9 +134,8 @@ const KakaoMap = () => {
   return (
     <div className="relative h-[calc(100vh-109px)] w-full">
       <title>슬램톡 | 농구장 지도</title>
-
       <Map
-        className="relative"
+        className="relative z-0"
         id="map"
         center={location.center}
         level={3}
@@ -156,7 +166,7 @@ const KakaoMap = () => {
         {courts?.map((court) => (
           <>
             <MapMarker
-              key={`marker__${court.latitude}-${court.longitude}`}
+              key={court.courtId}
               position={{ lat: court.latitude, lng: court.longitude }}
               image={{
                 src: '/icons/marker-img.png',
@@ -166,6 +176,10 @@ const KakaoMap = () => {
                 },
               }}
               clickable
+              onClick={() => {
+                setIsCourtDetailsOpen(true);
+                setSelectedCourtId(court.courtId);
+              }}
             />
             <CustomOverlayMap
               key={`overlay__${court.latitude}-${court.longitude}`}
@@ -184,6 +198,12 @@ const KakaoMap = () => {
           <ZoomControl position="RIGHT" />
         </div>
       </Map>
+      {isCourtDetailsOpen && (
+        <CourtDetails
+          courtId={selectedCourtId}
+          onClose={() => setIsCourtDetailsOpen(false)}
+        />
+      )}
       <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
         <Button
           isIconOnly

@@ -25,7 +25,7 @@ import { WebsiteIcon } from './icons/WebsiteIcon';
 // 현재 링크 공유 만들기 ✅
 
 interface CourtDetailsProps {
-  courtId: string;
+  courtId: number;
   onClose: () => void;
 }
 
@@ -33,7 +33,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
   const router = useRouter();
   const { error, data: selectedPlace } = useQuery({
     queryKey: ['courtDetails', courtId],
-    queryFn: () => getCourtDetails(courtId as string),
+    queryFn: () => getCourtDetails(courtId),
     enabled: !!courtId,
   });
 
@@ -72,14 +72,15 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
 
     return (
       <div
-        className={`sticky inset-0 z-40 m-auto h-fit w-full max-w-md rounded-lg bg-background shadow-md
+        className={`absolute inset-0 z-40 m-auto h-fit max-h-[calc(100vh-109px)] w-fit max-w-md overflow-y-auto rounded-lg bg-background shadow-md
           transition-all duration-300 ease-in-out`}
       >
-        <div className="relative max-h-[96vh] w-full overflow-auto rounded-lg text-sm">
-          <div className="relative h-60 w-full sm:h-48">
+        <div className="w-full rounded-lg text-sm ">
+          <div className="relative h-56 w-full sm:h-52">
             {selectedPlace.photoUrl ? (
               <Image
                 layout="fill"
+                objectFit="contain"
                 alt="농구장 사진"
                 src={selectedPlace.photoUrl}
               />
@@ -90,7 +91,6 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                 src="/images/han-river-park-court.png"
               />
             )}
-
             <Button
               isIconOnly
               className="bg-gradient absolute right-2 top-2"
@@ -100,7 +100,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
               <IoIosClose size={30} className="text-gray-600" />
             </Button>
           </div>
-          <div className="mb-5 h-full p-4">
+          <div className="p-4">
             <div className="flex justify-between">
               <div className="flex items-center">
                 <h2 className="text-xl font-bold">{selectedPlace.courtName}</h2>
@@ -117,7 +117,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                 시설 채팅
               </Button>
             </div>
-            <div className="my-4 flex w-full items-center justify-start gap-3">
+            <div className="my-2 flex w-full items-center justify-start gap-3">
               <Button
                 size="sm"
                 aria-label="크게 보기"
