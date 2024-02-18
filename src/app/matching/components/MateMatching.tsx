@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
-import axiosInstance from '@/app/api/axiosInstance';
+import { fetchMateData } from '@/services/matching/getMateData';
 import { useQuery } from '@tanstack/react-query';
 import LocalStorage from '@/utils/localstorage';
 import { useRouter } from 'next/navigation';
@@ -44,14 +44,6 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedPosition, setSelectedPosition] = useState<string>('');
-
-  const fetchMateData = async (): Promise<MatePost[]> => {
-    const response = await axiosInstance
-      .get('/api/mate/list')
-      .then((res) => res.data.results.matePostList);
-
-    return response;
-  };
 
   const { data } = useQuery<MatePost[], Error>({
     queryKey: ['mate'],
@@ -105,7 +97,7 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   if (data?.length === 0) {
     return (
       <div>
-        <div className="mt-30 mx-auto max-w-[250px]">
+        <div className="mx-auto mt-[50px] max-w-[250px]">
           게시글이 존재하지 않습니다.
         </div>
         <div className="fixed bottom-14 w-full max-w-[600px]">
