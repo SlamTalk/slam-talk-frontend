@@ -12,7 +12,7 @@ import { getUserData } from '@/services/user/getUserData';
 import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 import IMessage from '@/types/chat/message';
 import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
-import { getChatList } from '@/services/chatting/getChatList';
+// import { getChatList } from '@/services/chatting/getChatList';
 
 import axiosInstance from '../../../api/axiosInstance';
 import MessageList from '../../components/messageList';
@@ -30,16 +30,31 @@ const Chatting = () => {
     queryFn: postTokenRefresh,
     gcTime: 3000,
   });
-  const { data: myChatList } = useQuery<IChatRoomListItem[]>({
-    queryKey: ['myChatlist'],
-    queryFn: getChatList,
-  });
+  // const { data: myChatList } = useQuery<IChatRoomListItem[]>({
+  //   queryKey: ['myChatlist'],
+  //   queryFn: getChatList,
+  // });
   const accessToken = token;
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
-  const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
+  const [myChatList, setMyChatList] = useState<IChatRoomListItem[]>([]);
+  const handleChatList = async () => {
+    try {
+      const res = await axiosInstance.get('/api/chat/list');
+      res.data.results.map((i: IChatRoomListItem) =>
+        setMyChatList([...myChatList, i])
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  useEffect(() => {
+    handleChatList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const roomInfo = myChatList?.find((i) => i.roomId === +params.roomId);
   const nickname = error ? null : user?.nickname;
 
   const client = useRef<StompJs.Client | null>(null);
@@ -130,11 +145,23 @@ const Chatting = () => {
       headers: { authorization: `Bearer ${accessToken}` },
       body: JSON.stringify({
         roomId: params.roomId,
+        senderId: `${user?.id}`,
         senderNickname: nickname,
       }),
     });
-  };
 
+    // client.current?.deactivate();
+  };
+  const postMore = async () => {
+    try {
+      const res = await axiosInstance.post(
+        `/api/chat/history?roomId=${params.roomId}`
+      );
+      console.log(res.data.results);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   useEffect(() => {
     inputRef.current?.focus();
     const fetchData = async () => {
@@ -167,7 +194,7 @@ const Chatting = () => {
         </div>
       </div>
       <div className=" fixed	flex w-full max-w-[600px] items-center justify-center">
-        <Button>more</Button>
+        <Button onClick={postMore}>more</Button>
       </div>
       <MessageList list={messageListState} />
       <div
