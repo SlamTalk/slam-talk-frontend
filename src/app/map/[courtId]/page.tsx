@@ -6,7 +6,7 @@ import CourtDetailsFull from '../components/CourtDetailsFull';
 
 const CourtDetailsModal = () => {
   const pathname = usePathname();
-  const courtId = String(pathname.split('/').pop());
+  const courtId = Number(pathname.split('/').pop());
 
   if (!courtId) return null;
 
