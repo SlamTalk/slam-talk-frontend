@@ -12,6 +12,7 @@ import { getCommunityArticle } from '@/services/community/getCommunityArticle';
 import Image from 'next/image';
 import { deleteCommunityArticle } from '@/services/community/deleteCommunityArticle';
 import { postComment } from '@/services/community/comment/postComment';
+import { getUserData } from '@/services/user/getUserData';
 import CommentList from '../../components/commentList';
 
 // interface ICommunityItem {
@@ -36,6 +37,12 @@ const Page = () => {
     queryKey: ['articleData'],
     queryFn: () => getCommunityArticle(params.id),
   });
+  const { data: loginData } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: getUserData,
+  });
+  const writeName = articleData?.userNickname;
+  const loginUserName = loginData?.nickname;
   const [commentData, setCommentData] = useState({
     communityId: 0,
     content: '',
@@ -52,9 +59,6 @@ const Page = () => {
         content: comment,
       });
       postCommunityComment.mutate();
-
-      setComment('');
-
       window.location.reload();
     }
   };
@@ -116,28 +120,31 @@ const Page = () => {
                 {/* <div className="m-1 text-lg text-danger">
                   <FaHeart aria-label="like button" />
                 </div> */}
-                <div aria-label="수정 삭제 버튼 그룹">
-                  <button
-                    type="button"
-                    className="hover:text-primary"
-                    onClick={() => {
-                      router.push(`/community/article/${params.id}/edit`);
-                    }}
-                  >
-                    수정
-                  </button>
-                  <button
-                    onClick={handelDelete}
-                    type="button"
-                    className="ml-3 hover:text-primary"
-                  >
-                    삭제
-                  </button>
-                </div>
+                {loginUserName === writeName ? (
+                  <div aria-label="수정 삭제 버튼 그룹">
+                    <button
+                      type="button"
+                      className="hover:text-primary"
+                      onClick={() => {
+                        router.push(`/community/article/${params.id}/edit`);
+                      }}
+                    >
+                      수정
+                    </button>
+                    <button
+                      onClick={handelDelete}
+                      type="button"
+                      className="ml-3 hover:text-primary"
+                    >
+                      삭제
+                    </button>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
-          <div className="flex">
+
+          <div className="flex" aria-label="댓글 입력">
             <input
               placeholder="댓글을 입력해주세요"
               className="w-11/12 rounded-md bg-background p-1 p-2 shadow-md focus:outline-none focus:ring-0"
