@@ -20,7 +20,7 @@ const MiniMatePostCard = ({ matePost }: { matePost: MatePost }) => {
       <Card className="my-4 h-[180px] w-[180px]">
         <CardHeader>
           <div className="flex flex-col">
-            <p className="text-md font-bold">{shortLocation}</p>
+            <p className="text-md line-clamp-1 font-bold">{shortLocation}</p>
             <p className="text-small text-default-500">
               {formattedDate} {matePost.startTime}
             </p>
@@ -28,7 +28,7 @@ const MiniMatePostCard = ({ matePost }: { matePost: MatePost }) => {
         </CardHeader>
         <Divider />
         <CardBody>
-          <p className="overflow-hidden">{matePost.title}</p>
+          <p className="line-clamp-3">{matePost.title}</p>
         </CardBody>
       </Card>
     </Link>

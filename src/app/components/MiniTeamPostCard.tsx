@@ -20,7 +20,7 @@ const MiniTeamPostCard = ({ teamPost }: { teamPost: TeamPost }) => {
       <Card className="my-4 h-[180px] w-[180px]">
         <CardHeader>
           <div className="flex flex-col">
-            <p className="text-md font-bold">{shortLocation}</p>
+            <p className="text-md line-clamp-1 font-bold">{shortLocation}</p>
             <p className="text-small text-default-500">
               {formattedDate} {teamPost.startTime}
             </p>
@@ -28,7 +28,7 @@ const MiniTeamPostCard = ({ teamPost }: { teamPost: TeamPost }) => {
         </CardHeader>
         <Divider />
         <CardBody>
-          <p className="overflow-hidden">{teamPost.title}</p>
+          <p className="line-clamp-3">{teamPost.title}</p>
         </CardBody>
       </Card>
     </Link>
