@@ -18,12 +18,6 @@ import { FeeIcon } from './icons/FeeIcon';
 import { InfoIcon } from './icons/InfoIcon';
 import { WebsiteIcon } from './icons/WebsiteIcon';
 
-// 농구장 사진, 주소(도로명), 코트 종류, 실내외(실내/야외), 코트사이즈, 골대수, 야간 조명, 개방시간, 사용료, 주차 가능, 전화번호, 홈페이지, 기타 정보
-// [TODO] 주소 복사 넣기, ✅
-// 각 컨텐츠 아이콘 넣기 ✅
-// true, false 명확히하기 ✅
-// 현재 링크 공유 만들기 ✅
-
 interface CourtDetailsProps {
   courtId: number;
   onClose: () => void;
@@ -34,7 +28,6 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
   const { error, data: selectedPlace } = useQuery({
     queryKey: ['courtDetails', courtId],
     queryFn: () => getCourtDetails(courtId),
-    enabled: !!courtId,
   });
 
   if (error) {
@@ -72,10 +65,10 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
 
     return (
       <div
-        className={`absolute inset-0 z-40 m-auto h-fit max-h-[calc(100vh-109px)] w-fit max-w-md overflow-y-auto rounded-lg bg-background shadow-md
-          transition-all duration-300 ease-in-out`}
+        className={`min-w-md sm-h-full absolute inset-0 z-40 m-auto h-fit max-h-[calc(100vh-109px)] w-fit min-w-96 max-w-md overflow-y-auto rounded-lg
+          bg-background shadow-md transition-all duration-300 ease-in-out sm:min-w-full sm:rounded-none`}
       >
-        <div className="w-full rounded-lg text-sm ">
+        <div className="w-full text-sm">
           <div className="relative h-56 w-full sm:h-52">
             {selectedPlace.photoUrl ? (
               <Image
@@ -88,7 +81,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
               <Image
                 layout="fill"
                 alt="농구장 사진"
-                src="/images/han-river-park-court.png"
+                src="/images/basketball-court.svg"
               />
             )}
             <Button
@@ -101,14 +94,12 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
             </Button>
           </div>
           <div className="p-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-4">
               <div className="flex items-center">
                 <h2 className="text-xl font-bold">{selectedPlace.courtName}</h2>
               </div>
               <Button
                 color="primary"
-                variant="ghost"
-                className="border-1 font-semibold"
                 radius="full"
                 size="md"
                 startContent={<PiChatsCircle />}

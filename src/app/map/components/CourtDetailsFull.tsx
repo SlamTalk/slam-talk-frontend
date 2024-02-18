@@ -18,18 +18,14 @@ import { InfoIcon } from './icons/InfoIcon';
 import { WebsiteIcon } from './icons/WebsiteIcon';
 
 interface CourtDetailsProps {
-  courtId: string;
+  courtId: number;
 }
 
 const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
   const router = useRouter();
-
-  console.log(courtId);
-
   const { error, data: selectedPlace } = useQuery({
     queryKey: ['courtDetails', courtId],
-    queryFn: () => getCourtDetails(courtId as string),
-    enabled: !!courtId,
+    queryFn: () => getCourtDetails(courtId),
   });
 
   if (error) {
@@ -60,15 +56,15 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
         }
       }
     };
-    selectedPlace.convenience = ['화장실', '휴게시설'];
 
     return (
-      <div className="h-full w-full overflow-y-scroll">
+      <div className="h-full w-full overflow-y-auto">
         <div className="relative w-full text-sm">
-          <div className="relative h-60 w-full sm:h-48">
+          <div className="relative h-64 w-full sm:h-48">
             {selectedPlace.photoUrl ? (
               <Image
                 layout="fill"
+                objectFit="contain"
                 alt="농구장 사진"
                 src={selectedPlace.photoUrl}
               />
@@ -76,7 +72,7 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
               <Image
                 layout="fill"
                 alt="농구장 사진"
-                src="/images/han-river-park-court.png"
+                src="/images/basketball-court.svg"
               />
             )}
           </div>
@@ -87,8 +83,6 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
               </h2>
               <Button
                 color="primary"
-                variant="ghost"
-                className="border-1 font-semibold"
                 radius="full"
                 size="md"
                 startContent={<PiChatsCircle />}
