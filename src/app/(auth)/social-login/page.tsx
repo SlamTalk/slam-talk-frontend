@@ -22,12 +22,13 @@ const SocialLogin = () => {
   const login = searchParams.get('loginSuccess');
   const firstLoginCheck = searchParams.get('firstLoginCheck');
 
+  // https://slam-talk.vercel.app/social-login?loginSuccess=true&firstLoginCheck=false
   if (login === 'true') {
     refreshToken().then((token) => {
       if (token !== null) {
         LocalStorage.setItem('isLoggedIn', 'true');
         if (firstLoginCheck === 'true') {
-          router.push('user-info');
+          router.push('/user-info');
         } else {
           const currentUrl = window.location.href;
           const domain = new URL(currentUrl).origin;
@@ -39,6 +40,11 @@ const SocialLogin = () => {
         }
       }
     });
+  } else if (login === 'false') {
+    alert(
+      '탈퇴한 유저입니다. 같은 계정으로 로그인을 원하시면 탈퇴 7일 이후에 재가입 해주세요.'
+    );
+    router.push('/login');
   }
   return null;
 };
