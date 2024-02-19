@@ -62,11 +62,9 @@ const Chatting = () => {
   };
 
   const connect = async () => {
-    const webSocketFactory = () =>
-      new WebSocket(`${process.env.NEXT_PUBLIC_SOCKET_URL}`);
     client.current = new StompJs.Client({
-      // brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
-      webSocketFactory,
+      brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
+
       connectHeaders: {
         id: 'sub-0',
         authorization: `Bearer ${accessToken}`,
