@@ -22,7 +22,7 @@ const Chatting = () => {
   const router = useRouter();
 
   const [message, setMessage] = useState('');
-
+  const [moreCount, setMoreCount] = useState(0);
   // const [greeting, setGreeting] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -163,8 +163,9 @@ const Chatting = () => {
   };
   const postMore = async () => {
     try {
+      setMoreCount(moreCount + 1);
       const res = await axiosInstance.post(
-        `/api/chat/history?roomId=${params.roomId}`
+        `/api/chat/history?roomId=${params.roomId}&count=${moreCount}`
       );
       console.log(res.data.results);
     } catch (err) {
