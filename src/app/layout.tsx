@@ -41,7 +41,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       })
       .then((address) => {
         setUserAddress(address);
-        console.log(address);
       })
       .catch((error) => {
         console.error(error.message);
