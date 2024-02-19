@@ -19,7 +19,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
   useEffect(() => {
     // messageListData();
     setMessages(list);
-    console.log({ list });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 

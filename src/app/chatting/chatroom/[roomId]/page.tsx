@@ -13,6 +13,7 @@ import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 import IMessage from '@/types/chat/message';
 import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
 import { getChatList } from '@/services/chatting/getChatList';
+import { FaTimesCircle } from 'react-icons/fa';
 
 import axiosInstance from '../../../api/axiosInstance';
 import MessageList from '../../components/messageList';
@@ -22,6 +23,7 @@ const Chatting = () => {
   const router = useRouter();
 
   const [message, setMessage] = useState('');
+
   // const [greeting, setGreeting] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -39,7 +41,9 @@ const Chatting = () => {
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
+
   const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
+
   const nickname = error ? null : user?.nickname;
 
   const client = useRef<StompJs.Client | null>(null);
@@ -50,15 +54,19 @@ const Chatting = () => {
         `/api/chat/participation?roomId=${params.roomId}`
       );
       const listData = JSON.stringify(res.data.results);
-      console.log(typeof listData);
+
       setMessageListState(JSON.parse(listData));
     } catch (err) {
       console.error(err);
     }
   };
+
   const connect = async () => {
+    const webSocketFactory = () =>
+      new WebSocket(`${process.env.NEXT_PUBLIC_SOCKET_URL}`);
     client.current = new StompJs.Client({
-      brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
+      // brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
+      webSocketFactory,
       connectHeaders: {
         id: 'sub-0',
         authorization: `Bearer ${accessToken}`,
@@ -75,8 +83,16 @@ const Chatting = () => {
             },
             { authorization: `Bearer ${accessToken}` }
           );
+          client.current.subscribe(
+            `/sub/chat/bot/${params.roomId}`,
+            (res) => {
+              const greeting = res.body;
+              console.log({ greeting });
+            },
+            { authorization: `Bearer ${accessToken}` }
+          );
           client.current.publish({
-            destination: `/pub/chat/enter/${params.roomId}`,
+            destination: `/pub/chat/bot/${params.roomId}`,
             body: JSON.stringify({
               roomId: params.roomId,
               senderNickname: user?.nickname,
@@ -130,11 +146,34 @@ const Chatting = () => {
       headers: { authorization: `Bearer ${accessToken}` },
       body: JSON.stringify({
         roomId: params.roomId,
+        senderId: `${user?.id}`,
         senderNickname: nickname,
       }),
     });
-  };
 
+    client.current?.deactivate();
+  };
+  const exitChat = () => {
+    client.current?.publish({
+      destination: `/pub/exit/${params.roomId}`,
+      headers: { authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({
+        roomId: params.roomId,
+        senderNickname: nickname,
+      }),
+    });
+    client.current?.deactivate();
+  };
+  const postMore = async () => {
+    try {
+      const res = await axiosInstance.post(
+        `/api/chat/history?roomId=${params.roomId}`
+      );
+      console.log(res.data.results);
+    } catch (err) {
+      console.error(err);
+    }
+  };
   useEffect(() => {
     inputRef.current?.focus();
     const fetchData = async () => {
@@ -160,14 +199,25 @@ const Chatting = () => {
           <h2 className="w-[525px] text-center text-xl text-white">
             {roomInfo?.roomType === 'DIRECT' && roomInfo?.name}
             {roomInfo?.roomType === 'BASEKETBALL' && roomInfo?.name}
-            {roomInfo?.roomType === 'TOGTHER' && roomInfo?.name}
+            {roomInfo?.roomType === 'TOGETHER' && roomInfo?.name}
             {roomInfo?.roomType === 'MATCHING' && roomInfo?.name}
-            {!roomInfo?.roomType && 'testroom'}
           </h2>
+          <div className="cursor-pointer">
+            <Button
+              isIconOnly
+              className="h-auto w-14 border-none bg-transparent"
+              onClick={() => {
+                exitChat();
+                router.back();
+              }}
+            >
+              <FaTimesCircle className="m-1.5 text-xl" />
+            </Button>
+          </div>
         </div>
       </div>
       <div className=" fixed	flex w-full max-w-[600px] items-center justify-center">
-        <Button>more</Button>
+        <Button onClick={postMore}>more</Button>
       </div>
       <MessageList list={messageListState} />
       <div

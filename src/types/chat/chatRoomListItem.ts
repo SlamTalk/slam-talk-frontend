@@ -1,9 +1,11 @@
 export interface IChatRoomListItem {
   roomId: string;
   roomType: string;
-  partnerId: string | null;
+  participants: number[];
   name: string;
   imgUrl: string | null;
   lastMessage: string;
-  courtId: string | null;
+  basket_ball_id: number;
+  together_id: number;
+  teamMatching_id: number;
 }
