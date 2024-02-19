@@ -170,6 +170,7 @@ const Chatting = () => {
         `/api/chat/history?roomId=${params.roomId}&count=${moreCount}`
       );
       console.log(res.data.results);
+      setMessageListState([...res.data.results.reverse()]);
     } catch (err) {
       console.error(err);
     }
