@@ -4,13 +4,20 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Snippet, Button, Avatar } from '@nextui-org/react';
 import axiosInstance from '@/app/api/axiosInstance';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { AxiosResponse } from 'axios';
 import LocalStorage from '@/utils/localstorage';
 import { getUserData } from '@/services/user/getUserData';
 import MateApplicantList from '../../components/MateApplicantList';
 import { MatePost } from '../../../../types/matching/mateDataType';
+
+interface MateChatRoomType {
+  participants: number[];
+  roomType: string;
+  together_id: string;
+  name: string;
+}
 
 const MateDetailsPage = () => {
   const { error, data: user } = useQuery({
@@ -28,39 +35,13 @@ const MateDetailsPage = () => {
   const [endTime, setEndTime] = useState('');
   const router = useRouter();
 
+  // 상세 데이터 가져오기
   const fetchMateDetailsData = async (): Promise<MatePost> => {
     const response = await axiosInstance
       .get(`/api/mate/read/${postId}`)
       .then((res) => res.data.results);
 
     return response;
-  };
-
-  // const deleteRecruitment = async (): Promise<AxiosResponse> => {
-  //   const response = await axiosInstance.delete<AxiosResponse>(
-  //     `/api/mate/${postId}`
-  //   );
-
-  //   return response;
-  // };
-
-  const completeRecruitment = async (): Promise<AxiosResponse> => {
-    const response = await axiosInstance.patch<AxiosResponse>(
-      `/api/mate/${postId}/complete`
-    );
-
-    return response;
-  };
-
-  const handleFinishRecruitment = async () => {
-    try {
-      completeRecruitment();
-      alert('모집이 완료되었습니다.');
-      router.push('/matching');
-    } catch (err) {
-      console.error(err);
-      alert('모집 완료 처리 중 오류가 발생했습니다.');
-    }
   };
 
   const { data } = useQuery<MatePost, Error>({
@@ -74,6 +55,98 @@ const MateDetailsPage = () => {
     userProfile: data?.writerImageUrl,
   };
   const isWriter = user?.id === writer.userId;
+
+  // const deleteRecruitment = async (): Promise<AxiosResponse> => {
+  //   const response = await axiosInstance.delete<AxiosResponse>(
+  //     `/api/mate/${postId}`
+  //   );
+
+  //   return response;
+  // };
+
+  const patchCompleteRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.patch<AxiosResponse>(
+      `/api/mate/${postId}/complete`
+    );
+
+    return response;
+  };
+
+  const creatMateChatRoom = async (
+    roomData: MateChatRoomType
+  ): Promise<any> => {
+    try {
+      const response = await axiosInstance.post<any>(
+        `/api/chat/create`,
+        roomData
+      );
+
+      console.log({ response });
+      return response;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  };
+
+  const createMateChatRoomMutation = useMutation<
+    AxiosResponse,
+    Error,
+    MateChatRoomType
+  >({
+    mutationFn: creatMateChatRoom,
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: (er: Error) => {
+      console.log(er);
+    },
+  });
+
+  const patchPostStatusMutation = useMutation<AxiosResponse, Error>({
+    mutationFn: patchCompleteRecruitment,
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: (err: Error) => {
+      console.log(err);
+      throw err;
+    },
+  });
+
+  const handleFinishRecruitment = () => {
+    try {
+      patchPostStatusMutation.mutate();
+
+      // 'ACCEPTED' 상태인 참가자들의 ID를 추출
+      const acceptedParticipantIds =
+        data?.participants
+          .filter((participant) => participant.applyStatus === 'ACCEPTED')
+          .map((acceptedParticipant) => acceptedParticipant.participantId) ||
+        [];
+
+      // 작성자 ID를 포함하되, undefined를 제외
+      const participantsIds = [
+        data?.writerId,
+        ...acceptedParticipantIds,
+      ].filter((id): id is number => id !== undefined);
+
+      const newRoomData: MateChatRoomType = {
+        participants: participantsIds,
+        roomType: 'TM',
+        together_id: data?.matePostId.toString() ?? '',
+        name: data?.title ?? '',
+      };
+
+      createMateChatRoomMutation.mutate(newRoomData);
+
+      alert('모집이 완료되었습니다.');
+      router.push('/matching?tab=mate');
+    } catch (err) {
+      console.error(err);
+      alert('모집 완료 처리 중 오류가 발생했습니다.');
+    }
+  };
 
   useEffect(() => {
     if (data) {
