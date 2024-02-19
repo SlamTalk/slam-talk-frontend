@@ -28,7 +28,6 @@ const TeamMatchingApplication = () => {
 
   const handleSubmit = () => {
     newApplyMutation.mutate({
-      applyStatus: 'WAITING',
       teamName,
       skillLevel,
     });
