@@ -1,7 +1,7 @@
 import axiosInstance from '@/app/api/axiosInstance';
 import { BasketballCourtsDetails } from '@/types/basketballCourt/basketballCourtsDetails';
 
-const getCourtDetails = async (courtId: string) => {
+const getCourtDetails = async (courtId: number) => {
   try {
     const response = await axiosInstance.get(`/api/map/courts/${courtId}`);
 

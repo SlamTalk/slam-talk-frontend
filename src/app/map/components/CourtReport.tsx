@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-useless-escape */
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -10,6 +12,12 @@ import {
   Radio,
   SelectItem,
   Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from '@nextui-org/react';
 import { IoIosClose } from 'react-icons/io';
 import { FaTrashCan } from 'react-icons/fa6';
@@ -22,12 +30,13 @@ import {
 import { CameraIcon } from './icons/CameraIcon';
 
 interface CourtReportProps {
-  location: { address: string; latitude: string; longitude: string };
-  isVisible: boolean;
-  onClose: () => void;
+  position: { lat: number; lng: number };
+  address: string;
+  handleClose: () => void;
+  onReportSuccess: () => void;
 }
 
-interface CourtReportData {
+export interface CourtReportData {
   file: File | null;
   courtName: string;
   address: string;
@@ -37,10 +46,10 @@ interface CourtReportData {
   indoorOutdoor: string | null;
   courtSize: string | null;
   hoopCount: number | null;
-  nightLighting: true | null;
-  openingHours: true | null;
-  fee: true | null;
-  parkingAvailable: true | null;
+  nightLighting: string | boolean | null;
+  openingHours: string | boolean | null;
+  fee: string | boolean | null;
+  parkingAvailable: string | boolean | null;
   phoneNum: string | null;
   website: string | null;
   convenience: string | null;
@@ -52,12 +61,15 @@ interface CourtReportData {
 // 농구장명(필수), 주소(필수), 코트 종류, 실내외(실내/야외), 코트사이즈, 골대수, ✅
 // 야간 조명, 개방시간(제한/24시), 사용료, 주차 가능, 기타 정보 ✅
 // 전화번호, 홈페이지(링크), 편의시설 ✅
+// (도로명 주소 반영)
 
 const CourtReport: React.FC<CourtReportProps> = ({
-  location,
-  isVisible,
-  onClose,
+  position,
+  address,
+  handleClose,
+  onReportSuccess,
 }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const {
@@ -72,16 +84,40 @@ const CourtReport: React.FC<CourtReportProps> = ({
       formData.append('image', file);
     }
 
+    // 백엔드와 데이터 타입 맞추기
     if (data.convenience?.length === 0) {
-      // eslint-disable-next-line no-param-reassign
       data.convenience = '';
+    }
+
+    if (data.nightLighting === '있음') {
+      data.nightLighting = true;
+    } else if (data.nightLighting === '없음') {
+      data.nightLighting = false;
+    }
+
+    if (data.openingHours === '제한') {
+      data.openingHours = false;
+    } else if (data.openingHours === '24시') {
+      data.openingHours = true;
+    }
+
+    if (data.fee === '무료') {
+      data.fee = false;
+    } else if (data.fee === '유료') {
+      data.fee = true;
+    }
+
+    if (data.parkingAvailable === '가능') {
+      data.parkingAvailable = true;
+    } else if (data.parkingAvailable === '불가능') {
+      data.parkingAvailable = false;
     }
 
     const finalData = {
       ...data,
-      address: location.address,
-      latitude: location.latitude,
-      longitude: location.longitude,
+      address,
+      latitude: position.lat,
+      longitude: position.lng,
     };
 
     formData.append(
@@ -98,8 +134,8 @@ const CourtReport: React.FC<CourtReportProps> = ({
         },
       });
       if (response.status === 200) {
-        alert('농구장이 제보되었습니다. 감사합니다!');
-        onClose();
+        onOpen();
+        onReportSuccess();
       }
     } catch (error) {
       console.log('제보 실패: ', error);
@@ -134,24 +170,24 @@ const CourtReport: React.FC<CourtReportProps> = ({
 
   return (
     <div
-      className={`absolute inset-0 top-4 z-20 m-auto w-full max-w-md overflow-y-auto rounded-lg border-1
-    bg-background text-sm shadow-md transition-all duration-300 ease-in-out md:h-fit
-    md:max-h-[90vh] md:text-lg lg:text-xl ${isVisible ? '' : 'hidden'}`}
+      className={`absolute inset-0 z-20 m-auto w-full max-w-md overflow-y-auto rounded-lg
+    bg-background text-sm shadow-md transition-all duration-300 ease-in-out
+    md:max-h-[90vh] md:text-lg lg:text-xl`}
     >
-      <div className="h-full overflow-auto">
-        <div className="sticky top-0 z-30 flex h-14 items-center justify-center bg-background">
+      <div className="relative h-full overflow-y-auto">
+        <div className="sticky top-0 z-30 flex h-14 w-full items-center justify-center border-b bg-background">
           <p className="text-center text-xl font-semibold">농구장 제보하기</p>
           <Button
             isIconOnly
             className="bg-gradient absolute right-2 top-2"
-            onClick={onClose}
+            onClick={handleClose}
             aria-label="Close"
           >
             <IoIosClose size={30} />
           </Button>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="relative flex h-48 w-full items-center justify-center bg-gray-200">
+          <div className="relative flex h-48 w-full items-center justify-center bg-gray-200 dark:bg-gray-800">
             <div className="absolute top-0 z-10 flex h-8 w-full items-center justify-between bg-yellow-200 px-4 font-semibold">
               <p className="text-sm text-black sm:text-xs">
                 숨겨진 농구장을 제보해주시면 레벨 점수를 드립니다.
@@ -211,9 +247,9 @@ const CourtReport: React.FC<CourtReportProps> = ({
               </>
             )}
           </div>
-          <div className="flex flex-col p-4">
+          <div className="mt-2 flex flex-col p-4">
             <Input
-              className="font-semibold"
+              className="z-10 font-semibold"
               radius="sm"
               isRequired
               labelPlacement="outside"
@@ -244,11 +280,11 @@ const CourtReport: React.FC<CourtReportProps> = ({
             </div>
             <div className="w-full text-sm">
               <p className="font-semibold">주소</p>
-              <p>{location.address}</p>
+              <p>{address}</p>
             </div>
             <div className="flex gap-4 pt-6 md:flex-nowrap">
               <Select
-                className="max-w-xs font-semibold"
+                className="z-10 max-w-xs font-semibold"
                 radius="sm"
                 labelPlacement="outside"
                 label="코트 종류"
@@ -263,7 +299,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
                 ))}
               </Select>
               <Select
-                className="max-w-xs font-semibold"
+                className="z-10 max-w-xs font-semibold"
                 radius="sm"
                 labelPlacement="outside"
                 label="코트 사이즈"
@@ -279,7 +315,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
               </Select>
             </div>
             <Input
-              className="pt-6 font-semibold"
+              className="z-10 pt-6 font-semibold"
               radius="sm"
               labelPlacement="outside"
               variant="bordered"
@@ -307,7 +343,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
               />
             </div>
             <Select
-              className="font-semibold"
+              className="z-10 font-semibold"
               radius="sm"
               labelPlacement="outside"
               label="편의시설"
@@ -323,7 +359,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
               ))}
             </Select>
             <Input
-              className="pt-6 font-semibold sm:pb-2"
+              className="z-10 pt-6 font-semibold sm:pb-2"
               radius="sm"
               labelPlacement="outside"
               variant="bordered"
@@ -348,7 +384,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
               />
             </div>
             <Input
-              className="text-sm font-semibold"
+              className="z-10 text-sm font-semibold"
               radius="sm"
               labelPlacement="outside"
               variant="bordered"
@@ -408,7 +444,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
               <Radio value="가능">가능</Radio>
               <Radio value="불가능">불가능</Radio>
             </RadioGroup>
-            <div className="my-6 w-full">
+            <div className="mt-6 w-full">
               <Textarea
                 radius="sm"
                 maxRows={3}
@@ -418,6 +454,8 @@ const CourtReport: React.FC<CourtReportProps> = ({
                 {...register('additionalInfo', { maxLength: 300 })}
               />
             </div>
+          </div>
+          <div className="sticky bottom-0 z-30 flex h-14 items-center border-t bg-background px-4">
             <Button
               radius="sm"
               aria-label="제보하기"
@@ -429,6 +467,26 @@ const CourtReport: React.FC<CourtReportProps> = ({
           </div>
         </form>
       </div>
+      <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                농구장 제보 성공
+              </ModalHeader>
+              <ModalBody>
+                <p>감사합니다! 농구장 제보가 완료되었습니다.</p>
+                <p>관리자 검토 후 빠른 시일 내에 농구장 정보 반영하겠습니다.</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={handleClose}>
+                  닫기
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
