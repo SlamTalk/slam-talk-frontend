@@ -138,10 +138,10 @@ const MateDetailsPage = () => {
         name: data?.title ?? '',
       };
 
-      createMateChatRoomMutation.mutate(newRoomData);
+      const chatRoomId = createMateChatRoomMutation.mutate(newRoomData);
 
-      alert('모집이 완료되었습니다.');
-      router.push('/matching?tab=mate');
+      alert('모집이 완료되었습니다.\n확인을 누르면 채팅으로 이동합니다.');
+      router.push(`/chatting/chatroom/${chatRoomId}`);
     } catch (err) {
       console.error(err);
       alert('모집 완료 처리 중 오류가 발생했습니다.');
