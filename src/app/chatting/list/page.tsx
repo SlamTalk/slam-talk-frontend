@@ -1,42 +1,95 @@
 'use client';
 
 import { Avatar } from '@nextui-org/react';
-import { FaTimesCircle } from 'react-icons/fa';
 
 import React from 'react';
 
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
+// import { getChatList } from '@/services/chatting/getChatList';
+import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
+import axiosInstance from '@/app/api/axiosInstance';
+import { getUserData } from '@/services/user/getUserData';
+import { getChatList } from '@/services/chatting/getChatList';
 
-const chatList = () => {
-  const testList = [
-    { id: '6', title: 'test chat room1', lastMessage: '~~' },
-    { id: '3', title: 'test chat room2', lastMessage: '@@' },
-  ];
+const ChatList = () => {
+  const { data: loginData } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: getUserData,
+  });
+  const createData = {
+    participants: [6, loginData?.id],
+    roomType: 'DM',
+  };
+  const postChatRoom = async () => {
+    const res = await axiosInstance.post(
+      `/api/chat/create`,
+      JSON.stringify(createData)
+    );
+    return res.data.results;
+  };
+  const { data: myChatList } = useQuery<IChatRoomListItem[]>({
+    queryKey: ['myChatlist'],
+    queryFn: getChatList,
+  });
+
+  if (!myChatList) {
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={() => {
+            postChatRoom();
+          }}
+        >
+          testroom
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div>
       <div className="text-xl">나의 채팅 목록</div>
-      {testList.map((i) => (
+
+      {myChatList?.map((i: IChatRoomListItem) => (
         <div
-          key={i.id}
+          key={i.roomId}
           className="m-1.5 rounded-xl border border-gray-300 hover:bg-primary hover:text-white"
         >
           <div className="m-1.5 flex items-center justify-between">
             <div className="flex">
-              <Avatar className="m-1.5 cursor-pointer" />
-              <Link href={`/chatting/chatroom/${i.id}`}>
-                <div className="text-xl">{i.title}</div>
-                <div className="text-gray-400">{i.lastMessage}</div>
+              <Avatar
+                className="m-1.5 cursor-pointer"
+                src={i.imgUrl ? i.imgUrl : undefined}
+              />
+              <Link href={`/chatting/chatroom/${i.roomId}`}>
+                <div className="text-xl">
+                  {i.roomType === 'DIRECT' && i.name}
+                  {i.roomType === 'BASEKETBALL' && i.name}
+                  {i.roomType === 'TOGETHER' && i.name}
+                  {i.roomType === 'MATCHING' && i.name}
+                </div>
+                <div className="text-gray-400">
+                  {i.lastMessage.replace(/"/g, '')}
+                </div>
               </Link>
-            </div>
-            <div className="cursor-pointer">
-              <FaTimesCircle className="m-1.5 text-xl" />
             </div>
           </div>
         </div>
       ))}
+      <div>
+        <button
+          type="button"
+          onClick={() => {
+            postChatRoom();
+          }}
+        >
+          testroom
+        </button>
+      </div>
     </div>
   );
 };
 
-export default chatList;
+export default ChatList;

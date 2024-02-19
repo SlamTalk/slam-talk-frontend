@@ -6,9 +6,9 @@ body {
   min-width: 320px;
   max-width: 600px;
   margin: 0 auto;
+  padding: 0;
 }
 
 .footer {
   max-width: 600px;
-  margin: 0 auto;
 }

@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import { Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
-import axiosInstance from '@/app/api/axiosInstance';
+import { fetchMateData } from '@/services/matching/getMateData';
 import { useQuery } from '@tanstack/react-query';
 import LocalStorage from '@/utils/localstorage';
 import { useRouter } from 'next/navigation';
 import MatePostCard from './MatePostCard';
 import { MatePost } from '../../../types/matching/mateDataType';
 
-const levels = ['입문', '초보', '중수', '고수'];
+const levels = ['입문', '하수', '중수', '고수'];
 
 const cities = [
   '서울',
@@ -33,7 +33,7 @@ const cities = [
   '제주',
 ];
 
-const positions = ['CENTER', 'FORWARD', 'GUARD'];
+const positions = ['센터', '포워드', '가드'];
 
 interface MateMatchingProps {
   keywordProp: string | null;
@@ -44,14 +44,6 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedPosition, setSelectedPosition] = useState<string>('');
-
-  const fetchMateData = async (): Promise<MatePost[]> => {
-    const response = await axiosInstance
-      .get('/api/mate')
-      .then((res) => res.data.results.matePostList);
-
-    return response;
-  };
 
   const { data } = useQuery<MatePost[], Error>({
     queryKey: ['mate'],
@@ -70,13 +62,13 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
           ? post.positionList.some(
               (position) =>
                 position.position === selectedPosition ||
-                position.position === 'UNSPECIFIED'
+                position.position === '무관'
             )
           : true;
 
         // 실력 필터
         const matchesLevel = selectedLevel
-          ? post.skillList.includes(selectedLevel)
+          ? post.skillLevelList.includes(selectedLevel)
           : true;
 
         // 검색어 필터링
@@ -102,10 +94,10 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
     }
   };
 
-  if (!Array.isArray(data)) {
+  if (data?.length === 0) {
     return (
       <div>
-        <div className="mx-auto mt-10 max-w-[250px]">
+        <div className="mx-auto mt-[50px] max-w-[250px]">
           게시글이 존재하지 않습니다.
         </div>
         <div className="fixed bottom-14 w-full max-w-[600px]">
@@ -202,8 +194,9 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
             date={post.scheduledDate}
             startTime={post.startTime}
             location={post.locationDetail}
-            level={post.skillList}
+            level={post.skillLevelList}
             positionNeeds={post.positionList}
+            recruitmentStatus={post.recruitmentStatus}
           />
         </Link>
       ))}

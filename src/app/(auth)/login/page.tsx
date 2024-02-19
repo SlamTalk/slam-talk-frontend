@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Anton } from 'next/font/google';
 import { Button } from '@nextui-org/button';
 import Link from 'next/link';
+import LocalStorage from '@/utils/localstorage';
 import KakaoImg from './components/Kakao';
 import GoogleImg from './components/Google';
 import NaverImg from './components/Naver';
@@ -13,6 +14,12 @@ const anton = Anton({ weight: '400', subsets: ['latin'] });
 
 const Login = () => {
   const router = useRouter();
+  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+
+  if (isLoggedIn === 'true') {
+    router.push('my-page');
+  }
+
   const handleKakaoLogin = () => {
     const kakaoLoginURL = `${process.env.NEXT_PUBLIC_BASE_URL}/oauth2/authorization/kakao`;
     router.push(kakaoLoginURL);

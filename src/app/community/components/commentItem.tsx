@@ -1,67 +1,100 @@
+import { deleteComment } from '@/services/community/comment/deleteComment';
+import { patchComment } from '@/services/community/comment/patchComment';
+
+import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
+import { getOtherUserData } from '@/services/user/getOtherUserData';
+import { OtherUserInfo } from '@/types/user/otherUserInfo';
+import { Avatar } from '@nextui-org/react';
+import { getUserData } from '@/services/user/getUserData';
 
 interface ICommentItemProps {
-  comment: {
-    id: string;
-    postId: string;
-    userId: string;
-    content: string;
-  };
-  onEdit: (id: string, editedComment: string) => void;
-  onDelete: (id: string) => void;
+  commentId: number;
+  communityId: number;
+  userId: number;
+  content: string;
 }
 
 const CommentItem: React.FC<ICommentItemProps> = ({
-  comment,
-  onEdit,
-  onDelete,
+  userId,
+  communityId,
+  content,
+  commentId,
 }) => {
   const [editToggle, setEditToggle] = useState(false);
-  const [editedComment, setEditedComment] = useState(comment.content);
+  const [editedComment, setEditedComment] = useState('');
+  const patchArticleComment = useMutation({
+    mutationKey: ['patchComment'],
+    mutationFn: () => patchComment(communityId, editedComment, commentId),
+    onSuccess: () => {
+      window.location.reload();
+    },
+  });
+  const { data: writerUserInfo } = useQuery<OtherUserInfo | null>({
+    queryKey: [`getWriterInfo${userId}`],
+    queryFn: () => getOtherUserData({ userId }),
+  });
+  const { data: loginUserData } = useQuery({
+    queryKey: ['getLoginData'],
+    queryFn: getUserData,
+  });
   const handleEdit = () => {
     setEditToggle(!editToggle);
-    if (editToggle) {
-      onEdit(comment.id, editedComment);
-      setEditedComment('');
+    if (editToggle && editedComment !== '') {
+      console.log(editedComment);
+      patchArticleComment.mutate();
       setEditToggle(false);
     }
   };
+  const deleteArticleComment = useMutation({
+    mutationKey: ['deleteComment'],
+    mutationFn: () => deleteComment(communityId, commentId),
+    onSuccess: () => {
+      window.location.reload();
+    },
+  });
   const handleDelete = () => {
-    onDelete(comment.id);
+    deleteArticleComment.mutate();
   };
   return (
     <div
-      key={comment.id}
+      key={commentId}
       className="border-gray mt-2 flex items-center border-b-2"
     >
-      <p className="m-2 w-14 text-sm">{comment.userId}</p>
+      <div aria-label="작성자 정보">
+        <Avatar src={writerUserInfo?.imageUrl} />
+        <p className="text-center">{writerUserInfo?.nickname}</p>
+      </div>
+
       {editToggle ? (
         <input
-          placeholder={comment.content}
-          value={editedComment}
+          className="ml-2 mt-2 h-10 w-[750px]"
+          placeholder={content}
           onChange={(e) => {
             setEditedComment(e.target.value);
           }}
         />
       ) : (
-        <h2 className="ml-2 mt-2 h-10 w-[750px]">{comment.content}</h2>
+        <h2 className="ml-2 ms-5 mt-2 h-10 w-[750px]">{content}</h2>
       )}
-      <div aria-label="comment button group" className="w-40">
-        <button
-          className="text-gray-600 hover:text-primary"
-          type="button"
-          onClick={handleEdit}
-        >
-          수정
-        </button>
-        <button
-          type="button"
-          className="mx-3 text-gray-600 hover:text-primary"
-          onClick={handleDelete}
-        >
-          삭제
-        </button>
-      </div>
+      {loginUserData?.id === writerUserInfo?.id ? (
+        <div aria-label="comment button group" className="w-40">
+          <button
+            onClick={handleEdit}
+            className="text-gray-600 hover:text-primary"
+            type="button"
+          >
+            수정
+          </button>
+          <button
+            onClick={handleDelete}
+            type="button"
+            className="mx-3 text-gray-600 hover:text-primary"
+          >
+            삭제
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };

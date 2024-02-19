@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import IMessage from '@/types/chat/message';
+import axiosInstance from '@/app/api/axiosInstance';
+import { useRouter } from 'next/navigation';
 
 const MessageList = ({ list }: { list: IMessage[] }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -13,14 +15,33 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
   });
 
   const nickname = error ? null : user?.nickname;
-
+  const router = useRouter();
   useEffect(() => {
     // messageListData();
     setMessages(list);
-    console.log({ list });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
+  const postChatRoom = async (createData: any) => {
+    const res = await axiosInstance.post(
+      `/api/chat/create`,
+      JSON.stringify(createData)
+    );
+    return res.data.results;
+  };
+
+  const handleCreateChatroom = (partnerId: any) => async () => {
+    const createInfo = {
+      creator_id: user?.id,
+      participants: [partnerId],
+      roomType: 'DM',
+      basket_ball_id: '', // 시설채팅에만
+      name: '', // 1:1은 필요없음,시설명,매칭&같이하기는 작성글 제목
+    };
+    const createRoom = await postChatRoom(createInfo);
+    router.push(`/chatting/chatroom/${createRoom}`);
+  };
   return (
     <div className="min-w mt-16 h-[730px] w-full overflow-y-scroll	">
       {messages.map((i) =>
@@ -43,6 +64,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
           >
             <div aria-label="userIcon">
               <Avatar
+                onClick={handleCreateChatroom(user?.id)}
                 className="mx-2"
                 alt="others-profile"
                 src={user?.imageUrl}

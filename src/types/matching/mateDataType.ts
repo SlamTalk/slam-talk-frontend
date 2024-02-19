@@ -37,13 +37,15 @@ export interface MatePost {
   matePostId: number;
   writerId: number;
   writerNickname: string;
+  writerImageUrl: string;
   scheduledDate: string;
   startTime: string;
   endTime: string;
   title: string;
   content: string;
   positionList: Position[];
-  skillList: string[];
+  skillLevel: string;
+  skillLevelList: string[];
   recruitmentStatus: string;
   locationDetail: string;
   participants: Participant[];
@@ -69,4 +71,5 @@ export interface MateCardInfo {
   location: string;
   level: string[];
   positionNeeds: Position[];
+  recruitmentStatus: string;
 }

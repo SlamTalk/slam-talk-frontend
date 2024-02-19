@@ -3,11 +3,16 @@
 import React, { useState } from 'react';
 import { Tabs, Tab } from '@nextui-org/react';
 import { IoSearchSharp } from 'react-icons/io5';
+import { useSearchParams } from 'next/navigation';
 import TeamMatching from './components/TeamMatching';
 import MateMatching from './components/MateMatching';
 
 const MatchingPage = () => {
-  const [selectedTab, setSelectedTab] = useState<string>('team');
+  const searchParams = useSearchParams();
+  const tabValue = searchParams.get('tab');
+  const [selectedTab, setSelectedTab] = useState<string>(
+    tabValue === 'team' || tabValue === 'mate' ? tabValue : 'team'
+  );
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [keywordProp, setKeywordProp] = useState<string>('');
 
@@ -64,7 +69,7 @@ const MatchingPage = () => {
       </div>
 
       {selectedTab === 'team' ? (
-        <TeamMatching />
+        <TeamMatching keywordProp={keywordProp} />
       ) : (
         <MateMatching keywordProp={keywordProp} />
       )}

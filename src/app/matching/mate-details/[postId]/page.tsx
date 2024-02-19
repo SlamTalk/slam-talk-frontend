@@ -30,15 +30,23 @@ const MateDetailsPage = () => {
 
   const fetchMateDetailsData = async (): Promise<MatePost> => {
     const response = await axiosInstance
-      .get(`/api/mate/${postId}`)
+      .get(`/api/mate/read/${postId}`)
       .then((res) => res.data.results);
 
     return response;
   };
 
-  const deleteRecruitment = async (): Promise<AxiosResponse> => {
-    const response = await axiosInstance.delete<AxiosResponse>(
-      `/api/mate/${postId}`
+  // const deleteRecruitment = async (): Promise<AxiosResponse> => {
+  //   const response = await axiosInstance.delete<AxiosResponse>(
+  //     `/api/mate/${postId}`
+  //   );
+
+  //   return response;
+  // };
+
+  const completeRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.patch<AxiosResponse>(
+      `/api/mate/${postId}/complete`
     );
 
     return response;
@@ -46,7 +54,7 @@ const MateDetailsPage = () => {
 
   const handleFinishRecruitment = async () => {
     try {
-      deleteRecruitment();
+      completeRecruitment();
       alert('모집이 완료되었습니다.');
       router.push('/matching');
     } catch (err) {
@@ -63,7 +71,7 @@ const MateDetailsPage = () => {
   const writer = {
     userId: data?.writerId,
     userNickname: data?.writerNickname,
-    userProfile: null,
+    userProfile: data?.writerImageUrl,
   };
   const isWriter = user?.id === writer.userId;
 
@@ -110,7 +118,7 @@ const MateDetailsPage = () => {
     <div className="mx-[16px] mt-4 rounded-md border-2">
       {/* 유저 프로필 */}
       <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
-        <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray-300">
+        <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gray-300">
           <Avatar
             alt="profile-img"
             src={writer.userProfile || '/images/userprofile-default.png'}
@@ -120,7 +128,16 @@ const MateDetailsPage = () => {
       </div>
 
       {/* 모집글 제목 */}
-      <h1 className="mx-6 mb-2 text-xl font-bold">{data?.title}</h1>
+      <div className="mx-6 mb-2 flex items-start">
+        <h1 className="mr-4 max-w-[420px] text-xl font-bold">{data?.title}</h1>
+        <div
+          className={`mt-0.5 rounded-full px-3 py-1 text-xs text-white ${
+            data?.recruitmentStatus === 'COMPLETED' ? 'bg-danger' : 'bg-success'
+          }`}
+        >
+          {data?.recruitmentStatus === 'COMPLETED' ? '모집 완료' : '모집중'}
+        </div>
+      </div>
 
       {/* 날짜와 시간 */}
       <div className="mx-6 mb-4 flex items-center">
@@ -183,22 +200,28 @@ const MateDetailsPage = () => {
       </div>
       <div className="flex justify-center py-3">
         {isWriter ? (
-          <>
-            <Button
-              color="primary"
-              className="mx-2"
-              onClick={handleFinishRecruitment}
-            >
-              모집 완료
-            </Button>
-            <Link href={`/matching/mate-details/${data?.matePostId}/revise`}>
-              <Button color="default" className="mx-2 bg-gray-400 text-white">
-                모집글 수정
+          data?.recruitmentStatus !== 'COMPLETED' && (
+            <>
+              <Button
+                color="primary"
+                className="mx-2"
+                onClick={handleFinishRecruitment}
+              >
+                모집 완료
               </Button>
-            </Link>
-          </>
+              <Link href={`/matching/mate-details/${data?.matePostId}/revise`}>
+                <Button color="default" className="mx-2 bg-gray-400 text-white">
+                  모집글 수정
+                </Button>
+              </Link>
+            </>
+          )
         ) : (
-          <Button color="primary" onClick={handleApply}>
+          <Button
+            color="primary"
+            onClick={handleApply}
+            disabled={data?.recruitmentStatus === 'COMPLETED'}
+          >
             지원하기
           </Button>
         )}

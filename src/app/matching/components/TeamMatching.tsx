@@ -6,10 +6,12 @@ import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
 import { TeamPost } from '@/types/matching/teamDataType';
 import { useQuery } from '@tanstack/react-query';
-import axiosInstance from '@/app/api/axiosInstance';
+import LocalStorage from '@/utils/localstorage';
+import { useRouter } from 'next/navigation';
+import { fetchTeamData } from '@/services/matching/getTeamData';
 import TeamPostCard from './TeamPostCard';
 
-const levels = ['입문', '초보', '중수', '고수'];
+const levels = ['입문', '하수', '중수', '고수'];
 
 const cities = [
   '서울',
@@ -33,19 +35,16 @@ const cities = [
 
 const scale = ['2', '3', '4', '5'];
 
-const TeamMatching = () => {
+interface MateMatchingProps {
+  keywordProp: string | null;
+}
+
+const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
+  const router = useRouter();
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedNumberOfMembers, setSelectedNumberOfMembers] =
     useState<string>('');
-
-  const fetchTeamData = async (): Promise<TeamPost[]> => {
-    const response = await axiosInstance
-      .get('/api/match')
-      .then((res) => res.data.results.teamMatchingList);
-
-    return response;
-  };
 
   const { data } = useQuery<TeamPost[], Error>({
     queryKey: ['team'],
@@ -58,32 +57,53 @@ const TeamMatching = () => {
           ? post.locationDetail.includes(selectedCity)
           : true;
         const matchesLevel = selectedLevel
-          ? post.skillLevel.includes(selectedLevel)
+          ? post.skillLevelList.includes(selectedLevel)
           : true;
         const matchesNumberOfMembers = selectedNumberOfMembers
-          ? post.numberOfMembers.toString() === selectedNumberOfMembers
+          ? post.numberOfMembers === selectedNumberOfMembers
           : true;
-        return matchesCity && matchesLevel && matchesNumberOfMembers;
+        const keyword = keywordProp?.toLowerCase();
+        const matchesKeyword = keyword
+          ? post.title.toLowerCase().includes(keyword) ||
+            post.content.toLowerCase().includes(keyword) ||
+            post.locationDetail.toLowerCase().includes(keyword) ||
+            post.writerNickname.toLowerCase().includes(keyword)
+          : true;
+
+        return (
+          matchesCity &&
+          matchesLevel &&
+          matchesNumberOfMembers &&
+          matchesKeyword
+        );
       })
     : [];
+
+  const handleCreateNewPost = () => {
+    const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true') router.push(`/matching/team-new-post`);
+    else {
+      alert('로그인 후 이용할 수 있습니다.');
+      router.push(`/login`);
+    }
+  };
 
   if (!Array.isArray(data)) {
     return (
       <div>
-        <div className="mx-auto mt-10 max-w-[250px]">
+        <div className="mx-auto mt-[50px] max-w-[250px]">
           게시글이 존재하지 않습니다.
         </div>
         <div className="fixed bottom-14 w-full max-w-[600px]">
           <div className="mr-4 flex justify-end">
-            <Link href="/matching/team-new-post">
-              <Button
-                startContent={<FaPlus />}
-                color="primary"
-                className="rounded-full bg-primary text-white shadow-md"
-              >
-                새 모집글 작성
-              </Button>
-            </Link>
+            <Button
+              startContent={<FaPlus />}
+              color="primary"
+              className="rounded-full bg-primary text-white shadow-md"
+              onClick={handleCreateNewPost}
+            >
+              새 모집글 작성
+            </Button>
           </div>
         </div>
       </div>
@@ -109,9 +129,8 @@ const TeamMatching = () => {
             }}
             className="text-bold"
           >
-            {cities.map((city, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <SelectItem key={index} value={city}>
+            {cities.map((city) => (
+              <SelectItem key={city} value={city}>
                 {city}
               </SelectItem>
             ))}
@@ -126,9 +145,8 @@ const TeamMatching = () => {
             onChange={(e) => setSelectedNumberOfMembers(e.target.value)}
             style={{ width: '100px', fontWeight: 'bold' }}
           >
-            {scale.map((number, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <SelectItem key={index} value={number}>
+            {scale.map((number) => (
+              <SelectItem key={number} value={number}>
                 {`${number} vs ${number}`}
               </SelectItem>
             ))}
@@ -141,9 +159,8 @@ const TeamMatching = () => {
             onChange={(e) => setSelectedLevel(e.target.value)}
             style={{ width: '80px', marginLeft: '16px', fontWeight: 'bold' }}
           >
-            {levels.map((level, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <SelectItem key={index} value={level}>
+            {levels.map((level) => (
+              <SelectItem key={level} value={level}>
                 {level}
               </SelectItem>
             ))}
@@ -163,22 +180,22 @@ const TeamMatching = () => {
             date={post.scheduledDate}
             startTime={post.startTime}
             location={post.locationDetail}
-            level={post.skillLevel}
+            level={post.skillLevelList}
             numberOfMembers={post.numberOfMembers}
+            recruitmentStatusType={post.recruitmentStatusType}
           />
         </Link>
       ))}
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
-          <Link href="/matching/team-new-post">
-            <Button
-              startContent={<FaPlus />}
-              color="primary"
-              className="rounded-full bg-primary text-white shadow-md"
-            >
-              새 모집글 작성
-            </Button>
-          </Link>
+          <Button
+            startContent={<FaPlus />}
+            color="primary"
+            className="rounded-full bg-primary text-white shadow-md"
+            onClick={handleCreateNewPost}
+          >
+            새 모집글 작성
+          </Button>
         </div>
       </div>
     </div>
