@@ -20,6 +20,7 @@ import {
 } from '@nextui-org/react';
 import Link from 'next/link';
 import LocalStorage from '@/utils/localstorage';
+import ThemeSwitcher from '@/app/components/ThemeSwitcher';
 
 const MyPage = () => {
   const router = useRouter();
@@ -118,25 +119,33 @@ const MyPage = () => {
               </div>
             </div>
             <hr className="w-90 my-4 h-px bg-gray-300" />
-            {/* <p className="my-3 font-semibold">기타</p>
+            <p className="my-3 font-semibold">설정</p>
             <div className="mb-4 flex flex-col gap-4">
-              <span>문의하기</span>
-            </div> */}
-          </div>
-          {user.role === 'ADMIN' && (
-            <div className="absolute bottom-16 right-4">
-              <Link href="/admin">
-                <Button
-                  radius="sm"
-                  color="success"
-                  className="font-medium text-white"
-                >
-                  관리자 페이지
-                </Button>
-              </Link>
+              <div className="flex gap-2">
+                <span>화면 모드</span>
+                <ThemeSwitcher />
+              </div>
             </div>
-          )}
+          </div>
+          <hr className="w-90 my-4 h-px bg-gray-300" />
+          <p className="my-3 font-semibold">기타</p>
+          <div className="mb-4 flex flex-col gap-4">
+            <span>문의하기</span>
+          </div>
         </div>
+        {user.role === 'ADMIN' && (
+          <div className="absolute bottom-16 right-4">
+            <Link href="/admin">
+              <Button
+                radius="sm"
+                color="success"
+                className="font-medium text-white"
+              >
+                관리자 페이지
+              </Button>
+            </Link>
+          </div>
+        )}
         <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
           <ModalContent>
             {(onClose) => (
