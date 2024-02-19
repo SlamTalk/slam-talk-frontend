@@ -1,14 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Avatar } from '@nextui-org/react';
+import { Avatar, useDisclosure } from '@nextui-org/react';
 import UserProfile from '../components/UserProfile';
 
 const User = () => {
-  const [isUserProfileShow, setIsUserProfileShow] = useState(false);
+  const [selectedUserId, SetSelectedUserId] = useState<number | null>(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleShowUserProfile = () => {
+    SetSelectedUserId(2);
+    onOpen();
+  };
+
   return (
     <>
-      <Avatar onClick={() => setIsUserProfileShow(true)} />
+      <Avatar onClick={handleShowUserProfile} />
       <div>컨텐츠</div>
       <div>컨텐츠</div>
       <div>컨텐츠</div>
@@ -17,11 +24,13 @@ const User = () => {
       <div>컨텐츠</div>
       <div>컨텐츠</div>
       <div>컨텐츠</div>
-      <UserProfile
-        userId={2}
-        isVisible={isUserProfileShow}
-        onClose={() => setIsUserProfileShow(false)}
-      />
+      {selectedUserId && (
+        <UserProfile
+          isOpen={isOpen}
+          userId={selectedUserId}
+          onClose={onClose}
+        />
+      )}
     </>
   );
 };
