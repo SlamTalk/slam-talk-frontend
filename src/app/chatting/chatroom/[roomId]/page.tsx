@@ -166,10 +166,7 @@ const Chatting = () => {
     try {
       setMoreCount(moreCount + 1);
       const res = await axiosInstance.post(
-        `/api/chat/history?roomId=${params.roomId}`,
-        {
-          count: moreCount,
-        }
+        `/api/chat/history?roomId=${params.roomId}/?count=${moreCount}`
       );
       console.log(res.data.results);
     } catch (err) {
