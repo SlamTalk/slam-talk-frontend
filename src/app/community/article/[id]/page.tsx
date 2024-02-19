@@ -2,7 +2,7 @@
 
 import { Button } from '@nextui-org/button';
 import { useParams, useRouter } from 'next/navigation';
-import { Avatar } from '@nextui-org/react';
+import { Avatar, useDisclosure } from '@nextui-org/react';
 import { IoChevronBackSharp } from 'react-icons/io5';
 // import { FaHeart } from 'react-icons/fa';
 
@@ -13,6 +13,7 @@ import Image from 'next/image';
 import { deleteCommunityArticle } from '@/services/community/deleteCommunityArticle';
 import { postComment } from '@/services/community/comment/postComment';
 import { getUserData } from '@/services/user/getUserData';
+import UserProfile from '@/app/components/UserProfile';
 import CommentList from '../../components/commentList';
 
 // interface ICommunityItem {
@@ -31,9 +32,10 @@ import CommentList from '../../components/commentList';
 // }
 
 const Page = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const params = useParams<{ id: string }>();
-  const { data: articleData } = useQuery({
+  const { data: articleData, isLoading } = useQuery({
     queryKey: ['articleData'],
     queryFn: () => getCommunityArticle(params.id),
   });
@@ -42,6 +44,7 @@ const Page = () => {
     queryFn: getUserData,
   });
   const writeName = articleData?.userNickname;
+
   const loginUserName = loginData?.nickname;
   const [commentData, setCommentData] = useState({
     communityId: 0,
@@ -59,7 +62,13 @@ const Page = () => {
         content: comment,
       });
       postCommunityComment.mutate();
-      window.location.reload();
+      const currentUrl = window.location.href;
+      const domain = new URL(currentUrl).origin;
+      if (domain === 'http://localhost:3000') {
+        window.location.href = `http://localhost:3000/community/article/${params.id}`;
+      } else {
+        window.location.href = `https://slam-talk.vercel.app/community/article/${params.id}`;
+      }
     }
   };
   const deleteArticle: any = useMutation({
@@ -73,9 +82,13 @@ const Page = () => {
   const handelDelete = () => {
     deleteArticle.mutate();
   };
+  if (isLoading) {
+    return <div>Loading...</div>; // 로딩 중일 때 로딩 화면을 표시합니다.
+  }
 
   return (
     <div className="h-[90vh]">
+      <UserProfile isOpen={isOpen} userId={1} onClose={onClose} />
       {articleData ? (
         <div>
           <title>슬램톡 | 커뮤니티</title>
@@ -96,7 +109,13 @@ const Page = () => {
                 aria-label="유저 아바타"
                 className="mt-1 flex items-center justify-start border-b-1"
               >
-                <Avatar name={articleData.userNickname} className="me-2" />
+                <Avatar
+                  onClick={() => {
+                    onOpen();
+                  }}
+                  name={articleData.userNickname}
+                  className="me-2"
+                />
                 <p className="text-lg	">{articleData.userNickname}</p>
               </div>
 
