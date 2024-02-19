@@ -3,6 +3,7 @@
 'use client';
 
 import { getOtherUserData } from '@/services/user/getOtherUserData';
+import { getUserData } from '@/services/user/getUserData';
 import LocalStorage from '@/utils/localstorage';
 import {
   Avatar,
@@ -18,6 +19,8 @@ import {
 } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import axiosInstance from '../api/axiosInstance';
 
 export interface UserProfileProps {
   userId: number;
@@ -30,18 +33,46 @@ const UserProfile: React.FC<UserProfileProps> = ({
   isOpen,
   onClose,
 }) => {
+  const router = useRouter();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
 
-  const { error, data: user } = useQuery({
+  const { error, data: otherUser } = useQuery({
     queryKey: ['otherUserData', userId],
     queryFn: () => getOtherUserData({ userId }),
+  });
+
+  const { data: user } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: getUserData,
   });
 
   if (error) {
     console.log(error);
   }
 
-  if (isLoggedIn === 'true' && user) {
+  // eslint-disable-next-line no-param-reassign
+  // userId = 2;
+
+  const handleCreateChatting = async () => {
+    if (user && userId) {
+      const myId = user.id;
+      try {
+        const response = await axiosInstance.post('/api/chat/create', {
+          participants: [myId, userId],
+          roomType: 'DM',
+        });
+        if (response.status === 200) {
+          const room = response.data.results;
+          console.log(room);
+          router.push(`/chatting/chatroom/${room}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  if (isLoggedIn === 'true' && otherUser) {
     return (
       <>
         <title>슬램톡 | 유저 프로필</title>
@@ -50,20 +81,28 @@ const UserProfile: React.FC<UserProfileProps> = ({
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  {user.nickname}님의 프로필
+                  {otherUser.nickname}님의 프로필
                 </ModalHeader>
                 <ModalBody>
                   <div className="flex max-w-md flex-col gap-3 p-4">
                     <div className="flex flex-col items-center gap-3">
-                      <Avatar size="lg" alt="profile-img" src={user.imageUrl} />
-                      <p className="text-xl font-semibold">{user.nickname}</p>
+                      <Avatar
+                        size="lg"
+                        alt="profile-img"
+                        src={otherUser.imageUrl}
+                      />
+                      <p className="text-xl font-semibold">
+                        {otherUser.nickname}
+                      </p>
                       <Input
                         isDisabled
                         className="h-10"
                         size="sm"
                         label="소개 한마디"
                         value={
-                          user.selfIntroduction ? user.selfIntroduction : ''
+                          otherUser.selfIntroduction
+                            ? otherUser.selfIntroduction
+                            : ''
                         }
                       />
                     </div>
@@ -72,16 +111,16 @@ const UserProfile: React.FC<UserProfileProps> = ({
                         <p className="text-sm font-semibold">포지션</p>
                         <Card className="rounded-md text-sm">
                           <CardBody>
-                            {user.basketballPosition
-                              ? user.basketballPosition
+                            {otherUser.basketballPosition
+                              ? otherUser.basketballPosition
                               : '미정'}
                           </CardBody>
                         </Card>
                         <p className="text-sm font-semibold">농구 실력</p>
                         <Card className="rounded-md text-sm">
                           <CardBody>
-                            {user.basketballSkillLevel
-                              ? user.basketballSkillLevel
+                            {otherUser.basketballSkillLevel
+                              ? otherUser.basketballSkillLevel
                               : '🤔'}
                           </CardBody>
                         </Card>
@@ -92,15 +131,17 @@ const UserProfile: React.FC<UserProfileProps> = ({
                           <CardBody>
                             <div className="flex flex-col gap-6 text-sm">
                               <p className="underline underline-offset-2">
-                                Lv.{user.level === 0 ? 1 : user.level}
+                                Lv.{otherUser.level === 0 ? 1 : otherUser.level}
                               </p>
                               <p>
                                 팀 매칭 횟수:{' '}
-                                {user.teamMatchingCompleteParticipationCount}
+                                {
+                                  otherUser.teamMatchingCompleteParticipationCount
+                                }
                               </p>
                               <p>
                                 농구 메이트 참여:{' '}
-                                {user.mateCompleteParticipationCount}
+                                {otherUser.mateCompleteParticipationCount}
                               </p>
                             </div>
                           </CardBody>
@@ -113,7 +154,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
                   <Button color="danger" variant="light" onPress={onClose}>
                     닫기
                   </Button>
-                  <Button color="primary" onPress={onClose}>
+                  <Button color="primary" onClick={handleCreateChatting}>
                     1 : 1 채팅 걸기
                   </Button>
                 </ModalFooter>
