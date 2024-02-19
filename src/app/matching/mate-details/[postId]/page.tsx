@@ -2,7 +2,17 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Snippet, Button, Avatar } from '@nextui-org/react';
+import {
+  Snippet,
+  Button,
+  Avatar,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from '@nextui-org/react';
 import axiosInstance from '@/app/api/axiosInstance';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
@@ -20,6 +30,7 @@ interface MateChatRoomType {
 }
 
 const MateDetailsPage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
@@ -33,6 +44,7 @@ const MateDetailsPage = () => {
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [chatRoomId, setChatRoomId] = useState('');
   const router = useRouter();
 
   // 상세 데이터 가져오기
@@ -95,11 +107,13 @@ const MateDetailsPage = () => {
     MateChatRoomType
   >({
     mutationFn: creatMateChatRoom,
-    onSuccess: () => {
-      console.log('success');
+    onSuccess: (response) => {
+      const newChatRoomId = response.data;
+      setChatRoomId(newChatRoomId);
+      onOpen();
     },
-    onError: (er: Error) => {
-      console.log(er);
+    onError: (er) => {
+      console.error(er);
     },
   });
 
@@ -118,14 +132,11 @@ const MateDetailsPage = () => {
     try {
       patchPostStatusMutation.mutate();
 
-      // 'ACCEPTED' 상태인 참가자들의 ID를 추출
       const acceptedParticipantIds =
         data?.participants
           .filter((participant) => participant.applyStatus === 'ACCEPTED')
           .map((acceptedParticipant) => acceptedParticipant.participantId) ||
         [];
-
-      // 작성자 ID를 포함하되, undefined를 제외
       const participantsIds = [
         data?.writerId,
         ...acceptedParticipantIds,
@@ -138,10 +149,7 @@ const MateDetailsPage = () => {
         name: data?.title ?? '',
       };
 
-      const chatRoomId = createMateChatRoomMutation.mutate(newRoomData);
-
-      alert('모집이 완료되었습니다.\n확인을 누르면 채팅으로 이동합니다.');
-      router.push(`/chatting/chatroom/${chatRoomId}`);
+      createMateChatRoomMutation.mutate(newRoomData);
     } catch (err) {
       console.error(err);
       alert('모집 완료 처리 중 오류가 발생했습니다.');
@@ -239,7 +247,19 @@ const MateDetailsPage = () => {
       {/* 모집 정보 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">모집 정보</div>
+
         <div className="mt-2 rounded-md border-2 p-3">
+          <div className="flex">
+            {data?.skillLevelList.map((lev, index) => (
+              <div
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+                className="mb-2 mr-2 rounded-md bg-gray-200 px-2 py-1 text-xs dark:bg-gray-400"
+              >
+                {lev}
+              </div>
+            ))}
+          </div>
           {data?.positionList.map((position, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <div key={index} className="mb-1">
@@ -299,6 +319,34 @@ const MateDetailsPage = () => {
           </Button>
         )}
       </div>
+      <Modal isOpen={isOpen} onClose={onClose} placement="center">
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                메이트 찾기 모집 완료
+              </ModalHeader>
+              <ModalBody>
+                <p>메이트 찾기 모집이 완료되었습니다.</p>
+                <p>메이트 채팅방이 개설되었습니다.</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  닫기
+                </Button>
+                <Button
+                  color="primary"
+                  onPress={() =>
+                    router.push(`/chatting/chatroom/${chatRoomId}`)
+                  }
+                >
+                  채팅방으로 이동
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
