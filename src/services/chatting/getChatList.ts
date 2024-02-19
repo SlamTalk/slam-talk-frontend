@@ -1,15 +1,17 @@
 import axiosInstance from '@/app/api/axiosInstance';
 import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
+import { QueryFunction, QueryKey } from '@tanstack/react-query';
 
-export const getChatList = async () => {
+export const getChatList: QueryFunction<
+  IChatRoomListItem[],
+  QueryKey
+> = async () => {
   try {
     const response = await axiosInstance.get('/api/chat/list');
-    const responseList: IChatRoomListItem[] = response.data.results;
-    const myChatList: IChatRoomListItem[] = [];
-    responseList.map((item) => myChatList.push(item));
+    const myChatList: IChatRoomListItem[] = response.data.results;
     return myChatList;
   } catch (err) {
     console.error(err);
-    return err;
+    throw new Error('Failed to fetch chat list');
   }
 };

@@ -1,9 +1,8 @@
 'use client';
 
 import { Avatar } from '@nextui-org/react';
-import { FaTimesCircle } from 'react-icons/fa';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
@@ -11,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
 import axiosInstance from '@/app/api/axiosInstance';
 import { getUserData } from '@/services/user/getUserData';
+import { getChatList } from '@/services/chatting/getChatList';
 
 const ChatList = () => {
   const { data: loginData } = useQuery({
@@ -28,35 +28,18 @@ const ChatList = () => {
     );
     return res.data.results;
   };
-  // const { data: myChatList } = useQuery<IChatRoomListItem[]>({
-  //   queryKey: ['myChatlist'],
-  //   queryFn: () => {
-  //     getChatList();
-  //   },
-  // });
+  const { data: myChatList } = useQuery<IChatRoomListItem[]>({
+    queryKey: ['myChatlist'],
+    queryFn: getChatList,
+  });
 
-  const [myChatList, setMyChatList] = useState<IChatRoomListItem[]>([]);
-  const handleChatList = async () => {
-    try {
-      const res = await axiosInstance.get('/api/chat/list');
-      res.data.results.map((i: IChatRoomListItem) =>
-        setMyChatList([...myChatList, i])
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  useEffect(() => {
-    handleChatList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   if (!myChatList) {
     return (
       <div>
         <button
           type="button"
           onClick={() => {
-            // postChatRoom();
+            postChatRoom();
           }}
         >
           testroom
@@ -84,17 +67,13 @@ const ChatList = () => {
                 <div className="text-xl">
                   {i.roomType === 'DIRECT' && i.name}
                   {i.roomType === 'BASEKETBALL' && i.name}
-                  {i.roomType === 'TOGHTHER' && i.name}
+                  {i.roomType === 'TOGETHER' && i.name}
                   {i.roomType === 'MATCHING' && i.name}
-                  {!i.roomType && 'testroom'}
                 </div>
                 <div className="text-gray-400">
                   {i.lastMessage.replace(/"/g, '')}
                 </div>
               </Link>
-            </div>
-            <div className="cursor-pointer">
-              <FaTimesCircle className="m-1.5 text-xl" />
             </div>
           </div>
         </div>

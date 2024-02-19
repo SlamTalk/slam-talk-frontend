@@ -17,8 +17,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getCommunityBoard } from '@/services/community/getCommunityBoard';
 import { IBoard } from '@/types/community/board';
 import LocalStorage from '@/utils/localstorage';
-import { getUserData } from '@/services/user/getUserData';
-import axiosInstance from '@/app/api/axiosInstance';
 
 const Page = () => {
   // const params = useParams<{ tag: string }>();
@@ -47,30 +45,11 @@ const Page = () => {
   const Search = () => {
     setSearchKey(inputData);
   };
-  const { data: loginData } = useQuery({
-    queryKey: ['loginData'],
-    queryFn: getUserData,
-  });
-  const createData = {
-    participants: [7, loginData?.id],
-    together_id: 4,
-    roomType: 'TM',
-    name: '같이해요',
-  };
-  const postChatRoom = async () => {
-    const res = await axiosInstance.post(
-      `/api/chat/create`,
-      JSON.stringify(createData)
-    );
-    return res.data.results;
-  };
+
   return (
     <div className="flex flex-col">
       <title>슬램톡 | 커뮤니티</title>
       <div className="z-10 flex w-full transform items-center justify-center rounded-md bg-background p-1 shadow-md">
-        <button type="button" onClick={postChatRoom}>
-          test
-        </button>
         <input
           aria-label="검색창"
           value={inputData}

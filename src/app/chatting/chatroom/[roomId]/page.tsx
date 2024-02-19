@@ -12,7 +12,8 @@ import { getUserData } from '@/services/user/getUserData';
 import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 import IMessage from '@/types/chat/message';
 import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
-// import { getChatList } from '@/services/chatting/getChatList';
+import { getChatList } from '@/services/chatting/getChatList';
+import { FaTimesCircle } from 'react-icons/fa';
 
 import axiosInstance from '../../../api/axiosInstance';
 import MessageList from '../../components/messageList';
@@ -22,6 +23,7 @@ const Chatting = () => {
   const router = useRouter();
 
   const [message, setMessage] = useState('');
+
   // const [greeting, setGreeting] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -30,31 +32,20 @@ const Chatting = () => {
     queryFn: postTokenRefresh,
     gcTime: 3000,
   });
-  // const { data: myChatList } = useQuery<IChatRoomListItem[]>({
-  //   queryKey: ['myChatlist'],
-  //   queryFn: getChatList,
-  // });
+  const { data: myChatList } = useQuery<IChatRoomListItem[]>({
+    queryKey: ['myChatlist'],
+    queryFn: getChatList,
+  });
   const accessToken = token;
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
-  const [myChatList, setMyChatList] = useState<IChatRoomListItem[]>([]);
-  const handleChatList = async () => {
-    try {
-      const res = await axiosInstance.get('/api/chat/list');
-      res.data.results.map((i: IChatRoomListItem) =>
-        setMyChatList([...myChatList, i])
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  useEffect(() => {
-    handleChatList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const roomInfo = myChatList?.find((i) => i.roomId === +params.roomId);
+
+  const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
+  if (roomInfo === undefined) {
+    console.log({ myChatList });
+  }
   const nickname = error ? null : user?.nickname;
 
   const client = useRef<StompJs.Client | null>(null);
@@ -65,7 +56,7 @@ const Chatting = () => {
         `/api/chat/participation?roomId=${params.roomId}`
       );
       const listData = JSON.stringify(res.data.results);
-      console.log(typeof listData);
+
       setMessageListState(JSON.parse(listData));
     } catch (err) {
       console.error(err);
@@ -150,7 +141,7 @@ const Chatting = () => {
       }),
     });
 
-    // client.current?.deactivate();
+    client.current?.deactivate();
   };
   const postMore = async () => {
     try {
@@ -187,10 +178,12 @@ const Chatting = () => {
           <h2 className="w-[525px] text-center text-xl text-white">
             {roomInfo?.roomType === 'DIRECT' && roomInfo?.name}
             {roomInfo?.roomType === 'BASEKETBALL' && roomInfo?.name}
-            {roomInfo?.roomType === 'TOGTHER' && roomInfo?.name}
+            {roomInfo?.roomType === 'TOGETHER' && roomInfo?.name}
             {roomInfo?.roomType === 'MATCHING' && roomInfo?.name}
-            {!roomInfo?.roomType && 'testroom'}
           </h2>
+          <div className="cursor-pointer">
+            <FaTimesCircle className="m-1.5 text-xl" />
+          </div>
         </div>
       </div>
       <div className=" fixed	flex w-full max-w-[600px] items-center justify-center">

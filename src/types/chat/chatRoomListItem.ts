@@ -1,5 +1,5 @@
 export interface IChatRoomListItem {
-  roomId: number;
+  roomId: string;
   roomType: string;
   participants: number[];
   name: string;
