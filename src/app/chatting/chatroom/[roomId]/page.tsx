@@ -24,7 +24,7 @@ const Chatting = () => {
 
   const [message, setMessage] = useState('');
   const [moreCount, setMoreCount] = useState(0);
-  // const [greeting, setGreeting] = useState('');
+  const [greeting, setGreeting] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { data: token } = useQuery({
@@ -43,6 +43,7 @@ const Chatting = () => {
   });
 
   const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
+  // 농구장은 basketballId, 개인은 유저 id? 사용해서 링크 넣어주기
 
   const nickname = error ? null : user?.nickname;
 
@@ -84,8 +85,8 @@ const Chatting = () => {
           client.current.subscribe(
             `/sub/chat/bot/${params.roomId}`,
             (res) => {
-              const greeting = res.body;
-              console.log({ greeting });
+              const result = res.body;
+              setGreeting(result);
             },
             { authorization: `Bearer ${accessToken}` }
           );
@@ -215,10 +216,25 @@ const Chatting = () => {
           </div>
         </div>
       </div>
-      <div className=" fixed	flex w-full max-w-[600px] items-center justify-center">
+      <div className=" fixed	flex h-[80px] w-full max-w-[600px] flex-col items-center justify-center space-y-5">
         <Button onClick={postMore}>more</Button>
+        {greeting ? (
+          <div
+            aria-label="첫 방문 메시지 wrapper"
+            className="flex	 w-full justify-center"
+          >
+            <p
+              aria-label="첫 방문 메시지"
+              className="z-50 w-[150px] rounded bg-gray-300 text-center text-white"
+            >
+              {greeting}
+            </p>
+          </div>
+        ) : null}
       </div>
+
       <MessageList list={messageListState} />
+
       <div
         aria-label="chat input section"
         className="b-0 fixed flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"
