@@ -43,9 +43,7 @@ const Chatting = () => {
   });
 
   const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
-  if (roomInfo === undefined) {
-    console.log({ myChatList });
-  }
+
   const nickname = error ? null : user?.nickname;
 
   const client = useRef<StompJs.Client | null>(null);
@@ -62,9 +60,13 @@ const Chatting = () => {
       console.error(err);
     }
   };
+
   const connect = async () => {
+    const webSocketFactory = () =>
+      new WebSocket(`${process.env.NEXT_PUBLIC_SOCKET_URL}`);
     client.current = new StompJs.Client({
-      brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
+      // brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
+      webSocketFactory,
       connectHeaders: {
         id: 'sub-0',
         authorization: `Bearer ${accessToken}`,
@@ -81,8 +83,16 @@ const Chatting = () => {
             },
             { authorization: `Bearer ${accessToken}` }
           );
+          client.current.subscribe(
+            `/sub/chat/bot/${params.roomId}`,
+            (res) => {
+              const greeting = res.body;
+              console.log({ greeting });
+            },
+            { authorization: `Bearer ${accessToken}` }
+          );
           client.current.publish({
-            destination: `/pub/chat/enter/${params.roomId}`,
+            destination: `/pub/chat/bot/${params.roomId}`,
             body: JSON.stringify({
               roomId: params.roomId,
               senderNickname: user?.nickname,
@@ -143,6 +153,17 @@ const Chatting = () => {
 
     client.current?.deactivate();
   };
+  const exitChat = () => {
+    client.current?.publish({
+      destination: `/pub/exit/${params.roomId}`,
+      headers: { authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({
+        roomId: params.roomId,
+        senderNickname: nickname,
+      }),
+    });
+    client.current?.deactivate();
+  };
   const postMore = async () => {
     try {
       const res = await axiosInstance.post(
@@ -182,7 +203,16 @@ const Chatting = () => {
             {roomInfo?.roomType === 'MATCHING' && roomInfo?.name}
           </h2>
           <div className="cursor-pointer">
-            <FaTimesCircle className="m-1.5 text-xl" />
+            <Button
+              isIconOnly
+              className="h-auto w-14 border-none bg-transparent"
+              onClick={() => {
+                exitChat();
+                router.back();
+              }}
+            >
+              <FaTimesCircle className="m-1.5 text-xl" />
+            </Button>
           </div>
         </div>
       </div>

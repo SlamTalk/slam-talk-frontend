@@ -18,7 +18,7 @@ const ChatList = () => {
     queryFn: getUserData,
   });
   const createData = {
-    participants: [12, loginData?.id],
+    participants: [6, loginData?.id],
     roomType: 'DM',
   };
   const postChatRoom = async () => {
