@@ -78,6 +78,8 @@ const Page = () => {
     <div className="h-[90vh]">
       {articleData ? (
         <div>
+          <title>슬램톡 | 커뮤니티</title>
+
           <div className="flex h-[50px] items-center justify-center border-b-2">
             <IoChevronBackSharp
               cursor="pointer"
@@ -88,7 +90,6 @@ const Page = () => {
             />
             <h1 className="flex-grow text-center">{articleData.title}</h1>
           </div>
-
           <div className="flex h-[295px] flex-col">
             <div aria-label="contentsCard">
               <div
@@ -143,7 +144,6 @@ const Page = () => {
               </div>
             </div>
           </div>
-
           <div className="flex" aria-label="댓글 입력">
             <input
               placeholder="댓글을 입력해주세요"
