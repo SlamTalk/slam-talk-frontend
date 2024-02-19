@@ -39,7 +39,6 @@ const EmailLogin = () => {
         const accessToken = response.headers.authorization;
         axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
         localStorage.setItem('isLoggedIn', 'true');
-        alert('로그인 성공!');
         const currentUrl = window.location.href;
         const domain = new URL(currentUrl).origin;
         if (domain === 'http://localhost:3000') {
