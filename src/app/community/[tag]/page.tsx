@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Button } from '@nextui-org/button';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { FaPlus } from 'react-icons/fa';
 import { IoSearchSharp } from 'react-icons/io5';
 import {
@@ -16,23 +16,39 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { getCommunityBoard } from '@/services/community/getCommunityBoard';
 import { IBoard } from '@/types/community/board';
+
+// import { getCommunityTag } from '@/services/community/getCommunityTag';
+
 import LocalStorage from '@/utils/localstorage';
 
 const Page = () => {
-  // const params = useParams<{ tag: string }>();
+  const params = useParams<{ tag: string }>();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+
   const router = useRouter();
   const [inputData, setInputData] = useState('');
   const [isFocus, setIsFocus] = useState(false);
+  // const [tag, setTag] = useState('');
   const [searchKey, setSearchKey] = useState('');
   const { data: communityBoard } = useQuery<IBoard[]>({
     queryKey: ['communityBoard'],
     queryFn: getCommunityBoard,
   });
 
+  // const { data: categoriedList } = useQuery<any>({
+  //   queryKey: [`getCategory/${tag}`],
+  //   queryFn: async () => {
+  //     if (tag !== '') {
+  //       const data = await getCommunityTag('');
+  //       return data;
+  //     }
+  //     return '';
+  //   },
+  // });
   const handleLink = (id: number) => {
     router.push(`/community/article/${id}`);
   };
+
   useEffect(() => {
     if (isFocus) {
       setTimeout(() => {
@@ -70,57 +86,59 @@ const Page = () => {
       </div>
       <div className="my-3 flex justify-center space-x-10">
         <Button
+          onClick={() => {
+            router.push('/community/all');
+          }}
           aria-label="태그 버튼 all"
           key="all"
           radius="full"
           className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
-          onClick={() => {
-            router.push('/community/all');
-          }}
         >
           전체
         </Button>
+
         <Button
-          aria-label="태그 버튼 free"
-          key="FREE"
-          radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
             router.push('/community/FREE');
           }}
+          aria-label="태그 버튼 free"
+          value="FREE"
+          key="FREE"
+          radius="full"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           자유
         </Button>
         <Button
           aria-label="태그 버튼 usedtrade"
-          key="USED"
-          radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
             router.push('/community/USED');
           }}
+          key="USED"
+          radius="full"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           중고거래
         </Button>
         <Button
+          onClick={() => {
+            router.push('/community/QUESTION');
+          }}
           aria-label="태그 버튼 question"
           key="QUESTION"
           radius="full"
           className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
-          onClick={() => {
-            router.push('/community/QUESTION');
-          }}
         >
           질문
         </Button>
         <Button
           aria-label="태그 버튼 rentaltransfer"
-          key="TRANSFER"
-          radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
           onClick={() => {
             router.push('/community/TRANSFER');
           }}
+          key="TRANSFER"
+          radius="full"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           대관양도
         </Button>
@@ -131,23 +149,42 @@ const Page = () => {
           <TableColumn>TITLE</TableColumn>
           <TableColumn>USER</TableColumn>
         </TableHeader>
+
         <TableBody>
-          {(communityBoard || [])
-            .filter(
-              (item: IBoard) =>
-                searchKey === '' || item.title.includes(searchKey)
-            )
-            .map((item: IBoard) => (
-              <TableRow
-                className="cursor-pointer hover:bg-primary hover:text-white"
-                onClick={() => handleLink(item.communityId)}
-                key={item.communityId}
-                aria-labelledby={`title-${item.communityId}`}
-              >
-                <TableCell className="flex-grow">{item.title}</TableCell>
-                <TableCell>{item.userNickname}</TableCell>
-              </TableRow>
-            ))}
+          {params.tag === 'all'
+            ? (communityBoard || [])
+                .filter(
+                  (item: IBoard) =>
+                    searchKey === '' || item.title.includes(searchKey)
+                )
+                .map((item: IBoard) => (
+                  <TableRow
+                    className="cursor-pointer hover:bg-primary hover:text-white"
+                    onClick={() => handleLink(item.communityId)}
+                    key={item.communityId}
+                    aria-labelledby={`title-${item.communityId}`}
+                  >
+                    <TableCell className="flex-grow">{item.title}</TableCell>
+                    <TableCell>{item.userNickname}</TableCell>
+                  </TableRow>
+                ))
+            : (communityBoard || [])
+                .filter((item: IBoard) => item.category === params.tag)
+                .filter(
+                  (item: IBoard) =>
+                    searchKey === '' || item.title.includes(searchKey)
+                )
+                .map((item: IBoard) => (
+                  <TableRow
+                    className="cursor-pointer hover:bg-primary hover:text-white"
+                    onClick={() => handleLink(item.communityId)}
+                    key={item.communityId}
+                    aria-labelledby={`title-${item.communityId}`}
+                  >
+                    <TableCell className="flex-grow">{item.title}</TableCell>
+                    <TableCell>{item.userNickname}</TableCell>
+                  </TableRow>
+                ))}
         </TableBody>
       </Table>
 

@@ -8,7 +8,7 @@ import { TeamPost } from '@/types/matching/teamDataType';
 import { useQuery } from '@tanstack/react-query';
 import LocalStorage from '@/utils/localstorage';
 import { useRouter } from 'next/navigation';
-import axiosInstance from '@/app/api/axiosInstance';
+import { fetchTeamData } from '@/services/matching/getTeamData';
 import TeamPostCard from './TeamPostCard';
 
 const levels = ['입문', '하수', '중수', '고수'];
@@ -45,14 +45,6 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedNumberOfMembers, setSelectedNumberOfMembers] =
     useState<string>('');
-
-  const fetchTeamData = async (): Promise<TeamPost[]> => {
-    const response = await axiosInstance
-      .get('/api/match/list')
-      .then((res) => res.data.results.teamMatchingList);
-
-    return response;
-  };
 
   const { data } = useQuery<TeamPost[], Error>({
     queryKey: ['team'],
@@ -99,7 +91,7 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   if (!Array.isArray(data)) {
     return (
       <div>
-        <div className="mt-30 mx-auto max-w-[250px]">
+        <div className="mx-auto mt-[50px] max-w-[250px]">
           게시글이 존재하지 않습니다.
         </div>
         <div className="fixed bottom-14 w-full max-w-[600px]">

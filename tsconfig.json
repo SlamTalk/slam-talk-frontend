@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["kakao.maps.d.ts"],
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext", "ES6"],
     "allowJs": true,

@@ -1,102 +1,126 @@
-/* eslint-disable no-new */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable no-constant-condition */
+/* eslint-disable no-useless-escape */
 
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { Button } from '@nextui-org/button';
-import { IoSearchSharp } from 'react-icons/io5';
-import { MdMyLocation } from 'react-icons/md';
-import { BiSolidLocationPlus } from 'react-icons/bi';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  Map,
+  MapMarker,
+  MapTypeControl,
+  ZoomControl,
+  CustomOverlayMap,
+} from 'react-kakao-maps-sdk';
+import userLocationStore from '@/store/userLocationStore';
 import { useQuery } from '@tanstack/react-query';
 import getCourts from '@/services/basketballCourt/getCourts';
-import CourtReport from './CourtReport';
+import { Button } from '@nextui-org/button';
+import { MdMyLocation } from 'react-icons/md';
+import { BiSolidLocationPlus } from 'react-icons/bi';
+import { IoSearchSharp } from 'react-icons/io5';
+import { BasketballCourts } from '@/types/basketballCourt/basketballCourts';
+import { getAddressFromCoords } from '@/utils/getUserLocation';
+import LocalStorage from '@/utils/localstorage';
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from '@nextui-org/react';
 import CourtDetails from './CourtDetails';
+import CourtReport from './CourtReport';
 
-declare global {
-  interface Window {
-    kakao: any;
-  }
+// [TO DO]
+// 모달 알림 넣기 - 로그인 여부 ✅, 제보 성공✅/실패
+// 크게 보기 똑같은 UI 반영 ✅
+// 제보하기 이벤트 구현 ✅
+// 농구장 상세정보 UI 수정 ✅
+// 제보 모달 UI 수정 - 제보하기 Btn Fix ✅
+// 컨트롤 커스텀
+// 모바일 환경 움직임 확인하기
+
+export interface LatLng {
+  getLat: () => number;
+  getLng: () => number;
 }
 
-interface MouseEventWithLatLng {
-  latLng: {
-    La: number; // 경도
-    Ma: number; // 위도
-  };
-  point: {
-    x: number;
-    y: number;
-  };
+export interface MouseEventWithLatLng {
+  latLng: LatLng;
 }
 
 const KakaoMap = () => {
-  const mapRef = useRef<HTMLDivElement>(null);
-  const [map, setMap] = useState<any>(null);
-  const [searchKeyword, setSearchKeyword] = useState<string>('');
-  const [userLocation, setUserLocation] = useState<any>(null);
-  const [mapLevel] = useState(8);
-  const [isCourtReportVisible, setIsCourtReportVisible] = useState(false);
-  const [selectedCourtId, setSelectedCourtId] = useState<string>('');
-  const [isCourtDetailsVisible, setIsCourtDetailsVisible] = useState(false);
-  const [location, setLocation] = useState<any>(null);
+  const [map, setMap] = useState<any>();
+  const userLocation = userLocationStore((state) => state.userLocation);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [location, setLocation] = useState({
+    center: {
+      // 지도의 초기 위치
+      lat: userLocation ? userLocation.latitude : 37.5737,
+      lng: userLocation ? userLocation.longitude : 127.0484,
+    },
+  });
+  const [isCourtDetailsOpen, setIsCourtDetailsOpen] = useState<boolean>(false);
+  const [isCourtReportOpen, setIsCourtReportOpen] = useState(false);
+  const [selectedCourtId, setSelectedCourtId] = useState<number>(1);
   const [mode, setMode] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
+  const [, setCoord] = useState('');
+  const [position, setPosition] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
+  const [clickPositionAddress, setClickPositionAddress] = useState<string>('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const {
-    error,
-    data: courts,
-    isLoading,
-  } = useQuery({
+  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+  const router = useRouter();
+
+  const { error, data: courts } = useQuery<BasketballCourts[]>({
     queryKey: ['courts'],
     queryFn: getCourts,
   });
 
   if (error) {
-    console.log('농구장 정보를 불러오는데 실패했습니다:', error);
+    console.log(error);
   }
 
-  useEffect(() => {
-    if (!window.kakao || !window.kakao.maps) {
-      console.error('Kakao Maps API를 불러오는데 실패했습니다.');
-      return;
-    }
-
-    window.kakao.maps.load(() => {
-      if (!('geolocation' in navigator)) {
-        alert('이 브라우저는 위치 서비스를 지원하지 않습니다.');
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          const userLatLng = new window.kakao.maps.LatLng(latitude, longitude);
-          setUserLocation(userLatLng);
-          const seoulLatLng = new window.kakao.maps.LatLng(37.50827, 126.99315);
-          const options = { center: seoulLatLng, level: mapLevel };
-          const kakaoMap = new window.kakao.maps.Map(mapRef.current, options);
-          setMap(kakaoMap);
-        },
-        (locationError) => {
-          console.error(`Error: ${locationError.message}`);
-          if (locationError.code === locationError.PERMISSION_DENIED) {
-            alert(
-              '이 기능을 사용하려면 기기의 위치 서비스를 활성화해야 합니다. 설정에서 위치 서비스를 켜주세요.'
-            );
-          } else {
-            alert('위치 정보를 가져오는데 실패했습니다.');
-          }
-        }
-      );
-    });
-  }, [mapLevel]);
-
-  const moveToLocation = () => {
-    if (userLocation && map) {
-      map.setLevel(4);
-      map.panTo(userLocation);
+  const handleToggleMapClickEvent = () => {
+    if (isLoggedIn === 'true') {
+      setMode((prev) => !prev);
     } else {
-      alert('사용자 위치 정보가 설정되지 않았습니다.');
+      onOpen();
     }
+
+    if (mode === false) {
+      setPosition(null);
+    }
+  };
+
+  const handleMoveUserLocation = () => {
+    if (userLocation) {
+      const userPosition = new window.kakao.maps.LatLng(
+        userLocation.latitude,
+        userLocation.longitude
+      );
+      map.panTo(userPosition);
+    } else {
+      alert('위치 정보가 설정되지 않았습니다.');
+    }
+  };
+
+  const filterCourts = (
+    basketballCourts: BasketballCourts[],
+    keyword: string
+  ) => {
+    const result = basketballCourts.filter(
+      (court) =>
+        court.courtName.includes(keyword) || court.address.includes(keyword)
+    );
+    return result;
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,12 +128,22 @@ const KakaoMap = () => {
   };
 
   const handleSearch = () => {
+    if (!map) return;
+
     if (!searchKeyword) {
       alert('검색어를 입력하세요.');
       return;
     }
 
-    if (map) {
+    const filteredCourts = filterCourts(courts || [], searchKeyword);
+    if (filteredCourts.length > 0) {
+      const firstCourt = filteredCourts[0];
+      const courtPosition = new window.kakao.maps.LatLng(
+        firstCourt.latitude,
+        firstCourt.longitude
+      );
+      map.panTo(courtPosition);
+    } else {
       const ps = new window.kakao.maps.services.Places();
       ps.keywordSearch(
         searchKeyword,
@@ -118,8 +152,8 @@ const KakaoMap = () => {
             const firstResult = data[0];
             if (firstResult) {
               const { x, y } = firstResult;
-              const position = new window.kakao.maps.LatLng(y, x);
-              map.panTo(position);
+              const kakaoPosition = new window.kakao.maps.LatLng(y, x);
+              map.panTo(kakaoPosition);
             }
           } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
             alert('검색 결과가 존재하지 않습니다.');
@@ -132,146 +166,49 @@ const KakaoMap = () => {
     }
   };
 
-  const displayPlaces = (places: any) => {
-    if (!map) return;
-
-    const bounds = new window.kakao.maps.LatLngBounds();
-    const markerImageSrc = '/icons/marker-img.png';
-    const imageSize = new window.kakao.maps.Size(48);
-    const markerImage = new window.kakao.maps.MarkerImage(
-      markerImageSrc,
-      imageSize
-    );
-
-    places.forEach((place: any) => {
-      const marker = new window.kakao.maps.Marker({
-        map,
-        position: new window.kakao.maps.LatLng(place.latitude, place.longitude),
-        image: markerImage,
-      });
-
-      const content = `<div class="flex items-center px-2 py-1 bg-white text-black border border-gray-300 rounded text-sm font-medium shadow-sm ml-12">${place.courtName}</div>`;
-
-      // eslint-disable-next-line no-new
-      new window.kakao.maps.CustomOverlay({
-        map,
-        position: new window.kakao.maps.LatLng(place.latitude, place.longitude),
-        content,
-        yAnchor: 1,
-        xAnchor: 0.5,
-      });
-
-      window.kakao.maps.event.addListener(marker, 'click', () => {
-        setSelectedCourtId(place.courtId);
-        setIsCourtDetailsVisible(true);
-      });
-
-      bounds.extend(
-        new window.kakao.maps.LatLng(place.latitude, place.longitude)
-      );
-    });
-
-    map.setBounds(bounds);
-  };
-
-  useEffect(() => {
-    if (!map || isLoading || error) return;
-
-    displayPlaces(courts);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courts, isLoading, error, map]);
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
   };
 
-  useEffect(() => {
-    if (!map) return;
-
-    const handleCreateMarker = (mouseEvent: MouseEventWithLatLng) => {
-      const latlng = mouseEvent.latLng;
-
-      const markerImageSrc = '/icons/marker-img.png';
-      const imageSize = new window.kakao.maps.Size(48);
-      const markerImage = new window.kakao.maps.MarkerImage(
-        markerImageSrc,
-        imageSize
-      );
-
-      const newMarker = new window.kakao.maps.Marker({
-        position: latlng,
-        map,
-        image: markerImage,
-        clickable: true,
-      });
-
-      newMarker.setPosition(latlng);
-
-      const content = `<div class="flex items-center px-2 py-1 bg-white text-black border border-primary rounded text-sm font-medium shadow-sm ml-12">이 곳 제보하기</div>`;
-
-      const overlay = new window.kakao.maps.CustomOverlay({
-        map,
-        position: latlng,
-        content,
-        yAnchor: 1,
-        xAnchor: 0.5,
-      });
-
-      window.kakao.maps.event.addListener(newMarker, 'click', () => {
-        const geocoder = new window.kakao.maps.services.Geocoder();
-        geocoder.coord2Address(
-          latlng.La,
-          latlng.Ma,
-          (result: any, status: any) => {
-            if (status === window.kakao.maps.services.Status.OK) {
-              const address = result[0].address.address_name;
-              const courtInfo = {
-                address,
-                latitude: latlng.La,
-                longitude: latlng.Ma,
-              };
-
-              setLocation(courtInfo);
-              setIsCourtReportVisible(true);
-              setMode(false);
-              newMarker.setMap(null);
-              overlay.setMap(null);
-            } else {
-              alert('주소를 가져오지 못했습니다.');
-            }
-          }
-        );
-      });
-
-      setTimeout(() => {
-        newMarker.setMap(null);
-        overlay.setMap(null);
-      }, 30000);
-    };
-
+  const handleClickReport = (
+    _: kakao.maps.Map,
+    mouseEvent: MouseEventWithLatLng
+  ) => {
+    const latlng = mouseEvent.latLng;
+    const lat = latlng.getLat();
+    const lng = latlng.getLng();
+    setCoord(
+      `클릭한 위치의 위도는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
+    );
     if (mode === true) {
-      // 이벤트 등록
-      window.kakao.maps.event.addListener(map, 'click', handleCreateMarker);
+      setPosition({
+        lat,
+        lng,
+      });
+      getAddressFromCoords(lat, lng).then((address) => {
+        setClickPositionAddress(address);
+      });
     }
+  };
 
-    // 클린업 함수 실행
-    // eslint-disable-next-line consistent-return
-    return () => {
-      window.kakao.maps.event.removeListener(map, 'click', handleCreateMarker);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
-
-  const handleToggleMapClickEvent = () => {
-    setMode((prev) => !prev);
+  const handleClickReportMarker = () => {
+    setIsCourtReportOpen(true);
   };
 
   return (
-    <>
+    <div className="relative h-[calc(100vh-109px)] w-full">
       <title>슬램톡 | 농구장 지도</title>
-      <div className="relative h-full w-full">
+      <Map
+        className="relative z-0"
+        id="map"
+        center={location.center}
+        level={3}
+        style={{ width: '100%', height: '100%' }}
+        onCreate={setMap}
+        onClick={handleClickReport}
+      >
         <div className="absolute left-1/2 top-4 z-10 flex w-4/5 max-w-lg -translate-x-1/2 transform items-center justify-center rounded-md bg-background p-1 shadow-md">
           <input
             type="text"
@@ -293,47 +230,127 @@ const KakaoMap = () => {
             />
           </button>
         </div>
-        <div
-          ref={mapRef}
-          className="relative h-[calc(100vh-109px)] w-full overflow-y-hidden"
+        <Modal size="sm" isOpen={isOpen} onClose={onClose}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  농구장 제보
+                </ModalHeader>
+                <ModalBody>
+                  <p>로그인한 사용자만 이용할 수 있는 서비스입니다.</p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    닫기
+                  </Button>
+                  <Button color="primary" onPress={() => router.push('/login')}>
+                    로그인하러 가기
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+        {mode && position && (
+          <>
+            <MapMarker
+              image={{
+                src: '/icons/marker-img.png',
+                size: {
+                  width: 41,
+                  height: 48,
+                },
+              }}
+              position={position}
+              clickable
+              onClick={handleClickReportMarker}
+            />
+            <CustomOverlayMap
+              key={`overlay__${position.lat}-${position.lng}`}
+              position={position}
+              yAnchor={2.6}
+              xAnchor={0.67}
+            >
+              <div className="ml-12 flex items-center rounded border-1 border-primary bg-white px-2 py-1 text-sm font-medium text-black shadow-sm">
+                이 곳 제보하기
+              </div>
+            </CustomOverlayMap>
+          </>
+        )}
+        {courts?.map((court) => (
+          <>
+            <MapMarker
+              key={court.courtId}
+              position={{ lat: court.latitude, lng: court.longitude }}
+              image={{
+                src: '/icons/marker-img.png',
+                size: {
+                  width: 41,
+                  height: 48,
+                },
+              }}
+              clickable
+              onClick={() => {
+                setIsCourtDetailsOpen(true);
+                setSelectedCourtId(court.courtId);
+              }}
+            />
+            <CustomOverlayMap
+              key={`overlay__${court.latitude}-${court.longitude}`}
+              position={{ lat: court.latitude, lng: court.longitude }}
+              yAnchor={2.6}
+              xAnchor={0.63}
+            >
+              <div className="ml-12 flex items-center rounded border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-black shadow-sm">
+                {court.courtName}
+              </div>
+            </CustomOverlayMap>
+          </>
+        ))}
+        <div className="mt-20 !bg-primary !text-primary">
+          <MapTypeControl position="BOTTOMLEFT" />
+          <ZoomControl position="RIGHT" />
+        </div>
+      </Map>
+      {isCourtDetailsOpen && (
+        <CourtDetails
+          courtId={selectedCourtId}
+          onClose={() => setIsCourtDetailsOpen(false)}
+        />
+      )}
+      {position && clickPositionAddress && isCourtReportOpen && (
+        <CourtReport
+          address={clickPositionAddress}
+          position={position}
+          handleClose={() => {
+            setIsCourtReportOpen(false);
+            setPosition(null);
+          }}
+          onReportSuccess={() => setMode(false)}
+        />
+      )}
+      <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
+        <Button
+          isIconOnly
+          aria-label="Current Location"
+          type="button"
+          className="justify-center rounded-full bg-primary shadow-md"
+          onClick={handleMoveUserLocation}
         >
-          {isCourtReportVisible && (
-            <CourtReport
-              location={location}
-              isVisible={isCourtReportVisible}
-              onClose={() => setIsCourtReportVisible(false)}
-            />
-          )}
-          {isCourtDetailsVisible && (
-            <CourtDetails
-              courtId={selectedCourtId}
-              onClose={() => setIsCourtDetailsVisible(false)}
-            />
-          )}
-        </div>
-
-        <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
-          <Button
-            isIconOnly
-            aria-label="Current Location"
-            type="button"
-            className="justify-center rounded-full bg-primary shadow-md"
-            onClick={moveToLocation}
-          >
-            <MdMyLocation size={22} className="text-white" />
-          </Button>
-          <Button
-            startContent={<BiSolidLocationPlus size={20} />}
-            aria-label="Court Report"
-            type="button"
-            className="justify-center rounded-full bg-primary text-white shadow-md"
-            onClick={handleToggleMapClickEvent}
-          >
-            {mode ? '취소' : '농구장 제보'}
-          </Button>
-        </div>
+          <MdMyLocation size={22} className="text-white" />
+        </Button>
+        <Button
+          startContent={<BiSolidLocationPlus size={20} />}
+          aria-label="Court Report"
+          type="button"
+          className="justify-center rounded-full bg-primary text-white shadow-md"
+          onClick={handleToggleMapClickEvent}
+        >
+          {mode ? '취소' : '농구장 제보'}
+        </Button>
       </div>
-    </>
+    </div>
   );
 };
 

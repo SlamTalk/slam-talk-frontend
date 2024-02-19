@@ -93,7 +93,10 @@ const KakaoMapModal: FC<KakaoMapModalProps> = ({
         }
 
         const firstResult = data[0];
-        const position = new kakao.maps.LatLng(firstResult.y, firstResult.x);
+        const position = new kakao.maps.LatLng(
+          parseFloat(firstResult.y),
+          parseFloat(firstResult.x)
+        );
 
         // 지도 중심 이동
         mapInstance.current.setCenter(position);
