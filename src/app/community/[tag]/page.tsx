@@ -14,12 +14,12 @@ import {
   TableRow,
 } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
-import { getCommunityBoard } from '@/services/community/getCommunityBoard';
-import { IBoard } from '@/types/community/board';
+import { getCommunityBoard } from '../../../services/community/getCommunityBoard';
+import { IBoard } from '../../../types/community/board';
 
 // import { getCommunityTag } from '@/services/community/getCommunityTag';
 
-import LocalStorage from '@/utils/localstorage';
+import LocalStorage from '../../../utils/localstorage';
 
 const Page = () => {
   const params = useParams<{ tag: string }>();

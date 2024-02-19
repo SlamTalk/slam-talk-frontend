@@ -6,14 +6,13 @@ import { IoChevronBackSharp } from 'react-icons/io5';
 import * as StompJs from '@stomp/stompjs';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-
-import { useQuery } from '@tanstack/react-query';
-import { getUserData } from '@/services/user/getUserData';
-import { postTokenRefresh } from '@/services/token/postTokenRefresh';
-import IMessage from '@/types/chat/message';
-import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
-import { getChatList } from '@/services/chatting/getChatList';
 import { FaTimesCircle } from 'react-icons/fa';
+import { useQuery } from '@tanstack/react-query';
+import { getUserData } from '../../../../services/user/getUserData';
+import { postTokenRefresh } from '../../../../services/token/postTokenRefresh';
+import IMessage from '../../../../types/chat/message';
+import { IChatRoomListItem } from '../../../../types/chat/chatRoomListItem';
+import { getChatList } from '../../../../services/chatting/getChatList';
 
 import axiosInstance from '../../../api/axiosInstance';
 import MessageList from '../../components/messageList';
