@@ -90,7 +90,7 @@ const Page = () => {
             router.push('/community/all');
           }}
           aria-label="태그 버튼 all"
-          key=""
+          key="all"
           radius="full"
           className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
