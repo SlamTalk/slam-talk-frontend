@@ -175,6 +175,24 @@ const TeamDetailsPage = () => {
         </p>
       </div>
 
+      {/* 모집 정보 */}
+      <div className="mx-6 mb-4">
+        <div className="text-sm font-semibold">모집 정보</div>
+
+        <div className="mt-2 rounded-md border-2 p-3">
+          <div className="flex">
+            {data?.skillLevelList.map((lev, index) => (
+              <div
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+                className="mr-2 rounded-md bg-gray-200 px-2 py-1 text-xs dark:bg-gray-400"
+              >
+                {lev}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
       {/* 상세 내용 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">상세 내용</div>
