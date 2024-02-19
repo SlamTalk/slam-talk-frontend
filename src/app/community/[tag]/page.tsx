@@ -45,6 +45,7 @@ const Page = () => {
   const Search = () => {
     setSearchKey(inputData);
   };
+
   return (
     <div className="flex flex-col">
       <title>슬램톡 | 커뮤니티</title>

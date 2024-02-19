@@ -9,8 +9,15 @@ const MatchingHeader = () => {
   const router = useRouter();
 
   const handleBackClick = () => {
-    if (pathname.includes('revise' || 'application')) router.back();
-    else router.push('/matching');
+    if (pathname.includes('revise' || 'application')) {
+      router.back();
+    } else if (pathname.includes('mate')) {
+      router.push('/matching?tab=mate');
+    } else if (pathname.includes('team')) {
+      router.push('/matching?tab=team');
+    } else {
+      router.push('/matching');
+    }
   };
 
   return (
@@ -32,4 +39,5 @@ const MatchingHeader = () => {
     </div>
   );
 };
+
 export default MatchingHeader;
