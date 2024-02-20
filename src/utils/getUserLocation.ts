@@ -4,9 +4,9 @@ interface AddressResult {
   address: {
     address_name: string; // 지번 주소
   };
-  road_address: {
+  road_address?: {
     address_name: string | null; // 도로명 주소
-  };
+  } | null;
 }
 
 export const getUserLocation = (): Promise<Coords> =>
