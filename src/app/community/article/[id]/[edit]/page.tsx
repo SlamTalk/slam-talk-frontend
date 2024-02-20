@@ -74,6 +74,7 @@ const Page = () => {
   // const handelDelete = () => {};
   return (
     <div>
+      <title>슬램톡 | 커뮤니티 수정하기</title>
       {articleData ? (
         <div>
           <div className="flex h-[50px] items-center justify-center border-b-2">

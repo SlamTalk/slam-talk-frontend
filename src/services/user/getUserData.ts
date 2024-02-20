@@ -1,5 +1,5 @@
-import axiosInstance from '@/app/api/axiosInstance';
-import { UserInfo } from '@/types/user/userInfo';
+import axiosInstance from '../../app/api/axiosInstance';
+import { UserInfo } from '../../types/user/userInfo';
 import LocalStorage from '../../utils/localstorage';
 
 export const getUserData = async (): Promise<UserInfo | null> => {
