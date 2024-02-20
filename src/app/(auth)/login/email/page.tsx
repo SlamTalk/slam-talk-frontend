@@ -66,7 +66,7 @@ const EmailLogin = () => {
       <title>슬램톡 | 로그인</title>
       <div className="mt-14 flex h-full w-full flex-col flex-wrap justify-center gap-3 p-4 align-middle md:flex-nowrap">
         <h1 className="mb-4 text-2xl font-bold sm:text-xl">
-          이메일과 비밀번호를 입력해주세요.
+          이메일과 비밀번호를 입력해 주세요.
         </h1>
 
         <Input
@@ -85,7 +85,7 @@ const EmailLogin = () => {
         <div
           className={`mb-3 h-3 text-sm text-danger ${isEmailInvalid ? 'visible' : 'invisible'}`}
         >
-          {isEmailInvalid && '올바른 이메일을 입력해주세요.'}
+          {isEmailInvalid && '올바른 이메일을 입력해 주세요.'}
         </div>
 
         <Input
