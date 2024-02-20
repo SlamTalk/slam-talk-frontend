@@ -264,7 +264,7 @@ const Chatting = () => {
           >
             <p
               aria-label="첫 방문 메시지"
-              className="z-50 w-[150px] rounded bg-gray-300 text-center text-white"
+              className="z-50 h-[50px] w-[150px] rounded bg-gray-300 text-center text-white"
             >
               {greeting.split(' ')[0]}
               <br />

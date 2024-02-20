@@ -8,12 +8,17 @@ import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 // import { getChatList } from '@/services/chatting/getChatList';
 
+import LocalStorage from '@/utils/localstorage';
+import { useRouter } from 'next/navigation';
+
 import { IChatRoomListItem } from '../../../types/chat/chatRoomListItem';
 import axiosInstance from '../../api/axiosInstance';
 import { getUserData } from '../../../services/user/getUserData';
 import { getChatList } from '../../../services/chatting/getChatList';
 
 const ChatList = () => {
+  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+  const router = useRouter();
   const { data: loginData } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
@@ -34,9 +39,13 @@ const ChatList = () => {
     queryFn: getChatList,
   });
 
+  if (isLoggedIn === 'false') {
+    return router.push('/login');
+  }
   if (!myChatList) {
     return (
       <div>
+        참여중인 채팅방이 없습니다
         <button
           type="button"
           onClick={() => {
@@ -92,5 +101,4 @@ const ChatList = () => {
     </div>
   );
 };
-
 export default ChatList;
