@@ -21,6 +21,12 @@ import {
   SelectItem,
   Textarea,
   Tooltip,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -29,14 +35,15 @@ import { IoChevronBackSharp } from 'react-icons/io5';
 import axiosInstance from '@/app/api/axiosInstance';
 import { IoMdInformationCircleOutline } from 'react-icons/io';
 import Image from 'next/image';
+import { AxiosError } from 'axios';
 
 // [TO DO] 뒤로 가기 넣기 ✅
 // 닉네임, 이메일, 한마디, 포지션, 농구 실력, 활동 내역(레벨, 팀 매칭 횟수, 농구 메이트 참여 횟수)를 표시 ✅
 // 자기소개 ✅
 // 추가 정보: 소셜 ✅
 // 프로필 수정하기 ✅
-// 닉네임 수정시 닉네임 validate ✅ / 중복 errorMsg 표시
-// 수정 완료/실패 모달
+// 닉네임 수정시 닉네임 validate ✅ / 중복 errorMsg 표시 ✅
+// 수정 완료/실패 모달 ✅
 
 export interface ProfileEdit {
   file: File | null;
@@ -50,6 +57,9 @@ const MyProfile = () => {
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
   const router = useRouter();
   const [edit, setEdit] = useState<boolean>(false);
+  const [editSuccess, SetEditSuccess] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const {
@@ -106,21 +116,29 @@ const MyProfile = () => {
       });
       if (response.status === 200) {
         setEdit(false);
-        // onOpen();
+        SetEditSuccess(true);
+        onOpen();
       }
     } catch (error) {
-      console.log(error);
-      // onOpen();
+      if (error instanceof AxiosError && error.response) {
+        setErrorMsg(error.response.data.message);
+      }
+      SetEditSuccess(false);
+      onOpen();
     }
   };
 
   const MAX_FILE_SIZE_MB = 1;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEdit(true);
     const selectedFile = e.target.files && e.target.files[0];
     if (selectedFile) {
+      console.log(selectedFile.size);
+      console.log(1024 * 1024);
       if (selectedFile.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
-        alert(`파일 크기는 ${MAX_FILE_SIZE_MB}MB를 초과할 수 없습니다.`);
+        setErrorMsg(`파일 크기는 ${MAX_FILE_SIZE_MB}MB를 초과할 수 없습니다.`);
+        onOpen();
         e.target.value = '';
       } else {
         setFile(selectedFile);
@@ -418,6 +436,32 @@ const MyProfile = () => {
             </div>
           </form>
         </div>
+        <Modal isOpen={isOpen} onClose={onClose} placement="center">
+          <ModalContent>
+            {() => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  프로필 수정
+                </ModalHeader>
+                <ModalBody>
+                  {editSuccess ? (
+                    <p>프로필 수정이 완료되었습니다.</p>
+                  ) : (
+                    <p className="text-danger">
+                      {errorMsg ||
+                        '프로필 수정이 실패했습니다. 잠시 후 다시 시도해주세요.'}
+                    </p>
+                  )}
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="primary" onPress={onClose}>
+                    확인
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </>
     );
   }
