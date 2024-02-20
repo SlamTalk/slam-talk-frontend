@@ -2,6 +2,15 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import {
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from '@nextui-org/react';
 import { IoChevronBackSharp } from 'react-icons/io5';
 import axiosInstance from '@/app/api/axiosInstance';
 import LocalStorage from '@/utils/localstorage';
@@ -9,6 +18,7 @@ import LocalStorage from '@/utils/localstorage';
 const MyPageSettings = () => {
   const router = useRouter();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (isLoggedIn === 'false') {
     router.push('/login');
@@ -19,21 +29,19 @@ const MyPageSettings = () => {
   };
 
   const handleLogout = async () => {
-    if (window.confirm('정말 로그아웃하시겠습니까?')) {
-      try {
-        const response = await axiosInstance.post('/api/logout');
+    onOpen();
+  };
 
-        if (response.status === 200) {
-          localStorage.setItem('isLoggedIn', 'false');
-          alert('로그아웃되었습니다.');
-          router.push('/');
-        }
-      } catch (logoutError) {
-        console.log('로그아웃 실패: ', logoutError);
-        alert(
-          '죄송합니다. 로그아웃에 실패했습니다. 잠시 후 다시 시도해 주세요.'
-        );
+  const handleConfirmLogout = async () => {
+    try {
+      const response = await axiosInstance.post('/api/logout');
+
+      if (response.status === 200) {
+        localStorage.setItem('isLoggedIn', 'false');
+        router.push('/');
       }
+    } catch (logoutError) {
+      console.log('로그아웃 실패: ', logoutError);
     }
   };
 
@@ -80,6 +88,28 @@ const MyPageSettings = () => {
           </div>
         </div>
       </div>
+      <Modal isOpen={isOpen} onClose={onClose} placement="center">
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                로그아웃
+              </ModalHeader>
+              <ModalBody>
+                <p>정말 로그아웃하시겠습니까?</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  취소
+                </Button>
+                <Button color="primary" onPress={handleConfirmLogout}>
+                  확인
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 };

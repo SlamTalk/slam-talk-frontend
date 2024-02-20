@@ -41,7 +41,7 @@ import CourtReport from './CourtReport';
 // 농구장 상세정보 UI 수정 ✅
 // 제보 모달 UI 수정 - 제보하기 Btn Fix ✅
 // 컨트롤 커스텀
-// 모바일 환경 움직임 확인하기
+// 모바일 환경 움직임 확인하기 ✅
 
 export interface LatLng {
   getLat: () => number;
@@ -68,7 +68,7 @@ const KakaoMap = () => {
   const [selectedCourtId, setSelectedCourtId] = useState<number>(1);
   const [mode, setMode] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
-  const [, setCoord] = useState('');
+  const [coord, setCoord] = useState('');
   const [position, setPosition] = useState<{
     lat: number;
     lng: number;
@@ -182,14 +182,21 @@ const KakaoMap = () => {
     setCoord(
       `클릭한 위치의 위도는 ${latlng.getLat()} 이고, 경도는 ${latlng.getLng()} 입니다`
     );
+    console.log(coord);
     if (mode === true) {
       setPosition({
         lat,
         lng,
       });
-      getAddressFromCoords(lat, lng).then((address) => {
-        setClickPositionAddress(address);
-      });
+      getAddressFromCoords(lat, lng)
+        .then(({ address, roadAddress }) => {
+          // 도로명 주소가 있으면 그 값을, 없으면 지번 주소를 사용
+          const finalAddress = roadAddress || address;
+          setClickPositionAddress(finalAddress);
+        })
+        .catch((error) => {
+          console.error('주소 정보를 가져오는데 실패했습니다.', error);
+        });
     }
   };
 
@@ -230,7 +237,7 @@ const KakaoMap = () => {
             />
           </button>
         </div>
-        <Modal size="sm" isOpen={isOpen} onClose={onClose}>
+        <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
           <ModalContent>
             {(onClose) => (
               <>

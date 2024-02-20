@@ -14,12 +14,10 @@ import {
   TableRow,
 } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
-import { getCommunityBoard } from '@/services/community/getCommunityBoard';
-import { IBoard } from '@/types/community/board';
+import { getCommunityBoard } from '../../../services/community/getCommunityBoard';
+import { IBoard } from '../../../types/community/board';
 
-// import { getCommunityTag } from '@/services/community/getCommunityTag';
-
-import LocalStorage from '@/utils/localstorage';
+import LocalStorage from '../../../utils/localstorage';
 
 const Page = () => {
   const params = useParams<{ tag: string }>();
@@ -28,23 +26,25 @@ const Page = () => {
   const router = useRouter();
   const [inputData, setInputData] = useState('');
   const [isFocus, setIsFocus] = useState(false);
-  // const [tag, setTag] = useState('');
+
   const [searchKey, setSearchKey] = useState('');
   const { data: communityBoard } = useQuery<IBoard[]>({
     queryKey: ['communityBoard'],
     queryFn: getCommunityBoard,
   });
 
-  // const { data: categoriedList } = useQuery<any>({
-  //   queryKey: [`getCategory/${tag}`],
-  //   queryFn: async () => {
-  //     if (tag !== '') {
-  //       const data = await getCommunityTag('');
-  //       return data;
-  //     }
-  //     return '';
-  //   },
-  // });
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 415);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleLink = (id: number) => {
     router.push(`/community/article/${id}`);
   };
@@ -84,12 +84,13 @@ const Page = () => {
           <IoSearchSharp className="w-full text-gray-400 hover:text-black" />
         </button>
       </div>
-      <div className="my-3 flex justify-center space-x-10">
+      <div className="sm:ap flex flex-wrap justify-center sm:space-x-3 md:space-x-12">
         <Button
           onClick={() => {
             router.push('/community/all');
           }}
           aria-label="태그 버튼 all"
+          size={isMobile ? 'sm' : 'md'}
           key="all"
           radius="full"
           className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
@@ -102,6 +103,7 @@ const Page = () => {
             router.push('/community/FREE');
           }}
           aria-label="태그 버튼 free"
+          size={isMobile ? 'sm' : 'md'}
           value="FREE"
           key="FREE"
           radius="full"
@@ -114,6 +116,7 @@ const Page = () => {
           onClick={() => {
             router.push('/community/USED');
           }}
+          size={isMobile ? 'sm' : 'md'}
           key="USED"
           radius="full"
           className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
@@ -124,6 +127,7 @@ const Page = () => {
           onClick={() => {
             router.push('/community/QUESTION');
           }}
+          size={isMobile ? 'sm' : 'md'}
           aria-label="태그 버튼 question"
           key="QUESTION"
           radius="full"
@@ -136,6 +140,7 @@ const Page = () => {
           onClick={() => {
             router.push('/community/TRANSFER');
           }}
+          size={isMobile ? 'sm' : 'md'}
           key="TRANSFER"
           radius="full"
           className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
@@ -143,51 +148,51 @@ const Page = () => {
           대관양도
         </Button>
       </div>
+      <div className="h-[540px] overflow-y-scroll">
+        <Table color="primary" aria-label="게시글 목록" fullWidth>
+          <TableHeader>
+            <TableColumn>TITLE</TableColumn>
+            <TableColumn>USER</TableColumn>
+          </TableHeader>
 
-      <Table color="primary" aria-label="게시글 목록">
-        <TableHeader>
-          <TableColumn>TITLE</TableColumn>
-          <TableColumn>USER</TableColumn>
-        </TableHeader>
-
-        <TableBody>
-          {params.tag === 'all'
-            ? (communityBoard || [])
-                .filter(
-                  (item: IBoard) =>
-                    searchKey === '' || item.title.includes(searchKey)
-                )
-                .map((item: IBoard) => (
-                  <TableRow
-                    className="cursor-pointer hover:bg-primary hover:text-white"
-                    onClick={() => handleLink(item.communityId)}
-                    key={item.communityId}
-                    aria-labelledby={`title-${item.communityId}`}
-                  >
-                    <TableCell className="flex-grow">{item.title}</TableCell>
-                    <TableCell>{item.userNickname}</TableCell>
-                  </TableRow>
-                ))
-            : (communityBoard || [])
-                .filter((item: IBoard) => item.category === params.tag)
-                .filter(
-                  (item: IBoard) =>
-                    searchKey === '' || item.title.includes(searchKey)
-                )
-                .map((item: IBoard) => (
-                  <TableRow
-                    className="cursor-pointer hover:bg-primary hover:text-white"
-                    onClick={() => handleLink(item.communityId)}
-                    key={item.communityId}
-                    aria-labelledby={`title-${item.communityId}`}
-                  >
-                    <TableCell className="flex-grow">{item.title}</TableCell>
-                    <TableCell>{item.userNickname}</TableCell>
-                  </TableRow>
-                ))}
-        </TableBody>
-      </Table>
-
+          <TableBody>
+            {params.tag === 'all'
+              ? (communityBoard || [])
+                  .filter(
+                    (item: IBoard) =>
+                      searchKey === '' || item.title.includes(searchKey)
+                  )
+                  .map((item: IBoard) => (
+                    <TableRow
+                      className="cursor-pointer hover:bg-primary hover:text-white"
+                      onClick={() => handleLink(item.communityId)}
+                      key={item.communityId}
+                      aria-labelledby={`title-${item.communityId}`}
+                    >
+                      <TableCell className="flex-grow">{item.title}</TableCell>
+                      <TableCell>{item.userNickname}</TableCell>
+                    </TableRow>
+                  ))
+              : (communityBoard || [])
+                  .filter((item: IBoard) => item.category === params.tag)
+                  .filter(
+                    (item: IBoard) =>
+                      searchKey === '' || item.title.includes(searchKey)
+                  )
+                  .map((item: IBoard) => (
+                    <TableRow
+                      className="cursor-pointer hover:bg-primary hover:text-white"
+                      onClick={() => handleLink(item.communityId)}
+                      key={item.communityId}
+                      aria-labelledby={`title-${item.communityId}`}
+                    >
+                      <TableCell className="flex-grow">{item.title}</TableCell>
+                      <TableCell>{item.userNickname}</TableCell>
+                    </TableRow>
+                  ))}
+          </TableBody>
+        </Table>
+      </div>
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Button

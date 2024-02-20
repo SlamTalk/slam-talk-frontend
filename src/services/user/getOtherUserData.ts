@@ -11,7 +11,7 @@ export const getOtherUserData = async ({
 }: GetOtherUserDataProps): Promise<OtherUserInfo | null> => {
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
   if (isLoggedIn === 'true') {
-    const result = await axiosInstance.get(`/api/user/${userId}/other-info`);
+    const result = await axiosInstance.get(`/api/user/other-info/${userId}`);
     const user = result.data.results;
 
     const userData: OtherUserInfo = {
