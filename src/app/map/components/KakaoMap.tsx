@@ -237,7 +237,7 @@ const KakaoMap = () => {
             />
           </button>
         </div>
-        <Modal size="sm" isOpen={isOpen} onClose={onClose}>
+        <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
           <ModalContent>
             {(onClose) => (
               <>
