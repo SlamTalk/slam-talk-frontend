@@ -1,7 +1,8 @@
 import { useParams } from 'next/navigation';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getComment } from '@/services/community/comment/getCommentt';
+
+import { getCommunityArticle } from '@/services/community/getCommunityArticle';
 import CommentItem from './commentItem';
 
 interface ICommentItemProps {
@@ -15,15 +16,16 @@ interface ICommentItemProps {
 }
 
 const CommentList = () => {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
+
   const { data: commentListData } = useQuery({
-    queryKey: ['getComment'],
-    queryFn: () => getComment(+params.id),
+    queryKey: ['getCommunityComment'],
+    queryFn: () => getCommunityArticle(params.id),
   });
 
   return (
     <div className=" h-[400px] overflow-y-auto">
-      {commentListData?.map((i: ICommentItemProps) => (
+      {commentListData?.comments.map((i: ICommentItemProps) => (
         <div key={i.commentId}>
           <CommentItem
             key={i.commentId}
