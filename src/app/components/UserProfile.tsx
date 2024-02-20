@@ -50,9 +50,6 @@ const UserProfile: React.FC<UserProfileProps> = ({
     console.log(error);
   }
 
-  // eslint-disable-next-line no-param-reassign
-  // userId = 2;
-
   const handleCreateChatting = async () => {
     if (user && userId) {
       const myId = user.id;

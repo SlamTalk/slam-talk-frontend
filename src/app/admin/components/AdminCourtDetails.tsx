@@ -11,6 +11,10 @@ import {
   PutCourtData,
 } from './adminDataType';
 
+interface NewBasketChatData {
+  name: string;
+}
+
 const AdminCourtDetails: React.FC<AdminCourtDetailsProps> = ({
   data,
   onClose,
@@ -24,7 +28,27 @@ const AdminCourtDetails: React.FC<AdminCourtDetailsProps> = ({
     return response;
   };
 
-  const convertToPutCourtData = (courtData: CourtData): PutCourtData => {
+  const createBasketChatRoom = async (
+    roomData: NewBasketChatData
+  ): Promise<any> => {
+    try {
+      const response = await axiosInstance.post<any>(
+        `/api/chat/create/basketball`,
+        roomData
+      );
+
+      console.log({ response });
+      return response;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  };
+
+  const convertToPutCourtData = (
+    courtData: CourtData,
+    newId: number
+  ): PutCourtData => {
     const {
       courtType,
       indoorOutdoor,
@@ -36,13 +60,13 @@ const AdminCourtDetails: React.FC<AdminCourtDetailsProps> = ({
       parkingAvailable,
       phoneNum,
       website,
-      convenience, // 이 부분을 배열에서 문자열로 변환
+      convenience,
       additionalInfo,
       photoUrl,
       informerId,
     } = courtData;
 
-    return {
+    const newData: PutCourtData = {
       courtType,
       indoorOutdoor,
       courtSize,
@@ -53,11 +77,14 @@ const AdminCourtDetails: React.FC<AdminCourtDetailsProps> = ({
       parkingAvailable,
       phoneNum,
       website,
-      convenience: convenience.join(', '), // 배열을 콤마로 구분된 문자열로 변환
+      convenience: convenience.join(', '),
       additionalInfo,
       photoUrl,
       informerId,
+      chatroomId: newId,
     };
+
+    return newData;
   };
 
   const putReportCourtMutation = useMutation<
@@ -74,9 +101,25 @@ const AdminCourtDetails: React.FC<AdminCourtDetailsProps> = ({
     },
   });
 
+  const createBasketChatRoomMutation = useMutation<
+    AxiosResponse,
+    Error,
+    NewBasketChatData
+  >({
+    mutationFn: createBasketChatRoom,
+    onSuccess: (response) => {
+      const newChatroomId = response.data.results;
+      const newData = convertToPutCourtData(data, newChatroomId);
+      putReportCourtMutation.mutate(newData);
+    },
+    onError: (er) => {
+      console.error(er);
+    },
+  });
+
   const onAccept = () => {
-    const newData = convertToPutCourtData(data);
-    putReportCourtMutation.mutate(newData);
+    const newRoomData = { name: data.courtName };
+    createBasketChatRoomMutation.mutate(newRoomData);
     onClose();
   };
 
