@@ -27,10 +27,12 @@ const TeamMatchingApplication = () => {
   });
 
   const handleSubmit = () => {
-    newApplyMutation.mutate({
+    const newAppliedTeam = {
       teamName,
       skillLevel,
-    });
+    };
+
+    newApplyMutation.mutate(newAppliedTeam);
 
     router.back();
   };

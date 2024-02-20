@@ -10,7 +10,6 @@ export interface TeamApplied {
 }
 
 export interface TeamApplication {
-  applyStatus: string;
   teamName: string;
   skillLevel: string;
 }
