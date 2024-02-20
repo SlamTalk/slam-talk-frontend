@@ -46,6 +46,18 @@ const Page = () => {
   //   },
   // });
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 415);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // 컴포넌트가 마운트될 때 한 번 실행하여 초기 값 설정
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleLink = (id: number) => {
     router.push(`/community/article/${id}`);
   };
@@ -85,15 +97,16 @@ const Page = () => {
           <IoSearchSharp className="w-full text-gray-400 hover:text-black" />
         </button>
       </div>
-      <div className="my-3 flex w-full justify-center space-x-10">
+      <div className="flex flex-wrap justify-center sm:space-x-3 md:space-x-12">
         <Button
           onClick={() => {
             router.push('/community/all');
           }}
           aria-label="태그 버튼 all"
+          size={isMobile ? 'sm' : 'md'}
           key="all"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white sm:w-1 sm:w-[70] sm:text-sm"
         >
           전체
         </Button>
@@ -103,10 +116,11 @@ const Page = () => {
             router.push('/community/FREE');
           }}
           aria-label="태그 버튼 free"
+          size={isMobile ? 'sm' : 'md'}
           value="FREE"
           key="FREE"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white sm:w-1 sm:w-[70] sm:text-sm"
         >
           자유
         </Button>
@@ -115,9 +129,10 @@ const Page = () => {
           onClick={() => {
             router.push('/community/USED');
           }}
+          size={isMobile ? 'sm' : 'md'}
           key="USED"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white sm:w-1 sm:w-[70] sm:text-sm"
         >
           중고거래
         </Button>
@@ -125,10 +140,11 @@ const Page = () => {
           onClick={() => {
             router.push('/community/QUESTION');
           }}
+          size={isMobile ? 'sm' : 'md'}
           aria-label="태그 버튼 question"
           key="QUESTION"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white sm:w-1 sm:w-[70] sm:text-sm"
         >
           질문
         </Button>
@@ -137,9 +153,10 @@ const Page = () => {
           onClick={() => {
             router.push('/community/TRANSFER');
           }}
+          size={isMobile ? 'sm' : 'md'}
           key="TRANSFER"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white sm:w-1 sm:w-[70] sm:text-sm"
         >
           대관양도
         </Button>
