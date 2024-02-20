@@ -43,7 +43,10 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
     router.push(`/chatting/chatroom/${createRoom}`);
   };
   return (
-    <div className="min-w mt-16 h-[730px] w-full overflow-y-scroll	">
+    <div
+      key={messages[0].roomId}
+      className="min-w mt-16 h-[730px] w-full overflow-y-scroll	"
+    >
       {messages.map((i: IMessage) =>
         i.senderNickname?.replace(/"/g, '') === nickname
           ? i.senderNickname?.replace(/"/g, '') && (

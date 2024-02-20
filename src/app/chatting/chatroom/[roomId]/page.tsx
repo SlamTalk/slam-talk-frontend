@@ -220,6 +220,7 @@ const Chatting = () => {
         </ModalContent>
       </Modal>
       <div>
+        <title>슬램톡 | 채팅</title>
         <div className="fixed top-0 z-30 flex h-[61px] w-full max-w-[600px] items-center rounded-md bg-primary">
           <IoChevronBackSharp
             className="left-[20px] top-[20px] w-[50px] text-xl text-white"
