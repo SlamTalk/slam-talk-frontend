@@ -97,7 +97,7 @@ const Page = () => {
           <IoSearchSharp className="w-full text-gray-400 hover:text-black" />
         </button>
       </div>
-      <div className="flex flex-wrap justify-center sm:space-x-3 md:space-x-12">
+      <div className="sm:ap flex flex-wrap justify-center sm:space-x-3 md:space-x-12">
         <Button
           onClick={() => {
             router.push('/community/all');
@@ -106,7 +106,7 @@ const Page = () => {
           size={isMobile ? 'sm' : 'md'}
           key="all"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white sm:w-1 sm:w-[70] sm:text-sm"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           전체
         </Button>
@@ -120,7 +120,7 @@ const Page = () => {
           value="FREE"
           key="FREE"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white sm:w-1 sm:w-[70] sm:text-sm"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           자유
         </Button>
@@ -132,7 +132,7 @@ const Page = () => {
           size={isMobile ? 'sm' : 'md'}
           key="USED"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white sm:w-1 sm:w-[70] sm:text-sm"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           중고거래
         </Button>
@@ -144,7 +144,7 @@ const Page = () => {
           aria-label="태그 버튼 question"
           key="QUESTION"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white sm:w-1 sm:w-[70] sm:text-sm"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           질문
         </Button>
@@ -156,7 +156,7 @@ const Page = () => {
           size={isMobile ? 'sm' : 'md'}
           key="TRANSFER"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white sm:w-1 sm:w-[70] sm:text-sm"
+          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           대관양도
         </Button>
