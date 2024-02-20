@@ -2,7 +2,7 @@
 
 import { Button } from '@nextui-org/button';
 import { useParams, useRouter } from 'next/navigation';
-import { Avatar, Tooltip, useDisclosure } from '@nextui-org/react';
+import { Avatar, Tooltip, useDisclosure, Spinner } from '@nextui-org/react';
 import { IoChevronBackSharp } from 'react-icons/io5';
 // import { FaHeart } from 'react-icons/fa';
 
@@ -86,7 +86,11 @@ const Page = () => {
     deleteArticle.mutate();
   };
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩 중일 때 로딩 화면을 표시합니다.
+    return (
+      <div className="align-center flex h-screen justify-center">
+        <Spinner size="lg" color="primary" />
+      </div>
+    ); // 로딩 중일 때 로딩 화면을 표시합니다.
   }
 
   return (
