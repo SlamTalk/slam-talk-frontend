@@ -159,18 +159,28 @@ const Chatting = () => {
     });
 
     client.current?.deactivate();
+    router.back();
   };
   const exitChat = () => {
+    // client.current?.publish({
+    //   destination: `/pub/exit/${params.roomId}`,
+    //   headers: { authorization: `Bearer ${accessToken}` },
+    //   body: JSON.stringify({
+    //     roomId: params.roomId,
+    //     senderNickname: nickname,
+    //   }),
+    // });
     client.current?.publish({
-      destination: `/pub/exit/${params.roomId}`,
+      destination: `/pub/chat/bot/${params.roomId}`,
       headers: { authorization: `Bearer ${accessToken}` },
       body: JSON.stringify({
         roomId: params.roomId,
         senderNickname: nickname,
+        content: 'EXIT',
       }),
     });
     client.current?.deactivate();
-
+    console.log('퇴장~');
     router.back();
   };
   const postMore = async () => {
@@ -220,15 +230,13 @@ const Chatting = () => {
         </ModalContent>
       </Modal>
       <div>
-        <div className="fixed top-0 flex h-[61px] w-full max-w-[600px] items-center rounded-md bg-primary">
+        <title>슬램톡 | 채팅</title>
+        <div className="fixed top-0 z-30 flex h-[61px] w-full max-w-[600px] items-center rounded-md bg-primary">
           <IoChevronBackSharp
             className="left-[20px] top-[20px] w-[50px] text-xl text-white"
             cursor="pointer"
             size={24}
-            onClick={() => {
-              handleToBack();
-              router.back();
-            }}
+            onClick={handleToBack}
           />
           <h2 className="w-[525px] text-center text-xl text-white">
             {roomInfo?.roomType === 'DIRECT' && roomInfo?.name}
@@ -256,35 +264,43 @@ const Chatting = () => {
           >
             <p
               aria-label="첫 방문 메시지"
-              className="z-50 w-[150px] rounded bg-gray-300 text-center text-white"
+              className="z-50 h-[50px] w-[150px] rounded bg-gray-300 text-center text-white"
             >
-              {greeting}
+              {greeting.split(' ')[0]}
+              <br />
+              {greeting.split(' ')[1]}
             </p>
           </div>
         ) : null}
       </div>
 
       <MessageList list={messageListState} />
-
-      <div
-        aria-label="chat input section"
-        className="b-0 fixed flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          sendMessage();
+        }}
       >
-        <Input
-          ref={inputRef}
-          value={message}
-          onChange={(e) => {
-            setMessage(e.target.value);
-          }}
-        />
-        <Button
-          isIconOnly
-          className="h-auto w-14 border-none bg-transparent"
-          onClick={sendMessage}
+        <div
+          aria-label="chat input section"
+          className="b-0 fixed flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"
         >
-          <IoIosSend className="text-4xl text-primary" />
-        </Button>
-      </div>
+          <Input
+            ref={inputRef}
+            value={message}
+            onChange={(e) => {
+              setMessage(e.target.value);
+            }}
+          />
+          <Button
+            isIconOnly
+            className="h-auto w-14 border-none bg-transparent"
+            onClick={sendMessage}
+          >
+            <IoIosSend className="text-4xl text-primary" />
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };
