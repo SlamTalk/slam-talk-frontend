@@ -220,7 +220,7 @@ const Chatting = () => {
         </ModalContent>
       </Modal>
       <div>
-        <div className="fixed top-0 flex h-[61px] w-full max-w-[600px] items-center rounded-md bg-primary">
+        <div className="fixed top-0 z-30 flex h-[61px] w-full max-w-[600px] items-center rounded-md bg-primary">
           <IoChevronBackSharp
             className="left-[20px] top-[20px] w-[50px] text-xl text-white"
             cursor="pointer"

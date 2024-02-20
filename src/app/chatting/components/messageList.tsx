@@ -61,7 +61,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                 </div>
                 <div aria-label="userIcon">
                   <Avatar
-                    className="mx-2"
+                    className="z-10 mx-2"
                     alt="my-profile"
                     src={user?.imageUrl}
                   />
