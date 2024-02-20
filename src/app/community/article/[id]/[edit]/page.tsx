@@ -106,12 +106,12 @@ const Page = () => {
               <div aria-label="수정 삭제 버튼 그룹">
                 <button
                   type="button"
-                  className="hover:text-primary"
+                  className="me-4 hover:text-primary"
                   onClick={() => {
                     HandleEditor();
                   }}
                 >
-                  수정
+                  수정 완료
                 </button>
 
                 <input
@@ -122,7 +122,11 @@ const Page = () => {
                   onChange={handleImageUpload}
                   accept="image/*"
                 />
-                <button type="button" onClick={onClickImageUpload}>
+                <button
+                  type="button"
+                  className="hover:text-primary"
+                  onClick={onClickImageUpload}
+                >
                   이미지 업로드
                 </button>
                 {images.map((file, index) => (
