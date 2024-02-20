@@ -2,7 +2,7 @@
 
 import { Button } from '@nextui-org/button';
 import { useParams, useRouter } from 'next/navigation';
-import { Avatar, useDisclosure } from '@nextui-org/react';
+import { Avatar, Tooltip, useDisclosure } from '@nextui-org/react';
 import { IoChevronBackSharp } from 'react-icons/io5';
 // import { FaHeart } from 'react-icons/fa';
 
@@ -56,6 +56,9 @@ const Page = () => {
     mutationFn: () => postComment(commentData),
   });
   const handlePostComment = () => {
+    if (!loginData) {
+      router.push('/login');
+    }
     if (comment !== '') {
       setCommentData({
         communityId: +params.id,
@@ -173,12 +176,16 @@ const Page = () => {
                 setComment(e.target.value);
               }}
             />
-            <Button
-              className="w-[10px] hover:bg-primary hover:text-white"
-              onClick={handlePostComment}
+            <Tooltip
+              content={loginData !== null ? '' : '로그인이 필요한 기능입니다'}
             >
-              입력
-            </Button>
+              <Button
+                className="w-[10px] hover:bg-primary hover:text-white"
+                onClick={handlePostComment}
+              >
+                입력
+              </Button>
+            </Tooltip>
           </div>
           <CommentList />
         </div>
