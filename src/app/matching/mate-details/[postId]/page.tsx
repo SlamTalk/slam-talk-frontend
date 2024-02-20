@@ -93,7 +93,6 @@ const MateDetailsPage = () => {
         roomData
       );
 
-      console.log({ response });
       return response;
     } catch (e) {
       console.log(e);

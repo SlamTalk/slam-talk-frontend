@@ -3,8 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Snippet, Button, Avatar } from '@nextui-org/react';
-import { useQuery } from '@tanstack/react-query';
+import {
+  Snippet,
+  Button,
+  Avatar,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from '@nextui-org/react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import axiosInstance from '@/app/api/axiosInstance';
 import { TeamPost } from '@/types/matching/teamDataType';
@@ -12,7 +22,15 @@ import LocalStorage from '@/utils/localstorage';
 import { AxiosResponse } from 'axios';
 import TeamApplicantList from '../../components/TeamApplicantList';
 
+interface TeamChatRoomType {
+  participants: number[];
+  roomType: string;
+  teamMatching_id: string;
+  name: string;
+}
+
 const TeamDetailsPage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
@@ -26,6 +44,7 @@ const TeamDetailsPage = () => {
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [chatRoomId, setChatRoomId] = useState('');
   const router = useRouter();
 
   const fetchTeamDetailsData = async (): Promise<TeamPost> => {
@@ -34,33 +53,6 @@ const TeamDetailsPage = () => {
       .then((res) => res.data.results);
 
     return response;
-  };
-
-  // const deleteRecruitment = async (): Promise<AxiosResponse> => {
-  //   const response = await axiosInstance.delete<AxiosResponse>(
-  //     `/api/match/read/${postId}`
-  //   );
-
-  //   return response;
-  // };
-
-  const completeRecruitment = async (): Promise<AxiosResponse> => {
-    const response = await axiosInstance.patch<AxiosResponse>(
-      `/api/match/${postId}/complete`
-    );
-
-    return response;
-  };
-
-  const handleFinishRecruitment = async () => {
-    try {
-      completeRecruitment();
-      alert('모집이 완료되었습니다.');
-      router.push('/matching');
-    } catch (err) {
-      console.error(err);
-      alert('모집 완료 처리 중 오류가 발생했습니다.');
-    }
   };
 
   const { data } = useQuery<TeamPost, Error>({
@@ -111,6 +103,101 @@ const TeamDetailsPage = () => {
     else {
       alert('로그인 후 이용할 수 있습니다.');
       router.push(`/login`);
+    }
+  };
+
+  // const deleteRecruitment = async (): Promise<AxiosResponse> => {
+  //   const response = await axiosInstance.delete<AxiosResponse>(
+  //     `/api/match/read/${postId}`
+  //   );
+
+  //   return response;
+  // };
+
+  const patchCompleteRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.patch<AxiosResponse>(
+      `/api/match/${postId}/complete`
+    );
+
+    return response;
+  };
+
+  const patchPostStatusMutation = useMutation<AxiosResponse, Error>({
+    mutationFn: patchCompleteRecruitment,
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: (err: Error) => {
+      console.log(err);
+      throw err;
+    },
+  });
+
+  const creatTeamChatRoom = async (
+    roomData: TeamChatRoomType
+  ): Promise<any> => {
+    try {
+      const response = await axiosInstance.post<any>(
+        `/api/chat/create`,
+        roomData
+      );
+
+      return response;
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  };
+
+  const createTeamChatRoomMutation = useMutation<
+    AxiosResponse,
+    Error,
+    TeamChatRoomType
+  >({
+    mutationFn: creatTeamChatRoom,
+    onSuccess: (response) => {
+      const newChatRoomId = response.data;
+      setChatRoomId(newChatRoomId);
+      onOpen();
+    },
+    onError: (er) => {
+      console.error(er);
+    },
+  });
+
+  const handleFinishRecruitment = () => {
+    try {
+      patchPostStatusMutation.mutate();
+
+      const acceptedParticipantIds =
+        data?.teamApplicants
+          .filter((applicant) => applicant.applyStatusType === 'ACCEPTED')
+          .map((applicant) => applicant.applicantId) || [];
+
+      const participantsIds = [
+        data?.writerId,
+        ...acceptedParticipantIds,
+      ].filter((id): id is number => id !== undefined);
+
+      const title = `${data?.teamName} vs ${
+        acceptedParticipantIds.length > 0
+          ? data?.teamApplicants.find(
+              (applicant) => applicant.applicantId === acceptedParticipantIds[0]
+            )?.teamName
+          : ''
+      }`;
+
+      const newRoomData: TeamChatRoomType = {
+        participants: participantsIds,
+        roomType: 'MM',
+        teamMatching_id: data?.teamMatchingId.toString() ?? '',
+        name: title,
+      };
+
+      createTeamChatRoomMutation.mutate(newRoomData);
+    } catch (err) {
+      console.error(err);
+      alert('모집 완료 처리 중 오류가 발생했습니다.');
     }
   };
 
@@ -228,7 +315,7 @@ const TeamDetailsPage = () => {
                 모집 완료
               </Button>
               <Link
-                href={`/matching/mate-details/${data?.teamMatchingId}/revise`}
+                href={`/matching/team-details/${data?.teamMatchingId}/revise`}
               >
                 <Button color="default" className="mx-2 bg-gray-400 text-white">
                   모집글 수정
@@ -246,6 +333,34 @@ const TeamDetailsPage = () => {
           </Button>
         )}
       </div>
+      <Modal isOpen={isOpen} onClose={onClose} placement="center">
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                상대팀 찾기 모집 완료
+              </ModalHeader>
+              <ModalBody>
+                <p>상대팀 찾기 모집이 완료되었습니다.</p>
+                <p>상대팀과의 채팅방이 개설되었습니다.</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  닫기
+                </Button>
+                <Button
+                  color="primary"
+                  onPress={() =>
+                    router.push(`/chatting/chatroom/${chatRoomId}`)
+                  }
+                >
+                  채팅방으로 이동
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
