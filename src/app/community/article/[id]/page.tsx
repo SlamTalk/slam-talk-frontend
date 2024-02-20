@@ -44,7 +44,7 @@ const Page = () => {
     queryFn: getUserData,
   });
   const writeName = articleData?.userNickname;
-
+  const writerId = articleData?.userId;
   const loginUserName = loginData?.nickname;
   const [commentData, setCommentData] = useState({
     communityId: 0,
@@ -88,7 +88,7 @@ const Page = () => {
 
   return (
     <div className="h-[90vh]">
-      <UserProfile isOpen={isOpen} userId={1} onClose={onClose} />
+      <UserProfile isOpen={isOpen} userId={writerId} onClose={onClose} />
       {articleData ? (
         <div>
           <title>슬램톡 | 커뮤니티</title>
@@ -108,6 +108,7 @@ const Page = () => {
               <div
                 aria-label="유저 아바타"
                 className="mt-1 flex items-center justify-start border-b-1"
+                style={{ cursor: 'pointer' }}
               >
                 <Avatar
                   onClick={() => {

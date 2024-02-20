@@ -45,6 +45,7 @@ const Page = () => {
   //     return '';
   //   },
   // });
+
   const handleLink = (id: number) => {
     router.push(`/community/article/${id}`);
   };
@@ -84,7 +85,7 @@ const Page = () => {
           <IoSearchSharp className="w-full text-gray-400 hover:text-black" />
         </button>
       </div>
-      <div className="my-3 flex justify-center space-x-10">
+      <div className="my-3 flex w-full justify-center space-x-10">
         <Button
           onClick={() => {
             router.push('/community/all');
@@ -143,51 +144,51 @@ const Page = () => {
           대관양도
         </Button>
       </div>
+      <div className="h-[540px] overflow-y-scroll">
+        <Table color="primary" aria-label="게시글 목록" fullWidth>
+          <TableHeader>
+            <TableColumn>TITLE</TableColumn>
+            <TableColumn>USER</TableColumn>
+          </TableHeader>
 
-      <Table color="primary" aria-label="게시글 목록">
-        <TableHeader>
-          <TableColumn>TITLE</TableColumn>
-          <TableColumn>USER</TableColumn>
-        </TableHeader>
-
-        <TableBody>
-          {params.tag === 'all'
-            ? (communityBoard || [])
-                .filter(
-                  (item: IBoard) =>
-                    searchKey === '' || item.title.includes(searchKey)
-                )
-                .map((item: IBoard) => (
-                  <TableRow
-                    className="cursor-pointer hover:bg-primary hover:text-white"
-                    onClick={() => handleLink(item.communityId)}
-                    key={item.communityId}
-                    aria-labelledby={`title-${item.communityId}`}
-                  >
-                    <TableCell className="flex-grow">{item.title}</TableCell>
-                    <TableCell>{item.userNickname}</TableCell>
-                  </TableRow>
-                ))
-            : (communityBoard || [])
-                .filter((item: IBoard) => item.category === params.tag)
-                .filter(
-                  (item: IBoard) =>
-                    searchKey === '' || item.title.includes(searchKey)
-                )
-                .map((item: IBoard) => (
-                  <TableRow
-                    className="cursor-pointer hover:bg-primary hover:text-white"
-                    onClick={() => handleLink(item.communityId)}
-                    key={item.communityId}
-                    aria-labelledby={`title-${item.communityId}`}
-                  >
-                    <TableCell className="flex-grow">{item.title}</TableCell>
-                    <TableCell>{item.userNickname}</TableCell>
-                  </TableRow>
-                ))}
-        </TableBody>
-      </Table>
-
+          <TableBody>
+            {params.tag === 'all'
+              ? (communityBoard || [])
+                  .filter(
+                    (item: IBoard) =>
+                      searchKey === '' || item.title.includes(searchKey)
+                  )
+                  .map((item: IBoard) => (
+                    <TableRow
+                      className="cursor-pointer hover:bg-primary hover:text-white"
+                      onClick={() => handleLink(item.communityId)}
+                      key={item.communityId}
+                      aria-labelledby={`title-${item.communityId}`}
+                    >
+                      <TableCell className="flex-grow">{item.title}</TableCell>
+                      <TableCell>{item.userNickname}</TableCell>
+                    </TableRow>
+                  ))
+              : (communityBoard || [])
+                  .filter((item: IBoard) => item.category === params.tag)
+                  .filter(
+                    (item: IBoard) =>
+                      searchKey === '' || item.title.includes(searchKey)
+                  )
+                  .map((item: IBoard) => (
+                    <TableRow
+                      className="cursor-pointer hover:bg-primary hover:text-white"
+                      onClick={() => handleLink(item.communityId)}
+                      key={item.communityId}
+                      aria-labelledby={`title-${item.communityId}`}
+                    >
+                      <TableCell className="flex-grow">{item.title}</TableCell>
+                      <TableCell>{item.userNickname}</TableCell>
+                    </TableRow>
+                  ))}
+          </TableBody>
+        </Table>
+      </div>
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Button
