@@ -157,7 +157,8 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
             placeholder="실력별"
             size="sm"
             onChange={(e) => setSelectedLevel(e.target.value)}
-            style={{ width: '80px', marginLeft: '16px', fontWeight: 'bold' }}
+            style={{ width: '80px', fontWeight: 'bold' }}
+            className="ml-[16px] sm:ml-0"
           >
             {levels.map((level) => (
               <SelectItem key={level} value={level}>

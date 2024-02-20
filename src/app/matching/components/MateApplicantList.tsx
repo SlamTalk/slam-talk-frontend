@@ -99,19 +99,16 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
   return (
     <div
       key={applicant.participantTableId}
-      className="mb-2 mt-2 flex justify-between rounded-md border-2 px-3 py-1"
+      className="mb-2 mt-2 flex justify-between rounded-md border-2 px-3 py-1 sm:px-1"
     >
       <div className="flex items-center">
-        <span
-          className="w-30 mr-2 overflow-hidden truncate font-semibold"
-          style={{ width: '110px' }}
-        >
+        <span className="w-30 mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]">
           {applicant.participantNickname}
         </span>
-        <div className="mr-1 rounded-md bg-gray-200 px-2 py-1 dark:bg-gray-400">
+        <div className="mr-1 rounded-md bg-gray-200 px-2 py-1 text-xs dark:bg-gray-400">
           {applicant.position}
         </div>
-        <div className="rounded-md bg-gray-200 px-2 py-1 dark:bg-gray-400">
+        <div className="rounded-md bg-gray-200 px-2 py-1 text-xs  dark:bg-gray-400">
           {applicant.skillLevel}
         </div>
       </div>
@@ -136,7 +133,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
             </Button>
           </>
         ) : (
-          <div className="mr-2 text-sm">
+          <div className="mr-2 text-sm sm:mr-1">
             <span className={getStatusClassName(applicant.applyStatus)}>
               {applicant.applyStatus}
             </span>
