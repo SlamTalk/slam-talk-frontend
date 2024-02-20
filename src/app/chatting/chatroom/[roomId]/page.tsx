@@ -162,16 +162,16 @@ const Chatting = () => {
     router.back();
   };
   const exitChat = () => {
+    // client.current?.publish({
+    //   destination: `/pub/exit/${params.roomId}`,
+    //   headers: { authorization: `Bearer ${accessToken}` },
+    //   body: JSON.stringify({
+    //     roomId: params.roomId,
+    //     senderNickname: nickname,
+    //   }),
+    // });
     client.current?.publish({
-      destination: `/pub/exit/${params.roomId}`,
-      headers: { authorization: `Bearer ${accessToken}` },
-      body: JSON.stringify({
-        roomId: params.roomId,
-        senderNickname: nickname,
-      }),
-    });
-    client.current?.publish({
-      destination: `/pub/exit/${params.roomId}`,
+      destination: `/pub/chat/bot/${params.roomId}`,
       headers: { authorization: `Bearer ${accessToken}` },
       body: JSON.stringify({
         roomId: params.roomId,
@@ -266,7 +266,9 @@ const Chatting = () => {
               aria-label="첫 방문 메시지"
               className="z-50 w-[150px] rounded bg-gray-300 text-center text-white"
             >
-              {greeting}
+              {greeting.split(' ')[0]}
+              <br />
+              {greeting.split(' ')[1]}
             </p>
           </div>
         ) : null}
