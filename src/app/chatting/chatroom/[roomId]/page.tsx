@@ -201,7 +201,7 @@ const Chatting = () => {
           {(onClose) => (
             <>
               <ModalHeader className="flex gap-1">
-                채팅방 <p className="font-extrabold	">{roomInfo?.name}</p> 에서
+                채팅방 <p className="font-bold">{roomInfo?.name}</p> 에서
                 퇴장하기
               </ModalHeader>
               <ModalBody>
