@@ -134,8 +134,6 @@ const MyProfile = () => {
     setEdit(true);
     const selectedFile = e.target.files && e.target.files[0];
     if (selectedFile) {
-      console.log(selectedFile.size);
-      console.log(1024 * 1024);
       if (selectedFile.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
         setErrorMsg(`파일 크기는 ${MAX_FILE_SIZE_MB}MB를 초과할 수 없습니다.`);
         onOpen();
