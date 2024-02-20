@@ -159,6 +159,7 @@ const Chatting = () => {
     });
 
     client.current?.deactivate();
+    router.back();
   };
   const exitChat = () => {
     client.current?.publish({
@@ -169,8 +170,17 @@ const Chatting = () => {
         senderNickname: nickname,
       }),
     });
+    client.current?.publish({
+      destination: `/pub/exit/${params.roomId}`,
+      headers: { authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({
+        roomId: params.roomId,
+        senderNickname: nickname,
+        content: 'EXIT',
+      }),
+    });
     client.current?.deactivate();
-
+    console.log('퇴장~');
     router.back();
   };
   const postMore = async () => {
@@ -226,10 +236,7 @@ const Chatting = () => {
             className="left-[20px] top-[20px] w-[50px] text-xl text-white"
             cursor="pointer"
             size={24}
-            onClick={() => {
-              handleToBack();
-              router.back();
-            }}
+            onClick={handleToBack}
           />
           <h2 className="w-[525px] text-center text-xl text-white">
             {roomInfo?.roomType === 'DIRECT' && roomInfo?.name}

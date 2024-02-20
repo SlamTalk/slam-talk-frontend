@@ -1,13 +1,14 @@
-import { Avatar } from '@nextui-org/react';
+import { Avatar, useDisclosure } from '@nextui-org/react';
 
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import IMessage from '@/types/chat/message';
-import axiosInstance from '@/app/api/axiosInstance';
-import { useRouter } from 'next/navigation';
+
+import UserProfile from '@/app/components/UserProfile';
 
 const MessageList = ({ list }: { list: IMessage[] }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
@@ -15,7 +16,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
   });
 
   const nickname = error ? null : user?.nickname;
-  const router = useRouter();
+
   useEffect(() => {
     // messageListData();
     setMessages(list);
@@ -23,29 +24,30 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
-  const postChatRoom = async (createData: any) => {
-    const res = await axiosInstance.post(
-      `/api/chat/create`,
-      JSON.stringify(createData)
-    );
-    return res.data.results;
-  };
+  // const postChatRoom = async (createData: any) => {
+  //   const res = await axiosInstance.post(
+  //     `/api/chat/create`,
+  //     JSON.stringify(createData)
+  //   );
+  //   return res.data.results;
+  // };
 
-  const handleCreateChatroom = (partnerId: any) => async () => {
-    const createInfo = {
-      creator_id: user?.id,
-      participants: [partnerId],
-      roomType: 'DM',
-      basket_ball_id: '', // 시설채팅에만
-      name: '', // 1:1은 필요없음,시설명,매칭&같이하기는 작성글 제목
-    };
-    const createRoom = await postChatRoom(createInfo);
-    router.push(`/chatting/chatroom/${createRoom}`);
-  };
+  // const handleCreateChatroom = (partnerId: any) => async () => {
+  //   const createInfo = {
+  //     creator_id: user?.id,
+  //     participants: [partnerId],
+  //     roomType: 'DM',
+  //     basket_ball_id: '', // 시설채팅에만
+  //     name: '', // 1:1은 필요없음,시설명,매칭&같이하기는 작성글 제목
+  //   };
+  //   const createRoom = await postChatRoom(createInfo);
+  //   router.push(`/chatting/chatroom/${createRoom}`);
+  // };
+
   return (
     <div
-      key={messages[0].roomId}
-      className="min-w mt-16 h-[730px] w-full overflow-y-scroll	"
+      key={messages[0]?.roomId}
+      className="mt-16 w-full overflow-y-scroll	sm:h-[740px] md:h-[620px] xl:h-[740px]"
     >
       {messages.map((i: IMessage) =>
         i.senderNickname?.replace(/"/g, '') === nickname
@@ -77,8 +79,15 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                 className="mt-5 flex h-20 w-full justify-start"
               >
                 <div aria-label="userIcon">
+                  <UserProfile
+                    isOpen={isOpen}
+                    userId={+i.senderId}
+                    onClose={onClose}
+                  />
+
                   <Avatar
-                    onClick={handleCreateChatroom(user?.id)}
+                    onClick={onOpen}
+                    style={{ cursor: 'pointer' }}
                     className="mx-2"
                     alt="others-profile"
                     src={user?.imageUrl}
