@@ -176,6 +176,7 @@ const Chatting = () => {
       body: JSON.stringify({
         roomId: params.roomId,
         senderNickname: nickname,
+        senderId: user?.id,
         content: 'EXIT',
       }),
     });
