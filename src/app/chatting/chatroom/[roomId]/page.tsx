@@ -268,8 +268,9 @@ const Chatting = () => {
               className="z-50 h-[50px] w-[150px] rounded bg-gray-300 text-center text-white"
             >
               {greeting.split(' ')[0]}
-              <br />
               {greeting.split(' ')[1]}
+              <br />
+              {greeting.split(' ')[2]}
             </p>
           </div>
         ) : null}

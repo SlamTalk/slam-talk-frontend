@@ -33,8 +33,10 @@ const ChatList = () => {
     queryFn: getUserData,
   });
   const createData = {
-    participants: [6, loginData?.id],
-    roomType: 'DM',
+    participants: [1, loginData?.id, 3],
+    roomType: 'TM',
+    togetherId: '1',
+    name: '함께 즐겨요~',
   };
   const postChatRoom = async () => {
     const res = await axiosInstance.post(
