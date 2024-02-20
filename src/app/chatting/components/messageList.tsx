@@ -44,41 +44,54 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
   };
   return (
     <div className="min-w mt-16 h-[730px] w-full overflow-y-scroll	">
-      {messages.map((i) =>
-        i.senderNickname.replace(/"/g, '') === nickname ? (
-          <div key={i.messageId} className="mt-5 flex h-20 w-full justify-end">
-            <div aria-label="나의 닉네임과 채팅 메시지">
-              <p className="text-end">{i.senderNickname.replace(/"/g, '')}</p>
-              <div className="my-3 max-w-sm rounded-lg bg-primary px-3 py-2 text-white">
-                {i.content.replace(/"/g, '')}
+      {messages.map((i: IMessage) =>
+        i.senderNickname?.replace(/"/g, '') === nickname
+          ? i.senderNickname?.replace(/"/g, '') && (
+              <div
+                key={i.messageId}
+                className="mt-5 flex h-20 w-full justify-end"
+              >
+                <div aria-label="나의 닉네임과 채팅 메시지">
+                  <p className="text-end">
+                    {i.senderNickname?.replace(/"/g, '')}
+                  </p>
+                  <div className="my-3 max-w-sm rounded-lg bg-primary px-3 py-2 text-white">
+                    {i.content.replace(/"/g, '')}
+                  </div>
+                </div>
+                <div aria-label="userIcon">
+                  <Avatar
+                    className="mx-2"
+                    alt="my-profile"
+                    src={user?.imageUrl}
+                  />
+                </div>
               </div>
-            </div>
-            <div aria-label="userIcon">
-              <Avatar className="mx-2" alt="my-profile" src={user?.imageUrl} />
-            </div>
-          </div>
-        ) : (
-          <div
-            key={i.messageId}
-            className="mt-5 flex h-20 w-full justify-start"
-          >
-            <div aria-label="userIcon">
-              <Avatar
-                onClick={handleCreateChatroom(user?.id)}
-                className="mx-2"
-                alt="others-profile"
-                src={user?.imageUrl}
-              />
-            </div>
-            <div aria-label="상대방의 닉네임과 채팅 메시지">
-              <p className="text-start">{i.senderNickname.replace(/"/g, '')}</p>
+            )
+          : i.senderNickname?.replace(/"/g, '') !== nickname && (
+              <div
+                key={i.messageId}
+                className="mt-5 flex h-20 w-full justify-start"
+              >
+                <div aria-label="userIcon">
+                  <Avatar
+                    onClick={handleCreateChatroom(user?.id)}
+                    className="mx-2"
+                    alt="others-profile"
+                    src={user?.imageUrl}
+                  />
+                </div>
+                <div aria-label="상대방의 닉네임과 채팅 메시지">
+                  <p className="text-start">
+                    {i.senderNickname?.replace(/"/g, '')}
+                  </p>
 
-              <div className="my-1 max-w-sm rounded-lg bg-gray-200 px-3 py-2 text-black">
-                {i.content.replace(/"/g, '')}
+                  <div className="my-1 max-w-sm rounded-lg bg-gray-200 px-3 py-2 text-black">
+                    {i.content?.replace(/"/g, '')}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        )
+            )
       )}
     </div>
   );
