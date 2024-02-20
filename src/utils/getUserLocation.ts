@@ -39,10 +39,9 @@ export const getAddressFromCoords = (
         if (status === window.kakao.maps.services.Status.OK) {
           console.log(result);
           const address = result[0].address.address_name;
-          let roadAddress = null;
-          if (result[0] && result[0].road_address) {
-            roadAddress = result[0].road_address.address_name;
-          }
+          const roadAddress = result[0].road_address
+            ? result[0].road_address.address_name
+            : null;
           resolve({ address, roadAddress });
         } else {
           reject(new Error('주소를 가져오는데 실패했습니다.'));
