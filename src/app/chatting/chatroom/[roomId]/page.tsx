@@ -275,26 +275,32 @@ const Chatting = () => {
       </div>
 
       <MessageList list={messageListState} />
-
-      <div
-        aria-label="chat input section"
-        className="b-0 fixed flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          sendMessage();
+        }}
       >
-        <Input
-          ref={inputRef}
-          value={message}
-          onChange={(e) => {
-            setMessage(e.target.value);
-          }}
-        />
-        <Button
-          isIconOnly
-          className="h-auto w-14 border-none bg-transparent"
-          onClick={sendMessage}
+        <div
+          aria-label="chat input section"
+          className="b-0 fixed flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"
         >
-          <IoIosSend className="text-4xl text-primary" />
-        </Button>
-      </div>
+          <Input
+            ref={inputRef}
+            value={message}
+            onChange={(e) => {
+              setMessage(e.target.value);
+            }}
+          />
+          <Button
+            isIconOnly
+            className="h-auto w-14 border-none bg-transparent"
+            onClick={sendMessage}
+          >
+            <IoIosSend className="text-4xl text-primary" />
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };
