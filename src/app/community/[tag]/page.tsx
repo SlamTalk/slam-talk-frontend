@@ -17,8 +17,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getCommunityBoard } from '../../../services/community/getCommunityBoard';
 import { IBoard } from '../../../types/community/board';
 
-// import { getCommunityTag } from '@/services/community/getCommunityTag';
-
 import LocalStorage from '../../../utils/localstorage';
 
 const Page = () => {
@@ -28,23 +26,12 @@ const Page = () => {
   const router = useRouter();
   const [inputData, setInputData] = useState('');
   const [isFocus, setIsFocus] = useState(false);
-  // const [tag, setTag] = useState('');
+
   const [searchKey, setSearchKey] = useState('');
   const { data: communityBoard } = useQuery<IBoard[]>({
     queryKey: ['communityBoard'],
     queryFn: getCommunityBoard,
   });
-
-  // const { data: categoriedList } = useQuery<any>({
-  //   queryKey: [`getCategory/${tag}`],
-  //   queryFn: async () => {
-  //     if (tag !== '') {
-  //       const data = await getCommunityTag('');
-  //       return data;
-  //     }
-  //     return '';
-  //   },
-  // });
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -53,7 +40,7 @@ const Page = () => {
     };
 
     window.addEventListener('resize', handleResize);
-    handleResize(); // 컴포넌트가 마운트될 때 한 번 실행하여 초기 값 설정
+    handleResize();
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
