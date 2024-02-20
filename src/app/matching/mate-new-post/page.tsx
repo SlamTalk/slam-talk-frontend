@@ -71,7 +71,7 @@ const MateNewPostPage = () => {
     };
 
     createPostMutation.mutate(newMateData);
-    router.push('/matching');
+    router.push('/matching?tab=mate');
   };
 
   const handleCenterCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {

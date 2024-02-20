@@ -467,7 +467,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
           </div>
         </form>
       </div>
-      <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
+      <Modal isOpen={isOpen} onClose={onClose} placement="center">
         <ModalContent>
           {() => (
             <>
