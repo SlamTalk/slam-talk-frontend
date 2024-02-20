@@ -116,7 +116,7 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
         </div>
       </div>
       <div className="flex items-center">
-        {isWriter && applicant.applyStatusType === 'WAITING' ? (
+        {isWriter && applicant.applyStatus === 'WAITING' ? (
           <>
             <Button
               className="text-black"
@@ -137,13 +137,13 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
           </>
         ) : (
           <div className="mr-2 text-sm">
-            <span className={getStatusClassName(applicant.applyStatusType)}>
-              {applicant.applyStatusType}
+            <span className={getStatusClassName(applicant.applyStatus)}>
+              {applicant.applyStatus}
             </span>
           </div>
         )}
         {user?.id === applicant.applicantId &&
-          applicant.applyStatusType === 'WAITING' && (
+          applicant.applyStatus === 'WAITING' && (
             <Button
               className="bg-gray-400"
               size="sm"

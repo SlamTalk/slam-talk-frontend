@@ -2,8 +2,7 @@ export interface TeamApplied {
   teamApplicantTableId: number;
   applicantId: number;
   applicantNickname: string;
-  chatroomId: number;
-  applyStatusType: string;
+  applyStatus: string;
   teamName: string;
   skillLevel: string;
   teamMatchingId: number;

@@ -171,7 +171,7 @@ const TeamDetailsPage = () => {
 
       const acceptedParticipantIds =
         data?.teamApplicants
-          .filter((applicant) => applicant.applyStatusType === 'ACCEPTED')
+          .filter((applicant) => applicant.applyStatus === 'ACCEPTED')
           .map((applicant) => applicant.applicantId) || [];
 
       const participantsIds = [
