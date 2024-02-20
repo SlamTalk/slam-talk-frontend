@@ -36,8 +36,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         setUserLocation({ latitude, longitude });
         return getAddressFromCoords(latitude, longitude);
       })
-      .then((address) => {
-        setUserAddress(address);
+      .then(({ address, roadAddress }) => {
+        const finalAddress = roadAddress || address;
+        setUserAddress(finalAddress);
       })
       .catch((error) => {
         console.error(error.message);
