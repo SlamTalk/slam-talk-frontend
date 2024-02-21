@@ -241,7 +241,7 @@ const Chatting = () => {
           />
           <h2 className="w-[525px] text-center text-xl text-white">
             {roomInfo?.roomType === 'DIRECT' && roomInfo?.name}
-            {roomInfo?.roomType === 'BASEKETBALL' && roomInfo?.name}
+            {roomInfo?.roomType === 'BASKETBALL' && roomInfo?.name}
             {roomInfo?.roomType === 'TOGETHER' && roomInfo?.name}
             {roomInfo?.roomType === 'MATCHING' && roomInfo?.name}
           </h2>
