@@ -27,6 +27,7 @@ const getCourtDetails = async (courtId: number) => {
         convenience: court.convenience,
         additionalInfo: court.additionalInfo,
         photoUrl: court.photoUrl,
+        chatroomId: court.chatroomId,
       };
       return courtDetails;
     }
