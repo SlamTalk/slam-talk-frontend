@@ -80,15 +80,25 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
             </div>
             <div className="mb-5 h-full p-4">
               <div className="flex justify-between">
-                <h2 className="mx-1 text-xl font-bold">
-                  {selectedPlace.courtName}
-                </h2>
+                <div className="flex items-center gap-3">
+                  <h2 className="text-xl font-bold">
+                    {selectedPlace.courtName}
+                  </h2>
+                  <span className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
+                    {selectedPlace.indoorOutdoor}
+                  </span>
+                </div>
                 <Button
                   color="primary"
                   radius="full"
                   size="md"
                   startContent={<PiChatsCircle />}
                   aria-label="시설 채팅 바로가기"
+                  onClick={() =>
+                    router.push(
+                      `/chatting/chatroom/${selectedPlace.chatroomId}`
+                    )
+                  }
                 >
                   시설 채팅
                 </Button>
@@ -219,9 +229,6 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
-                    {selectedPlace.indoorOutdoor}
-                  </span>
                   <ul className="flex gap-2">
                     {selectedPlace.convenience
                       ? selectedPlace.convenience.map(

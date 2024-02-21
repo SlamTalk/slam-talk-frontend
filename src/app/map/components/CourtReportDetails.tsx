@@ -6,12 +6,10 @@ import { IoIosClose } from 'react-icons/io';
 import { FaPhoneAlt, FaParking, FaTag, FaRegDotCircle } from 'react-icons/fa';
 import Image from 'next/image';
 import { FaLocationDot, FaClock, FaLightbulb } from 'react-icons/fa6';
-import { PiChatsCircle } from 'react-icons/pi';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import getCourtDetails from '@/services/basketballCourt/getCourtDetails';
-import { RiShareBoxFill } from 'react-icons/ri';
 import Link from 'next/link';
+import getReportCourtDetails from '@/services/basketballCourt/getReportCourtDetails';
 import { CourtIcon } from './icons/CourtIcon';
 import { HoopIcon } from './icons/HoopIcon';
 import { FeeIcon } from './icons/FeeIcon';
@@ -23,11 +21,15 @@ interface CourtDetailsProps {
   onClose: () => void;
 }
 
-const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
+const CourtReportDetails: React.FC<CourtDetailsProps> = ({
+  courtId,
+  onClose,
+}) => {
   const router = useRouter();
+
   const { error, data: selectedPlace } = useQuery({
-    queryKey: ['courtDetails', courtId],
-    queryFn: () => getCourtDetails(courtId),
+    queryKey: ['reportCourtDetails', courtId],
+    queryFn: () => getReportCourtDetails(courtId),
   });
 
   if (error) {
@@ -35,18 +37,11 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
     router.push('/map');
   }
 
-  if (selectedPlace) {
-    const handlePhoneClick = () => {
-      if (selectedPlace.phoneNum) {
-        const confirmDial = window.confirm(
-          `이 전화번호로 연결하시겠습니까? ${selectedPlace.phoneNum}`
-        );
-        if (confirmDial) {
-          window.location.href = `tel:${selectedPlace.phoneNum}`;
-        }
-      }
-    };
+  const handleClose = () => {
+    onClose();
+  };
 
+  if (selectedPlace) {
     const handleCopyAddress = async () => {
       if (selectedPlace.address) {
         try {
@@ -59,16 +54,12 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
       }
     };
 
-    const handleClose = () => {
-      onClose();
-    };
-
     return (
       <>
         <title>슬램톡 | 농구장 지도</title>
         <div
           className={`min-w-md sm-h-full absolute inset-0 z-40 m-auto h-fit max-h-[calc(100vh-109px)] w-fit min-w-96 max-w-md overflow-y-auto rounded-lg
-          bg-background shadow-md transition-all duration-300 ease-in-out sm:min-w-full`}
+            bg-background shadow-md transition-all duration-300 ease-in-out sm:min-w-full`}
         >
           <div className="w-full text-sm">
             <div className="relative h-56 w-full sm:h-52">
@@ -101,38 +92,12 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                   <h2 className="text-xl font-bold">
                     {selectedPlace.courtName}
                   </h2>
-                  <span className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
-                    {selectedPlace.indoorOutdoor}
-                  </span>
+                  <p className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
+                    {selectedPlace.indoorOutdoor && selectedPlace.indoorOutdoor}
+                  </p>
                 </div>
-                <Button
-                  color="primary"
-                  radius="full"
-                  size="md"
-                  startContent={<PiChatsCircle />}
-                  aria-label="시설 채팅 바로가기"
-                  onClick={() =>
-                    router.push(
-                      `/chatting/chatroom/${selectedPlace.chatroomId}`
-                    )
-                  }
-                >
-                  시설 채팅
-                </Button>
               </div>
               <div className="my-2 flex w-full items-center justify-start gap-3">
-                <Button
-                  size="sm"
-                  aria-label="크게 보기"
-                  variant="bordered"
-                  className="border-0 p-0"
-                  radius="full"
-                  startContent={<RiShareBoxFill />}
-                  onClick={() => window.open(`/map/${courtId}`)}
-                >
-                  크게 보기
-                </Button>
-                <hr className="h-4 w-px bg-gray-300" />
                 <Button
                   size="sm"
                   variant="bordered"
@@ -170,7 +135,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                   <span>
                     개방 시간:{' '}
                     <span className="text-rose-400">
-                      {selectedPlace.openingHours}
+                      {selectedPlace.openingHours && '제한'}
                     </span>
                   </span>
                 </div>
@@ -178,7 +143,6 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                   <FaPhoneAlt
                     size={15}
                     className="pointer-events-auto text-gray-400 dark:text-gray-200"
-                    onClick={handlePhoneClick}
                   />
                   <span>
                     {selectedPlace.phoneNum ? selectedPlace.phoneNum : '-'}
@@ -187,7 +151,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                 <div className="flex gap-2 align-middle">
                   <FeeIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-info text-blue-500">
-                    이용료: {selectedPlace.fee}
+                    이용료: {selectedPlace.fee && '무료'}
                   </span>
                 </div>
 
@@ -206,19 +170,22 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                 <div className="flex gap-2 align-middle">
                   <CourtIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="font-medium">
-                    코트 종류: {selectedPlace.courtType}
+                    코트 종류:{' '}
+                    {selectedPlace.courtType ? selectedPlace.courtType : '-'}
                   </span>
                 </div>
                 <div className="flex gap-2 align-middle">
                   <CourtIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="font-medium">
-                    코트 사이즈: {selectedPlace.courtSize}
+                    코트 사이즈:{' '}
+                    {selectedPlace.courtSize ? selectedPlace.courtSize : '-'}
                   </span>
                 </div>
                 <div className="flex gap-2 align-middle">
                   <HoopIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="font-medium">
-                    골대 수: {selectedPlace.hoopCount}
+                    골대 수:{' '}
+                    {selectedPlace.hoopCount ? selectedPlace.hoopCount : '-'}
                   </span>
                 </div>
                 <div className="flex gap-2 align-middle">
@@ -233,7 +200,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>주차: {selectedPlace.parkingAvailable}</span>
+                  <span>주차: {selectedPlace.parkingAvailable && '불가'}</span>
                 </div>
 
                 <div className="flex gap-2 align-middle text-sm">
@@ -275,4 +242,4 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
   return null;
 };
 
-export default CourtDetails;
+export default CourtReportDetails;

@@ -8,10 +8,10 @@ export interface BasketballCourtReport {
   indoorOutdoor: string | null;
   courtSize: string | null;
   hoopCount: number | null;
-  nightLighting: string; // default: 없음
-  openingHours: string; // 제한
-  fee: string; // 무료
-  parkingAvailable: string; // 불가능
+  nightLighting: string | null; // default: 없음
+  openingHours: string | null; // 제한
+  fee: string | null; // 무료
+  parkingAvailable: string | null; // 불가능
   phoneNum: string | null;
   website: string | null;
   convenience: string | null;
