@@ -48,7 +48,6 @@ const Page = () => {
   });
   const writeName = articleData?.userNickname;
   const writerId = articleData?.userId;
-  console.log({ writerId });
   const loginUserName = loginData?.nickname;
   const [commentData, setCommentData] = useState({
     communityId: 0,
