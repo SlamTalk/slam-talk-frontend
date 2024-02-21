@@ -93,7 +93,7 @@ const Page = () => {
           size={isMobile ? 'sm' : 'md'}
           key="all"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           전체
         </Button>
@@ -107,7 +107,7 @@ const Page = () => {
           value="FREE"
           key="FREE"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           자유
         </Button>
@@ -119,7 +119,7 @@ const Page = () => {
           size={isMobile ? 'sm' : 'md'}
           key="USED"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           중고거래
         </Button>
@@ -131,7 +131,7 @@ const Page = () => {
           aria-label="태그 버튼 question"
           key="QUESTION"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           질문
         </Button>
@@ -143,7 +143,7 @@ const Page = () => {
           size={isMobile ? 'sm' : 'md'}
           key="TRANSFER"
           radius="full"
-          className="rounded-lg border border-gray-200 bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
+          className="rounded-lg bg-gray-200 text-gray-500 shadow-md hover:bg-primary hover:text-white"
         >
           대관양도
         </Button>
