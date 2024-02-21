@@ -1,7 +1,15 @@
 'use client';
 
-import React from 'react';
-import { Button } from '@nextui-org/react';
+import React, { useState } from 'react';
+import {
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from '@nextui-org/react';
 import { IoIosClose } from 'react-icons/io';
 import { FaPhoneAlt, FaParking, FaTag, FaRegDotCircle } from 'react-icons/fa';
 import Image from 'next/image';
@@ -12,6 +20,7 @@ import { useQuery } from '@tanstack/react-query';
 import getCourtDetails from '@/services/basketballCourt/getCourtDetails';
 import { RiShareBoxFill } from 'react-icons/ri';
 import Link from 'next/link';
+import LocalStorage from '@/utils/localstorage';
 import { CourtIcon } from './icons/CourtIcon';
 import { HoopIcon } from './icons/HoopIcon';
 import { FeeIcon } from './icons/FeeIcon';
@@ -20,11 +29,18 @@ import { WebsiteIcon } from './icons/WebsiteIcon';
 
 interface CourtDetailsProps {
   courtId: number;
-  onClose: () => void;
+  handleClose: () => void;
 }
 
-const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
+const CourtDetails: React.FC<CourtDetailsProps> = ({
+  courtId,
+  handleClose,
+}) => {
   const router = useRouter();
+  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+  const [msg, setMsg] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { error, data: selectedPlace } = useQuery({
     queryKey: ['courtDetails', courtId],
     queryFn: () => getCourtDetails(courtId),
@@ -59,8 +75,13 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
       }
     };
 
-    const handleClose = () => {
-      onClose();
+    const handleGoChatting = () => {
+      if (isLoggedIn === 'true') {
+        router.push(`/chatting/chatroom/${selectedPlace.chatroomId}`);
+      } else {
+        setMsg('로그인 후 이용할 수 있는 서비스입니다.');
+        onOpen();
+      }
     };
 
     return (
@@ -111,11 +132,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                   size="md"
                   startContent={<PiChatsCircle />}
                   aria-label="시설 채팅 바로가기"
-                  onClick={() =>
-                    router.push(
-                      `/chatting/chatroom/${selectedPlace.chatroomId}`
-                    )
-                  }
+                  onClick={handleGoChatting}
                 >
                   시설 채팅
                 </Button>
@@ -269,6 +286,28 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
             </div>
           </div>
         </div>
+        <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
+          <ModalContent>
+            {() => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  농구장 시설 채팅
+                </ModalHeader>
+                <ModalBody>
+                  <p>{msg}</p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    닫기
+                  </Button>
+                  <Button color="primary" onPress={() => router.push('/login')}>
+                    로그인하러 가기
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </>
     );
   }

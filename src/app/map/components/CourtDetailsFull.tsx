@@ -1,7 +1,15 @@
 'use client';
 
-import React from 'react';
-import { Button } from '@nextui-org/react';
+import React, { useState } from 'react';
+import {
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from '@nextui-org/react';
 import { FaPhoneAlt, FaParking, FaTag, FaRegDotCircle } from 'react-icons/fa';
 import Image from 'next/image';
 import { FaLocationDot, FaClock, FaLightbulb } from 'react-icons/fa6';
@@ -11,6 +19,7 @@ import { useQuery } from '@tanstack/react-query';
 import getCourtDetails from '@/services/basketballCourt/getCourtDetails';
 import { RiShareBoxFill } from 'react-icons/ri';
 import Link from 'next/link';
+import LocalStorage from '@/utils/localstorage';
 import { CourtIcon } from './icons/CourtIcon';
 import { HoopIcon } from './icons/HoopIcon';
 import { FeeIcon } from './icons/FeeIcon';
@@ -23,6 +32,10 @@ interface CourtDetailsProps {
 
 const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
   const router = useRouter();
+  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+  const [msg, setMsg] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { error, data: selectedPlace } = useQuery({
     queryKey: ['courtDetails', courtId],
     queryFn: () => getCourtDetails(courtId),
@@ -54,6 +67,15 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
           console.error('주소 복사 중 오류 발생:', error);
           alert('주소를 복사하는 데 실패했습니다.');
         }
+      }
+    };
+
+    const handleGoChatting = () => {
+      if (isLoggedIn === 'true') {
+        router.push(`/chatting/chatroom/${selectedPlace.chatroomId}`);
+      } else {
+        setMsg('로그인 후 이용할 수 있는 서비스입니다.');
+        onOpen();
       }
     };
 
@@ -94,11 +116,7 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                   size="md"
                   startContent={<PiChatsCircle />}
                   aria-label="시설 채팅 바로가기"
-                  onClick={() =>
-                    router.push(
-                      `/chatting/chatroom/${selectedPlace.chatroomId}`
-                    )
-                  }
+                  onClick={handleGoChatting}
                 >
                   시설 채팅
                 </Button>
@@ -257,6 +275,28 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
             </div>
           </div>
         </div>
+        <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
+          <ModalContent>
+            {() => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  농구장 시설 채팅
+                </ModalHeader>
+                <ModalBody>
+                  <p>{msg}</p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    닫기
+                  </Button>
+                  <Button color="primary" onPress={() => router.push('/login')}>
+                    로그인하러 가기
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </>
     );
   }
