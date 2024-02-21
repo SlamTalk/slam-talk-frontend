@@ -12,6 +12,7 @@ import {
 } from './adminDataType';
 
 interface NewBasketChatData {
+  basket_ball_id: string;
   name: string;
 }
 
@@ -118,7 +119,10 @@ const AdminCourtDetails: React.FC<AdminCourtDetailsProps> = ({
   });
 
   const onAccept = () => {
-    const newRoomData = { name: data.courtName };
+    const newRoomData = {
+      basket_ball_id: data.courtId.toString(),
+      name: data.courtName,
+    };
     createBasketChatRoomMutation.mutate(newRoomData);
     onClose();
   };
