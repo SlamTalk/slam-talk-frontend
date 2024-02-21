@@ -368,7 +368,7 @@ const KakaoMap = () => {
       {isCourtDetailsOpen && (
         <CourtDetails
           courtId={selectedCourtId}
-          onClose={() => setIsCourtDetailsOpen(false)}
+          handleClose={() => setIsCourtDetailsOpen(false)}
         />
       )}
       {isCourtReportDetailsOpen && (
