@@ -190,8 +190,17 @@ const Chatting = () => {
       const res = await axiosInstance.post(
         `/api/chat/history?roomId=${params.roomId}&count=${moreCount}`
       );
-      console.log(res.data.results);
-      setMessageListState([...res.data.results.reverse()]);
+
+      const duplicatedMessage = res.data.results as IMessage[];
+      const unique = Array.from(
+        new Map(
+          duplicatedMessage.map((messageItem: IMessage) => [
+            messageItem.messageId,
+            messageItem,
+          ])
+        ).values()
+      );
+      setMessageListState(unique.reverse());
     } catch (err) {
       console.error(err);
     }
