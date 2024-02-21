@@ -113,7 +113,7 @@ const ChatList = () => {
             </div>
             <div className="right-4 w-[50px]">
               {i.roomType === 'DIRECT' && `DM`}
-              {i.roomType === 'BASEKETBALL' && `BM`}
+              {i.roomType === 'BASKETBALL' && `BM`}
               {i.roomType === 'TOGETHER' && `TM`}
               {i.roomType === 'MATCHING' && `MM`}
             </div>
