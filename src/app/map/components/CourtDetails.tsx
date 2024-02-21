@@ -1,7 +1,15 @@
 'use client';
 
-import React from 'react';
-import { Button } from '@nextui-org/react';
+import React, { useState } from 'react';
+import {
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from '@nextui-org/react';
 import { IoIosClose } from 'react-icons/io';
 import { FaPhoneAlt, FaParking, FaTag, FaRegDotCircle } from 'react-icons/fa';
 import Image from 'next/image';
@@ -12,6 +20,7 @@ import { useQuery } from '@tanstack/react-query';
 import getCourtDetails from '@/services/basketballCourt/getCourtDetails';
 import { RiShareBoxFill } from 'react-icons/ri';
 import Link from 'next/link';
+import LocalStorage from '@/utils/localstorage';
 import { CourtIcon } from './icons/CourtIcon';
 import { HoopIcon } from './icons/HoopIcon';
 import { FeeIcon } from './icons/FeeIcon';
@@ -20,11 +29,18 @@ import { WebsiteIcon } from './icons/WebsiteIcon';
 
 interface CourtDetailsProps {
   courtId: number;
-  onClose: () => void;
+  handleClose: () => void;
 }
 
-const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
+const CourtDetails: React.FC<CourtDetailsProps> = ({
+  courtId,
+  handleClose,
+}) => {
   const router = useRouter();
+  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+  const [msg, setMsg] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { error, data: selectedPlace } = useQuery({
     queryKey: ['courtDetails', courtId],
     queryFn: () => getCourtDetails(courtId),
@@ -59,8 +75,13 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
       }
     };
 
-    const handleClose = () => {
-      onClose();
+    const handleGoChatting = () => {
+      if (isLoggedIn === 'true') {
+        router.push(`/chatting/chatroom/${selectedPlace.chatroomId}`);
+      } else {
+        setMsg('로그인 후 이용할 수 있는 서비스입니다.');
+        onOpen();
+      }
     };
 
     return (
@@ -97,10 +118,13 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
             </div>
             <div className="p-4">
               <div className="flex justify-between gap-4">
-                <div className="flex items-center">
+                <div className="flex items-center gap-3">
                   <h2 className="text-xl font-bold">
                     {selectedPlace.courtName}
                   </h2>
+                  <span className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
+                    {selectedPlace.indoorOutdoor}
+                  </span>
                 </div>
                 <Button
                   color="primary"
@@ -108,6 +132,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                   size="md"
                   startContent={<PiChatsCircle />}
                   aria-label="시설 채팅 바로가기"
+                  onClick={handleGoChatting}
                 >
                   시설 채팅
                 </Button>
@@ -162,7 +187,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                   <span>
                     개방 시간:{' '}
                     <span className="text-rose-400">
-                      {selectedPlace.openingHours === true ? '24시간' : '제한'}
+                      {selectedPlace.openingHours}
                     </span>
                   </span>
                 </div>
@@ -179,7 +204,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                 <div className="flex gap-2 align-middle">
                   <FeeIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-info text-blue-500">
-                    이용료: {selectedPlace.fee === true ? '유료' : '무료'}
+                    이용료: {selectedPlace.fee}
                   </span>
                 </div>
 
@@ -218,20 +243,14 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>
-                    야간 조명:{' '}
-                    {selectedPlace.nightLighting === true ? '있음' : '없음'}
-                  </span>
+                  <span>야간 조명: {selectedPlace.nightLighting}</span>
                 </div>
                 <div className="flex gap-2 align-middle">
                   <FaParking
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>
-                    주차:{' '}
-                    {selectedPlace.parkingAvailable === true ? '가능' : '불가'}
-                  </span>
+                  <span>주차: {selectedPlace.parkingAvailable}</span>
                 </div>
 
                 <div className="flex gap-2 align-middle text-sm">
@@ -239,9 +258,6 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
-                    {selectedPlace.indoorOutdoor}
-                  </span>
                   <ul className="flex gap-2">
                     {selectedPlace.convenience
                       ? selectedPlace.convenience.map(
@@ -270,6 +286,28 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
             </div>
           </div>
         </div>
+        <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
+          <ModalContent>
+            {() => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  농구장 시설 채팅
+                </ModalHeader>
+                <ModalBody>
+                  <p>{msg}</p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    닫기
+                  </Button>
+                  <Button color="primary" onPress={() => router.push('/login')}>
+                    로그인하러 가기
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </>
     );
   }

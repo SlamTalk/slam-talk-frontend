@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable no-nested-ternary */
+
 import {
   Avatar,
   Modal,
@@ -10,39 +12,40 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 
-import React, { useEffect } from 'react';
-
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 // import { getChatList } from '@/services/chatting/getChatList';
 
 import LocalStorage from '@/utils/localstorage';
 
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { IChatRoomListItem } from '../../../types/chat/chatRoomListItem';
-import axiosInstance from '../../api/axiosInstance';
-import { getUserData } from '../../../services/user/getUserData';
+// import axiosInstance from '../../api/axiosInstance';
+// import { getUserData } from '../../../services/user/getUserData';
 import { getChatList } from '../../../services/chatting/getChatList';
 
 const ChatList = () => {
   const router = useRouter();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { data: loginData } = useQuery({
-    queryKey: ['loginData'],
-    queryFn: getUserData,
-  });
-  const createData = {
-    participants: [6, loginData?.id],
-    roomType: 'DM',
-  };
-  const postChatRoom = async () => {
-    const res = await axiosInstance.post(
-      `/api/chat/create`,
-      JSON.stringify(createData)
-    );
-    return res.data.results;
-  };
+  // const { data: loginData } = useQuery({
+  //   queryKey: ['loginData'],
+  //   queryFn: getUserData,
+  // });
+  // const createData = {
+  //   participants: [1, loginData?.id, 4, 10],
+  //   roomType: 'TM',
+  //   together_id: '47000',
+  //   name: '함께 즐겨요~',
+  // };
+  // const postChatRoom = async () => {
+  //   const res = await axiosInstance.post(
+  //     `/api/chat/create`,
+  //     JSON.stringify(createData)
+  //   );
+  //   return res.data.results;
+  // };
   const { data: myChatList } = useQuery<IChatRoomListItem[]>({
     queryKey: ['myChatlist'],
     queryFn: getChatList,
@@ -82,32 +85,50 @@ const ChatList = () => {
             <div className="flex">
               <Avatar
                 className="m-1.5 cursor-pointer"
-                src={i.imgUrl ? i.imgUrl : undefined}
+                src={
+                  i.roomType === 'DIRECT'
+                    ? i.imgUrl || undefined
+                    : i.roomType === 'BASEKETBALL'
+                      ? '/images/basketball-stand.svg'
+                      : i.roomType === 'TOGETHER'
+                        ? '/images/team-group-thin.svg'
+                        : i.roomType === 'MATCHING'
+                          ? i.imgUrl || undefined
+                          : undefined
+                }
               />
+
               <Link href={`/chatting/chatroom/${i.roomId}`}>
                 <div className="text-xl">
                   {i.roomType === 'DIRECT' && i.name}
-                  {i.roomType === 'BASEKETBALL' && i.name}
+                  {i.roomType === 'BASKETBALL' && i.name}
                   {i.roomType === 'TOGETHER' && i.name}
                   {i.roomType === 'MATCHING' && i.name}
                 </div>
+
                 <div className="text-gray-400">
                   {i.lastMessage.replace(/"/g, '')}
                 </div>
               </Link>
             </div>
+            <div className="right-4 w-[50px]">
+              {i.roomType === 'DIRECT' && `DM`}
+              {i.roomType === 'BASKETBALL' && `BM`}
+              {i.roomType === 'TOGETHER' && `TM`}
+              {i.roomType === 'MATCHING' && `MM`}
+            </div>
           </div>
         </div>
       ))}
       <div>
-        <button
+        {/* <button
           type="button"
           onClick={() => {
             postChatRoom();
           }}
         >
           testroom
-        </button>
+        </button> */}
       </div>
     </div>
   ) : (

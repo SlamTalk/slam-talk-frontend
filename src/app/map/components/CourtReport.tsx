@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-useless-escape */
 import React, { useState } from 'react';
@@ -66,9 +67,50 @@ const CourtReport: React.FC<CourtReportProps> = ({
       formData.append('image', file);
     }
 
+    // nightLighting : 있음(LIGHT) , 없음(NON_LIGHT)
+    // openingHours : 24시(ALL_NIGHT), 제한(NON_ALL_NIGHT)
+    // fee : 무료(FREE) , 유료(NON_FREE)
+    // parkingAvailable : 가능(PARKING_AVAILABLE), 불가능(PARKING_UNAVAILABLE)
+
+    // 백엔드에 보낼 형식 맞추기
     if (data.convenience?.length === 0) {
-      // eslint-disable-next-line no-param-reassign
-      data.convenience = '';
+      data.convenience = null;
+    }
+
+    if (data.indoorOutdoor === undefined) {
+      data.indoorOutdoor = null;
+    }
+
+    if (data.nightLighting === '있음') {
+      data.nightLighting = 'LIGHT';
+    } else if (data.nightLighting === '없음') {
+      data.nightLighting = 'NON_LIGHT';
+    } else {
+      data.nightLighting = null;
+    }
+
+    if (data.openingHours === '24시') {
+      data.openingHours = 'ALL_NIGHT';
+    } else if (data.openingHours === '제한') {
+      data.openingHours = 'NON_ALL_LIGHT';
+    } else {
+      data.openingHours = null;
+    }
+
+    if (data.fee === '무료') {
+      data.fee = 'FREE';
+    } else if (data.fee === '유료') {
+      data.fee = 'NON_FREE';
+    } else {
+      data.fee = null;
+    }
+
+    if (data.parkingAvailable === '가능') {
+      data.parkingAvailable = 'PARKING_AVAILABLE';
+    } else if (data.parkingAvailable === '불가능') {
+      data.parkingAvailable = 'PARKING_UNAVAILABLE';
+    } else {
+      data.parkingAvailable = null;
     }
 
     const finalData = {

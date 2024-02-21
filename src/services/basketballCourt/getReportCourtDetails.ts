@@ -1,9 +1,11 @@
 import axiosInstance from '@/app/api/axiosInstance';
 import { BasketballCourtsDetails } from '@/types/basketballCourt/basketballCourtsDetails';
 
-const getCourtDetails = async (courtId: number) => {
+const getReportCourtDetails = async (courtId: number) => {
   try {
-    const response = await axiosInstance.get(`/api/map/courts/${courtId}`);
+    const response = await axiosInstance.get(
+      `/api/map/report/courts/${courtId}`
+    );
 
     if (response.status === 200) {
       const court = response.data.results;
@@ -38,4 +40,4 @@ const getCourtDetails = async (courtId: number) => {
   return null;
 };
 
-export default getCourtDetails;
+export default getReportCourtDetails;

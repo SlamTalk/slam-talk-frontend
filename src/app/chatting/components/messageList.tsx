@@ -1,6 +1,6 @@
 import { Avatar, useDisclosure } from '@nextui-org/react';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import IMessage from '@/types/chat/message';
@@ -43,7 +43,10 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
   //   const createRoom = await postChatRoom(createInfo);
   //   router.push(`/chatting/chatroom/${createRoom}`);
   // };
-
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
   return (
     <div
       key={messages[0]?.roomId}
@@ -60,7 +63,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                   <p className="text-end">
                     {i.senderNickname?.replace(/"/g, '')}
                   </p>
-                  <div className="my-3 max-w-sm rounded-lg bg-primary px-3 py-2 text-white">
+                  <div className="my-3 w-fit max-w-sm rounded-lg bg-primary px-3 py-2 text-white">
                     {i.content.replace(/"/g, '')}
                   </div>
                 </div>
@@ -68,7 +71,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                   <Avatar
                     className="z-10 mx-2"
                     alt="my-profile"
-                    src={user?.imageUrl}
+                    src={i?.imgUrl}
                   />
                 </div>
               </div>
@@ -90,7 +93,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                     style={{ cursor: 'pointer' }}
                     className="mx-2"
                     alt="others-profile"
-                    src={user?.imageUrl}
+                    src={i?.imgUrl}
                   />
                 </div>
                 <div aria-label="상대방의 닉네임과 채팅 메시지">
@@ -98,13 +101,14 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                     {i.senderNickname?.replace(/"/g, '')}
                   </p>
 
-                  <div className="my-1 max-w-sm rounded-lg bg-gray-200 px-3 py-2 text-black">
+                  <div className="my-1 w-fit max-w-sm rounded-lg bg-gray-200 px-3 py-2 text-black">
                     {i.content?.replace(/"/g, '')}
                   </div>
                 </div>
               </div>
             )
       )}
+      <div ref={messageEndRef}> </div>
     </div>
   );
 };
