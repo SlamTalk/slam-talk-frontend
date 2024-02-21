@@ -30,9 +30,12 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  Tooltip,
 } from '@nextui-org/react';
+import getReportCourts from '@/services/basketballCourt/getReportCourts';
 import CourtDetails from './CourtDetails';
 import CourtReport from './CourtReport';
+import CourtReportDetails from './CourtReportDetails';
 
 // [TO DO]
 // 모달 알림 넣기 - 로그인 여부 ✅, 제보 성공✅/실패
@@ -42,6 +45,7 @@ import CourtReport from './CourtReport';
 // 제보 모달 UI 수정 - 제보하기 Btn Fix ✅
 // 컨트롤 커스텀
 // 모바일 환경 움직임 확인하기 ✅
+// 농구장 제보 마커 추가 ✅
 
 export interface LatLng {
   getLat: () => number;
@@ -63,9 +67,13 @@ const KakaoMap = () => {
       lng: userLocation ? userLocation.longitude : 127.0484,
     },
   });
-  const [isCourtDetailsOpen, setIsCourtDetailsOpen] = useState<boolean>(false);
+
   const [isCourtReportOpen, setIsCourtReportOpen] = useState(false);
+  const [isCourtDetailsOpen, setIsCourtDetailsOpen] = useState<boolean>(false);
+  const [isCourtReportDetailsOpen, setIsCourtReportDetailsOpen] =
+    useState(false);
   const [selectedCourtId, setSelectedCourtId] = useState<number>(1);
+  const [selectedCourtReportId, setSelectedCourtReportId] = useState<number>(1);
   const [mode, setMode] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [coord, setCoord] = useState('');
@@ -82,6 +90,11 @@ const KakaoMap = () => {
   const { error, data: courts } = useQuery<BasketballCourts[]>({
     queryKey: ['courts'],
     queryFn: getCourts,
+  });
+
+  const { data: reportCourts, refetch } = useQuery<BasketballCourts[]>({
+    queryKey: ['reportCourts'],
+    queryFn: getReportCourts,
   });
 
   if (error) {
@@ -285,6 +298,38 @@ const KakaoMap = () => {
             </CustomOverlayMap>
           </>
         )}
+        {reportCourts?.map((court) => (
+          <>
+            <MapMarker
+              key={court.courtId}
+              position={{ lat: court.latitude, lng: court.longitude }}
+              image={{
+                src: '/icons/marker-img.png',
+                size: {
+                  width: 41,
+                  height: 48,
+                },
+              }}
+              clickable
+              onClick={() => {
+                setIsCourtReportDetailsOpen(true);
+                setSelectedCourtReportId(court.courtId);
+              }}
+            />
+            <CustomOverlayMap
+              key={`overlay__${court.latitude}-${court.longitude}`}
+              position={{ lat: court.latitude, lng: court.longitude }}
+              yAnchor={2.6}
+              xAnchor={0.66}
+            >
+              <Tooltip content={court.courtName} showArrow placement="right">
+                <div className="ml-12 flex items-center rounded border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-black shadow-sm">
+                  #{court.courtId} 제보 검토중
+                </div>
+              </Tooltip>
+            </CustomOverlayMap>
+          </>
+        ))}
         {courts?.map((court) => (
           <>
             <MapMarker
@@ -323,7 +368,13 @@ const KakaoMap = () => {
       {isCourtDetailsOpen && (
         <CourtDetails
           courtId={selectedCourtId}
-          onClose={() => setIsCourtDetailsOpen(false)}
+          handleClose={() => setIsCourtDetailsOpen(false)}
+        />
+      )}
+      {isCourtReportDetailsOpen && (
+        <CourtReportDetails
+          courtId={selectedCourtReportId}
+          onClose={() => setIsCourtReportDetailsOpen(false)}
         />
       )}
       {position && clickPositionAddress && isCourtReportOpen && (
@@ -333,6 +384,7 @@ const KakaoMap = () => {
           handleClose={() => {
             setIsCourtReportOpen(false);
             setPosition(null);
+            refetch();
           }}
           onReportSuccess={() => setMode(false)}
         />
