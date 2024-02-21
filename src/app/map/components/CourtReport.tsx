@@ -74,11 +74,11 @@ const CourtReport: React.FC<CourtReportProps> = ({
 
     // 백엔드에 보낼 형식 맞추기
     if (data.convenience?.length === 0) {
-      data.convenience = '';
+      data.convenience = null;
     }
 
     if (data.indoorOutdoor === undefined) {
-      data.indoorOutdoor = '';
+      data.indoorOutdoor = null;
     }
 
     if (data.nightLighting === '있음') {
@@ -86,7 +86,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
     } else if (data.nightLighting === '없음') {
       data.nightLighting = 'NON_LIGHT';
     } else {
-      data.nightLighting = '';
+      data.nightLighting = null;
     }
 
     if (data.openingHours === '24시') {
@@ -94,7 +94,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
     } else if (data.openingHours === '제한') {
       data.openingHours = 'NON_ALL_LIGHT';
     } else {
-      data.openingHours = '';
+      data.openingHours = null;
     }
 
     if (data.fee === '무료') {
@@ -102,7 +102,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
     } else if (data.fee === '유료') {
       data.fee = 'NON_FREE';
     } else {
-      data.fee = '';
+      data.fee = null;
     }
 
     if (data.parkingAvailable === '가능') {
@@ -110,7 +110,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
     } else if (data.parkingAvailable === '불가능') {
       data.parkingAvailable = 'PARKING_UNAVAILABLE';
     } else {
-      data.parkingAvailable = '';
+      data.parkingAvailable = null;
     }
 
     const finalData = {
