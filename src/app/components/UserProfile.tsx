@@ -128,7 +128,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
                           <CardBody>
                             <div className="flex flex-col gap-6 text-sm">
                               <p className="underline underline-offset-2">
-                                Lv.{otherUser.level === 0 ? 1 : otherUser.level}
+                                Lv.{otherUser.level}
                               </p>
                               <p>
                                 팀 매칭 횟수:{' '}

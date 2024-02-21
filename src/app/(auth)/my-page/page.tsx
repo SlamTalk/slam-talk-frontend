@@ -132,20 +132,20 @@ const MyPage = () => {
           <div className="mb-4 flex flex-col gap-4">
             <span>문의하기</span>
           </div>
+          {user.role === 'ADMIN' && (
+            <div className="absolute bottom-16 right-4">
+              <Link href="/admin">
+                <Button
+                  radius="sm"
+                  color="success"
+                  className="font-medium text-white"
+                >
+                  관리자 페이지
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
-        {user.role === 'ADMIN' && (
-          <div className="absolute bottom-16 right-4">
-            <Link href="/admin">
-              <Button
-                radius="sm"
-                color="success"
-                className="font-medium text-white"
-              >
-                관리자 페이지
-              </Button>
-            </Link>
-          </div>
-        )}
         <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
           <ModalContent>
             {(onClose) => (
