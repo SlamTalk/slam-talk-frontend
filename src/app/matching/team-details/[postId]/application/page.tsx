@@ -25,6 +25,7 @@ const TeamMatchingApplication = () => {
     onError: (error: Error) => {
       console.log(error);
       alert('이미 신청한 모집입니다.');
+      router.back();
     },
   });
 
@@ -38,7 +39,7 @@ const TeamMatchingApplication = () => {
   };
 
   return (
-    <div className="mx-auto mt-20 w-[450px] px-[16px]">
+    <form className="mx-auto mt-20 w-[450px] px-[16px]" onSubmit={handleSubmit}>
       <Image
         src="/images/basketball-team.png"
         width={300}
@@ -49,6 +50,7 @@ const TeamMatchingApplication = () => {
       <div className="mb-4">
         <div className="text-md mb-2 font-bold">팀명</div>
         <Textarea
+          isRequired
           maxLength={30}
           maxRows={1}
           value={teamName}
@@ -60,6 +62,7 @@ const TeamMatchingApplication = () => {
       <div className="mb-4">
         <div className="text-md mb-2 font-bold">원하는 실력대</div>
         <Select
+          isRequired
           value={skillLevel}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
             setSkillLevel(e.target.value)
@@ -82,11 +85,11 @@ const TeamMatchingApplication = () => {
         </Select>
       </div>
       <div className="mt-10 flex w-full">
-        <Button className="mx-auto" color="primary" onClick={handleSubmit}>
+        <Button type="submit" className="mx-auto" color="primary">
           지원하기
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 
