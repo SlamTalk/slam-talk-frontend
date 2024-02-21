@@ -241,6 +241,8 @@ const MyProfile = () => {
                   <Image
                     className="rounded-sm"
                     alt="네이버 아이콘"
+                    height={16}
+                    width={20}
                     src="/icons/naver-icon.png"
                   />
                 )}
