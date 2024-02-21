@@ -72,9 +72,12 @@ const TeamPostRevisePage = () => {
     mutationFn: patchTeamPost,
     onSuccess: () => {
       console.log('success');
+      router.push(`/matching/team-details/${postId}`);
     },
     onError: (error: Error) => {
+      alert('장소와 날짜, 시간을 다시 한 번 확인해주세요.');
       console.log(error);
+      throw error;
     },
   });
 
@@ -115,7 +118,6 @@ const TeamPostRevisePage = () => {
     };
 
     patchPostMutation.mutate(newTeamData);
-    router.push(`/matching/team-details/${postId}`);
   };
 
   return (
@@ -124,6 +126,7 @@ const TeamPostRevisePage = () => {
       <div className="mb-4">
         <div className="text-md font-bold">제목</div>
         <Input
+          isRequired
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력하세요"
@@ -133,6 +136,7 @@ const TeamPostRevisePage = () => {
       <div className="mb-4">
         <div className="text-md mb-2 font-bold">팀명</div>
         <Input
+          isRequired
           maxLength={30}
           value={teamName}
           onChange={(e) => setTeamName(e.target.value)}
@@ -146,6 +150,7 @@ const TeamPostRevisePage = () => {
         <div className="text-md font-bold">장소</div>
         <div className="relative">
           <Input
+            isRequired
             disabled
             id="address"
             placeholder="주소를 입력하세요"
@@ -235,29 +240,31 @@ const TeamPostRevisePage = () => {
           className="w-full"
           placeholder="실력대를 선택하세요"
         >
+          <SelectItem key="BEGINNER" value="BEGINNER">
+            입문
+          </SelectItem>
           <SelectItem key="OVER_BEGINNER" value="OVER_BEGINNER">
             입문 이상
           </SelectItem>
-          <SelectItem key="BEGINNER" value="BEGINNER">
-            입문
+
+          <SelectItem key="UNDER_LOW" value="UNDER_LOW">
+            하수 이하
           </SelectItem>
           <SelectItem key="OVER_LOW" value="OVER_LOW">
             하수 이상
           </SelectItem>
-          <SelectItem key="UNDER_LOW" value="UNDER_LOW">
-            하수 이하
+
+          <SelectItem key="UNDER_MIDDLE" value="UNDER_MIDDLE">
+            중수 이하
           </SelectItem>
           <SelectItem key="OVER_MIDDLE" value="OVER_MIDDLE">
             중수 이상
           </SelectItem>
-          <SelectItem key="UNDER_MIDDLE" value="UNDER_MIDDLE">
-            중수 이하
+          <SelectItem key="UNDER_HIGH" value="UNDER_HIGH">
+            고수 이하
           </SelectItem>
           <SelectItem key="HIGH" value="HIGH">
             고수
-          </SelectItem>
-          <SelectItem key="UNDER_HIGH" value="UNDER_HIGH">
-            고수 이하
           </SelectItem>
         </Select>
       </div>

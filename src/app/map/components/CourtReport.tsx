@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable no-param-reassign */
 /* eslint-disable no-useless-escape */
 import React, { useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import {
   Textarea,
@@ -27,6 +26,7 @@ import {
   basketballCourtSize,
   basketballConvenience,
 } from '@/constants/courtReportData';
+import { BasketballCourtReport } from '@/types/basketballCourt/basketballCourtReport';
 import { CameraIcon } from './icons/CameraIcon';
 
 interface CourtReportProps {
@@ -36,32 +36,12 @@ interface CourtReportProps {
   onReportSuccess: () => void;
 }
 
-export interface CourtReportData {
-  file: File | null;
-  courtName: string;
-  address: string;
-  latitude: number;
-  longitude: number;
-  courtType: string | null;
-  indoorOutdoor: string | null;
-  courtSize: string | null;
-  hoopCount: number | null;
-  nightLighting: string | boolean | null;
-  openingHours: string | boolean | null;
-  fee: string | boolean | null;
-  parkingAvailable: string | boolean | null;
-  phoneNum: string | null;
-  website: string | null;
-  convenience: string | null;
-  additionalInfo: string | null;
-}
-
 // 농구장 사진(1MB) ✅
 // (마커 정보→ 위도, 경도, 주소) ✅
 // 농구장명(필수), 주소(필수), 코트 종류, 실내외(실내/야외), 코트사이즈, 골대수, ✅
 // 야간 조명, 개방시간(제한/24시), 사용료, 주차 가능, 기타 정보 ✅
 // 전화번호, 홈페이지(링크), 편의시설 ✅
-// (도로명 주소 반영)
+// (도로명 주소 반영) ✅
 
 const CourtReport: React.FC<CourtReportProps> = ({
   position,
@@ -70,47 +50,25 @@ const CourtReport: React.FC<CourtReportProps> = ({
   onReportSuccess,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [reportSuccess, setReportSuccess] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CourtReportData>();
-  const onSubmit: SubmitHandler<CourtReportData> = async (data) => {
+  } = useForm<BasketballCourtReport>();
+  const onSubmit: SubmitHandler<BasketballCourtReport> = async (data) => {
     const formData = new FormData();
 
     if (file) {
       formData.append('image', file);
     }
 
-    // 백엔드와 데이터 타입 맞추기
     if (data.convenience?.length === 0) {
+      // eslint-disable-next-line no-param-reassign
       data.convenience = '';
-    }
-
-    if (data.nightLighting === '있음') {
-      data.nightLighting = true;
-    } else if (data.nightLighting === '없음') {
-      data.nightLighting = false;
-    }
-
-    if (data.openingHours === '제한') {
-      data.openingHours = false;
-    } else if (data.openingHours === '24시') {
-      data.openingHours = true;
-    }
-
-    if (data.fee === '무료') {
-      data.fee = false;
-    } else if (data.fee === '유료') {
-      data.fee = true;
-    }
-
-    if (data.parkingAvailable === '가능') {
-      data.parkingAvailable = true;
-    } else if (data.parkingAvailable === '불가능') {
-      data.parkingAvailable = false;
     }
 
     const finalData = {
@@ -119,6 +77,8 @@ const CourtReport: React.FC<CourtReportProps> = ({
       latitude: position.lat,
       longitude: position.lng,
     };
+
+    console.log(finalData);
 
     formData.append(
       'data',
@@ -134,12 +94,13 @@ const CourtReport: React.FC<CourtReportProps> = ({
         },
       });
       if (response.status === 200) {
+        setReportSuccess(true);
         onOpen();
         onReportSuccess();
       }
     } catch (error) {
-      console.log('제보 실패: ', error);
-      alert('농구장 제보에 실패했습니다.');
+      setReportSuccess(false);
+      onOpen();
     }
   };
 
@@ -223,7 +184,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
             <input
               id="fileInput"
               type="file"
-              accept="image/*"
+              accept="image/png, image/jpg, image/jpeg"
               onChange={handleFileChange}
               style={{ display: 'none' }}
             />
@@ -256,16 +217,16 @@ const CourtReport: React.FC<CourtReportProps> = ({
               variant="bordered"
               type="string"
               label="농구장명"
-              placeholder="농구장명을 입력해주세요."
+              placeholder="농구장명을 입력해 주세요."
               {...register('courtName', {
                 required: true,
                 minLength: {
                   value: 2,
-                  message: '농구장 이름을 2자 이상 30자 이하로 입력해주세요.',
+                  message: '농구장 이름을 2자 이상 30자 이하로 입력해 주세요.',
                 },
                 maxLength: {
                   value: 30,
-                  message: '농구장 이름을 2자 이상 30자 이하로 입력해주세요.',
+                  message: '농구장 이름을 2자 이상 30자 이하로 입력해 주세요.',
                 },
               })}
             />
@@ -321,15 +282,15 @@ const CourtReport: React.FC<CourtReportProps> = ({
               variant="bordered"
               type="number"
               label="골대 수"
-              placeholder="농구장 골대 수를 입력해주세요."
+              placeholder="농구장 골대 수를 입력해 주세요."
               {...register('hoopCount', {
                 min: {
                   value: 1,
-                  message: '농구장 골대 수를 1개 이상으로 입력해주세요.',
+                  message: '농구장 골대 수를 1개 이상으로 입력해 주세요.',
                 },
                 max: {
                   value: 30,
-                  message: '농구장 골대 수를 30개 이하로 입력해주세요.',
+                  message: '농구장 골대 수를 30개 이하로 입력해 주세요.',
                 },
               })}
             />
@@ -365,12 +326,12 @@ const CourtReport: React.FC<CourtReportProps> = ({
               variant="bordered"
               type="tel"
               label="전화번호"
-              placeholder="대표 전화번호를 입력해주세요."
+              placeholder="대표 전화번호를 입력해 주세요."
               {...register('phoneNum', {
                 pattern: {
                   value: /^\d{2,3}-?\d{3,4}-?\d{4}$/,
                   message:
-                    '전화번호 형식으로 입력해주세요. 00-000-0000 또는 000-0000-0000',
+                    '전화번호 형식으로 입력해 주세요. 00-000-0000 또는 000-0000-0000',
                 },
               })}
             />
@@ -390,12 +351,12 @@ const CourtReport: React.FC<CourtReportProps> = ({
               variant="bordered"
               type="url"
               label="홈페이지"
-              placeholder="관련 홈페이지를 입력해주세요."
+              placeholder="관련 홈페이지를 입력해 주세요."
               {...register('website', {
                 pattern: {
                   value:
                     /(http[s]?|ftp):\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}/g,
-                  message: '홈페이지 링크를 입력해주세요.',
+                  message: '홈페이지 링크를 입력해 주세요.',
                 },
               })}
             />
@@ -408,49 +369,96 @@ const CourtReport: React.FC<CourtReportProps> = ({
                 )}
               />
             </div>
-            <RadioGroup
-              className="text-sm font-semibold"
-              label="야간 조명"
-              orientation="horizontal"
-              {...register('nightLighting')}
-            >
-              <Radio value="있음">있음</Radio>
-              <Radio value="없음">없음</Radio>
-            </RadioGroup>
-            <RadioGroup
-              className="pt-6 text-sm font-semibold"
-              label="개방 시간"
-              orientation="horizontal"
-              {...register('openingHours')}
-            >
-              <Radio value="제한">제한</Radio>
-              <Radio value="24시">24시</Radio>
-            </RadioGroup>
-            <RadioGroup
-              className="pt-6 text-sm font-semibold"
-              label="사용료"
-              orientation="horizontal"
-              {...register('fee')}
-            >
-              <Radio value="무료">무료</Radio>
-              <Radio value="유료">유료</Radio>
-            </RadioGroup>
-            <RadioGroup
-              className="pt-6 text-sm font-semibold"
-              label="주차여부"
-              orientation="horizontal"
-              {...register('parkingAvailable')}
-            >
-              <Radio value="가능">가능</Radio>
-              <Radio value="불가능">불가능</Radio>
-            </RadioGroup>
+            <div className="flex flex-col gap-4">
+              <Controller
+                control={control}
+                name="indoorOutdoor"
+                render={({ field: { onChange, value } }) => (
+                  <RadioGroup
+                    value={value || ''}
+                    onChange={(value) => onChange(value)}
+                    className="text-sm font-semibold"
+                    label="실내외"
+                    orientation="horizontal"
+                  >
+                    <Radio value="실내">실내</Radio>
+                    <Radio value="야외">야외</Radio>
+                  </RadioGroup>
+                )}
+              />
+              <Controller
+                control={control}
+                name="nightLighting"
+                render={({ field: { onChange, value } }) => (
+                  <RadioGroup
+                    value={value || ''}
+                    onChange={(value) => onChange(value)}
+                    className="text-sm font-semibold"
+                    label="야간 조명"
+                    orientation="horizontal"
+                  >
+                    <Radio value="있음">있음</Radio>
+                    <Radio value="없음">없음</Radio>
+                  </RadioGroup>
+                )}
+              />
+              <Controller
+                control={control}
+                name="openingHours"
+                render={({ field: { onChange, value } }) => (
+                  <RadioGroup
+                    value={value || ''}
+                    onChange={(value) => onChange(value)}
+                    className="text-sm font-semibold"
+                    label="개방 시간"
+                    orientation="horizontal"
+                  >
+                    <Radio value="제한">제한</Radio>
+                    <Radio value="24시">24시</Radio>
+                  </RadioGroup>
+                )}
+              />
+              <Controller
+                control={control}
+                name="fee"
+                render={({ field: { onChange, value } }) => (
+                  <RadioGroup
+                    value={value || ''}
+                    onChange={(value) => onChange(value)}
+                    className="text-sm font-semibold"
+                    label="사용료"
+                    orientation="horizontal"
+                  >
+                    <Radio value="무료">무료</Radio>
+                    <Radio value="유료">유료</Radio>
+                  </RadioGroup>
+                )}
+              />
+              <Controller
+                control={control}
+                name="parkingAvailable"
+                render={({ field: { onChange, value } }) => (
+                  <RadioGroup
+                    value={value || ''}
+                    onChange={(value) => onChange(value)}
+                    className="text-sm font-semibold"
+                    label="주차 여부"
+                    orientation="horizontal"
+                  >
+                    <Radio value="가능">가능</Radio>
+                    <Radio value="불가능">불가능</Radio>
+                  </RadioGroup>
+                )}
+              />
+            </div>
+
             <div className="mt-6 w-full">
               <Textarea
                 radius="sm"
                 maxRows={3}
                 variant="bordered"
                 label="기타 정보"
-                placeholder="해당 농구장에 관한 기타 정보를 입력해주세요."
+                placeholder="해당 농구장에 관한 기타 정보를 입력해 주세요."
                 {...register('additionalInfo', { maxLength: 300 })}
               />
             </div>
@@ -467,20 +475,28 @@ const CourtReport: React.FC<CourtReportProps> = ({
           </div>
         </form>
       </div>
-      <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
+      <Modal isOpen={isOpen} onClose={onClose} placement="center">
         <ModalContent>
           {() => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                농구장 제보 성공
+                농구장 제보
               </ModalHeader>
               <ModalBody>
-                <p>감사합니다! 농구장 제보가 완료되었습니다.</p>
-                <p>관리자 검토 후 빠른 시일 내에 농구장 정보 반영하겠습니다.</p>
+                {reportSuccess ? (
+                  <>
+                    <p>감사합니다! 농구장 제보가 완료되었습니다.</p>
+                    <p>
+                      관리자 검토 후 빠른 시일 내에 농구장 정보 반영하겠습니다.
+                    </p>
+                  </>
+                ) : (
+                  <p>농구장 제보에 실패했습니다. 잠시 후 다시 시도해주세요.</p>
+                )}
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={handleClose}>
-                  닫기
+                <Button color="primary" onPress={handleClose}>
+                  확인
                 </Button>
               </ModalFooter>
             </>

@@ -171,9 +171,9 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
               onChange={(e) => setSelectedLevel(e.target.value)}
               style={{
                 width: '80px',
-                marginLeft: '16px',
                 fontWeight: 'bold',
               }}
+              className="ml-[16px] sm:ml-0"
             >
               {levels.map((level) => (
                 <SelectItem key={level} value={level}>

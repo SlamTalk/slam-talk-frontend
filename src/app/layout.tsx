@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import Script from 'next/script';
 import { usePathname } from 'next/navigation';
@@ -13,8 +12,6 @@ import useLocationStore from '@/store/userLocationStore';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Providers from './components/Providers';
-
-const inter = Inter({ subsets: ['latin'] });
 
 const queryClient = new QueryClient();
 
@@ -39,9 +36,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         setUserLocation({ latitude, longitude });
         return getAddressFromCoords(latitude, longitude);
       })
-      .then((address) => {
-        setUserAddress(address);
-        console.log(address);
+      .then(({ address, roadAddress }) => {
+        const finalAddress = roadAddress || address;
+        setUserAddress(finalAddress);
       })
       .catch((error) => {
         console.error(error.message);
@@ -56,7 +53,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_KEY}&autoload=false&libraries=services`}
         />
       </head>
-      <body className={`${inter.className}`}>
+      <body>
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools />
           <Providers>

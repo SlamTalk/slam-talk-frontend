@@ -5,8 +5,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { getOtherUserData } from '@/services/user/getOtherUserData';
 import { OtherUserInfo } from '@/types/user/otherUserInfo';
-import { Avatar } from '@nextui-org/react';
+import { Avatar, useDisclosure } from '@nextui-org/react';
 import { getUserData } from '@/services/user/getUserData';
+import UserProfile from '@/app/components/UserProfile';
 
 interface ICommentItemProps {
   commentId: number;
@@ -30,6 +31,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       window.location.reload();
     },
   });
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: writerUserInfo } = useQuery<OtherUserInfo | null>({
     queryKey: [`getWriterInfo${userId}`],
     queryFn: () => getOtherUserData({ userId }),
@@ -61,8 +63,14 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       key={commentId}
       className="border-gray mt-2 flex items-center border-b-2"
     >
-      <div aria-label="작성자 정보">
-        <Avatar src={writerUserInfo?.imageUrl} />
+      <UserProfile isOpen={isOpen} userId={userId} onClose={onClose} />
+      <div aria-label="작성자 정보" style={{ cursor: 'pointer' }}>
+        <Avatar
+          src={writerUserInfo?.imageUrl}
+          onClick={() => {
+            onOpen();
+          }}
+        />
         <p className="text-center">{writerUserInfo?.nickname}</p>
       </div>
 

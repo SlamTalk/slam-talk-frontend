@@ -35,7 +35,7 @@ const PasswordPage = () => {
         <div
           className={`mb-3 h-3 text-sm text-danger ${isEmailInvalid ? 'visible' : 'invisible'}`}
         >
-          {isEmailInvalid && '올바른 이메일을 입력해주세요.'}
+          {isEmailInvalid && '올바른 이메일을 입력해 주세요.'}
         </div>
         <Button
           size="lg"

@@ -20,20 +20,21 @@ const TeamMatchingApplication = () => {
       postNewTeamApplication(newApplication, teamPostId),
     onSuccess: () => {
       console.log('success');
+      router.back();
     },
     onError: (error: Error) => {
       console.log(error);
+      alert('이미 신청한 모집입니다.');
     },
   });
 
   const handleSubmit = () => {
-    newApplyMutation.mutate({
-      applyStatus: 'WAITING',
+    const newAppliedTeam = {
       teamName,
       skillLevel,
-    });
+    };
 
-    router.back();
+    newApplyMutation.mutate(newAppliedTeam);
   };
 
   return (

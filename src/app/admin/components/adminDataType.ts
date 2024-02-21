@@ -35,6 +35,7 @@ export interface PutCourtData {
   additionalInfo: string;
   photoUrl: string;
   informerId: number;
+  chatroomId: number;
 }
 
 export interface AdminCourtDetailsProps {

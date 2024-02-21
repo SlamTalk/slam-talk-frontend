@@ -116,6 +116,7 @@ const Page = () => {
 
   return (
     <form method="post" encType="multipart/form-data">
+      <title>슬램톡 | 커뮤니티 작성하기</title>
       <div className="flex flex-col">
         <div className="flex space-x-96">
           <Dropdown>

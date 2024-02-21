@@ -1,5 +1,14 @@
 import { Coords } from '@/types/location/userLocationType';
 
+interface AddressResult {
+  address: {
+    address_name: string; // 지번 주소
+  };
+  road_address?: {
+    address_name: string | null; // 도로명 주소
+  } | null;
+}
+
 export const getUserLocation = (): Promise<Coords> =>
   new Promise((resolve, reject) => {
     if (!('geolocation' in navigator)) {
@@ -21,15 +30,18 @@ export const getUserLocation = (): Promise<Coords> =>
 export const getAddressFromCoords = (
   latitude: number,
   longitude: number
-): Promise<string> =>
+): Promise<{ address: string; roadAddress: string | null }> =>
   new Promise((resolve, reject) => {
     window.kakao.maps.load(() => {
       // API가 로드될 때까지 기다림
       const geocoder = new window.kakao.maps.services.Geocoder();
-      const callback = (result: any, status: any) => {
+      const callback = (result: AddressResult[], status: string) => {
         if (status === window.kakao.maps.services.Status.OK) {
           const address = result[0].address.address_name;
-          resolve(address);
+          const roadAddress = result[0].road_address
+            ? result[0].road_address.address_name
+            : null;
+          resolve({ address, roadAddress });
         } else {
           reject(new Error('주소를 가져오는데 실패했습니다.'));
         }
