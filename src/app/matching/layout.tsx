@@ -3,7 +3,7 @@
 import React from 'react';
 
 const MatchingLayout = ({ children }: { children: React.ReactNode }) => (
-  <div className="">{children}</div>
+  <div className="pb-[52px]">{children}</div>
 );
 
 export default MatchingLayout;

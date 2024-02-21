@@ -33,8 +33,10 @@ const TeamNewPostPage = () => {
         newTeamData
       );
       console.log({ response });
+      router.push('/matching');
       return response.data;
     } catch (error) {
+      alert('장소와 날짜, 시간을 다시 한 번 확인해주세요.');
       console.log(error);
       throw error;
     }
@@ -87,7 +89,6 @@ const TeamNewPostPage = () => {
     };
 
     createPostMutation.mutate(newTeamData);
-    router.push('/matching');
   };
 
   return (
@@ -96,6 +97,7 @@ const TeamNewPostPage = () => {
       <div className="mb-4">
         <div className="text-md font-bold">제목</div>
         <Input
+          isRequired
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력하세요"
@@ -105,6 +107,7 @@ const TeamNewPostPage = () => {
       <div className="mb-4">
         <div className="text-md mb-2 font-bold">팀명</div>
         <Input
+          isRequired
           maxLength={30}
           value={teamName}
           onChange={(e) => setTeamName(e.target.value)}
@@ -118,6 +121,7 @@ const TeamNewPostPage = () => {
         <div className="text-md font-bold">장소</div>
         <div className="relative">
           <Input
+            isRequired
             disabled
             id="address"
             placeholder="주소를 입력하세요"
@@ -176,6 +180,7 @@ const TeamNewPostPage = () => {
       <div className="mb-2.5">
         <div className="text-md font-bold">규모</div>
         <Select
+          isRequired
           value={gameSize}
           onChange={(e) => handleGameSizeChange(e.target.value)}
           className="w-full"
@@ -200,6 +205,7 @@ const TeamNewPostPage = () => {
       <div className="mb-2.5">
         <div className="text-md font-bold">원하는 실력대</div>
         <Select
+          isRequired
           value={skillLevel}
           onChange={(e) => setSkillLevel(e.target.value)}
           className="w-full"
