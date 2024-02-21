@@ -101,7 +101,7 @@ const ChatList = () => {
               <Link href={`/chatting/chatroom/${i.roomId}`}>
                 <div className="text-xl">
                   {i.roomType === 'DIRECT' && i.name}
-                  {i.roomType === 'BASEKETBALL' && i.name}
+                  {i.roomType === 'BASKETBALL' && i.name}
                   {i.roomType === 'TOGETHER' && i.name}
                   {i.roomType === 'MATCHING' && i.name}
                 </div>
@@ -113,7 +113,7 @@ const ChatList = () => {
             </div>
             <div className="right-4 w-[50px]">
               {i.roomType === 'DIRECT' && `DM`}
-              {i.roomType === 'BASEKETBALL' && `BM`}
+              {i.roomType === 'BASKETBALL' && `BM`}
               {i.roomType === 'TOGETHER' && `TM`}
               {i.roomType === 'MATCHING' && `MM`}
             </div>

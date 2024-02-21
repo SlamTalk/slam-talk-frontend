@@ -1,26 +1,38 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
-import { Button, Input } from '@nextui-org/react';
+import {
+  Button,
+  Input,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from '@nextui-org/react';
+import confetti from 'canvas-confetti';
 import {
   validateEmail,
   validateNickname,
   validatePassword,
 } from '@/utils/validations';
 import { AxiosError } from 'axios';
-import { useRouter } from 'next/navigation';
 import { EyeSlashFilledIcon } from '../login/components/EyeSlashFilledIcon';
 import { EyeFilledIcon } from '../login/components/EyeFilledIcon';
 import axiosInstance from '../../api/axiosInstance';
 
 const SignUp = () => {
-  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nicknameTouched, setNicknameTouched] = useState(false);
   const [code, setCode] = useState('');
+  const [sendCode, setSendCode] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [successSignUp, setSuccessSignUp] = useState(false);
+  const [msg, setMsg] = useState('');
 
   const isNicknameInvalid = useMemo(
     () =>
@@ -43,13 +55,21 @@ const SignUp = () => {
     return !validatePassword(password);
   }, [password]);
 
+  const handleConfetti = () => {
+    confetti({
+      particleCount: 100,
+      spread: 160,
+    });
+  };
+
   const handleSignup = async () => {
     if (
       !validateEmail(email) ||
       !validatePassword(password) ||
       isNicknameInvalid
     ) {
-      alert('입력 정보를 확인해주세요.');
+      setMsg('입력 정보를 확인해주세요.');
+      onOpen();
       return;
     }
 
@@ -62,18 +82,21 @@ const SignUp = () => {
 
       if (response.status === 200) {
         localStorage.setItem('isLoggedIn', 'true');
-        alert('감사합니다. 회원가입에 성공했습니다!');
-        router.push('/user-info');
+        setSuccessSignUp(true);
+        setMsg('감사합니다. 회원가입에 성공했습니다!');
+        onOpen();
+        handleConfetti();
       }
     } catch (error) {
       if (error instanceof AxiosError) {
         const message =
           error.response?.data?.message ||
           '죄송합니다. 회원가입에 실패했습니다. 서버 오류 발생.';
-        alert(message);
+        setMsg(message);
+        onOpen();
       } else {
         console.log(error);
-        alert('죄송합니다. 알 수 없는 오류가 발생했습니다.');
+        setMsg('죄송합니다. 알 수 없는 오류가 발생했습니다.');
       }
     }
   };
@@ -87,7 +110,8 @@ const SignUp = () => {
 
   const handleSendEmailCode = async () => {
     if (!email) {
-      alert('이메일을 입력해 주세요.');
+      setMsg('이메일을 입력해 주세요.');
+      onOpen();
       return;
     }
     try {
@@ -95,22 +119,27 @@ const SignUp = () => {
         email,
       });
       if (response.status === 200) {
-        alert(
+        setSendCode(true);
+        setMsg(
           '이메일 인증 요청을 보냈습니다. 5분 안에 인증코드를 입력해 주세요.'
         );
+        onOpen();
       }
     } catch (error) {
-      alert('이메일 인증 요청에 실패했습니다.');
+      setMsg('이메일 인증 요청에 실패했습니다.');
+      onOpen();
     }
   };
 
   const handleValidateEmailCode = async () => {
     if (!email) {
-      alert('이메일을 입력해 주세요.');
+      setMsg('이메일을 입력해 주세요.');
+      onOpen();
       return;
     }
     if (!code) {
-      alert('인증 코드를 입력해 주세요.');
+      setMsg('인증 코드를 입력해 주세요.');
+      onOpen();
       return;
     }
     try {
@@ -118,11 +147,27 @@ const SignUp = () => {
         `/api/mail-check?email=${email}&code=${code}`
       );
       if (response.status === 200) {
-        alert('이메일 인증에 성공했습니다!');
+        setMsg('이메일 인증에 성공했습니다!');
+        onOpen();
       }
     } catch (error) {
       console.log('이메일 인증 실패:', error);
-      alert('이메일 인증에 실패했습니다.');
+      setMsg('이메일 인증에 실패했습니다.');
+      onOpen();
+    }
+  };
+
+  const handleCloseModal = () => {
+    if (successSignUp) {
+      const currentUrl = window.location.href;
+      const domain = new URL(currentUrl).origin;
+      if (domain === 'http://localhost:3000') {
+        window.location.href = 'http://localhost:3000/user-info';
+      } else {
+        window.location.href = 'https://slam-talk.vercel.app/user-info';
+      }
+    } else {
+      onClose();
     }
   };
 
@@ -169,10 +214,8 @@ const SignUp = () => {
           />
           <Button
             type="submit"
-            variant="ghost"
             radius="sm"
-            className="top-3 max-w-xs font-medium"
-            color="danger"
+            className="top-3 max-w-xs"
             onClick={handleSendEmailCode}
           >
             이메일 인증 요청
@@ -193,16 +236,26 @@ const SignUp = () => {
             placeholder="인증코드 입력"
             onValueChange={setCode}
           />
-          <Button
-            type="submit"
-            variant="ghost"
-            radius="sm"
-            className="top-3 max-w-xs font-medium"
-            color="danger"
-            onClick={handleValidateEmailCode}
-          >
-            확인
-          </Button>
+          {sendCode ? (
+            <Button
+              type="submit"
+              radius="sm"
+              className="top-3 max-w-xs font-medium"
+              onClick={handleValidateEmailCode}
+            >
+              확인
+            </Button>
+          ) : (
+            <Button
+              isDisabled
+              type="submit"
+              radius="sm"
+              className="top-3 max-w-xs font-medium"
+              onClick={handleValidateEmailCode}
+            >
+              확인
+            </Button>
+          )}
         </div>
         <Input
           radius="sm"
@@ -240,6 +293,30 @@ const SignUp = () => {
           가입 완료
         </Button>
       </div>
+      <Modal
+        size="sm"
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+        placement="center"
+      >
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                회원가입
+              </ModalHeader>
+              <ModalBody>
+                <p>{msg}</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onPress={handleCloseModal}>
+                  확인
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 };

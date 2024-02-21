@@ -12,6 +12,7 @@ import {
   MapTypeControl,
   ZoomControl,
   CustomOverlayMap,
+  MarkerClusterer,
 } from 'react-kakao-maps-sdk';
 import userLocationStore from '@/store/userLocationStore';
 import { useQuery } from '@tanstack/react-query';
@@ -30,9 +31,12 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  Tooltip,
 } from '@nextui-org/react';
+import getReportCourts from '@/services/basketballCourt/getReportCourts';
 import CourtDetails from './CourtDetails';
 import CourtReport from './CourtReport';
+import CourtReportDetails from './CourtReportDetails';
 
 // [TO DO]
 // 모달 알림 넣기 - 로그인 여부 ✅, 제보 성공✅/실패
@@ -42,6 +46,7 @@ import CourtReport from './CourtReport';
 // 제보 모달 UI 수정 - 제보하기 Btn Fix ✅
 // 컨트롤 커스텀
 // 모바일 환경 움직임 확인하기 ✅
+// 농구장 제보 마커 추가 ✅
 
 export interface LatLng {
   getLat: () => number;
@@ -63,9 +68,12 @@ const KakaoMap = () => {
       lng: userLocation ? userLocation.longitude : 127.0484,
     },
   });
-  const [isCourtDetailsOpen, setIsCourtDetailsOpen] = useState<boolean>(false);
   const [isCourtReportOpen, setIsCourtReportOpen] = useState(false);
+  const [isCourtDetailsOpen, setIsCourtDetailsOpen] = useState<boolean>(false);
+  const [isCourtReportDetailsOpen, setIsCourtReportDetailsOpen] =
+    useState(false);
   const [selectedCourtId, setSelectedCourtId] = useState<number>(1);
+  const [selectedCourtReportId, setSelectedCourtReportId] = useState<number>(1);
   const [mode, setMode] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [coord, setCoord] = useState('');
@@ -82,6 +90,11 @@ const KakaoMap = () => {
   const { error, data: courts } = useQuery<BasketballCourts[]>({
     queryKey: ['courts'],
     queryFn: getCourts,
+  });
+
+  const { data: reportCourts, refetch } = useQuery<BasketballCourts[]>({
+    queryKey: ['reportCourts'],
+    queryFn: getReportCourts,
   });
 
   if (error) {
@@ -205,159 +218,205 @@ const KakaoMap = () => {
   };
 
   return (
-    <div className="relative h-[calc(100vh-109px)] w-full">
-      <title>슬램톡 | 농구장 지도</title>
-      <Map
-        className="relative z-0"
-        id="map"
-        center={location.center}
-        level={3}
-        style={{ width: '100%', height: '100%' }}
-        onCreate={setMap}
-        onClick={handleClickReport}
-      >
-        <div className="absolute left-1/2 top-4 z-10 flex w-4/5 max-w-lg -translate-x-1/2 transform items-center justify-center rounded-md bg-background p-1 shadow-md">
-          <input
-            type="text"
-            placeholder="장소 검색"
-            className="flex-grow rounded-md border-0 p-2 focus:outline-none focus:ring-0"
-            value={searchKeyword}
-            onChange={handleSearchChange}
-            onKeyDown={handleKeyDown}
-          />
-          <button
-            aria-label="Search"
-            type="button"
-            onClick={handleSearch}
-            className="ml-2 mr-2 flex h-full items-center justify-center rounded-md focus:outline-none"
+    <>
+      <div className="relative h-[calc(100vh-109px)] w-full">
+        <title>슬램톡 | 농구장 지도</title>
+        <Map
+          className="relative z-0"
+          id="map"
+          center={location.center}
+          level={3}
+          style={{ width: '100%', height: '100%' }}
+          onCreate={setMap}
+          onClick={handleClickReport}
+        >
+          <div className="absolute left-1/2 top-4 z-10 flex w-4/5 max-w-lg -translate-x-1/2 transform items-center justify-center rounded-md bg-background p-1 shadow-md">
+            <input
+              type="text"
+              placeholder="장소 검색"
+              className="flex-grow rounded-md border-0 p-2 focus:outline-none focus:ring-0"
+              value={searchKeyword}
+              onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
+            />
+            <button
+              aria-label="Search"
+              type="button"
+              onClick={handleSearch}
+              className="ml-2 mr-2 flex h-full items-center justify-center rounded-md focus:outline-none"
+            >
+              <IoSearchSharp
+                size={20}
+                className="text-gray-400 hover:text-black"
+              />
+            </button>
+          </div>
+          {mode && position && (
+            <>
+              <MapMarker
+                image={{
+                  src: '/icons/marker-img.png',
+                  size: {
+                    width: 41,
+                    height: 48,
+                  },
+                }}
+                position={position}
+                clickable
+                onClick={handleClickReportMarker}
+              />
+              <CustomOverlayMap
+                key={`overlay__${position.lat}-${position.lng}`}
+                position={position}
+                yAnchor={2.6}
+                xAnchor={0.67}
+              >
+                <div className="ml-12 flex items-center rounded border-1 border-primary bg-white px-2 py-1 text-sm font-medium text-black shadow-sm">
+                  이 곳 제보하기
+                </div>
+              </CustomOverlayMap>
+            </>
+          )}
+          {reportCourts?.map((court) => (
+            <>
+              <MapMarker
+                key={court.courtId}
+                position={{ lat: court.latitude, lng: court.longitude }}
+                image={{
+                  src: '/icons/marker-img.png',
+                  size: {
+                    width: 41,
+                    height: 48,
+                  },
+                }}
+                clickable
+                onClick={() => {
+                  setIsCourtReportDetailsOpen(true);
+                  setSelectedCourtReportId(court.courtId);
+                }}
+              />
+              <CustomOverlayMap
+                key={`overlay__${court.latitude}-${court.longitude}`}
+                position={{ lat: court.latitude, lng: court.longitude }}
+                yAnchor={2.6}
+                xAnchor={0.66}
+              >
+                <Tooltip content={court.courtName} showArrow placement="right">
+                  <div className="ml-12 flex items-center rounded border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-black shadow-sm">
+                    #{court.courtId} 제보 검토중
+                  </div>
+                </Tooltip>
+              </CustomOverlayMap>
+            </>
+          ))}
+          <MarkerClusterer
+            averageCenter // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+            minLevel={8} // 클러스터 할 최소 지도 레벨
           >
-            <IoSearchSharp
-              size={20}
-              className="text-gray-400 hover:text-black"
-            />
-          </button>
-        </div>
-        <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
-          <ModalContent>
-            {(onClose) => (
+            {courts?.map((court) => (
               <>
-                <ModalHeader className="flex flex-col gap-1">
-                  농구장 제보
-                </ModalHeader>
-                <ModalBody>
-                  <p>로그인한 사용자만 이용할 수 있는 서비스입니다.</p>
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose}>
-                    닫기
-                  </Button>
-                  <Button color="primary" onPress={() => router.push('/login')}>
-                    로그인하러 가기
-                  </Button>
-                </ModalFooter>
+                <MapMarker
+                  key={court.courtId}
+                  position={{ lat: court.latitude, lng: court.longitude }}
+                  image={{
+                    src: '/icons/marker-img.png',
+                    size: {
+                      width: 41,
+                      height: 48,
+                    },
+                  }}
+                  clickable
+                  onClick={() => {
+                    setIsCourtDetailsOpen(true);
+                    setSelectedCourtId(court.courtId);
+                  }}
+                />
+                <CustomOverlayMap
+                  key={`overlay__${court.latitude}-${court.longitude}`}
+                  position={{ lat: court.latitude, lng: court.longitude }}
+                  yAnchor={2.6}
+                  xAnchor={0.63}
+                >
+                  <div className="ml-12 flex items-center rounded border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-black shadow-sm">
+                    {court.courtName}
+                  </div>
+                </CustomOverlayMap>
               </>
-            )}
-          </ModalContent>
-        </Modal>
-        {mode && position && (
-          <>
-            <MapMarker
-              image={{
-                src: '/icons/marker-img.png',
-                size: {
-                  width: 41,
-                  height: 48,
-                },
-              }}
-              position={position}
-              clickable
-              onClick={handleClickReportMarker}
-            />
-            <CustomOverlayMap
-              key={`overlay__${position.lat}-${position.lng}`}
-              position={position}
-              yAnchor={2.6}
-              xAnchor={0.67}
-            >
-              <div className="ml-12 flex items-center rounded border-1 border-primary bg-white px-2 py-1 text-sm font-medium text-black shadow-sm">
-                이 곳 제보하기
-              </div>
-            </CustomOverlayMap>
-          </>
+            ))}
+          </MarkerClusterer>
+          <div className="mt-20 !bg-primary !text-primary">
+            <MapTypeControl position="BOTTOMLEFT" />
+            <ZoomControl position="RIGHT" />
+          </div>
+        </Map>
+        {isCourtDetailsOpen && (
+          <CourtDetails
+            courtId={selectedCourtId}
+            handleClose={() => setIsCourtDetailsOpen(false)}
+          />
         )}
-        {courts?.map((court) => (
-          <>
-            <MapMarker
-              key={court.courtId}
-              position={{ lat: court.latitude, lng: court.longitude }}
-              image={{
-                src: '/icons/marker-img.png',
-                size: {
-                  width: 41,
-                  height: 48,
-                },
-              }}
-              clickable
-              onClick={() => {
-                setIsCourtDetailsOpen(true);
-                setSelectedCourtId(court.courtId);
-              }}
-            />
-            <CustomOverlayMap
-              key={`overlay__${court.latitude}-${court.longitude}`}
-              position={{ lat: court.latitude, lng: court.longitude }}
-              yAnchor={2.6}
-              xAnchor={0.63}
-            >
-              <div className="ml-12 flex items-center rounded border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-black shadow-sm">
-                {court.courtName}
-              </div>
-            </CustomOverlayMap>
-          </>
-        ))}
-        <div className="mt-20 !bg-primary !text-primary">
-          <MapTypeControl position="BOTTOMLEFT" />
-          <ZoomControl position="RIGHT" />
+        {isCourtReportDetailsOpen && (
+          <CourtReportDetails
+            courtId={selectedCourtReportId}
+            onClose={() => setIsCourtReportDetailsOpen(false)}
+          />
+        )}
+        {position && clickPositionAddress && isCourtReportOpen && (
+          <CourtReport
+            address={clickPositionAddress}
+            position={position}
+            handleClose={() => {
+              setIsCourtReportOpen(false);
+              setPosition(null);
+              refetch();
+            }}
+            onReportSuccess={() => setMode(false)}
+          />
+        )}
+        <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
+          <Button
+            isIconOnly
+            aria-label="Current Location"
+            type="button"
+            className="justify-center rounded-full bg-primary shadow-md"
+            onClick={handleMoveUserLocation}
+          >
+            <MdMyLocation size={22} className="text-white" />
+          </Button>
+          <Button
+            startContent={<BiSolidLocationPlus size={20} />}
+            aria-label="Court Report"
+            type="button"
+            className="justify-center rounded-full bg-primary text-white shadow-md"
+            onClick={handleToggleMapClickEvent}
+          >
+            {mode ? '취소' : '농구장 제보'}
+          </Button>
         </div>
-      </Map>
-      {isCourtDetailsOpen && (
-        <CourtDetails
-          courtId={selectedCourtId}
-          onClose={() => setIsCourtDetailsOpen(false)}
-        />
-      )}
-      {position && clickPositionAddress && isCourtReportOpen && (
-        <CourtReport
-          address={clickPositionAddress}
-          position={position}
-          handleClose={() => {
-            setIsCourtReportOpen(false);
-            setPosition(null);
-          }}
-          onReportSuccess={() => setMode(false)}
-        />
-      )}
-      <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
-        <Button
-          isIconOnly
-          aria-label="Current Location"
-          type="button"
-          className="justify-center rounded-full bg-primary shadow-md"
-          onClick={handleMoveUserLocation}
-        >
-          <MdMyLocation size={22} className="text-white" />
-        </Button>
-        <Button
-          startContent={<BiSolidLocationPlus size={20} />}
-          aria-label="Court Report"
-          type="button"
-          className="justify-center rounded-full bg-primary text-white shadow-md"
-          onClick={handleToggleMapClickEvent}
-        >
-          {mode ? '취소' : '농구장 제보'}
-        </Button>
       </div>
-    </div>
+      <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                농구장 제보
+              </ModalHeader>
+              <ModalBody>
+                <p>로그인한 사용자만 이용할 수 있는 서비스입니다.</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  닫기
+                </Button>
+                <Button color="primary" onPress={() => router.push('/login')}>
+                  로그인하러 가기
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
 
