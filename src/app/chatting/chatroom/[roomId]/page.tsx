@@ -122,7 +122,7 @@ const Chatting = () => {
       heartbeatOutgoing: 1000,
     });
     if (client.current !== null) {
-      await client.current.activate();
+      client.current.activate();
     }
   };
 
@@ -137,7 +137,7 @@ const Chatting = () => {
             senderNickname: user?.nickname,
             content: message,
             senderId: user?.id,
-            senderImageUrl: user?.imageUrl,
+            imgUrl: user?.imageUrl,
           }),
         });
         setMessage('');
@@ -162,20 +162,13 @@ const Chatting = () => {
     router.back();
   };
   const exitChat = () => {
-    // client.current?.publish({
-    //   destination: `/pub/exit/${params.roomId}`,
-    //   headers: { authorization: `Bearer ${accessToken}` },
-    //   body: JSON.stringify({
-    //     roomId: params.roomId,
-    //     senderNickname: nickname,
-    //   }),
-    // });
     client.current?.publish({
       destination: `/pub/chat/bot/${params.roomId}`,
       headers: { authorization: `Bearer ${accessToken}` },
       body: JSON.stringify({
         roomId: params.roomId,
         senderNickname: nickname,
+        senderId: user?.id,
         content: 'EXIT',
       }),
     });
@@ -189,8 +182,17 @@ const Chatting = () => {
       const res = await axiosInstance.post(
         `/api/chat/history?roomId=${params.roomId}&count=${moreCount}`
       );
-      console.log(res.data.results);
-      setMessageListState([...res.data.results.reverse()]);
+
+      const duplicatedMessage = res.data.results as IMessage[];
+      const unique = Array.from(
+        new Map(
+          duplicatedMessage.map((messageItem: IMessage) => [
+            messageItem.messageId,
+            messageItem,
+          ])
+        ).values()
+      );
+      setMessageListState(() => [...messageListState, ...unique.reverse()]);
     } catch (err) {
       console.error(err);
     }
@@ -211,8 +213,7 @@ const Chatting = () => {
           {(onClose) => (
             <>
               <ModalHeader className="flex gap-1">
-                채팅방 <p className="font-bold">{roomInfo?.name}</p> 에서
-                퇴장하기
+                채팅방에서 퇴장하기
               </ModalHeader>
               <ModalBody>
                 <p>정말로 퇴장하시겠습니까? 재입장이 불가능합니다.</p>
@@ -267,8 +268,9 @@ const Chatting = () => {
               className="z-50 h-[50px] w-[150px] rounded bg-gray-300 text-center text-white"
             >
               {greeting.split(' ')[0]}
-              <br />
               {greeting.split(' ')[1]}
+              <br />
+              {greeting.split(' ')[2]}
             </p>
           </div>
         ) : null}
