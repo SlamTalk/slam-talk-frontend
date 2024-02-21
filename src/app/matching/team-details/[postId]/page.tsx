@@ -156,7 +156,7 @@ const TeamDetailsPage = () => {
   >({
     mutationFn: creatTeamChatRoom,
     onSuccess: (response) => {
-      const newChatRoomId = response.data;
+      const newChatRoomId = response.data.results;
       setChatRoomId(newChatRoomId);
       onOpen();
     },
