@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from '@nextui-org/react';
 import { useParams } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
@@ -102,7 +101,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
       className="mb-2 mt-2 flex justify-between rounded-md border-2 px-3 py-1 sm:px-1"
     >
       <div className="flex items-center">
-        <span className="w-30 mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]">
+        <span className="mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]">
           {applicant.participantNickname}
         </span>
         <div className="mr-1 rounded-md bg-gray-200 px-2 py-1 text-xs dark:bg-gray-400">
@@ -115,22 +114,20 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
       <div className="flex items-center">
         {isWriter && applicant.applyStatus === 'WAITING' ? (
           <>
-            <Button
-              className="text-black"
-              size="sm"
-              color="success"
+            <button
+              type="button"
+              className="mx-1 rounded-lg bg-success px-2 py-1.5 text-xs text-black"
               onClick={() => handleAccept(applicant.participantTableId)}
             >
               수락
-            </Button>
-            <Button
-              className="ml-1 text-black"
-              size="sm"
-              color="danger"
+            </button>
+            <button
+              type="button"
+              className="mx-1 rounded-lg bg-danger px-2 py-1.5 text-xs text-black"
               onClick={() => handleReject(applicant.participantTableId)}
             >
               거절
-            </Button>
+            </button>
           </>
         ) : (
           <div className="mr-2 text-sm sm:mr-1">
@@ -141,13 +138,13 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
         )}
         {user?.id === applicant.participantId &&
           applicant.applyStatus === 'WAITING' && (
-            <Button
-              className="bg-gray-400 text-black"
-              size="sm"
+            <button
+              type="button"
+              className="mx-1 rounded-lg bg-gray-400 px-2 py-1.5 text-xs text-black"
               onClick={() => handleCancel(applicant.participantTableId)}
             >
               취소
-            </Button>
+            </button>
           )}
       </div>
     </div>
