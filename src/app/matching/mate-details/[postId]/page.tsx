@@ -93,7 +93,6 @@ const MateDetailsPage = () => {
         roomData
       );
 
-      console.log({ response });
       return response;
     } catch (e) {
       console.log(e);
@@ -108,7 +107,7 @@ const MateDetailsPage = () => {
   >({
     mutationFn: creatMateChatRoom,
     onSuccess: (response) => {
-      const newChatRoomId = response.data;
+      const newChatRoomId = response.data.results;
       setChatRoomId(newChatRoomId);
       onOpen();
     },

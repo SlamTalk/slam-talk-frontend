@@ -108,6 +108,9 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({ courtId, onClose }) => {
                   size="md"
                   startContent={<PiChatsCircle />}
                   aria-label="시설 채팅 바로가기"
+                  onClick={() =>
+                    router.push(`chatting/chatroom/${selectedPlace.chatroomId}`)
+                  }
                 >
                   시설 채팅
                 </Button>

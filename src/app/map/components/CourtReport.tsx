@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-useless-escape */
 import React, { useState } from 'react';
@@ -66,9 +67,50 @@ const CourtReport: React.FC<CourtReportProps> = ({
       formData.append('image', file);
     }
 
+    // nightLighting : 있음(LIGHT) , 없음(NON_LIGHT)
+    // openingHours : 24시(ALL_NIGHT), 제한(NON_ALL_NIGHT)
+    // fee : 무료(FREE) , 유료(NON_FREE)
+    // parkingAvailable : 가능(PARKING_AVAILABLE), 불가능(PARKING_UNAVAILABLE)
+
+    // 백엔드에 보낼 형식 맞추기
     if (data.convenience?.length === 0) {
-      // eslint-disable-next-line no-param-reassign
       data.convenience = '';
+    }
+
+    if (data.indoorOutdoor === undefined) {
+      data.indoorOutdoor = '';
+    }
+
+    if (data.nightLighting === '있음') {
+      data.nightLighting = 'LIGHT';
+    } else if (data.nightLighting === '없음') {
+      data.nightLighting = 'NON_LIGHT';
+    } else {
+      data.nightLighting = '';
+    }
+
+    if (data.openingHours === '24시') {
+      data.openingHours = 'ALL_NIGHT';
+    } else if (data.openingHours === '제한') {
+      data.openingHours = 'NON_ALL_LIGHT';
+    } else {
+      data.openingHours = '';
+    }
+
+    if (data.fee === '무료') {
+      data.fee = 'FREE';
+    } else if (data.fee === '유료') {
+      data.fee = 'NON_FREE';
+    } else {
+      data.fee = '';
+    }
+
+    if (data.parkingAvailable === '가능') {
+      data.parkingAvailable = 'PARKING_AVAILABLE';
+    } else if (data.parkingAvailable === '불가능') {
+      data.parkingAvailable = 'PARKING_UNAVAILABLE';
+    } else {
+      data.parkingAvailable = '';
     }
 
     const finalData = {
@@ -184,7 +226,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
             <input
               id="fileInput"
               type="file"
-              accept="image/*"
+              accept="image/png, image/jpg, image/jpeg"
               onChange={handleFileChange}
               style={{ display: 'none' }}
             />
@@ -217,16 +259,16 @@ const CourtReport: React.FC<CourtReportProps> = ({
               variant="bordered"
               type="string"
               label="농구장명"
-              placeholder="농구장명을 입력해주세요."
+              placeholder="농구장명을 입력해 주세요."
               {...register('courtName', {
                 required: true,
                 minLength: {
                   value: 2,
-                  message: '농구장 이름을 2자 이상 30자 이하로 입력해주세요.',
+                  message: '농구장 이름을 2자 이상 30자 이하로 입력해 주세요.',
                 },
                 maxLength: {
                   value: 30,
-                  message: '농구장 이름을 2자 이상 30자 이하로 입력해주세요.',
+                  message: '농구장 이름을 2자 이상 30자 이하로 입력해 주세요.',
                 },
               })}
             />
@@ -282,15 +324,15 @@ const CourtReport: React.FC<CourtReportProps> = ({
               variant="bordered"
               type="number"
               label="골대 수"
-              placeholder="농구장 골대 수를 입력해주세요."
+              placeholder="농구장 골대 수를 입력해 주세요."
               {...register('hoopCount', {
                 min: {
                   value: 1,
-                  message: '농구장 골대 수를 1개 이상으로 입력해주세요.',
+                  message: '농구장 골대 수를 1개 이상으로 입력해 주세요.',
                 },
                 max: {
                   value: 30,
-                  message: '농구장 골대 수를 30개 이하로 입력해주세요.',
+                  message: '농구장 골대 수를 30개 이하로 입력해 주세요.',
                 },
               })}
             />
@@ -326,12 +368,12 @@ const CourtReport: React.FC<CourtReportProps> = ({
               variant="bordered"
               type="tel"
               label="전화번호"
-              placeholder="대표 전화번호를 입력해주세요."
+              placeholder="대표 전화번호를 입력해 주세요."
               {...register('phoneNum', {
                 pattern: {
                   value: /^\d{2,3}-?\d{3,4}-?\d{4}$/,
                   message:
-                    '전화번호 형식으로 입력해주세요. 00-000-0000 또는 000-0000-0000',
+                    '전화번호 형식으로 입력해 주세요. 00-000-0000 또는 000-0000-0000',
                 },
               })}
             />
@@ -351,12 +393,12 @@ const CourtReport: React.FC<CourtReportProps> = ({
               variant="bordered"
               type="url"
               label="홈페이지"
-              placeholder="관련 홈페이지를 입력해주세요."
+              placeholder="관련 홈페이지를 입력해 주세요."
               {...register('website', {
                 pattern: {
                   value:
                     /(http[s]?|ftp):\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}/g,
-                  message: '홈페이지 링크를 입력해주세요.',
+                  message: '홈페이지 링크를 입력해 주세요.',
                 },
               })}
             />
@@ -458,7 +500,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
                 maxRows={3}
                 variant="bordered"
                 label="기타 정보"
-                placeholder="해당 농구장에 관한 기타 정보를 입력해주세요."
+                placeholder="해당 농구장에 관한 기타 정보를 입력해 주세요."
                 {...register('additionalInfo', { maxLength: 300 })}
               />
             </div>

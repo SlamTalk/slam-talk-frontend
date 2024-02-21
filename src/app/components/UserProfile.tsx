@@ -4,7 +4,7 @@
 
 import { getOtherUserData } from '@/services/user/getOtherUserData';
 import { getUserData } from '@/services/user/getUserData';
-import LocalStorage from '@/utils/localstorage';
+
 import {
   Avatar,
   Button,
@@ -34,7 +34,6 @@ const UserProfile: React.FC<UserProfileProps> = ({
   onClose,
 }) => {
   const router = useRouter();
-  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
 
   const { error, data: otherUser } = useQuery({
     queryKey: ['otherUserData', userId],
@@ -69,7 +68,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
     }
   };
 
-  if (isLoggedIn === 'true' && otherUser) {
+  if (otherUser) {
     return (
       <>
         <title>슬램톡 | 유저 프로필</title>
@@ -128,7 +127,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
                           <CardBody>
                             <div className="flex flex-col gap-6 text-sm">
                               <p className="underline underline-offset-2">
-                                Lv.{otherUser.level === 0 ? 1 : otherUser.level}
+                                Lv.{otherUser.level}
                               </p>
                               <p>
                                 팀 매칭 횟수:{' '}

@@ -37,7 +37,6 @@ export const getAddressFromCoords = (
       const geocoder = new window.kakao.maps.services.Geocoder();
       const callback = (result: AddressResult[], status: string) => {
         if (status === window.kakao.maps.services.Status.OK) {
-          console.log(result);
           const address = result[0].address.address_name;
           const roadAddress = result[0].road_address
             ? result[0].road_address.address_name

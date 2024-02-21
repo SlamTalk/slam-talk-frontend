@@ -3,6 +3,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { getCommunityArticle } from '@/services/community/getCommunityArticle';
+import { Spinner } from '@nextui-org/react';
 import CommentItem from './commentItem';
 
 interface ICommentItemProps {
@@ -22,9 +23,16 @@ const CommentList = () => {
     queryKey: ['getCommunityComment'],
     queryFn: () => getCommunityArticle(params.id),
   });
+  if (!commentListData) {
+    return (
+      <div className="align-center flex h-screen justify-center">
+        <Spinner size="lg" color="primary" />
+      </div>
+    );
+  }
 
   return (
-    <div className=" h-[400px] overflow-y-auto">
+    <div className=" h-[500px] overflow-y-scroll">
       {commentListData?.comments.map((i: ICommentItemProps) => (
         <div key={i.commentId}>
           <CommentItem

@@ -64,6 +64,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       className="border-gray mt-2 flex items-center border-b-2"
     >
       <UserProfile isOpen={isOpen} userId={userId} onClose={onClose} />
+
       <div aria-label="작성자 정보" style={{ cursor: 'pointer' }}>
         <Avatar
           src={writerUserInfo?.imageUrl}
@@ -85,7 +86,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       ) : (
         <h2 className="ml-2 ms-5 mt-2 h-10 w-[750px]">{content}</h2>
       )}
-      {loginUserData?.id === writerUserInfo?.id ? (
+      {loginUserData?.id === writerUserInfo?.id && writerUserInfo !== null ? (
         <div aria-label="comment button group" className="w-40">
           <button
             onClick={handleEdit}

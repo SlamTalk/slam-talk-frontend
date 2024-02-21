@@ -87,7 +87,7 @@ const SignUp = () => {
 
   const handleSendEmailCode = async () => {
     if (!email) {
-      alert('이메일을 입력해주세요.');
+      alert('이메일을 입력해 주세요.');
       return;
     }
     try {
@@ -96,7 +96,7 @@ const SignUp = () => {
       });
       if (response.status === 200) {
         alert(
-          '이메일 인증 요청을 보냈습니다. 5분 안에 인증코드를 입력해주세요.'
+          '이메일 인증 요청을 보냈습니다. 5분 안에 인증코드를 입력해 주세요.'
         );
       }
     } catch (error) {
@@ -106,11 +106,11 @@ const SignUp = () => {
 
   const handleValidateEmailCode = async () => {
     if (!email) {
-      alert('이메일을 입력해주세요.');
+      alert('이메일을 입력해 주세요.');
       return;
     }
     if (!code) {
-      alert('인증 코드를 입력해주세요.');
+      alert('인증 코드를 입력해 주세요.');
       return;
     }
     try {
@@ -131,7 +131,7 @@ const SignUp = () => {
       <title>슬램톡 | 회원가입</title>
       <div className="mt-14 flex h-full w-full flex-col flex-wrap gap-2 p-4 sm:mt-6 md:flex-nowrap">
         <h1 className="mb-5 text-2xl font-bold sm:text-xl">
-          이메일, 닉네임, 비밀번호를 입력해주세요.
+          이메일, 닉네임, 비밀번호를 입력해 주세요.
         </h1>
         <Input
           radius="sm"
@@ -181,7 +181,7 @@ const SignUp = () => {
         <div
           className={`mb-3 h-3 text-sm text-danger ${isEmailInvalid ? 'visible' : 'invisible'}`}
         >
-          {isEmailInvalid && '올바른 이메일을 입력해주세요.'}
+          {isEmailInvalid && '올바른 이메일을 입력해 주세요.'}
         </div>
         <div className="mb-6 flex items-center justify-end gap-3">
           <Input
