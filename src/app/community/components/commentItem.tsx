@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { getOtherUserData } from '@/services/user/getOtherUserData';
 import { OtherUserInfo } from '@/types/user/otherUserInfo';
-import { Avatar, useDisclosure, Tooltip } from '@nextui-org/react';
+import { Avatar, useDisclosure } from '@nextui-org/react';
 import { getUserData } from '@/services/user/getUserData';
 import UserProfile from '@/app/components/UserProfile';
 
@@ -64,19 +64,17 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       className="border-gray mt-2 flex items-center border-b-2"
     >
       <UserProfile isOpen={isOpen} userId={userId} onClose={onClose} />
-      <Tooltip
-        content={loginUserData ? '' : '비회원은 회원정보 열람이 제한됩니다.'}
-      >
-        <div aria-label="작성자 정보" style={{ cursor: 'pointer' }}>
-          <Avatar
-            src={writerUserInfo?.imageUrl}
-            onClick={() => {
-              onOpen();
-            }}
-          />
-          <p className="text-center">{writerUserInfo?.nickname}</p>
-        </div>
-      </Tooltip>
+
+      <div aria-label="작성자 정보" style={{ cursor: 'pointer' }}>
+        <Avatar
+          src={writerUserInfo?.imageUrl}
+          onClick={() => {
+            onOpen();
+          }}
+        />
+        <p className="text-center">{writerUserInfo?.nickname}</p>
+      </div>
+
       {editToggle ? (
         <input
           className="ml-2 mt-2 h-10 w-[750px]"
