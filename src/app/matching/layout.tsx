@@ -3,7 +3,7 @@
 import React from 'react';
 
 const MatchingLayout = ({ children }: { children: React.ReactNode }) => (
-  <div>{children}</div>
+  <div className="">{children}</div>
 );
 
 export default MatchingLayout;

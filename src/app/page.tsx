@@ -85,11 +85,11 @@ const Home = () => {
   return (
     <>
       <title>슬램톡 | 농구 플랫폼</title>
-      <div>
-        <div className="m-auto grid max-w-[600px] overflow-y-auto  scrollbar-hide">
-          <div className="mx-[16px] mt-4 rounded-md bg-background">
+      <div className="relative w-full max-w-[600px] pb-[52px]">
+        <div className="m-auto overflow-y-auto scrollbar-hide">
+          <div className="relative mx-[16px] mt-4 rounded-md bg-background">
             {mostImminentSchedule ? (
-              <Card className="max-w-[568px] px-4 py-2">
+              <Card className="w-full px-4 py-2">
                 <div className="mt-2 text-center text-lg font-bold">
                   임박한 매칭이 있어요!
                 </div>
@@ -112,8 +112,8 @@ const Home = () => {
                 </Link>
               </Card>
             ) : (
-              <div>
-                <div className="text-md m-2 items-center text-center text-gray-400">
+              <div className="flex min-h-[100px] items-center justify-center rounded-medium bg-gray-200">
+                <div className="text-md m-2 h-[50%] text-gray-400">
                   예정된 매칭이 없습니다.
                 </div>
               </div>
@@ -147,7 +147,7 @@ const Home = () => {
                 </div>
               </Link>
             </div>
-            <div className="flex max-w-[568px] gap-3">
+            <div className="my-2 flex gap-3">
               {teamPosts && teamPosts.length > 0 ? (
                 teamPosts
                   .slice(0, 3)
@@ -172,7 +172,7 @@ const Home = () => {
               <div className="mr-2 text-black text-opacity-40">전체보기 〉</div>
             </Link>
           </div>
-          <div className="flex max-w-[568px] gap-3">
+          <div className="my-2 flex gap-3">
             {matePosts && matePosts.length > 0 ? (
               matePosts
                 .slice(0, 3)

@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Button } from '@nextui-org/react';
 import { UserInfo } from '@/types/user/userInfo';
 import { TeamApplied } from '@/types/matching/teamDataType';
 import { useMutation } from '@tanstack/react-query';
@@ -101,42 +100,37 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
   return (
     <div
       key={applicant.applicantId}
-      className="mb-2 mt-2 flex justify-between rounded-md border-2 px-3 py-1"
+      className="mb-2 mt-2 flex justify-between rounded-md border-2 px-3 py-1 sm:px-1"
     >
       <div className="flex items-center">
-        <span
-          className="w-30 mr-2 overflow-hidden truncate font-semibold"
-          style={{ width: '110px' }}
-        >
+        <span className="mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]">
           {applicant.applicantNickname}
         </span>
         <div className="y-1 mr-2 font-semibold">[{applicant.teamName}]</div>
-        <div className="rounded-md bg-gray-200 px-2 py-1 dark:bg-gray-400">
+        <div className="rounded-md bg-gray-200 px-2 py-1 text-xs dark:bg-gray-400">
           {applicant.skillLevel}
         </div>
       </div>
       <div className="flex items-center">
         {isWriter && applicant.applyStatus === 'WAITING' ? (
           <>
-            <Button
-              className="text-black"
-              size="sm"
-              color="success"
+            <button
+              type="button"
+              className="mx-1 rounded-lg bg-success px-2 py-1.5 text-xs text-black"
               onClick={() => handleAccept(applicant.teamApplicantTableId)}
             >
               수락
-            </Button>
-            <Button
-              className="ml-1 text-black"
-              size="sm"
-              color="danger"
+            </button>
+            <button
+              type="button"
+              className="mx-1 rounded-lg bg-danger px-2 py-1.5 text-xs text-black"
               onClick={() => handleReject(applicant.teamApplicantTableId)}
             >
               거절
-            </Button>
+            </button>
           </>
         ) : (
-          <div className="mr-2 text-sm">
+          <div className="mr-2 text-sm sm:mr-1">
             <span className={getStatusClassName(applicant.applyStatus)}>
               {applicant.applyStatus}
             </span>
@@ -144,13 +138,13 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
         )}
         {user?.id === applicant.applicantId &&
           applicant.applyStatus === 'WAITING' && (
-            <Button
-              className="bg-gray-400"
-              size="sm"
+            <button
+              type="button"
+              className="mx-1 rounded-lg bg-gray-400 px-2 py-1.5 text-xs text-black"
               onClick={() => handleCancel(applicant.teamApplicantTableId)}
             >
               취소
-            </Button>
+            </button>
           )}
       </div>
     </div>

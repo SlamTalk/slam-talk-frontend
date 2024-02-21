@@ -4,7 +4,7 @@ import MatchingHeader from '../../components/MatchingHeader';
 const TeamDetailsLayout = ({ children }: { children: React.ReactNode }) => (
   <div>
     <MatchingHeader />
-    <section>{children}</section>
+    <section className="pb-[56px]">{children}</section>
   </div>
 );
 
