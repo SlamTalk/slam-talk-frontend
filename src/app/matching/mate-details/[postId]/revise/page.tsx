@@ -85,10 +85,23 @@ const MatePostRevisePage = () => {
   const patchPostMutation = useMutation<AxiosResponse, Error, NewMateData>({
     mutationFn: patchMatePost,
     onSuccess: () => {
-      console.log('success');
+      if (
+        parseInt(centerCount, 10) +
+          parseInt(forwardCount, 10) +
+          parseInt(guardCount, 10) +
+          parseInt(unspecifiedCount, 10) ===
+        0
+      ) {
+        alert('포지션 별 인원 수를 적어도 한 명 포함시켜 주세요.');
+      } else {
+        console.log('success');
+        router.push(`/matching/mate-details/${postId}`);
+      }
     },
     onError: (error: Error) => {
+      alert('장소와 날짜, 시간을 다시 한 번 확인해주세요.');
       console.log(error);
+      throw error;
     },
   });
 
@@ -126,9 +139,7 @@ const MatePostRevisePage = () => {
       maxParticipantsOthers: parseInt(unspecifiedCount, 10),
     };
 
-    console.log({ newMateData });
     patchPostMutation.mutate(newMateData);
-    router.push(`/matching/mate-details/${postId}`);
   };
 
   const handleCenterCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,6 +181,7 @@ const MatePostRevisePage = () => {
       <div className="mb-4">
         <div className="text-md font-bold">제목</div>
         <Input
+          isRequired
           id="title"
           placeholder="제목을 입력하세요"
           value={title}
@@ -182,6 +194,7 @@ const MatePostRevisePage = () => {
         <div className="text-md font-bold">장소</div>
         <div className="relative">
           <Input
+            isRequired
             disabled
             id="address"
             placeholder="주소를 입력하세요"
