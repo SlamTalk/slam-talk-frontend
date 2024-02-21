@@ -122,7 +122,7 @@ const Chatting = () => {
       heartbeatOutgoing: 1000,
     });
     if (client.current !== null) {
-      await client.current.activate();
+      client.current.activate();
     }
   };
 
@@ -137,7 +137,7 @@ const Chatting = () => {
             senderNickname: user?.nickname,
             content: message,
             senderId: user?.id,
-            senderImageUrl: user?.imageUrl,
+            imgUrl: user?.imageUrl,
           }),
         });
         setMessage('');
@@ -162,14 +162,6 @@ const Chatting = () => {
     router.back();
   };
   const exitChat = () => {
-    // client.current?.publish({
-    //   destination: `/pub/exit/${params.roomId}`,
-    //   headers: { authorization: `Bearer ${accessToken}` },
-    //   body: JSON.stringify({
-    //     roomId: params.roomId,
-    //     senderNickname: nickname,
-    //   }),
-    // });
     client.current?.publish({
       destination: `/pub/chat/bot/${params.roomId}`,
       headers: { authorization: `Bearer ${accessToken}` },
@@ -200,7 +192,7 @@ const Chatting = () => {
           ])
         ).values()
       );
-      setMessageListState(unique.reverse());
+      setMessageListState(() => [...messageListState, ...unique.reverse()]);
     } catch (err) {
       console.error(err);
     }

@@ -1,6 +1,6 @@
 import { Avatar, useDisclosure } from '@nextui-org/react';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import IMessage from '@/types/chat/message';
@@ -43,7 +43,10 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
   //   const createRoom = await postChatRoom(createInfo);
   //   router.push(`/chatting/chatroom/${createRoom}`);
   // };
-
+  const messageEndRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
   return (
     <div
       key={messages[0]?.roomId}
@@ -105,6 +108,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
               </div>
             )
       )}
+      <div ref={messageEndRef}> </div>
     </div>
   );
 };
