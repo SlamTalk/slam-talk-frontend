@@ -6,7 +6,7 @@ import { Avatar, Tooltip, useDisclosure, Spinner } from '@nextui-org/react';
 import { IoChevronBackSharp } from 'react-icons/io5';
 // import { FaHeart } from 'react-icons/fa';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getCommunityArticle } from '@/services/community/getCommunityArticle';
 import Image from 'next/image';
@@ -14,6 +14,8 @@ import { deleteCommunityArticle } from '@/services/community/deleteCommunityArti
 import { postComment } from '@/services/community/comment/postComment';
 import { getUserData } from '@/services/user/getUserData';
 import UserProfile from '@/app/components/UserProfile';
+import { getOtherUserData } from '@/services/user/getOtherUserData';
+import { OtherUserInfo } from '@/types/user/otherUserInfo';
 import CommentList from '../../components/commentList';
 
 // interface ICommunityItem {
@@ -34,22 +36,33 @@ import CommentList from '../../components/commentList';
 const Page = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
+
   const params = useParams<{ id: string }>();
   const { data: articleData, isLoading } = useQuery({
     queryKey: ['articleData'],
     queryFn: () => getCommunityArticle(params.id),
   });
-  const { data: loginData } = useQuery({
+  const { data: loginData, isSuccess } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
   const writeName = articleData?.userNickname;
   const writerId = articleData?.userId;
+  console.log({ writerId });
   const loginUserName = loginData?.nickname;
   const [commentData, setCommentData] = useState({
     communityId: 0,
     content: '',
   });
+  const [writerInfo, setWriterInfo] = useState<OtherUserInfo | null>();
+  useEffect(() => {
+    if (isSuccess && writerId !== undefined) {
+      getOtherUserData({ userId: writerId }).then((data) => {
+        setWriterInfo(data);
+      });
+    }
+  }, [isSuccess, writerId]);
+
   const [comment, setComment] = useState('');
   const postCommunityComment: any = useMutation({
     mutationKey: ['postComment'],
@@ -121,7 +134,7 @@ const Page = () => {
                   onClick={() => {
                     onOpen();
                   }}
-                  name={articleData.userNickname}
+                  src={writerInfo?.imageUrl}
                   className="me-2"
                 />
                 <p className="text-lg	">{articleData.userNickname}</p>
