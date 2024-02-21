@@ -19,31 +19,31 @@ import LocalStorage from '@/utils/localstorage';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { IChatRoomListItem } from '../../../types/chat/chatRoomListItem';
-import axiosInstance from '../../api/axiosInstance';
-import { getUserData } from '../../../services/user/getUserData';
+// import axiosInstance from '../../api/axiosInstance';
+// import { getUserData } from '../../../services/user/getUserData';
 import { getChatList } from '../../../services/chatting/getChatList';
 
 const ChatList = () => {
   const router = useRouter();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { data: loginData } = useQuery({
-    queryKey: ['loginData'],
-    queryFn: getUserData,
-  });
-  const createData = {
-    participants: [1, loginData?.id, 4, 10],
-    roomType: 'TM',
-    together_id: '47000',
-    name: '함께 즐겨요~',
-  };
-  const postChatRoom = async () => {
-    const res = await axiosInstance.post(
-      `/api/chat/create`,
-      JSON.stringify(createData)
-    );
-    return res.data.results;
-  };
+  // const { data: loginData } = useQuery({
+  //   queryKey: ['loginData'],
+  //   queryFn: getUserData,
+  // });
+  // const createData = {
+  //   participants: [1, loginData?.id, 4, 10],
+  //   roomType: 'TM',
+  //   together_id: '47000',
+  //   name: '함께 즐겨요~',
+  // };
+  // const postChatRoom = async () => {
+  //   const res = await axiosInstance.post(
+  //     `/api/chat/create`,
+  //     JSON.stringify(createData)
+  //   );
+  //   return res.data.results;
+  // };
   const { data: myChatList } = useQuery<IChatRoomListItem[]>({
     queryKey: ['myChatlist'],
     queryFn: getChatList,
@@ -101,14 +101,14 @@ const ChatList = () => {
         </div>
       ))}
       <div>
-        <button
+        {/* <button
           type="button"
           onClick={() => {
             postChatRoom();
           }}
         >
           testroom
-        </button>
+        </button> */}
       </div>
     </div>
   ) : (
