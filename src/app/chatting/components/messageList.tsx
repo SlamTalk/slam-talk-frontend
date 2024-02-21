@@ -60,7 +60,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                   <p className="text-end">
                     {i.senderNickname?.replace(/"/g, '')}
                   </p>
-                  <div className="my-3 max-w-sm rounded-lg bg-primary px-3 py-2 text-white">
+                  <div className="my-3 w-fit max-w-sm rounded-lg bg-primary px-3 py-2 text-white">
                     {i.content.replace(/"/g, '')}
                   </div>
                 </div>
@@ -68,7 +68,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                   <Avatar
                     className="z-10 mx-2"
                     alt="my-profile"
-                    src={user?.imageUrl}
+                    src={i?.imgUrl}
                   />
                 </div>
               </div>
@@ -90,7 +90,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                     style={{ cursor: 'pointer' }}
                     className="mx-2"
                     alt="others-profile"
-                    src={user?.imageUrl}
+                    src={i?.imgUrl}
                   />
                 </div>
                 <div aria-label="상대방의 닉네임과 채팅 메시지">
@@ -98,7 +98,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                     {i.senderNickname?.replace(/"/g, '')}
                   </p>
 
-                  <div className="my-1 max-w-sm rounded-lg bg-gray-200 px-3 py-2 text-black">
+                  <div className="my-1 w-fit max-w-sm rounded-lg bg-gray-200 px-3 py-2 text-black">
                     {i.content?.replace(/"/g, '')}
                   </div>
                 </div>

@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable no-nested-ternary */
+
 import {
   Avatar,
   Modal,
@@ -83,8 +85,19 @@ const ChatList = () => {
             <div className="flex">
               <Avatar
                 className="m-1.5 cursor-pointer"
-                src={i.imgUrl ? i.imgUrl : undefined}
+                src={
+                  i.roomType === 'DIRECT'
+                    ? i.imgUrl || undefined
+                    : i.roomType === 'BASEKETBALL'
+                      ? '/images/basketball-stand.svg'
+                      : i.roomType === 'TOGETHER'
+                        ? '/images/team-group-thin.svg'
+                        : i.roomType === 'MATCHING'
+                          ? i.imgUrl || undefined
+                          : undefined
+                }
               />
+
               <Link href={`/chatting/chatroom/${i.roomId}`}>
                 <div className="text-xl">
                   {i.roomType === 'DIRECT' && i.name}
@@ -92,10 +105,17 @@ const ChatList = () => {
                   {i.roomType === 'TOGETHER' && i.name}
                   {i.roomType === 'MATCHING' && i.name}
                 </div>
+
                 <div className="text-gray-400">
                   {i.lastMessage.replace(/"/g, '')}
                 </div>
               </Link>
+            </div>
+            <div className="right-4 w-[50px]">
+              {i.roomType === 'DIRECT' && `DM`}
+              {i.roomType === 'BASEKETBALL' && `BM`}
+              {i.roomType === 'TOGETHER' && `TM`}
+              {i.roomType === 'MATCHING' && `MM`}
             </div>
           </div>
         </div>
