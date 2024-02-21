@@ -174,7 +174,7 @@ const Page = () => {
           hidden
           ref={imageInput}
           onChange={handleImageUpload}
-          accept="image/*"
+          accept="image/png, image/jpg, image/jpeg"
         />
         <button type="button" onClick={onClickImageUpload}>
           이미지 업로드
