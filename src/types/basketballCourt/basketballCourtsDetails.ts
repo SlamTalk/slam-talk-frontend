@@ -17,4 +17,5 @@ export interface BasketballCourtsDetails {
   convenience: string[] | null;
   additionalInfo: string | null;
   photoUrl: string | null;
+  chatroomId: number;
 }
