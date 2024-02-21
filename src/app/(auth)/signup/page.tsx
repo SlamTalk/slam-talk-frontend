@@ -11,13 +11,13 @@ import {
   ModalFooter,
   useDisclosure,
 } from '@nextui-org/react';
+import confetti from 'canvas-confetti';
 import {
   validateEmail,
   validateNickname,
   validatePassword,
 } from '@/utils/validations';
 import { AxiosError } from 'axios';
-import { useRouter } from 'next/navigation';
 import { EyeSlashFilledIcon } from '../login/components/EyeSlashFilledIcon';
 import { EyeFilledIcon } from '../login/components/EyeFilledIcon';
 import axiosInstance from '../../api/axiosInstance';
@@ -27,7 +27,6 @@ import axiosInstance from '../../api/axiosInstance';
 // 이메일 인증 UI 고치기 ✅
 
 const SignUp = () => {
-  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
@@ -60,6 +59,13 @@ const SignUp = () => {
     return !validatePassword(password);
   }, [password]);
 
+  const handleConfetti = () => {
+    confetti({
+      particleCount: 100,
+      spread: 160,
+    });
+  };
+
   const handleSignup = async () => {
     if (
       !validateEmail(email) ||
@@ -83,7 +89,7 @@ const SignUp = () => {
         setSuccessSignUp(true);
         setMsg('감사합니다. 회원가입에 성공했습니다!');
         onOpen();
-        router.push('/user-info');
+        handleConfetti();
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -157,7 +163,13 @@ const SignUp = () => {
 
   const handleCloseModal = () => {
     if (successSignUp) {
-      router.push('/user-info');
+      const currentUrl = window.location.href;
+      const domain = new URL(currentUrl).origin;
+      if (domain === 'http://localhost:3000') {
+        window.location.href = 'http://localhost:3000/user-info';
+      } else {
+        window.location.href = 'https://slam-talk.vercel.app/user-info';
+      }
     } else {
       onClose();
     }
@@ -207,7 +219,7 @@ const SignUp = () => {
           <Button
             type="submit"
             radius="sm"
-            className="top-3 max-w-xs font-medium"
+            className="top-3 max-w-xs"
             onClick={handleSendEmailCode}
           >
             이메일 인증 요청
