@@ -22,10 +22,6 @@ import { EyeSlashFilledIcon } from '../login/components/EyeSlashFilledIcon';
 import { EyeFilledIcon } from '../login/components/EyeFilledIcon';
 import axiosInstance from '../../api/axiosInstance';
 
-// [TO DO]
-// 모달 추가, 알림 제거 ✅
-// 이메일 인증 UI 고치기 ✅
-
 const SignUp = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [nickname, setNickname] = useState('');
