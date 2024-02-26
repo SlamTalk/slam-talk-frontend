@@ -144,7 +144,7 @@
 
 ### 회원가입
 
-![회원가입-동영상](https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/9192f835-7ffd-4f25-aeab-e43faec4f997)
+<img alt="회원가입" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/9192f835-7ffd-4f25-aeab-e43faec4f997" width="380px">
 
 - 자체 회원가입
 
@@ -163,7 +163,7 @@
 
 ### 로그인, 유저 관리
 
-![로그인-프로필-수정-동영상](https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/16eeecd8-1ac2-4537-bfce-8f8786abfd34)
+<img alt="로그인-유저-관리" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/16eeecd8-1ac2-4537-bfce-8f8786abfd34" width="380px">
 
 - 로그인 구현
 
@@ -188,9 +188,7 @@
 
 ### 농구장 지도
 
-<video width="440px" controls autoplay>
-    <source src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/d7c19686-9c29-43c9-bc58-2aeff9999256" type="video/mp4">
-</video>
+https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/d7c19686-9c29-43c9-bc58-2aeff9999256.mp4
 
 > 처음에 [kakao maps web api](https://apis.map.kakao.com/web/)를 이용했지만 점점 기능이 많아지면서 react 환경에 적합하고 코드가 좀 더 간편, 문서화가 잘되어 있는 [react-kakao-maps-sdk](https://github.com/JaeSeoKim/react-kakao-maps-sdk)로 리팩토링 완료하였습니다.
 
@@ -226,9 +224,7 @@
 
 ### 농구장 제보하기
 
-<video width="440px" controls autoplay>
-    <source src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/bf7565d2-4abf-4b77-8939-64bfce7608e1" type="video/mp4">
-</video>
+https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/bf7565d2-4abf-4b77-8939-64bfce7608e1.mp4
 
 > 지도에 표시되지 않는 농구장을 유저가 직접 제보할 수 있는 기능입니다. 제보하기 버튼을 누르면 지도 클릭시 마커 생성 이벤트가 발생하고 해당 마커를 클릭하면 위도, 경도, 주소 정보가 자동으로 채워져 해당 위치에 제보가 가능합니다. <br>
 
