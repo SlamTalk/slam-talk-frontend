@@ -254,6 +254,19 @@ https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/bf7565d2-4abf-4b
 
 ### 채팅
 
+<div style="display: flex; gap: 20px;">
+    <img alt="1:1-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/2c8fa872-70b4-48c8-bc64-90853044f195" width="400px">
+    <img alt="시설-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/85c88777-2e27-407d-86aa-63c8f3cb08bf" width="400px">
+</div>
+<div style="display: flex; gap: 280px;">
+<p>농구장 시설 단체 채팅</p>
+<p>1:1 채팅</p>
+</div>
+
+<br>
+
+<img alt="채팅-리스트" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/936b88a5-67a5-4646-9745-97425f3cdbfe" width="400px">
+
 ### 관리자 페이지
 
 ## Problem Solving
