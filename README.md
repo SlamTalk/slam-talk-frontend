@@ -1,4 +1,4 @@
-![로그인-프로필-수정-동영상](https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/ef401bc3-eb99-4cff-a829-3f66fc3279f5)<h1 align="middle">Slam Talk (슬램톡)</h1>
+<h1 align="middle">Slam Talk (슬램톡)</h1>
 
 <p align="middle">
 <img src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/a6bd1eca-7d78-402c-99a1-66005ecc1727" width="200"/>
@@ -144,7 +144,7 @@
 
 ### 회원가입
 
-<img alt="회원가입" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/9192f835-7ffd-4f25-aeab-e43faec4f997" width="380px">
+<img alt="회원가입" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/9192f835-7ffd-4f25-aeab-e43faec4f997" width="400px">
 
 - 자체 회원가입
 
@@ -163,7 +163,7 @@
 
 ### 로그인, 유저 관리
 
-<img alt="로그인-유저-관리" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/16eeecd8-1ac2-4537-bfce-8f8786abfd34" width="380px">
+<img alt="로그인-유저-관리" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/16eeecd8-1ac2-4537-bfce-8f8786abfd34" width="400px">
 
 - 로그인 구현
 
