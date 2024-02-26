@@ -1,4 +1,4 @@
-<h1 align="middle">Slam Talk (슬램톡)</h1>
+![로그인-프로필-수정-동영상](https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/ef401bc3-eb99-4cff-a829-3f66fc3279f5)<h1 align="middle">Slam Talk (슬램톡)</h1>
 
 <p align="middle">
 <img src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/a6bd1eca-7d78-402c-99a1-66005ecc1727" width="200"/>
@@ -144,9 +144,7 @@
 
 ### 회원가입
 
-<video width="440px" controls autoplay preload="auto">
-    <source src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/04bae2ea-9295-487b-8252-e8c9d94a0b98" type="video/mp4">
-</video>
+![회원가입-동영상](https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/9192f835-7ffd-4f25-aeab-e43faec4f997)
 
 - 자체 회원가입
 
@@ -165,9 +163,7 @@
 
 ### 로그인, 유저 관리
 
-<video width="440px" controls autoplay>
-    <source src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/e3c922c9-3c0c-4ab5-9e84-850cb34da2fa" type="video/mp4">
-</video>
+![로그인-프로필-수정-동영상](https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/16eeecd8-1ac2-4537-bfce-8f8786abfd34)
 
 - 로그인 구현
 
