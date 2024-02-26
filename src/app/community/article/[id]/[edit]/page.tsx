@@ -82,7 +82,7 @@ const Page = () => {
               cursor="pointer"
               size={24}
               onClick={() => {
-                router.push(`/community/${params.id}`);
+                router.push(`/community/article/${params.id}`);
               }}
             />
 
@@ -120,7 +120,7 @@ const Page = () => {
                   hidden
                   ref={imageInput}
                   onChange={handleImageUpload}
-                  accept="image/*"
+                  accept="image/png, image/jpg, image/jpeg"
                 />
                 <button
                   type="button"
