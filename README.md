@@ -185,8 +185,7 @@
 
 - 로그인 구현
 
-  보안을 위해(XSS 공격 방어) accessToken은 메모리에 저장하고, refreshToken은 HTTP Only 쿠키에 저장해 관리하고 있습니다.
-  CSRF 취약점 보안을 위해 secure 속성을 사용해 HTTPS를 통해서만 쿠키가 전송될 수 있게 제한했습니다.
+  보안을 위해 accessToken은 메모리에 저장하고, refreshToken은 HTTP Only 쿠키에 저장해 관리하고 있습니다.
 
 - 로그인 접근 제한
 
