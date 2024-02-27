@@ -164,7 +164,7 @@ const SignUp = () => {
       if (domain === 'http://localhost:3000') {
         window.location.href = 'http://localhost:3000/user-info';
       } else {
-        window.location.href = 'https://slam-talk.vercel.app/user-info';
+        window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/user-info`;
       }
     } else {
       onClose();

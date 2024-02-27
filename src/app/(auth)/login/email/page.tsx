@@ -44,7 +44,7 @@ const EmailLogin = () => {
         if (domain === 'http://localhost:3000') {
           window.location.href = 'http://localhost:3000';
         } else {
-          window.location.href = 'https://slam-talk.vercel.app';
+          window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}`;
         }
       }
     } catch (error) {

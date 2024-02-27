@@ -66,25 +66,37 @@ const MyPageSettings = () => {
         <h2 className="pt-4 text-center text-lg font-semibold">설정</h2>
         <hr className="w-90 my-4 h-px bg-gray-300" />
         <div className="flex flex-col px-4">
-          <p className="my-3 font-semibold">알림 설정</p>
+          {/* <p className="my-3 font-semibold">알림 설정</p>
           <span>알림 수신 설정</span>
-          <hr className="w-90 my-4 h-px bg-gray-300" />
+          <hr className="w-90 my-4 h-px bg-gray-300" /> */}
           <p className="my-3 font-semibold">기타</p>
-          <div
-            className="flex items-center gap-2"
-            onClick={handleLogout}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleLogout();
-              }
-            }}
-          >
-            <div className="flex flex-col gap-4">
-              <span>로그아웃</span>
-              <span>탈퇴하기</span>
+
+          <div className="flex flex-col gap-4">
+            <div
+              onClick={handleLogout}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleLogout();
+                }
+              }}
+            >
+              로그아웃
             </div>
+            <div
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleLogout();
+                }
+              }}
+              onClick={() => router.push('/my-page/settings/change-password')}
+            >
+              <p>비밀번호 변경</p>
+            </div>
+            <p>탈퇴하기</p>
           </div>
         </div>
       </div>
