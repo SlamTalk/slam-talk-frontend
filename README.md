@@ -6,7 +6,7 @@
 
 <p align="middle">농구를 할 장소와 함께 할 친구를 찾을 수 있는 플랫폼</p>
 
-<p align="middle"><a href="https://slam-talk.vercel.app">사이트 바로가기 ⛹️‍♀️⛹️‍♂️</a></p>
+<p align="middle"><a href="https://www.slam-talk.site">사이트 바로가기 ⛹️‍♀️⛹️‍♂️</a></p>
 
 ## 프로젝트 개요
 
