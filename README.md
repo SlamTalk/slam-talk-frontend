@@ -252,6 +252,24 @@ https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/bf7565d2-4abf-4b
 
 ### 커뮤니티
 
+인증된 유저만 글 작성 댓글 작성이 가능합니다.(비회원은 게시글 열람만 가능)
+
+커뮤니티는 자유/질문/중고거래/대관양도 4개의 주제로 분류하고, 전체 내용을 분류없이 확인할 수 있습니다.
+
+현재 보이는 게시글 목록에서 검색하여 원하는 제목을 가진 글을 찾을 수 있습니다.
+
+<img src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/5cc5c033-3363-4a47-97f4-64758b2f3660' width="400px"/>
+
+글 작성시에 기존에 정해진 4가지의 주제중에 선택하여 작성이 가능합니다.
+
+<img src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/fafc74ea-fb8f-4e73-83f6-674fc09cf9aa' width="400px" />
+
+작성된 게시글은 작성자만 수정,삭제가 가능합니다.
+
+<img src="https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/b92ea2de-bb0f-43cd-96d1-b24e2db3a0b0" width="400px"/>
+
+게시글 또는 댓글 작성자의 프로필 이미지를 클릭하여 유저 정보확인과 채팅이 가능하게 하여 유저에게 다른 서비스도 사용을 유도합니다.
+
 ### 채팅
 
 인증된 유저 끼리 실시간으로 채팅을 이용할 수 있습니다.
