@@ -270,12 +270,12 @@ https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/bf7565d2-4abf-4b
 
 <div style="display: flex; gap: 10px;">
 <div>
-    <img alt="1:1-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/2c8fa872-70b4-48c8-bc64-90853044f195" width="400px" height="520px">
+    <img alt="1:1-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/2c8fa872-70b4-48c8-bc64-90853044f195" width="400px" height="560px">
     <p>농구장 시설 단체 채팅</p>
 <p>1:1 채팅방은 채팅방을 생성할 유저 프로필 카드에서 또는 팀 매칭<br/> 완료후 팀 대표자 간 채팅방 생성이 가능합니다.</p>
 </div>
   <div>
-    <img alt="시설-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/85c88777-2e27-407d-86aa-63c8f3cb08bf" width="400px" height="520px">
+    <img alt="시설-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/85c88777-2e27-407d-86aa-63c8f3cb08bf" width="400px" height="560px">
     <p>1:1 채팅</p>
   <p>단체 채팅방은 농구장 지도, 메이트 매칭에서 생성 가능합니다.</p>
     </div>
