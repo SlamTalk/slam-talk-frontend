@@ -22,7 +22,7 @@ const SocialLogin = () => {
   const login = searchParams.get('loginSuccess');
   const firstLoginCheck = searchParams.get('firstLoginCheck');
 
-  // https://slam-talk.vercel.app/social-login?loginSuccess=true&firstLoginCheck=false
+  // https://www.slam-talk.site/social-login?loginSuccess=true&firstLoginCheck=false
   if (login === 'true') {
     refreshToken().then((token) => {
       if (token !== null) {
@@ -35,7 +35,7 @@ const SocialLogin = () => {
           if (domain === 'http://localhost:3000') {
             window.location.href = 'http://localhost:3000';
           } else {
-            window.location.href = 'https://slam-talk.vercel.app';
+            window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}`;
           }
         }
       }
