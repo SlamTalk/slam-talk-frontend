@@ -254,18 +254,43 @@ https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/bf7565d2-4abf-4b
 
 ### 채팅
 
-<div style="display: flex; gap: 20px;">
-    <img alt="1:1-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/2c8fa872-70b4-48c8-bc64-90853044f195" width="400px">
-    <img alt="시설-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/85c88777-2e27-407d-86aa-63c8f3cb08bf" width="400px">
+인증된 유저 끼리 실시간으로 채팅을 이용할 수 있습니다.
+
+채팅방 타입은 1:1 채팅방 / 농구장 채팅방 / 같이하기 채팅방 / 팀 매칭 채팅방 이렇게 4가지 종류가 있으며,
+
+각 타입에 따라 채팅방 이름이 결정됩니다.
+
+채팅방 첫 입장시 입장안내 메시지,퇴장시에는 퇴장안내 메시지를 채팅방에 보여줍니다.
+
+유저가 좌측 상단에있는 나가기 버튼을 누르면 다른 페이지로 이동을 합니다.(완전한 퇴장 x)
+
+→ 유저가 채팅방에서 마지막으로 본 메시지를 기록하고, 재입장시에는 그 이후의 메시지만 보여줍니다.
+
+또한 채팅방에서 과거 메세지를 조회하고 싶다면 more 버튼을 눌러서 과거 메세지 내역을 조회할 수 있습니다.
+
+<div style="display: flex; gap: 10px;">
+<div>
+    <img alt="1:1-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/2c8fa872-70b4-48c8-bc64-90853044f195" width="400px" height="520px">
+    <p>농구장 시설 단체 채팅</p>
+<p>1:1 채팅방은 채팅방을 생성할 유저 프로필 카드에서 또는 팀 매칭<br/> 완료후 팀 대표자 간 채팅방 생성이 가능합니다.</p>
 </div>
-<div style="display: flex; gap: 280px;">
-<p>농구장 시설 단체 채팅</p>
-<p>1:1 채팅</p>
+  <div>
+    <img alt="시설-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/85c88777-2e27-407d-86aa-63c8f3cb08bf" width="400px" height="520px">
+    <p>1:1 채팅</p>
+  <p>단체 채팅방은 농구장 지도, 메이트 매칭에서 생성 가능합니다.</p>
+    </div>
 </div>
 
 <br>
+채팅 리스트에서는 유저가 참여한 채팅방 목록을 조회할 수 있습니다.
+
+채팅방 최신 메세지, 채팅방 제목, 채팅방 타입(DM/BM/MM/TM) 을 함께 확인할 수 있습니다.
 
 <img alt="채팅-리스트" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/936b88a5-67a5-4646-9745-97425f3cdbfe" width="400px">
+
+채팅 방 타입에 따라서 정해진 이름과 dm일 경우는 유저의 프로필이 채팅룸의 이미지가 됩니다.
+
+타입별로 구분하여 명시해줍니다.
 
 ### 관리자 페이지
 
