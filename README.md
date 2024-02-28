@@ -286,6 +286,9 @@ https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/bf7565d2-4abf-4b
 
 또한 채팅방에서 과거 메세지를 조회하고 싶다면 more 버튼을 눌러서 과거 메세지 내역을 조회할 수 있습니다.
 
+- stompJs를 사용한 이유:
+  백엔드 파트에서 소켓 통신을 위해 spring-stomp 통신 환경을 구축하였기 때문에, 그에 호환등의 문제나 동일한 프로토콜을 가져 소통이 원활하고, 기존의 커뮤니티 형성이 잘되어 참고 자료가 많은 점을 장점으로 판단하여 stompJs를 사용하였습니다.
+
 <div style="display: flex; gap: 10px;">
 <div>
     <img alt="1:1-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/2c8fa872-70b4-48c8-bc64-90853044f195" width="400px" height="560px">
