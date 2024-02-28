@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
   timeout: 10000,

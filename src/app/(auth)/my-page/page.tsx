@@ -85,7 +85,15 @@ const MyPage = () => {
               <IoChevronBackSharp size={24} />
             </div>
             <Link href="/my-page/settings">
-              <IoSettingsOutline aria-label="settings" size={24} />
+              <Button
+                isIconOnly
+                size="sm"
+                radius="full"
+                aria-label="설정"
+                variant="light"
+              >
+                <IoSettingsOutline aria-label="settings" size={24} />
+              </Button>
             </Link>
           </div>
           <div className="mt-7 flex items-center justify-between">

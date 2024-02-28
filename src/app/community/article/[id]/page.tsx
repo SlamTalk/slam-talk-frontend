@@ -82,7 +82,7 @@ const Page = () => {
       if (domain === 'http://localhost:3000') {
         window.location.href = `http://localhost:3000/community/article/${params.id}`;
       } else {
-        window.location.href = `https://slam-talk.vercel.app/community/article/${params.id}`;
+        window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/community/article/${params.id}`;
       }
     }
   };

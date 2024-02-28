@@ -12,7 +12,7 @@ const PasswordPage = () => {
   );
 
   const handleSendEmail = () => {
-    alert(`구현 예정) ${email}으로 비밀번호 변경 이메일을 발송했습니다.`);
+    alert(`비밀번호 찾기 구현 예정. 문의해주세요.`);
   };
 
   return (
@@ -21,6 +21,7 @@ const PasswordPage = () => {
       <div className="mt-14 flex h-full w-full flex-col flex-wrap justify-center gap-3 p-5 align-middle md:flex-nowrap">
         <h1 className="mb-4 text-2xl font-bold sm:text-xl">비밀번호 재설정</h1>
         <Input
+          radius="sm"
           isClearable
           isRequired
           type="email"
@@ -37,12 +38,7 @@ const PasswordPage = () => {
         >
           {isEmailInvalid && '올바른 이메일을 입력해 주세요.'}
         </div>
-        <Button
-          size="lg"
-          radius="full"
-          color="primary"
-          onClick={handleSendEmail}
-        >
+        <Button size="lg" radius="sm" color="primary" onClick={handleSendEmail}>
           메일 발송
         </Button>
       </div>

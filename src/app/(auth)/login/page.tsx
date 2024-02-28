@@ -21,15 +21,15 @@ const Login = () => {
   }
 
   const handleKakaoLogin = () => {
-    const kakaoLoginURL = `${process.env.NEXT_PUBLIC_BASE_URL}/oauth2/authorization/kakao`;
+    const kakaoLoginURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/oauth2/authorization/kakao`;
     router.push(kakaoLoginURL);
   };
   const handleNaverLogin = () => {
-    const naverLoginURL = `${process.env.NEXT_PUBLIC_BASE_URL}/oauth2/authorization/naver`;
+    const naverLoginURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/oauth2/authorization/naver`;
     router.push(naverLoginURL);
   };
   const handleGoogleLogin = () => {
-    const googleLoginURL = `${process.env.NEXT_PUBLIC_BASE_URL}/oauth2/authorization/google`;
+    const googleLoginURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/oauth2/authorization/google`;
     router.push(googleLoginURL);
   };
 
