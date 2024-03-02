@@ -85,26 +85,26 @@ const MyPage = () => {
             >
               <IoChevronBackSharp size={24} />
             </div>
-            <Link href="/my-page/settings">
-              <Button
-                isIconOnly
-                size="sm"
-                radius="full"
-                aria-label="설정"
-                variant="light"
-              >
-                <IoSettingsOutline aria-label="settings" size={24} />
-              </Button>
-            </Link>
+            <Button
+              href="/my-page/settings"
+              as={Link}
+              isIconOnly
+              size="sm"
+              radius="full"
+              aria-label="설정"
+              variant="light"
+            >
+              <IoSettingsOutline aria-label="settings" size={24} />
+            </Button>
           </div>
           <div className="mt-7 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Avatar alt="profile-img" src={user.imageUrl} />
               <p className="text-lg font-semibold">{user.nickname}</p>
             </div>
-            <Link href="/my-page/profile">
-              <Button size="sm">프로필 보기</Button>
-            </Link>
+            <Button href="/my-page/profile" as={Link} size="sm">
+              프로필 보기
+            </Button>
           </div>
           <Button
             type="submit"
@@ -156,15 +156,15 @@ const MyPage = () => {
           </div>
           {user.role === 'ADMIN' && (
             <div className="absolute bottom-16 right-4">
-              <Link href="/admin" target="_blank">
-                <Button
-                  radius="sm"
-                  color="success"
-                  className="font-medium text-white"
-                >
-                  관리자 페이지
-                </Button>
-              </Link>
+              <Button
+                href="/admin"
+                as={Link}
+                radius="sm"
+                color="success"
+                className="font-medium text-white"
+              >
+                관리자 페이지
+              </Button>
             </div>
           )}
         </div>
