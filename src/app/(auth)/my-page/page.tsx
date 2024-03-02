@@ -117,14 +117,18 @@ const MyPage = () => {
           <div>
             <p className="mb-3 font-semibold">나의 활동</p>
             <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-2">
-                <LuClipboardList className="text-text" />
-                <span>팀 매칭 내역</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <LuClipboardList className="text-text" />
-                <span>농구 메이트 찾기 내역</span>
-              </div>
+              <Link href="/my-page/team-matching-list">
+                <div className="flex items-center gap-2">
+                  <LuClipboardList className="text-text" />
+                  <span>팀 매칭 내역</span>
+                </div>
+              </Link>
+              <Link href="/my-page/mate-matching-list">
+                <div className="flex items-center gap-2">
+                  <LuClipboardList className="text-text" />
+                  <span>농구 메이트 찾기 내역</span>
+                </div>
+              </Link>
             </div>
             <hr className="w-90 my-4 h-px bg-gray-300" />
             <p className="my-3 font-semibold">설정</p>
