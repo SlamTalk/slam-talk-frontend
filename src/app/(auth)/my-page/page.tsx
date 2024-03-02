@@ -21,6 +21,7 @@ import {
 import Link from 'next/link';
 import LocalStorage from '@/utils/localstorage';
 import ThemeSwitcher from '@/app/components/ThemeSwitcher';
+import KakaoChannelImg from './components/KakaoChannel';
 
 const MyPage = () => {
   const router = useRouter();
@@ -142,11 +143,20 @@ const MyPage = () => {
           <hr className="w-90 my-4 h-px bg-gray-300" />
           <p className="my-3 font-semibold">기타</p>
           <div className="mb-4 flex flex-col gap-4">
-            <span>문의하기</span>
+            <Button
+              radius="sm"
+              href="http://pf.kakao.com/_AxisJG/chat"
+              target="_blank"
+              as={Link}
+              startContent={<KakaoChannelImg />}
+              className="w-fit bg-kakao dark:text-background"
+            >
+              카카오톡 채널 문의하기
+            </Button>
           </div>
           {user.role === 'ADMIN' && (
             <div className="absolute bottom-16 right-4">
-              <Link href="/admin">
+              <Link href="/admin" target="_blank">
                 <Button
                   radius="sm"
                   color="success"
