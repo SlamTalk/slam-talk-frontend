@@ -398,4 +398,4 @@ https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/381169d3-c77c-40
 ## 기타
 
 - 구름 풀스택 2회차 최종 프로젝트 인기상 수상 - [발표(24/02/22) PPT](https://github.com/SlamTalk/slam-talk-frontend/files/14399752/slam_talk.pdf)
-- [피그마 와이어프레임](https://www.figma.com/file/AAC8YMtbWw32jkT0XNRS9q/%EB%86%8D%EA%B5%AC-%EC%95%B1?type=design&node-id=0%3A1&mode=design&t=fOLsFQ3RiSAo5Rml-1)
+- [피그마 와이어프레임](https://www.figma.com/file/ZD66J8VJY2Novju78Z3F1q/Slam-Talk-Wireframe?type=design&node-id=0%3A1&mode=design&t=eljuNXwNhPyvrol6-1)
