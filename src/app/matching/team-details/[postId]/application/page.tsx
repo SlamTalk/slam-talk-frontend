@@ -60,7 +60,7 @@ const TeamMatchingApplication = () => {
         />
       </div>
       <div className="mb-4">
-        <div className="text-md mb-2 font-bold">원하는 실력대</div>
+        <div className="text-md mb-2 font-bold">내 실력</div>
         <Select
           isRequired
           value={skillLevel}
@@ -74,7 +74,7 @@ const TeamMatchingApplication = () => {
             입문
           </SelectItem>
           <SelectItem key="LOW" value="LOW">
-            초보
+            하수
           </SelectItem>
           <SelectItem key="MIDDLE" value="MIDDLE">
             중수
