@@ -18,10 +18,10 @@ import LocalStorage from '@/utils/localstorage';
 import { useRouter } from 'next/navigation';
 import axiosInstance from '@/app/api/axiosInstance';
 import { IoChevronBackSharp } from 'react-icons/io5';
-import { EyeSlashFilledIcon } from '../../login/components/EyeSlashFilledIcon';
-import { EyeFilledIcon } from '../../login/components/EyeFilledIcon';
+import { EyeSlashFilledIcon } from '../../../../components/Input/EyeSlashFilledIcon';
+import { EyeFilledIcon } from '../../../../components/Input/EyeFilledIcon';
 
-const PasswordPage = () => {
+const ChangePassword = () => {
   const router = useRouter();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
   const [isVisible, setIsVisible] = useState(false);
@@ -185,4 +185,4 @@ const PasswordPage = () => {
   return null;
 };
 
-export default PasswordPage;
+export default ChangePassword;

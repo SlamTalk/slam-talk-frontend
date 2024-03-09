@@ -15,8 +15,8 @@ import { validateEmail, validatePassword } from '@/utils/validations';
 import Link from 'next/link';
 import axiosInstance from '@/app/api/axiosInstance';
 import { AxiosError } from 'axios';
-import { EyeSlashFilledIcon } from '../components/EyeSlashFilledIcon';
-import { EyeFilledIcon } from '../components/EyeFilledIcon';
+import { EyeSlashFilledIcon } from '../../../components/Input/EyeSlashFilledIcon';
+import { EyeFilledIcon } from '../../../components/Input/EyeFilledIcon';
 
 const EmailLogin = () => {
   const [isVisible, setIsVisible] = useState(false);
