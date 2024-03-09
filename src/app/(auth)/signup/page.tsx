@@ -5,7 +5,7 @@ import EmailValidation from './components/EmailValidation';
 import NicknamePassword from './components/NicknamePassword';
 
 const SignUp = () => {
-  const [emailValidate, setEmailValidate] = useState(true);
+  const [emailValidate, setEmailValidate] = useState(false);
   const [validEmail, setValidEmail] = useState('');
 
   const handleEmailValidate = (email: string) => {
