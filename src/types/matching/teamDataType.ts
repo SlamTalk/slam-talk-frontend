@@ -45,6 +45,11 @@ export interface TeamPost {
   teamApplicants: TeamApplied[];
 }
 
+export interface InfiniteTeamPost {
+  nextCursor: string | null;
+  teamMatchingList: TeamPost[];
+}
+
 export interface TeamData {
   success: boolean;
   status: number;

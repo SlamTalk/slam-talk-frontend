@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
-import { TeamPost } from '@/types/matching/teamDataType';
-import { useQuery } from '@tanstack/react-query';
+import { InfiniteTeamPost } from '@/types/matching/teamDataType';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import LocalStorage from '@/utils/localstorage';
 import { useRouter } from 'next/navigation';
-import { fetchTeamData } from '@/services/matching/getTeamData';
+import { infiniteFetchTeamData } from '@/services/matching/getTeamData';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { useInView } from 'react-intersection-observer';
 import TeamPostCard from './TeamPostCard';
 
 const levels = ['입문', '하수', '중수', '고수'];
@@ -41,43 +43,30 @@ interface MateMatchingProps {
 
 const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   const router = useRouter();
+  const { ref, inView } = useInView({ threshold: 0, delay: 0 });
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedNumberOfMembers, setSelectedNumberOfMembers] =
     useState<string>('');
 
-  const { data } = useQuery<TeamPost[], Error>({
-    queryKey: ['team'],
-    queryFn: fetchTeamData,
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery<
+    InfiniteTeamPost,
+    Error
+  >({
+    queryKey: ['team', 'infinite'],
+    queryFn: ({ pageParam }: any) => infiniteFetchTeamData(pageParam),
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => lastPage?.nextCursor,
   });
 
-  const filteredPosts = Array.isArray(data)
-    ? data.filter((post) => {
-        const matchesCity = selectedCity
-          ? post.locationDetail.includes(selectedCity)
-          : true;
-        const matchesLevel = selectedLevel
-          ? post.skillLevelList.includes(selectedLevel)
-          : true;
-        const matchesNumberOfMembers = selectedNumberOfMembers
-          ? post.numberOfMembers === selectedNumberOfMembers
-          : true;
-        const keyword = keywordProp?.toLowerCase();
-        const matchesKeyword = keyword
-          ? post.title.toLowerCase().includes(keyword) ||
-            post.content.toLowerCase().includes(keyword) ||
-            post.locationDetail.toLowerCase().includes(keyword) ||
-            post.writerNickname.toLowerCase().includes(keyword)
-          : true;
+  console.log({ data });
 
-        return (
-          matchesCity &&
-          matchesLevel &&
-          matchesNumberOfMembers &&
-          matchesKeyword
-        );
-      })
-    : [];
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+      console.log(inView);
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
 
   const handleCreateNewPost = () => {
     const isLoggedIn = LocalStorage.getItem('isLoggedIn');
@@ -88,27 +77,10 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
     }
   };
 
-  if (!Array.isArray(data)) {
-    return (
-      <div>
-        <div className="mx-auto mt-[50px] max-w-[250px]">
-          게시글이 존재하지 않습니다.
-        </div>
-        <div className="fixed bottom-14 w-full max-w-[600px]">
-          <div className="mr-4 flex justify-end">
-            <Button
-              startContent={<FaPlus />}
-              color="primary"
-              className="rounded-full bg-primary text-white shadow-md"
-              onClick={handleCreateNewPost}
-            >
-              새 모집글 작성
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  console.log({ keywordProp });
+  console.log({ selectedCity });
+  console.log({ selectedLevel });
+  console.log({ selectedNumberOfMembers });
 
   return (
     <div className="relative mx-auto max-w-[600px] pb-[80px]">
@@ -168,25 +140,23 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
           </Select>
         </div>
       </div>
-      {filteredPosts?.map((post) => (
-        <Link
-          key={post.teamMatchingId}
-          href={`/matching/team-details/${post.teamMatchingId}`}
-        >
-          {/* eslint-disable-next-line react/no-array-index-key */}
-          <TeamPostCard
-            key={post.teamMatchingId}
-            title={post.title}
-            teamName={post.teamName}
-            date={post.scheduledDate}
-            startTime={post.startTime}
-            location={post.locationDetail}
-            level={post.skillLevelList}
-            numberOfMembers={post.numberOfMembers}
-            recruitmentStatusType={post.recruitmentStatusType}
-          />
-        </Link>
-      ))}
+      {data?.pages.map((page) =>
+        page.teamMatchingList.map((post) => (
+          <Link href={`/matching/team-details/${post.teamMatchingId}`}>
+            <TeamPostCard
+              key={post.teamMatchingId}
+              title={post.title}
+              teamName={post.teamName}
+              date={post.scheduledDate}
+              startTime={post.startTime}
+              location={post.locationDetail}
+              level={post.skillLevelList}
+              numberOfMembers={post.numberOfMembers}
+              recruitmentStatusType={post.recruitmentStatusType}
+            />
+          </Link>
+        ))
+      )}
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Button
@@ -199,6 +169,7 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
           </Button>
         </div>
       </div>
+      <div ref={ref} style={{ height: '10px' }} />
     </div>
   );
 };
