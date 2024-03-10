@@ -1,6 +1,5 @@
 import axiosInstance from '@/app/api/axiosInstance';
 import { OtherUserInfo } from '@/types/user/otherUserInfo';
-// import LocalStorage from '../../utils/localstorage';
 
 export interface GetOtherUserDataProps {
   userId: number;

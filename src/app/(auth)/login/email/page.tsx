@@ -1,31 +1,56 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
-import { Button, Input } from '@nextui-org/react';
+import {
+  Button,
+  Input,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
+} from '@nextui-org/react';
 import { validateEmail, validatePassword } from '@/utils/validations';
 import Link from 'next/link';
 import axiosInstance from '@/app/api/axiosInstance';
 import { AxiosError } from 'axios';
-import { EyeSlashFilledIcon } from '../components/EyeSlashFilledIcon';
-import { EyeFilledIcon } from '../components/EyeFilledIcon';
+import { EyeSlashFilledIcon } from '../../../components/Input/EyeSlashFilledIcon';
+import { EyeFilledIcon } from '../../../components/Input/EyeFilledIcon';
 
 const EmailLogin = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [msg, setMsg] = useState('');
 
-  const isEmailInvalid = useMemo(
-    () => !validateEmail(email) && email !== '',
-    [email]
-  );
-  const isPasswordInvalid = useMemo(
-    () => !validatePassword(password) && password !== '',
-    [password]
-  );
+  const isEmailValid = useMemo(() => {
+    if (!email) return true;
+
+    return validateEmail(email);
+  }, [email]);
+
+  const isPasswordValid = useMemo(() => {
+    if (!password) return true;
+
+    return validatePassword(password);
+  }, [password]);
 
   const handleLogin = async () => {
-    if (isEmailInvalid || isPasswordInvalid) {
-      alert('유효하지 않은 이메일 또는 비밀번호입니다.');
+    if (!email) {
+      setMsg('이메일을 입력해주세요.');
+      onOpen();
+      return;
+    }
+    if (!password) {
+      setMsg('비밀번호를 입력해주세요.');
+      onOpen();
+      return;
+    }
+    if (!isEmailValid || !isPasswordValid) {
+      setMsg('입력 정보를 확인해주세요.');
+      onOpen();
       return;
     }
 
@@ -49,17 +74,13 @@ const EmailLogin = () => {
       }
     } catch (error) {
       console.log('로그인 실패:', error);
-      if (error instanceof AxiosError) {
-        const message =
-          error.response?.data?.message ||
-          '죄송합니다. 로그인에 실패했습니다. 서버 오류 발생.';
-        alert(message);
-      } else {
-        alert('죄송합니다. 알 수 없는 오류가 발생했습니다.');
+      if (error instanceof AxiosError && error.response?.data.message) {
+        setMsg(error.response.data.message);
+        onOpen();
       }
     }
   };
-  const toggleVisibility = () => setIsVisible(!isVisible);
+  const handleToggleVisibility = () => setIsVisible(!isVisible);
 
   return (
     <>
@@ -78,14 +99,11 @@ const EmailLogin = () => {
           label="이메일"
           value={email}
           onValueChange={setEmail}
-          onClear={() => setEmail('')}
           placeholder="이메일"
-          isInvalid={isEmailInvalid}
+          isInvalid={!isEmailValid}
         />
-        <div
-          className={`mb-3 h-3 text-sm text-danger ${isEmailInvalid ? 'visible' : 'invisible'}`}
-        >
-          {isEmailInvalid && '올바른 이메일을 입력해 주세요.'}
+        <div className="mb-3 h-3 text-sm text-danger">
+          {!isEmailValid && '올바른 이메일을 입력해 주세요.'}
         </div>
 
         <Input
@@ -99,7 +117,7 @@ const EmailLogin = () => {
             <button
               className="focus:outline-none"
               type="button"
-              onClick={toggleVisibility}
+              onClick={handleToggleVisibility}
             >
               {isVisible ? (
                 <EyeSlashFilledIcon className="pointer-events-none text-2xl text-default-400" />
@@ -112,15 +130,38 @@ const EmailLogin = () => {
           onValueChange={setPassword}
         />
         <div className="mb-3 h-3 text-sm text-danger" />
-        <Button size="lg" radius="sm" color="primary" onClick={handleLogin}>
-          로그인
-        </Button>
+        {validateEmail(email) && validatePassword(password) ? (
+          <Button size="lg" radius="sm" color="primary" onClick={handleLogin}>
+            로그인
+          </Button>
+        ) : (
+          <Button size="lg" radius="sm" color="primary" isDisabled>
+            로그인
+          </Button>
+        )}
         <div className="mt-4 flex justify-center gap-3 align-middle text-sm text-gray-400">
           <Link href="/find-password">
             <p>비밀번호 찾기</p>
           </Link>
         </div>
       </div>
+      <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">로그인</ModalHeader>
+              <ModalBody>
+                <p>{msg}</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onPress={onClose}>
+                  확인
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </>
   );
 };
