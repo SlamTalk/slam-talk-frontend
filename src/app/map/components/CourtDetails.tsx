@@ -75,6 +75,19 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
       }
     };
 
+    const handleShareCourt = () => {
+      const shareUrl = `https://www.slam-talk.site/map/${courtId}`;
+      navigator.clipboard
+        .writeText(shareUrl)
+        .then(() => {
+          alert('링크가 복사되었습니다.');
+        })
+        .catch((err) => {
+          console.error('링크 복사 실패:', err);
+          alert('링크 복사에 실패했습니다.');
+        });
+    };
+
     const handleGoChatting = () => {
       if (isLoggedIn === 'true') {
         router.push(`/chatting/chatroom/${selectedPlace.chatroomId}`);
@@ -140,14 +153,14 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
               <div className="my-2 flex w-full items-center justify-start gap-3">
                 <Button
                   size="sm"
-                  aria-label="크게 보기"
+                  aria-label="공유하기"
                   variant="bordered"
                   className="border-0 p-0"
                   radius="full"
                   startContent={<RiShareBoxFill />}
-                  onClick={() => window.open(`/map/${courtId}`)}
+                  onClick={handleShareCourt}
                 >
-                  크게 보기
+                  공유하기
                 </Button>
                 <hr className="h-4 w-px bg-gray-300" />
                 <Button
