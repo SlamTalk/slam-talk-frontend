@@ -18,8 +18,8 @@ import axiosInstance from '@/app/api/axiosInstance';
 import confetti from 'canvas-confetti';
 import { AxiosError } from 'axios';
 import { IoChevronBackSharp } from 'react-icons/io5';
-import { EyeSlashFilledIcon } from '../../../components/input/EyeSlashFilledIcon';
-import { EyeFilledIcon } from '../../../components/input/EyeFilledIcon';
+import { EyeSlashFilledIcon } from '@/app/components/input/EyeSlashFilledIcon';
+import { EyeFilledIcon } from '@/app/components/input/EyeFilledIcon';
 
 interface EmailProps {
   validEmail: string;
