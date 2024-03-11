@@ -38,7 +38,9 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
 }) => {
   const router = useRouter();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
-  const [msg, setMsg] = useState('');
+  const [loginMsg, setLoginMsg] = useState('');
+  const [alertMsg, setAlertMsg] = useState('');
+  const [isTel, setIsTel] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { error, data: selectedPlace } = useQuery({
@@ -54,12 +56,11 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
   if (selectedPlace) {
     const handlePhoneClick = () => {
       if (selectedPlace.phoneNum) {
-        const confirmDial = window.confirm(
+        setAlertMsg(
           `이 전화번호로 연결하시겠습니까? ${selectedPlace.phoneNum}`
         );
-        if (confirmDial) {
-          window.location.href = `tel:${selectedPlace.phoneNum}`;
-        }
+        setIsTel(true);
+        onOpen();
       }
     };
 
@@ -67,21 +68,50 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
       if (selectedPlace.address) {
         try {
           await navigator.clipboard.writeText(selectedPlace.address);
-          alert('주소가 복사되었습니다.');
+          setAlertMsg('주소가 복사되었습니다.');
+          onOpen();
         } catch (copyError) {
           console.error('주소 복사 중 오류 발생:', copyError);
-          alert('주소를 복사하는 데 실패했습니다.');
+          setAlertMsg('주소를 복사하는 데 실패했습니다.');
+          onOpen();
         }
       }
+    };
+
+    const handleShareCourt = () => {
+      const shareUrl = `https://www.slam-talk.site/map/${courtId}`;
+      navigator.clipboard
+        .writeText(shareUrl)
+        .then(() => {
+          setAlertMsg(
+            '해당 농구장 정보를 공유할 수 있는 링크가 복사되었습니다.'
+          );
+          onOpen();
+        })
+        .catch((err) => {
+          setAlertMsg('링크 복사에 실패했습니다.');
+          onOpen();
+          console.error('링크 복사 실패:', err);
+        });
     };
 
     const handleGoChatting = () => {
       if (isLoggedIn === 'true') {
         router.push(`/chatting/chatroom/${selectedPlace.chatroomId}`);
       } else {
-        setMsg('로그인 후 이용할 수 있는 서비스입니다.');
+        setLoginMsg('로그인 후 이용할 수 있는 서비스입니다.');
         onOpen();
       }
+    };
+
+    const handleCloseLoginModal = () => {
+      setLoginMsg('');
+      onClose();
+    };
+
+    const handleCloseAlert = () => {
+      setAlertMsg('');
+      onClose();
     };
 
     return (
@@ -140,14 +170,14 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
               <div className="my-2 flex w-full items-center justify-start gap-3">
                 <Button
                   size="sm"
-                  aria-label="크게 보기"
+                  aria-label="공유하기"
                   variant="bordered"
                   className="border-0 p-0"
                   radius="full"
                   startContent={<RiShareBoxFill />}
-                  onClick={() => window.open(`/map/${courtId}`)}
+                  onClick={handleShareCourt}
                 >
-                  크게 보기
+                  공유하기
                 </Button>
                 <hr className="h-4 w-px bg-gray-300" />
                 <Button
@@ -286,28 +316,106 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
             </div>
           </div>
         </div>
-        <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
-          <ModalContent>
-            {() => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  농구장 시설 채팅
-                </ModalHeader>
-                <ModalBody>
-                  <p>{msg}</p>
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose}>
-                    닫기
-                  </Button>
-                  <Button color="primary" onPress={() => router.push('/login')}>
-                    로그인하러 가기
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
+        {loginMsg && (
+          <Modal
+            size="sm"
+            isOpen={isOpen}
+            onClose={handleCloseLoginModal}
+            placement="center"
+          >
+            <ModalContent>
+              {() => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    농구장 시설 채팅
+                  </ModalHeader>
+                  <ModalBody>
+                    <p>{loginMsg}</p>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="danger"
+                      variant="light"
+                      onPress={handleCloseLoginModal}
+                    >
+                      닫기
+                    </Button>
+                    <Button
+                      color="primary"
+                      onPress={() => router.push('/login')}
+                    >
+                      로그인하러 가기
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+        )}
+        {alertMsg && (
+          <Modal
+            size="sm"
+            isOpen={isOpen}
+            onClose={handleCloseAlert}
+            placement="center"
+          >
+            <ModalContent>
+              {() => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    알림
+                  </ModalHeader>
+                  <ModalBody>
+                    <p>{alertMsg}</p>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button color="primary" onPress={handleCloseAlert}>
+                      확인
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+        )}
+        {isTel && (
+          <Modal
+            size="sm"
+            isOpen={isOpen}
+            onClose={handleCloseAlert}
+            placement="center"
+          >
+            <ModalContent>
+              {() => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    전화 연결
+                  </ModalHeader>
+                  <ModalBody>
+                    <p>{alertMsg}</p>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="danger"
+                      variant="light"
+                      onPress={handleCloseLoginModal}
+                    >
+                      취소
+                    </Button>
+                    <Button
+                      color="primary"
+                      onClick={() => {
+                        window.location.href = `tel:${selectedPlace.phoneNum}`;
+                      }}
+                    >
+                      확인
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+        )}
       </>
     );
   }
