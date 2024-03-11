@@ -4,7 +4,7 @@ import { validateEmail } from '@/utils/validations';
 import { Button, Input } from '@nextui-org/react';
 import React, { useMemo, useState } from 'react';
 
-const PasswordPage = () => {
+const FindPassword = () => {
   const [email, setEmail] = useState('');
   const isEmailInvalid = useMemo(
     () => !validateEmail(email) && email !== '',
@@ -29,7 +29,6 @@ const PasswordPage = () => {
           label="이메일"
           value={email}
           onValueChange={setEmail}
-          onClear={() => setEmail('')}
           placeholder="이메일"
           isInvalid={isEmailInvalid}
         />
@@ -46,4 +45,4 @@ const PasswordPage = () => {
   );
 };
 
-export default PasswordPage;
+export default FindPassword;
