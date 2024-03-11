@@ -97,42 +97,35 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
         <div className="h-full w-full overflow-y-auto">
           <div className="relative w-full text-sm">
             <div className="relative h-64 w-full sm:h-48">
-              {selectedPlace.photoUrl ? (
-                <Image
-                  layout="fill"
-                  objectFit="contain"
-                  alt="농구장 사진"
-                  src={selectedPlace.photoUrl}
-                />
-              ) : (
-                <Image
-                  layout="fill"
-                  alt="농구장 사진"
-                  src="/images/basketball-court.svg"
-                />
-              )}
+              <Image
+                fill
+                alt="농구장 사진"
+                src={
+                  selectedPlace.photoUrl
+                    ? selectedPlace.photoUrl
+                    : '/images/basketball-court.svg'
+                }
+              />
             </div>
             <div className="mb-5 h-full p-4">
               <div className="flex justify-between">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-xl font-bold">
-                    {selectedPlace.courtName}
-                  </h2>
-                  <span className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
-                    {selectedPlace.indoorOutdoor}
-                  </span>
+                <h2 className="text-xl font-bold">{selectedPlace.courtName}</h2>
+                <div>
+                  <Button
+                    color="primary"
+                    radius="full"
+                    size="md"
+                    startContent={<PiChatsCircle />}
+                    aria-label="시설 채팅 바로가기"
+                    onClick={handleGoChatting}
+                  >
+                    시설 채팅
+                  </Button>
                 </div>
-                <Button
-                  color="primary"
-                  radius="full"
-                  size="md"
-                  startContent={<PiChatsCircle />}
-                  aria-label="시설 채팅 바로가기"
-                  onClick={handleGoChatting}
-                >
-                  시설 채팅
-                </Button>
               </div>
+              <span className="break-keep rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
+                {selectedPlace.indoorOutdoor}
+              </span>
               <div className="my-4 w-full">
                 <Button
                   size="sm"
@@ -248,9 +241,10 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                     className="text-gray-400 dark:text-gray-200"
                   />
                   <ul className="flex gap-2">
-                    {selectedPlace.convenience
-                      ? selectedPlace.convenience.map(
-                          (tag: string, idx: number) => (
+                    {selectedPlace.convenience &&
+                      selectedPlace.convenience.map(
+                        (tag: string, idx: number) =>
+                          tag !== '' ? (
                             <li
                               // eslint-disable-next-line react/no-array-index-key
                               key={idx}
@@ -258,9 +252,10 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                             >
                               <span>{tag}</span>
                             </li>
+                          ) : (
+                            '-'
                           )
-                        )
-                      : '-'}
+                      )}
                   </ul>
                 </div>
                 <div className="flex gap-2 align-middle">

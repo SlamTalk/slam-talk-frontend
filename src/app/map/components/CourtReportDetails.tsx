@@ -63,20 +63,15 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
         >
           <div className="w-full text-sm">
             <div className="relative h-56 w-full sm:h-52">
-              {selectedPlace.photoUrl ? (
-                <Image
-                  layout="fill"
-                  objectFit="contain"
-                  alt="농구장 사진"
-                  src={selectedPlace.photoUrl}
-                />
-              ) : (
-                <Image
-                  layout="fill"
-                  alt="농구장 사진"
-                  src="/images/basketball-court.svg"
-                />
-              )}
+              <Image
+                fill
+                alt="농구장 사진"
+                src={
+                  selectedPlace.photoUrl
+                    ? selectedPlace.photoUrl
+                    : '/images/basketball-court.svg'
+                }
+              />
               <Button
                 size="sm"
                 radius="full"
@@ -90,16 +85,12 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
               </Button>
             </div>
             <div className="p-4">
-              <div className="flex justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-xl font-bold">
-                    {selectedPlace.courtName}
-                  </h2>
-                  <p className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
-                    {selectedPlace.indoorOutdoor && selectedPlace.indoorOutdoor}
-                  </p>
-                </div>
-              </div>
+              <h2 className="mb-1 text-xl font-bold">
+                {selectedPlace.courtName}
+              </h2>
+              <span className="break-keep rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
+                {selectedPlace.indoorOutdoor}
+              </span>
               <div className="my-2 flex w-full items-center justify-start gap-3">
                 <Button
                   size="sm"
