@@ -163,7 +163,7 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                   <span>
                     개방 시간:{' '}
                     <span className="text-rose-400">
-                      {selectedPlace.openingHours === true ? '24시간' : '제한'}
+                      {selectedPlace.openingHours}
                     </span>
                   </span>
                 </div>
@@ -180,7 +180,7 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                 <div className="flex gap-2 align-middle">
                   <FeeIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-info text-blue-500">
-                    이용료: {selectedPlace.fee === true ? '유료' : '무료'}
+                    이용료: {selectedPlace.fee}
                   </span>
                 </div>
 
@@ -219,20 +219,14 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>
-                    야간 조명:{' '}
-                    {selectedPlace.nightLighting === true ? '있음' : '없음'}
-                  </span>
+                  <span>야간 조명: {selectedPlace.nightLighting}</span>
                 </div>
                 <div className="flex gap-2 align-middle">
                   <FaParking
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>
-                    주차:{' '}
-                    {selectedPlace.parkingAvailable === true ? '가능' : '불가'}
-                  </span>
+                  <span>주차: {selectedPlace.parkingAvailable}</span>
                 </div>
 
                 <div className="flex gap-2 align-middle text-sm">

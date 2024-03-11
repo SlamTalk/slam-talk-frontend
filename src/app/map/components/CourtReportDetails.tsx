@@ -131,7 +131,7 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                   <span>
                     개방 시간:{' '}
                     <span className="text-rose-400">
-                      {selectedPlace.openingHours && '제한'}
+                      {selectedPlace.openingHours}
                     </span>
                   </span>
                 </div>
@@ -147,7 +147,7 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                 <div className="flex gap-2 align-middle">
                   <FeeIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-info text-blue-500">
-                    이용료: {selectedPlace.fee && '무료'}
+                    이용료: {selectedPlace.fee}
                   </span>
                 </div>
 
@@ -196,7 +196,7 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>주차: {selectedPlace.parkingAvailable && '불가'}</span>
+                  <span>주차: {selectedPlace.parkingAvailable}</span>
                 </div>
 
                 <div className="flex gap-2 align-middle text-sm">
