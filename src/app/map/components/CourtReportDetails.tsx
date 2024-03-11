@@ -88,9 +88,11 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
               <h2 className="mb-1 text-xl font-bold">
                 {selectedPlace.courtName}
               </h2>
-              <span className="break-keep rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
-                {selectedPlace.indoorOutdoor}
-              </span>
+              {selectedPlace.indoorOutdoor && (
+                <span className="break-keep rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
+                  {selectedPlace.indoorOutdoor}
+                </span>
+              )}
               <div className="my-2 flex w-full items-center justify-start gap-3">
                 <Button
                   size="sm"
