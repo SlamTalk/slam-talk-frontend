@@ -138,12 +138,15 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
                 />
               )}
               <Button
+                size="sm"
+                radius="full"
+                variant="light"
                 isIconOnly
-                className="bg-gradient absolute right-2 top-2"
+                className="absolute right-2 top-2"
                 onClick={handleClose}
                 aria-label="Close"
               >
-                <IoIosClose size={30} className="text-gray-600" />
+                <IoIosClose size={30} />
               </Button>
             </div>
             <div className="p-4">
@@ -289,9 +292,10 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
                     className="text-gray-400 dark:text-gray-200"
                   />
                   <ul className="flex gap-2">
-                    {selectedPlace.convenience
-                      ? selectedPlace.convenience.map(
-                          (tag: string, idx: number) => (
+                    {selectedPlace.convenience &&
+                      selectedPlace.convenience.map(
+                        (tag: string, idx: number) =>
+                          tag !== '' ? (
                             <li
                               // eslint-disable-next-line react/no-array-index-key
                               key={idx}
@@ -299,9 +303,10 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
                             >
                               <span>{tag}</span>
                             </li>
+                          ) : (
+                            '-'
                           )
-                        )
-                      : '-'}
+                      )}
                   </ul>
                 </div>
                 <div className="flex gap-2 align-middle">
