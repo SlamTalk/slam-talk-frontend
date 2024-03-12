@@ -4,7 +4,7 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 import CourtDetailsFull from '../components/CourtDetailsFull';
 
-const CourtDetailsModal = () => {
+const SharedCourtDetails = () => {
   const pathname = usePathname();
   const courtId = Number(pathname.split('/').pop());
 
@@ -18,4 +18,4 @@ const CourtDetailsModal = () => {
   );
 };
 
-export default CourtDetailsModal;
+export default SharedCourtDetails;

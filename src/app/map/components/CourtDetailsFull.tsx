@@ -97,42 +97,35 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
         <div className="h-full w-full overflow-y-auto">
           <div className="relative w-full text-sm">
             <div className="relative h-64 w-full sm:h-48">
-              {selectedPlace.photoUrl ? (
-                <Image
-                  layout="fill"
-                  objectFit="contain"
-                  alt="농구장 사진"
-                  src={selectedPlace.photoUrl}
-                />
-              ) : (
-                <Image
-                  layout="fill"
-                  alt="농구장 사진"
-                  src="/images/basketball-court.svg"
-                />
-              )}
+              <Image
+                fill
+                alt="농구장 사진"
+                src={
+                  selectedPlace.photoUrl
+                    ? selectedPlace.photoUrl
+                    : '/images/basketball-court.svg'
+                }
+              />
             </div>
             <div className="mb-5 h-full p-4">
               <div className="flex justify-between">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-xl font-bold">
-                    {selectedPlace.courtName}
-                  </h2>
-                  <span className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
-                    {selectedPlace.indoorOutdoor}
-                  </span>
+                <h2 className="text-xl font-bold">{selectedPlace.courtName}</h2>
+                <div>
+                  <Button
+                    color="primary"
+                    radius="full"
+                    size="md"
+                    startContent={<PiChatsCircle />}
+                    aria-label="시설 채팅 바로가기"
+                    onClick={handleGoChatting}
+                  >
+                    시설 채팅
+                  </Button>
                 </div>
-                <Button
-                  color="primary"
-                  radius="full"
-                  size="md"
-                  startContent={<PiChatsCircle />}
-                  aria-label="시설 채팅 바로가기"
-                  onClick={handleGoChatting}
-                >
-                  시설 채팅
-                </Button>
               </div>
+              <span className="break-keep rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
+                {selectedPlace.indoorOutdoor}
+              </span>
               <div className="my-4 w-full">
                 <Button
                   size="sm"
@@ -170,7 +163,7 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                   <span>
                     개방 시간:{' '}
                     <span className="text-rose-400">
-                      {selectedPlace.openingHours === true ? '24시간' : '제한'}
+                      {selectedPlace.openingHours}
                     </span>
                   </span>
                 </div>
@@ -187,7 +180,7 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                 <div className="flex gap-2 align-middle">
                   <FeeIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-info text-blue-500">
-                    이용료: {selectedPlace.fee === true ? '유료' : '무료'}
+                    이용료: {selectedPlace.fee}
                   </span>
                 </div>
 
@@ -226,20 +219,14 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>
-                    야간 조명:{' '}
-                    {selectedPlace.nightLighting === true ? '있음' : '없음'}
-                  </span>
+                  <span>야간 조명: {selectedPlace.nightLighting}</span>
                 </div>
                 <div className="flex gap-2 align-middle">
                   <FaParking
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>
-                    주차:{' '}
-                    {selectedPlace.parkingAvailable === true ? '가능' : '불가'}
-                  </span>
+                  <span>주차: {selectedPlace.parkingAvailable}</span>
                 </div>
 
                 <div className="flex gap-2 align-middle text-sm">
@@ -248,9 +235,10 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                     className="text-gray-400 dark:text-gray-200"
                   />
                   <ul className="flex gap-2">
-                    {selectedPlace.convenience
-                      ? selectedPlace.convenience.map(
-                          (tag: string, idx: number) => (
+                    {selectedPlace.convenience &&
+                      selectedPlace.convenience.map(
+                        (tag: string, idx: number) =>
+                          tag !== '' ? (
                             <li
                               // eslint-disable-next-line react/no-array-index-key
                               key={idx}
@@ -258,9 +246,10 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                             >
                               <span>{tag}</span>
                             </li>
+                          ) : (
+                            '-'
                           )
-                        )
-                      : '-'}
+                      )}
                   </ul>
                 </div>
                 <div className="flex gap-2 align-middle">

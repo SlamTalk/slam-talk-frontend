@@ -18,8 +18,8 @@ import LocalStorage from '@/utils/localstorage';
 import { useRouter } from 'next/navigation';
 import axiosInstance from '@/app/api/axiosInstance';
 import { IoChevronBackSharp } from 'react-icons/io5';
-import { EyeSlashFilledIcon } from '../../../../components/Input/EyeSlashFilledIcon';
-import { EyeFilledIcon } from '../../../../components/Input/EyeFilledIcon';
+import { EyeSlashFilledIcon } from '@/app/components/input/EyeSlashFilledIcon';
+import { EyeFilledIcon } from '@/app/components/input/EyeFilledIcon';
 
 const ChangePassword = () => {
   const router = useRouter();
