@@ -34,14 +34,17 @@ const Page = () => {
     queryKey: ['communityBoard'],
     queryFn: getCommunityBoard,
   });
+  const [boardList, setBoardList] = useState<IBoard[] | undefined>(
+    communityBoard
+  );
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
   const pages = useMemo(
     () =>
-      communityBoard?.length
-        ? Math.ceil(communityBoard.length / rowsPerPage)
+      boardList && boardList.length > rowsPerPage
+        ? Math.ceil((boardList || []).length / rowsPerPage)
         : 1,
-    [communityBoard?.length]
+    [boardList]
   );
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -124,6 +127,11 @@ const Page = () => {
         <Button
           aria-label="태그 버튼 usedtrade"
           onClick={() => {
+            setBoardList(
+              communityBoard
+                ? communityBoard.filter((i) => i.category === params.tag)
+                : []
+            );
             router.push('/community/USED');
           }}
           size={isMobile ? 'sm' : 'md'}
@@ -135,6 +143,11 @@ const Page = () => {
         </Button>
         <Button
           onClick={() => {
+            setBoardList(
+              communityBoard
+                ? communityBoard.filter((i) => i.category === params.tag)
+                : []
+            );
             router.push('/community/QUESTION');
           }}
           size={isMobile ? 'sm' : 'md'}
@@ -148,6 +161,11 @@ const Page = () => {
         <Button
           aria-label="태그 버튼 rentaltransfer"
           onClick={() => {
+            setBoardList(
+              communityBoard
+                ? communityBoard.filter((i) => i.category === params.tag)
+                : []
+            );
             router.push('/community/TRANSFER');
           }}
           size={isMobile ? 'sm' : 'md'}
@@ -206,10 +224,12 @@ const Page = () => {
                     </TableRow>
                   ))
               : (
-                  communityBoard?.slice(
-                    (page - 1) * rowsPerPage,
-                    (page - 1) * rowsPerPage + rowsPerPage
-                  ) || []
+                  communityBoard
+                    ?.filter((item: IBoard) => item.category === params.tag)
+                    .slice(
+                      (page - 1) * rowsPerPage,
+                      (page - 1) * rowsPerPage + rowsPerPage
+                    ) || []
                 )
                   .filter((item: IBoard) => item.category === params.tag)
                   .filter(
