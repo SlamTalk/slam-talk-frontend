@@ -35,7 +35,7 @@ const Page = () => {
     queryFn: getCommunityBoard,
   });
   const [page, setPage] = useState(1);
-  const rowsPerPage = 8;
+  const rowsPerPage = 10;
   const pages = useMemo(
     () =>
       communityBoard?.length
@@ -205,7 +205,12 @@ const Page = () => {
                       <TableCell>{item.userNickname}</TableCell>
                     </TableRow>
                   ))
-              : (communityBoard || [])
+              : (
+                  communityBoard?.slice(
+                    (page - 1) * rowsPerPage,
+                    (page - 1) * rowsPerPage + rowsPerPage
+                  ) || []
+                )
                   .filter((item: IBoard) => item.category === params.tag)
                   .filter(
                     (item: IBoard) =>
