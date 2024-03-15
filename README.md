@@ -124,13 +124,22 @@
 
 ## 📌 기술 스택
 
-![Next.js](https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![TypeScript](https://img.shields.io/badge/-TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) <br>
-![Zustand](https://img.shields.io/badge/-Zustand-222222?style=for-the-badge&logoColor=white)
-![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white) <br>
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-0F172A?style=for-the-badge&logo=tailwindcss) <br>
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Git](https://img.shields.io/badge/-Git-F05032?style=for-the-badge&logo=git&logoColor=ffffff)
+![NPM](https://img.shields.io/badge/NPM-v10.2.4-%23CB3837.svg?&logo=npm&logoColor=%23CB3837)
+![NodeJS](https://img.shields.io/badge/node.js-v20.11.1-6DA55F?&logo=node.js&logoColor=6DA55F)
+![ESLint](https://img.shields.io/badge/ESLint-v8.56.0-4B3263?&logo=eslint&logoColor=4B3263)
+![Prettier](https://img.shields.io/badge/prettier-v3.2.2-yellow?&logo=prettier&logoColor=yellow)
+
+![Next.js](https://img.shields.io/badge/next.js-v14.0.4-000000?&logo=nextdotjs&logoColor=000000)
+![TypeScript](https://img.shields.io/badge/TypeScript-v5.0-007ACC?&logo=typescript&logoColor=007ACC)
+![Zustand](https://img.shields.io/badge/Zustand-v4.5.0-222222?&logoColor=white)
+![React Query](https://img.shields.io/badge/React%20Query-v5.17.9-FF4154?&logo=react%20query&logoColor=FF4154) <br>
+
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-v3.3.0-0F172A?&logo=tailwindcss)
+![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-v7.50.1-%23EC5990.svg?&logo=reacthookform&logoColor=%23EC5990)
+<br>
+
+![Vercel](https://img.shields.io/badge/Vercel-000000?&logo=vercel&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?&logo=git&logoColor=ffffff)
 
 [⭐️ 기술 스택 선정 이유](https://www.notion.so/ab7a4fcc0b0f4682ad274bfa98a9a7b5)
 
