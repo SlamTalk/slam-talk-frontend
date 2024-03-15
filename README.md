@@ -13,7 +13,7 @@
 
 > 주변에 있는 농구장을 검색할 수 있고, 해당 농구장을 이용하는 사람들과 채팅을 통해 소통할 수 있으며 농구 메이트 찾기, 팀 매칭, 대관 양도, 중고 거래 등의 기능을 이용할 수 있는 플랫폼입니다. <br>
 >
-> 프론트엔드 3명, 백엔드 4명으로 구성되어 작업한 프로젝트. <br>
+> 팀 구성: 프론트엔드 3명, 백엔드 4명<br>
 > 개발 기간: 24/01/11 ~ 24/2/22(프로젝트 발표) 이후 유지보수 중<br>
 >
 > [🌟 기획서 & 기능 명세서](https://www.notion.so/ec211098ba794bff83e6a41a74a3d58c) <br>
@@ -118,19 +118,28 @@
 
 ## 📌 프로젝트 아키텍처 <br>
 
-<img alt="슬램톡 프로젝트 아키텍처" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/f74b5631-bc78-4037-ba00-ebaf2dda3af4" width="90%"/>
+<img alt="슬램톡 프로젝트 아키텍처" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/f74b5631-bc78-4037-ba00-ebaf2dda3af4"/>
 
 > 농구 앱 특성상 모바일 유저가 많을 것으로 예상되어 반응형 웹앱으로 구현했습니다.
 
 ## 📌 기술 스택
 
-![Next.js](https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![TypeScript](https://img.shields.io/badge/-TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) <br>
-![Zustand](https://img.shields.io/badge/-Zustand-222222?style=for-the-badge&logoColor=white)
-![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white) <br>
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-0F172A?style=for-the-badge&logo=tailwindcss) <br>
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Git](https://img.shields.io/badge/-Git-F05032?style=for-the-badge&logo=git&logoColor=ffffff)
+![NPM](https://img.shields.io/badge/NPM-v10.2.4-%23CB3837.svg?&logo=npm&logoColor=%23CB3837)
+![NodeJS](https://img.shields.io/badge/node.js-v20.11.1-6DA55F?&logo=node.js&logoColor=6DA55F)
+![ESLint](https://img.shields.io/badge/ESLint-v8.56.0-4B3263?&logo=eslint&logoColor=4B3263)
+![Prettier](https://img.shields.io/badge/prettier-v3.2.2-yellow?&logo=prettier&logoColor=yellow)
+
+![Next.js](https://img.shields.io/badge/next.js-v14.0.4-000000?&logo=nextdotjs&logoColor=000000)
+![TypeScript](https://img.shields.io/badge/TypeScript-v5.0-007ACC?&logo=typescript&logoColor=007ACC)
+![Zustand](https://img.shields.io/badge/Zustand-v4.5.0-222222?&logoColor=white)
+![React Query](https://img.shields.io/badge/React%20Query-v5.17.9-FF4154?&logo=react%20query&logoColor=FF4154) <br>
+
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-v3.3.0-0F172A?&logo=tailwindcss)
+![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-v7.50.1-%23EC5990.svg?&logo=reacthookform&logoColor=%23EC5990)
+<br>
+
+![Vercel](https://img.shields.io/badge/Vercel-000000?&logo=vercel&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?&logo=git&logoColor=ffffff)
 
 [⭐️ 기술 스택 선정 이유](https://www.notion.so/ab7a4fcc0b0f4682ad274bfa98a9a7b5)
 
@@ -138,15 +147,15 @@
 
 | [🔗 로그인](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%A1%9C%EA%B7%B8%EC%9D%B8) | [🔗 회원가입](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85) | [🔗 유저 관리](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EC%9C%A0%EC%A0%80-%EA%B4%80%EB%A6%AC) | [🔗 메인 페이지](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%A9%94%EC%9D%B8%ED%8E%98%EC%9D%B4%EC%A7%80) |
 | :----------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|              <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/821723ca-e7c9-4cdb-9979-9feb0c44f385'>              |                   <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/821723ca-e7c9-4cdb-9979-9feb0c44f385'>                    |                    <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/8a4be327-0769-43ae-a792-8f5e095d00dd'>                     |                         <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/fde161f7-bd37-4b41-9f7e-f0525d0f7076'>                          |
+|              <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/748a11ec-be82-460a-a725-bfb8e5e6f8f7'>              |                   <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/eb10d1b3-0b93-491a-8aea-116426c93050'>                    |                    <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/8a4be327-0769-43ae-a792-8f5e095d00dd'>                     |                         <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/593afb21-969d-41e8-b711-2f52ebd0eb76'>                          |
 
-| [🔗 농구장 지도](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC%EC%9E%A5-%EC%A7%80%EB%8F%84) | [🔗 농구장 제보](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%ED%8C%80-%EB%A7%A4%EC%B9%AD-%EC%B0%BE%EA%B8%B0) | [🔗 상대 팀 찾기](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%ED%8C%80-%EB%A7%A4%EC%B9%AD-%EC%B0%BE%EA%B8%B0) | [🔗 농구 메이트 찾기](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC-%EB%A9%94%EC%9D%B4%ED%8A%B8-%EC%B0%BE%EA%B8%B0) |
-| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|                          <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/9835bc39-72b6-4f00-bbd1-815f85900d4f'>                          |                          <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/e129bec4-576f-408b-bee4-cbacea7b48d0'>                           |                           <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/8d050c75-7d91-47f2-95ff-80e394c45127'>                           |                                      <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/0fa8e261-8ace-41d9-ac35-12edc6971966'>                                      |
+| [🔗 농구장 지도](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC%EC%9E%A5-%EC%A7%80%EB%8F%84) | [🔗 농구장 제보](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC%EC%9E%A5-%EC%A0%9C%EB%B3%B4%ED%95%98%EA%B8%B0) | [🔗 상대 팀 찾기](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC%EC%9E%A5-%EC%A0%9C%EB%B3%B4%ED%95%98%EA%B8%B0) | [🔗 농구 메이트 찾기](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC-%EB%A9%94%EC%9D%B4%ED%8A%B8-%EC%B0%BE%EA%B8%B0) |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|                          <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/9835bc39-72b6-4f00-bbd1-815f85900d4f'>                          |                                   <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/e129bec4-576f-408b-bee4-cbacea7b48d0'>                                   |                                   <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/27995d26-fb1a-4253-a26b-d5faf4e659dd'>                                    |                                      <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/98e6d8fc-e058-4be8-a46f-225a3d1a50f0'>                                      |
 
 | [🔗 커뮤니티](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0) | [🔗 1:1 채팅](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-11-%EC%B1%84%ED%8C%85) | [🔗 농구장 시설 채팅](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC%EC%9E%A5-%EC%8B%9C%EC%84%A4-%EC%B1%84%ED%8C%85) | [🔗 관리자 페이지](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EA%B4%80%EB%A6%AC%EC%9E%90-%ED%8E%98%EC%9D%B4%EC%A7%80) |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|                   <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/821723ca-e7c9-4cdb-9979-9feb0c44f385'>                    |            <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/821723ca-e7c9-4cdb-9979-9feb0c44f385'>            |                                      <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/8a4be327-0769-43ae-a792-8f5e095d00dd'>                                      |                               <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/2614c5df-e2c2-4d5a-a1b3-5ea0709d3138'>                                |
+|                    <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/76f50d21-a2b1-4727-8b9f-e851d45c6bfa'>                    |            <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/6ebb2284-a133-4343-b6f1-81af871f6e78'>             |                                      <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/35abce74-7444-466e-ab93-1cfe24d6f841'>                                       |                               <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/a3e09059-c57a-47a1-af85-42fc66c5647f'>                                |
 
 ## 기타
 
