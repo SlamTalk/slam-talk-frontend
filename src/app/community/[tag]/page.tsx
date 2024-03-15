@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@nextui-org/button';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { FaPlus } from 'react-icons/fa';
 import { IoSearchSharp } from 'react-icons/io5';
 import {
@@ -16,15 +16,15 @@ import {
   Spinner,
 } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
+import { getCommunityTag } from '@/services/community/getCommunityTag';
 import { getCommunityBoard } from '../../../services/community/getCommunityBoard';
 import { IBoard } from '../../../types/community/board';
 
 import LocalStorage from '../../../utils/localstorage';
 
 const Page = () => {
-  const params = useParams<{ tag: string }>();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
-
+  const [tag, setTag] = useState('');
   const router = useRouter();
   const [inputData, setInputData] = useState('');
   const [isFocus, setIsFocus] = useState(false);
@@ -34,18 +34,21 @@ const Page = () => {
     queryKey: ['communityBoard'],
     queryFn: getCommunityBoard,
   });
-  const [boardList, setBoardList] = useState<IBoard[] | undefined>(
-    communityBoard
-  );
+  const { data: categoriedBoard } = useQuery<IBoard[]>({
+    queryKey: ['categoriedBoard', tag],
+    queryFn: useCallback(() => getCommunityTag(tag), [tag]),
+  });
+
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
   const pages = useMemo(
     () =>
-      boardList && boardList.length > rowsPerPage
-        ? Math.ceil((boardList || []).length / rowsPerPage)
-        : 1,
-    [boardList]
+      communityBoard && tag === ''
+        ? Math.ceil((communityBoard || []).length / rowsPerPage)
+        : Math.ceil((categoriedBoard || []).length / rowsPerPage),
+    [communityBoard, tag, categoriedBoard]
   );
+
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -100,7 +103,7 @@ const Page = () => {
       <div className="sm:ap flex flex-wrap justify-center sm:space-x-2 md:space-x-12 ">
         <Button
           onClick={() => {
-            router.push('/community/all');
+            setTag('');
           }}
           aria-label="태그 버튼 all"
           size={isMobile ? 'sm' : 'md'}
@@ -113,7 +116,7 @@ const Page = () => {
 
         <Button
           onClick={() => {
-            router.push('/community/FREE');
+            setTag('FREE');
           }}
           aria-label="태그 버튼 free"
           size={isMobile ? 'sm' : 'md'}
@@ -127,12 +130,7 @@ const Page = () => {
         <Button
           aria-label="태그 버튼 usedtrade"
           onClick={() => {
-            setBoardList(
-              communityBoard
-                ? communityBoard.filter((i) => i.category === params.tag)
-                : []
-            );
-            router.push('/community/USED');
+            setTag('USED');
           }}
           size={isMobile ? 'sm' : 'md'}
           key="USED"
@@ -143,12 +141,7 @@ const Page = () => {
         </Button>
         <Button
           onClick={() => {
-            setBoardList(
-              communityBoard
-                ? communityBoard.filter((i) => i.category === params.tag)
-                : []
-            );
-            router.push('/community/QUESTION');
+            setTag('QUESTION');
           }}
           size={isMobile ? 'sm' : 'md'}
           aria-label="태그 버튼 question"
@@ -161,12 +154,7 @@ const Page = () => {
         <Button
           aria-label="태그 버튼 rentaltransfer"
           onClick={() => {
-            setBoardList(
-              communityBoard
-                ? communityBoard.filter((i) => i.category === params.tag)
-                : []
-            );
-            router.push('/community/TRANSFER');
+            setTag('TRANSFER');
           }}
           size={isMobile ? 'sm' : 'md'}
           key="TRANSFER"
@@ -201,7 +189,7 @@ const Page = () => {
           </TableHeader>
 
           <TableBody items={communityBoard ?? []} loadingContent={<Spinner />}>
-            {params.tag === 'all'
+            {tag === ''
               ? (
                   communityBoard?.slice(
                     (page - 1) * rowsPerPage,
@@ -224,14 +212,11 @@ const Page = () => {
                     </TableRow>
                   ))
               : (
-                  communityBoard
-                    ?.filter((item: IBoard) => item.category === params.tag)
-                    .slice(
-                      (page - 1) * rowsPerPage,
-                      (page - 1) * rowsPerPage + rowsPerPage
-                    ) || []
+                  categoriedBoard?.slice(
+                    (page - 1) * rowsPerPage,
+                    (page - 1) * rowsPerPage + rowsPerPage
+                  ) || []
                 )
-                  .filter((item: IBoard) => item.category === params.tag)
                   .filter(
                     (item: IBoard) =>
                       searchKey === '' || item.title.includes(searchKey)
