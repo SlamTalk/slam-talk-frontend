@@ -125,16 +125,16 @@
 ## 📌 기술 스택
 
 ![NPM](https://img.shields.io/badge/NPM-v10.2.4-%23CB3837.svg?&logo=npm&logoColor=%23CB3837)
-![NodeJS](https://img.shields.io/badge/node.js-v20.11.1-6DA55F?&logo=node.js&logoColor=6DA55F)
+![NodeJS](https://img.shields.io/badge/Node.js-v20.11.1-6DA55F?&logo=node.js&logoColor=6DA55F)
 ![ESLint](https://img.shields.io/badge/ESLint-v8.56.0-4B3263?&logo=eslint&logoColor=4B3263)
-![Prettier](https://img.shields.io/badge/prettier-v3.2.2-yellow?&logo=prettier&logoColor=yellow)
+![Prettier](https://img.shields.io/badge/Prettier-v3.2.2-yellow?&logo=prettier&logoColor=yellow)
 
-![Next.js](https://img.shields.io/badge/next.js-v14.0.4-000000?&logo=nextdotjs&logoColor=000000)
+![Next.js](https://img.shields.io/badge/Next.js-v14.0.4-000000?&logo=nextdotjs&logoColor=000000)
 ![TypeScript](https://img.shields.io/badge/TypeScript-v5.0-007ACC?&logo=typescript&logoColor=007ACC)
 ![Zustand](https://img.shields.io/badge/Zustand-v4.5.0-222222?&logoColor=white)
 ![React Query](https://img.shields.io/badge/React%20Query-v5.17.9-FF4154?&logo=react%20query&logoColor=FF4154) <br>
 
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-v3.3.0-0F172A?&logo=tailwindcss)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v3.3.0-0F172A?&logo=tailwindcss)
 ![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-v7.50.1-%23EC5990.svg?&logo=reacthookform&logoColor=%23EC5990)
 <br>
 
