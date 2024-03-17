@@ -4,7 +4,7 @@
 <img src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/a6bd1eca-7d78-402c-99a1-66005ecc1727" width="200"/>
 </p>
 
-<p align="middle">농구를 할 장소와 함께 할 친구를 찾을 수 있는 플랫폼</p>
+<p align="middle">농구할 장소와 함께 할 친구를 찾을 수 있는 플랫폼</p>
 
 <p align="middle"><a href="https://www.slam-talk.site"><b>배포 사이트 바로가기 ⛹️‍♀️⛹️‍♂️
 </b></a></p>
