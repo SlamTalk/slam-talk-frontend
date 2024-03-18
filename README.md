@@ -11,23 +11,20 @@
 
 ## 🏀 슬램톡 서비스 소개
 
-> 주변에 있는 농구장을 검색할 수 있고, 해당 농구장을 이용하는 사람들과 채팅을 통해 소통할 수 있으며 농구 메이트 찾기, 팀 매칭, 대관 양도, 중고 거래 등의 기능을 이용할 수 있는 플랫폼입니다. <br>
->
-> 팀 구성: 프론트엔드 3명, 백엔드 4명<br>
 > 개발 기간: 24/01/11 ~ 24/2/22(프로젝트 발표) 이후 유지보수 중<br>
->
-> [🌟 기획서 & 기능 명세서](https://www.notion.so/ec211098ba794bff83e6a41a74a3d58c) <br>
-> 📄 [Swagger](http://43.200.131.233:8080/swagger-ui/index.html) | [API 문서](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=f3bf16cf100e45f69a3e0bb075a342b0&pm=s) | [ERD](https://www.erdcloud.com/d/GyK7pkbTanPFqno4F) | [Figma Wireframe](https://www.figma.com/file/ZD66J8VJY2Novju78Z3F1q/Slam-Talk-Wireframe?type=design&node-id=0%3A1&mode=design&t=eljuNXwNhPyvrol6-1)
-
-## 🤝 협업 방식
-
-[🌟 깃 컨벤션](https://www.notion.so/300caffe87af4fb09eaea24d3cfc31c7) <br>
-
-> 문서: Notion 활용 - [동기와 비동기 팀 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991) | [프론트 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=a0f8672e41df49ce86c681506b707aeb&pm=s) | [백엔드 노션]() <br>
->
-> 프로젝트 관리: [Github Projects](https://github.com/orgs/SlamTalk/projects/1) 활용
->
-> 소통: Slack, KakaoTalk 활용 <br> [프론트엔드 팀 규칙](https://www.notion.so/d2944bc3c6064dd58a8a0d59a2a5ba7a)
+### 🗺 주변의 농구장을 찾을 수 있는 지도 서비스
+> - 가까운 농구장을 쉽게 찾을 수 있습니다.
+> - 지도에 없는 농구장이라면 제보하기를 통해 농구장에 대해 제보할 수 있습니다.
+### 👨‍👩‍👧‍👦 농구장 시설마다 연결된 채팅방을 통해 이용할 수 있는 채팅 서비스
+> - 근처 농구장을 이용하는 사람들과 편하게 약속을 잡을 수 있습니다.
+> - 지금 이용하는 사람이 있는지 채팅방에 물어보세요!
+### 🤼‍♂️ 시합을 할 상대팀 혹은 용병을 구할 수 있는 매칭 서비스
+> - 상대팀 찾기 기능을 이용해서 시합할 상대팀을 찾을 수 있습니다.
+> - 메이트 찾기 기능을 이용해서 조건에 맞는 용병을 구할 수 있습니다.
+### 💬 기능별 용도에 맞는 다양한 채팅 서비스
+> - 농구장 시설 채팅, 팀 채팅, 메이트 채팅, 1:1 채팅 종류별 채팅 리스트를 한 눈에 확인할 수 있습니다.
+### 📋 카테고리별 게시판
+> - 중고거래, 질문, 대관양도, 자유게시판 등 목적에 맞는 게시판을 이용할 수 있습니다.
 
 ## 😄 동기와 비동기 프론트엔드 팀원 소개
 
@@ -114,6 +111,7 @@
 </tbody>
 </table>
 
+> 팀 구성: 프론트엔드 3명, 백엔드 4명<br>
 > [👉 백엔드 팀원 소개 바로가기](https://github.com/SlamTalk/slam-talk-backend)
 
 ## 📌 프로젝트 아키텍처 <br>
@@ -141,7 +139,7 @@
 ![Vercel](https://img.shields.io/badge/Vercel-000000?&logo=vercel&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?&logo=git&logoColor=ffffff)
 
-[⭐️ 기술 스택 선정 이유](https://www.notion.so/ab7a4fcc0b0f4682ad274bfa98a9a7b5)
+> [⭐️ 기술 스택 선정 이유](https://www.notion.so/ab7a4fcc0b0f4682ad274bfa98a9a7b5)
 
 ## 📌 주요 기능 소개
 
@@ -156,6 +154,26 @@
 | [🔗 커뮤니티](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0) | [🔗 1:1 채팅](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-11-%EC%B1%84%ED%8C%85) | [🔗 농구장 시설 채팅](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC%EC%9E%A5-%EC%8B%9C%EC%84%A4-%EC%B1%84%ED%8C%85) | [🔗 관리자 페이지](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EA%B4%80%EB%A6%AC%EC%9E%90-%ED%8E%98%EC%9D%B4%EC%A7%80) |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |                    <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/76f50d21-a2b1-4727-8b9f-e851d45c6bfa'>                    |            <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/6ebb2284-a133-4343-b6f1-81af871f6e78'>             |                                      <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/35abce74-7444-466e-ab93-1cfe24d6f841'>                                       |                               <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/a3e09059-c57a-47a1-af85-42fc66c5647f'>                                |
+
+## 🕹 프로젝트 구동 방식
+> .env.local 파일에서 다음과 같은 환경변수 설정 필요 <br>
+> NEXT_PUBLIC_MAP_KEY <br> NEXT_PUBLIC_BASE_URL <br> NEXT_PUBLIC_BACKEND_URL <br> NEXT_PUBLIC_SOCKET_URL <br>
+- clone 후 ``` npm i ``` 또는 ``` npm install ```
+- 실행 : ``` npm run dev ```
+
+## 🗄 문서
+> [🌟 기획서 & 기능 명세서](https://www.notion.so/ec211098ba794bff83e6a41a74a3d58c) <br>
+> 📄 [Swagger](http://43.200.131.233:8080/swagger-ui/index.html) | [API 문서](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=f3bf16cf100e45f69a3e0bb075a342b0&pm=s) | [ERD](https://www.erdcloud.com/d/GyK7pkbTanPFqno4F) | [Figma Wireframe](https://www.figma.com/file/ZD66J8VJY2Novju78Z3F1q/Slam-Talk-Wireframe?type=design&node-id=0%3A1&mode=design&t=eljuNXwNhPyvrol6-1)
+
+## 🤝 협업 방식
+
+> [🌟 깃 컨벤션](https://www.notion.so/300caffe87af4fb09eaea24d3cfc31c7) <br>
+>
+> 문서: Notion 활용 - [동기와 비동기 팀 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991) | [프론트 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=a0f8672e41df49ce86c681506b707aeb&pm=s) | [백엔드 노션]() <br>
+>
+> 프로젝트 관리: [Github Projects](https://github.com/orgs/SlamTalk/projects/1) 활용
+>
+> 소통: Slack, KakaoTalk 활용 <br> [프론트엔드 팀 규칙](https://www.notion.so/d2944bc3c6064dd58a8a0d59a2a5ba7a)
 
 ## 기타
 
