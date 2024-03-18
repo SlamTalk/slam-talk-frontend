@@ -126,17 +126,22 @@ const Page = () => {
             <div aria-label="contentsCard">
               <div
                 aria-label="유저 아바타"
-                className="mt-1 flex items-center justify-start border-b-1"
+                className="mt-1 flex items-center space-x-[400px] border-b-1"
                 style={{ cursor: 'pointer' }}
               >
-                <Avatar
-                  onClick={() => {
-                    onOpen();
-                  }}
-                  src={writerInfo?.imageUrl}
-                  className="me-2"
-                />
-                <p className="text-lg	">{articleData.userNickname}</p>
+                <div className="flex items-center">
+                  <Avatar
+                    onClick={() => {
+                      onOpen();
+                    }}
+                    src={writerInfo?.imageUrl}
+                    className="me-2"
+                  />
+                  <p className="text-lg">{articleData.userNickname}</p>
+                </div>
+                <p className="text-gray-400">
+                  {articleData.updatedAt.toString().split('T')[0]}
+                </p>
               </div>
 
               <div className="h-[200px] border-b-2">
