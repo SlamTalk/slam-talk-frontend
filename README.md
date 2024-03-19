@@ -111,8 +111,8 @@
 </a>
 </td>
 <td width="100" align="center">
-<a href="https://github.com/SwimmingRive">
-<img src="http://img.shields.io/badge/SwimmingRive-green?style=social&logo=github"/>
+<a href="https://github.com/SwimmingRiver">
+<img src="http://img.shields.io/badge/SwimmingRiver-green?style=social&logo=github"/>
 </a>
 </td>
 </tr>
