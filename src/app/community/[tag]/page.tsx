@@ -30,7 +30,7 @@ const Page = () => {
   const [isFocus, setIsFocus] = useState(false);
 
   const [searchKey, setSearchKey] = useState('');
-  const { data: communityBoard } = useQuery<IBoard[]>({
+  const { data: communityBoard, refetch } = useQuery<IBoard[]>({
     queryKey: ['communityBoard'],
     queryFn: getCommunityBoard,
   });
@@ -38,6 +38,10 @@ const Page = () => {
     queryKey: ['categoriedBoard', tag],
     queryFn: useCallback(() => getCommunityTag(tag), [tag]),
   });
+  useEffect(() => {
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
