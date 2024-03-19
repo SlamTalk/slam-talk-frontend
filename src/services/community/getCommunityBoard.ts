@@ -4,6 +4,6 @@ import { IBoard } from '@/types/community/board';
 export const getCommunityBoard = async (): Promise<IBoard[]> => {
   const res = await axiosInstance.get('/api/community/board');
   const communityBoard = res.data.results.reverse();
-  console.log({ res });
+
   return communityBoard;
 };
