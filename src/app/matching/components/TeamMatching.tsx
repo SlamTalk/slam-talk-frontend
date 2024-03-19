@@ -49,17 +49,40 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   const [selectedNumberOfMembers, setSelectedNumberOfMembers] =
     useState<string>('');
 
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery<
+  const { data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<
     InfiniteTeamPost,
     Error
   >({
     queryKey: ['team', 'infinite'],
-    queryFn: ({ pageParam }: any) => infiniteFetchTeamData(pageParam),
+    queryFn: ({ pageParam }: any) =>
+      infiniteFetchTeamData(
+        pageParam,
+        selectedLevel,
+        selectedCity,
+        selectedNumberOfMembers,
+        keywordProp
+      ),
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage?.nextCursor,
   });
 
-  console.log({ data });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await refetch();
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [
+    selectedCity,
+    selectedLevel,
+    selectedNumberOfMembers,
+    keywordProp,
+    refetch,
+  ]);
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -76,11 +99,6 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
       router.push(`/login`);
     }
   };
-
-  console.log({ keywordProp });
-  console.log({ selectedCity });
-  console.log({ selectedLevel });
-  console.log({ selectedNumberOfMembers });
 
   return (
     <div className="relative mx-auto max-w-[600px] pb-[80px]">

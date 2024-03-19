@@ -10,10 +10,16 @@ export const fetchTeamData = async (): Promise<TeamPost[]> => {
 };
 
 export const infiniteFetchTeamData = async (
-  pageParams: string
+  pageParams: string,
+  selectedLevel: string,
+  selectedCity: string,
+  selectedNumberOfMembers: string,
+  keywordProp: string | null
 ): Promise<InfiniteTeamPost> => {
   const response = await axiosInstance
-    .get(`/api/match/list?cursorTime=${pageParams || ''}`)
+    .get(
+      `/api/match/list?cursorTime=${pageParams || ''}&skillLevel=${selectedLevel}&location=${selectedCity}&nov=${selectedNumberOfMembers}&searchWord=${keywordProp}`
+    )
     .then((res) => res.data.results);
 
   return response;
