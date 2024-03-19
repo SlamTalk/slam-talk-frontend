@@ -4,21 +4,37 @@
 <img src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/a6bd1eca-7d78-402c-99a1-66005ecc1727" width="200"/>
 </p>
 
-<p align="middle">농구를 할 장소와 함께 할 친구를 찾을 수 있는 플랫폼</p>
+<p align="middle">농구할 장소와 함께 할 친구를 찾을 수 있는 플랫폼</p>
 
-<p align="middle"><a href="https://www.slam-talk.site">사이트 바로가기 ⛹️‍♀️⛹️‍♂️</a></p>
+<p align="middle"><a href="https://www.slam-talk.site"><b>배포 사이트 바로가기 ⛹️‍♀️⛹️‍♂️
+</b></a></p>
 
-## 프로젝트 개요
+## 🏀 슬램톡 서비스 소개
 
-> 개발 기간: 24/01/11 ~ 24/2/22(프로젝트 발표, 구름 수료) 이후 유지보수 중<br>
->
-> [동기와 비동기 팀 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991) | [프론트 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=a0f8672e41df49ce86c681506b707aeb&pm=s) | [백엔드 노션]() <br> [Swagger](http://43.200.131.233:8080/swagger-ui/index.html) | [API 문서](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=f3bf16cf100e45f69a3e0bb075a342b0&pm=s) | [ERD](https://www.erdcloud.com/d/GyK7pkbTanPFqno4F)
->
-> [기획서 & 기능 명세서](https://www.notion.so/ec211098ba794bff83e6a41a74a3d58c)
+### 🗺 주변의 농구장을 찾을 수 있는 지도 서비스
 
-## 동기와 비동기 프론트엔드 팀원 소개
+> - 가까운 농구장을 쉽게 찾을 수 있습니다.
+> - 지도에 없는 농구장이라면 제보하기를 통해 농구장에 대해 제보할 수 있습니다.
 
-> [백엔드 팀원 소개 바로가기](https://github.com/SlamTalk/slam-talk-backend)
+### 👨‍👩‍👧‍👦 농구장 시설마다 연결된 채팅방을 통해 이용할 수 있는 채팅 서비스
+
+> - 근처 농구장을 이용하는 사람들과 편하게 약속을 잡을 수 있습니다.
+> - 지금 이용하는 사람이 있는지 채팅방에 물어보세요!
+
+### 🤼‍♂️ 시합을 할 상대팀 혹은 용병을 구할 수 있는 매칭 서비스
+
+> - 상대팀 찾기 기능을 이용해서 시합할 상대팀을 찾을 수 있습니다.
+> - 메이트 찾기 기능을 이용해서 조건에 맞는 용병을 구할 수 있습니다.
+
+### 💬 기능별 용도에 맞는 다양한 채팅 서비스
+
+> - 농구장 시설 채팅, 팀 채팅, 메이트 채팅, 1:1 채팅 종류별 채팅 리스트를 한 눈에 확인할 수 있습니다.
+
+### 📋 카테고리별 게시판
+
+> - 중고거래, 질문, 대관양도, 자유게시판 등 목적에 맞는 게시판을 이용할 수 있습니다.
+
+## 😄 동기와 비동기 프론트엔드 팀원 소개
 
 <table width="500" align="center">
 <tbody>
@@ -65,8 +81,8 @@
 프론트엔드 팀장
 <li>농구장 지도, 제보 기능</li>
 <li>회원가입/로그인 관련</li>
-<li>유저 관리(마이페이지 관련 - 내 매칭/메이트 목록, 테마 변경, 프로필)</li>
-<li>개발 초기 환경구축(Next.js, GitHub Actions, husky)</li>
+<li>마이페이지, 유저 관리(프로필 표시, 유저 정보 수정)</li>
+<li>개발 환경설정(Next.js, GitHub Actions, Husky)</li>
 </ul>
 </td>
 
@@ -95,310 +111,95 @@
 </a>
 </td>
 <td width="100" align="center">
-<a href="https://github.com/SwimmingRive">
-<img src="http://img.shields.io/badge/SwimmingRive-green?style=social&logo=github"/>
+<a href="https://github.com/SwimmingRiver">
+<img src="http://img.shields.io/badge/SwimmingRiver-green?style=social&logo=github"/>
 </a>
 </td>
 </tr>
 </tbody>
 </table>
 
-<br>
+> 팀 구성: 프론트엔드 3명, 백엔드 4명<br> [👉 백엔드 팀원 소개 바로가기](https://github.com/SlamTalk/slam-talk-backend)
 
-## 프로젝트 소개
+## 📌 프로젝트 아키텍처 <br>
 
-> 프론트엔드 3명, 백엔드 4명으로 구성되어 작업한 프로젝트입니다. <br>
->
-> 주변에 있는 농구장을 검색할 수 있고, 해당 농구장을 이용하는 사람들과 채팅을 통해 소통할 수 있으며 농구 메이트 찾기, 팀 매칭, 대관 양도, 중고 거래 등의 기능을 이용할 수 있는 플랫폼입니다. <br>
-
-### 주요 기능
-
-- 집 근처 농구장 표시, 검색 기능 : 유저의 현재 위치를 중심으로 주변의 농구장을 표시하는 기능(자세한 농구장 특화 정보 제공), 검색으로 농구장 찾기 / 지역 이동 가능.
-- 농구장 제보 기능 : 유저가 직접 알려지지 않은 농구장을 제보하는 기능.
-- 농구장별 채팅 기능 : 해당 농구장을 이용하는 사람끼리 채팅할 수 있는 기능.
-- 농구 메이트 찾기 기능 : 원하는 시간과 원하는 지역 및 실력에 맞는 팀원을 구할 수 있는 기능.
-- 상대팀 매칭 기능 : 원하는 지역과 원하는 시간 및 인원수에 맞춰 상대 팀을 매칭 해주는 기능.
-- 게시판 : 회원 모집, 대관 양도, 중고 거래 등을 할 수 있는 게시판.
-
-### 프로젝트 아키텍처 <br>
-
-<img alt="슬램톡 프로젝트 아키텍처" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/f74b5631-bc78-4037-ba00-ebaf2dda3af4" width="90%"/>
+<img alt="슬램톡 프로젝트 아키텍처" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/f74b5631-bc78-4037-ba00-ebaf2dda3af4"/>
 
 > 농구 앱 특성상 모바일 유저가 많을 것으로 예상되어 반응형 웹앱으로 구현했습니다.
 
-### 기술 스택
-
-![Next.js](https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![TypeScript](https://img.shields.io/badge/-TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) <br>
-![Zustand](https://img.shields.io/badge/-Zustand-222222?style=for-the-badge&logoColor=white)
-![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white) <br/>
-![TailwindCSS](https://img.shields.io/badge/tailwindcss-0F172A?style=for-the-badge&logo=tailwindcss)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Git](https://img.shields.io/badge/-Git-F05032?style=for-the-badge&logo=git&logoColor=ffffff)
-
-[기술 스택 선정 이유](https://www.notion.so/ab7a4fcc0b0f4682ad274bfa98a9a7b5)
-
-## 주요 기능
-
-### 메인 페이지
-<img alt="메인페이지" src="https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/223cd8ea-469b-4fb2-8b67-8d97fd35abc7" width="400px">
-
-- 헤더와 푸터
-
-  헤더에는 제품 로고와 간략한 유저 정보를 표시했습니다.
-  로고 클릭 시 홈 화면으로, 유저 프로필 클릭시 마이페이지로 이동합니다.
-
-- 임박한 매칭 표시
-
-  만약 성사된 매칭(상대팀 찾기/메이트 찾기)이 있으면, 성사된 매칭 중 가장 날짜가 임박한 매칭을 최상단에 알려 줍니다.
-
-- 농구장 찾기 기능 홍보
-  
-  유저들이 가장 쉽게 이용할 수 있고, 가장 많이 이용할 것으로 기대되는 농구장 지도 페이지를 홍보하는 필드입니다.
-
-- 매칭(상대팀 찾기/메이트 찾기) 최신글 표시
-
-  매칭 최신 모집글 3개씩 표시해줍니다.
-
-### 회원가입
-
-<img alt="회원가입" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/9192f835-7ffd-4f25-aeab-e43faec4f997" width="400px">
-
-- 자체 회원가입
-
-  회원가입시 유저가 번거롭지 않게 최대한 간단하게 구성하였고, 가짜 계정 방지와 비밀번호 재설정에서 문제가 없기 위해 이메일 인증(SMTP 이용)을 도입했습니다. <br>
-
-  백엔드에서 보내는 닉네임/이메일 중복 에러 메세지를 모달을 통해 표시하고, 프론트단에서 닉네임/이메일/비밀번호 검증을 진행, 에러 메세지를 Next UI를 이용해 표시했습니다.
-
-- funnel 패턴을 이용한 유저 정보 수집
-
-  회원가입시 자동으로 로그인이 완료되고 '/user-info' 페이지로 이동해 농구 포지션, 농구 실력 2가지 유저 정보를 수집합니다. funnel 패턴을 이용해 2가지 단계를 모두 완료시 api 요청을 보내 유저 정보 수집을 완료합니다. 빠른 이용을 원해 유저 정보 수집 페이지에서 벗어나도 추후 프로필에서 해당 정보 설정이 가능하기 때문에 문제되지 않습니다.
-
-- 소셜 회원가입
-
-  편하고 빠른 앱 이용을 위해 카카오, 네이버, 구글 3가지 소셜 로그인을 도입했습니다. <br>
-  소셜로 첫 로그인시 백엔드에서 DB 조회로 판별해 처음 가입하는 유저인 경우에는 '?firstLogin='true'' params을 넘겨줍니다. '/social-login' 페이지에서 이를 통해 회원가입을 판단하고, 회원가입시 유저 정보 수집 페이지로 이동시키고 로그인시 메인 페이지로 이동시킵니다.
-
-### 로그인, 유저 관리
-
-<img alt="로그인-유저-관리" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/16eeecd8-1ac2-4537-bfce-8f8786abfd34" width="400px">
-
-- 로그인 구현
-
-  보안을 위해 accessToken은 메모리에 저장하고, refreshToken은 HTTP Only 쿠키에 저장해 관리하고 있습니다.
-
-- 로그인 접근 제한
-
-  로그인시 로그인 상태 정보(isLoggedIn)를 localStorage에 저장해 프론트단에서 isLoggedIn값과 api 응답 데이터 존재로 로그인 여부를 판별합니다. 이를 이용해 프론트단에서 로그인 여부에 따른 페이지 접근 제한을 걸어줬습니다. 현재 서비스에서는 조회는 비로그인시에도 가능하지만 생성, 삭제, 수정시 로그인이 필요하며 채팅 서비스는 로그인시 가능합니다.
-
-- 유저 관리
-
-  > 마이페이지에서 출석하기, 화면 모드(다크/라이트) 설정, 프로필 보기/수정하기, 문의하기, 로그아웃, 탈퇴가 가능합니다.
-
-  활동 내역: 출석하기, 활동 내역 바탕으로 유저마다 점수, level을 부여하는 방식으로 유저 참여율을 높이고자 했습니다. 이후 게이미피케이션(Gamification) 요소를 더 발전시킬 예정입니다.
-
-  화면 모드 설정: 다크/라이트 테마 정보를 localStorage에 저장해 재접속시 설정한 화면 테마로 접속하도록 구현했습니다.
-
-  프로필 수정: 사진, 닉네임, 자기소개, 포지션, 농구 실력 수정이 가능하며 react-hook-form을 이용해 유효성 검사를 하고 에러 메세지 표시를 했습니다. 사진 데이터 전송을 위해 FormData를 이용했습니다.
-
-  상대방 프로필 표시: 상대방 유저 아바타를 누르면 어떤 페이지에서든 상대방 프로필이 표시될 수 있기 때문에 Next UI Modal을 이용해 구현했습니다. 아바타 클릭시 해당 유저의 id를 props로 넘겨주고 이를 받아 해당 유저의 id로 유저 정보를 조회합니다. 상대방 프로필 정보는 마이 프로필에서 민감 정보인 이메일, 가입 경로를 제외한 정보와 동일합니다.
-
-### 농구장 지도
-
-https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/d7c19686-9c29-43c9-bc58-2aeff9999256.mp4
-
-> 처음에 [kakao maps web api](https://apis.map.kakao.com/web/)를 이용했지만 점점 기능이 많아지면서 react 환경에 적합하고 코드가 좀 더 간편, 문서화가 잘되어 있는 [react-kakao-maps-sdk](https://github.com/JaeSeoKim/react-kakao-maps-sdk)로 리팩토링 완료하였습니다.
-
-- 농구장 마커 표시
-
-  커스텀 오버레이를 이용해 농구공을 이용한 custom marker를 적용했고 상단에 농구장명을 표시해줬습니다. <br>
-
-  처음 지도 접속시 빠른 데이터 표시를 위해 모든 농구장에 대한 간단 정보(위치 정보, 농구장명)만 불러와 마커를 표시해주고, 농구장 마커 클릭시 해당 농구장 id로 농구장 상세 정보 보기 api 요청을 보내 상세 정보를 표시합니다.
-
-- 농구장 자세히 보기
-
-  농구장 마커를 클릭시 해당 농구장에 대한 자세한 정보가 표시됩니다. <br>
-  길찾기를 누르면 카카오맵으로 연결되며 해당 농구장으로 도착이 설정되어서 바로 길찾기가 가능합니다. <br>
-  크게 보기를 누르면 해당 농구장에 대한 url이 생겨 해당 농구장 정보를 공유할 수 있습니다. <br>
-
-- 유저 현재 위치 기반
-
-  지도 접속시 현재 유저 위치 정보가 있다면 그 위치로 처음 위치를 설정합니다. 유저가 위치 정보 수집을 거부하면 서울로 기본 설정됩니다. <br>
-  '농구장 제보' 위에 location Icon 버튼을 클릭하면 현재 위치로 이동합니다. <br>
-  앱의 다른 부분에서도 추후 위치 기반을 도입할 예정으로 Geolocation API를 이용한 유저 위치 정보를 전역 상태 정보로 저장하고, 위치 정보 수집 역할을 하는 함수를 유틸 함수로 분리했습니다. <br>
-
-- 검색
-
-  검색을 하면 현재 DB에 있는 농구장 정보 안에서 먼저 검색을 하고 검색 결과가 있다면 이에 따라 이동합니다. DB 안에 없는 정보를 검색한다면 kakao maps api를 이용해 검색이 되고 그 검색 결과에 따라 이동합니다.
-
-- 지도 조작
-
-  마우스, 모바일(터치)를 통해 지도 이동이 가능하고, 마우스 Wheel Event, +/- Control로 확대, 축소가 가능합니다.
-
-- 지도 클러스트
-
-  지도 축소로 너무 많은 농구장 마커가 보이면 일정 map level에서 마커 클러스트를 적용합니다.
-
-### 농구장 제보하기
-
-https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/bf7565d2-4abf-4b77-8939-64bfce7608e1.mp4
-
-> 지도에 표시되지 않는 농구장을 유저가 직접 제보할 수 있는 기능입니다. 제보하기 버튼을 누르면 지도 클릭시 마커 생성 이벤트가 발생하고 해당 마커를 클릭하면 위도, 경도, 주소 정보가 자동으로 채워져 해당 위치에 제보가 가능합니다. <br>
-
-- 제보 UI
-
-  제보시 주소, 농구장명만 필수값이고 나머지 정보들은 자유롭게 채울 수 있습니다. 해당 데이터에 맞는 Input, Radio, Select, Textarea 요소들을 이용해 제보 컴포넌트를 구성하였고, react-hook-form을 이용해 유효성 검사 진행, 에러 메세지 표시를 했습니다.
-
-  > ✏️ react-hook-form 사용 이유 <br>
-
-        - 많은 useState를 사용하는 것보다 간단하게 코드 표현 가능
-        - 실시간 유효성 검사 및 동기화 가능
-        - 리렌더링 최소화
-        - 농구장 제보 컴포넌트, 프로필 수정에서는 필수값이 많지 않아 인풋 전체가 danger color로 표시되는 Next UI 에러 메세지보다 react-hook-form 에러 메세지를 이용해 표시했습니다.
-        (에러 메세지는 항상 고정된 div 높이 안에 표시해 에러 메세지 존재 여부에 따라 UI가 변동되지 않도록 고정했습니다.)
-
-- 제보 완료 후 제보 상태 관리
-
-  제보 완료 후 해당 위치에 제보 검토 중인 마커가 표시되고 클릭시 자신이 제보한 정보를 확인할 수 있습니다. <br>
-
-  관리자 검토 후 해당 농구장이 수락된다면 해당 유저는 30점의 점수를 받고, 제보 검토 중 마커는 실제 농구장 마커로 표시됩니다.
-
-### 시합 상대팀 찾기
-https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/bdf6fc4e-6483-4d99-a624-085a9b0737cc
-- 상대팀 찾기 새 모집글 작성
-
-  제목, 팀명, 장소, 날짜와 시간, 규모, 원하는 실력대를 필수 입력 필드로 하고, 필드 값을 넣어 '모집 완료' 버튼을 누르면 새 모집글이 생성됩니다.
-
-  > 주소 선택시 카카오 지도 API를 활용하여 검색한 곳 또는 마우스 클릭으로 표시한 지점에 마커를 찍어주고, 확인 버튼을 눌렀을 때 해당 마커가 있는 곳의 주소가 주소 입력필드로 넘어가게 됩니다.
-
-
-https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/b2f649e5-8fd5-44aa-add4-a8e813097ba3
-- 상대팀 찾기 모집글 지원하기
-  
-  유저가 해당 모집글의 작성자와 다른 사람일 경우 모집글 상세페이지 하단에 '지원하기' 버튼이 표시되고, 팀명과 실력 필드 값을 넣어 '지원하기' 버튼을 누르면 해당 모집글의 지원자로 등록됩니다.
-
-  본인이 지원한 리스트는 '취소' 버튼을 통해 취소할 수 있습니다.
-
-https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/e941e069-cd2f-4a8c-a8f1-92c02f6d3f0a
-- 상대팀 찾기 모집글 지원자 수락 및 모집완료
-  
-  유저가 해당 모집글의 작성자와 동일한 경우 모집글 상세페이지 하단에는 '모집 완료' 버튼과 '수정' 버튼이 표시되고, 대기중인 지원자 리스트에는 '수락'과 '거절' 버튼이 표시됩니다.
-
-  '수락' 버튼을 눌러 지원자의 신청을 수락할 수 있고, '모집 완료' 버튼을 통해 모집중인 글을 마감할 수 있습니다.
-
-  '모집 완료' 버튼을 누르면 해당 모집글은 모집 완료 상태로 변경되고, ACCEPTED된 지원자와 팀채팅(MM)이 생성됩니다.
-
-
-### 농구 메이트 찾기
-
-https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/7314571a-0cc2-4e7f-99b8-a4803a373263
-- 메이트 찾기 새 모집글 작성
-
-  제목, 장소, 날짜와 시간, 포지션 별 인원 수, 원하는 실력대를 필수 입력 필드로 하고, 필드 값을 넣어 '모집 완료' 버튼을 누르면 새 모집글이 생성됩니다.
-
-  > 포지션 별 인원 수의 경우 각각의 모집 인원을 다 더한 값이 0인 경우에 예외처리를 해주어서 어떤 포지션이든 1명 이상 모집해야 글을 작성할 수 있도록 했습니다.
-
-  > 주소 선택시 카카오 지도 API를 활용하여 검색한 곳 또는 마우스 클릭으로 표시한 지점에 마커를 찍어주고, 확인 버튼을 눌렀을 때 해당 마커가 있는 곳의 주소가 주소 입력필드로 넘어가게 됩니다.
-
-
-https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/a8a4738a-7665-4c44-9793-aa5db87df575
-
-- 메이트 찾기 모집글 지원하기
-  
-  유저가 해당 모집글의 작성자와 다른 사람일 경우 모집글 상세페이지 하단에 '지원하기' 버튼이 표시되고, 포지션과 실력 필드 값을 넣어 '지원하기' 버튼을 누르면 해당 모집글의 지원자로 등록됩니다.
-
-  본인이 지원한 리스트는 '취소' 버튼을 통해 취소할 수 있습니다.
-
-
-https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/381169d3-c77c-40b3-be49-72223c0ef304
-
-- 메이트 찾기 모집글 지원자 수락 및 모집완료
-  
-  유저가 해당 모집글의 작성자와 동일한 경우 모집글 상세페이지 하단에는 '모집 완료' 버튼과 '수정' 버튼이 표시되고, 대기중인 지원자 리스트에는 '수락'과 '거절' 버튼이 표시됩니다.
-
-  '수락' 버튼을 눌러 지원자의 신청을 수락할 수 있고, '모집 완료' 버튼을 통해 모집중인 글을 마감할 수 있습니다.
-
-  '모집 완료' 버튼을 누르면 해당 모집글은 모집 완료 상태로 변경되고, ACCEPTED된 지원자들과 메이트 채팅(TM)이 생성됩니다.
-
-### 커뮤니티
-
-인증된 유저만 글 작성 댓글 작성이 가능합니다.(비회원은 게시글 열람만 가능)
-
-커뮤니티는 자유/질문/중고거래/대관양도 4개의 주제로 분류하고, 전체 내용을 분류없이 확인할 수 있습니다.
-
-현재 보이는 게시글 목록에서 검색하여 원하는 제목을 가진 글을 찾을 수 있습니다.
-
-<img src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/5cc5c033-3363-4a47-97f4-64758b2f3660' width="400px"/>
-
-글 작성시에 기존에 정해진 4가지의 주제중에 선택하여 작성이 가능합니다.
-
-<img src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/fafc74ea-fb8f-4e73-83f6-674fc09cf9aa' width="400px" />
-
-작성된 게시글은 작성자만 수정,삭제가 가능합니다.
-
-<img src="https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/b92ea2de-bb0f-43cd-96d1-b24e2db3a0b0" width="400px"/>
-
-게시글 또는 댓글 작성자의 프로필 이미지를 클릭하여 유저 정보확인과 채팅이 가능하게 하여 유저에게 다른 서비스도 사용을 유도합니다.
-
-### 채팅
-
-인증된 유저 끼리 실시간으로 채팅을 이용할 수 있습니다.
-
-채팅방 타입은 1:1 채팅방 / 농구장 채팅방 / 같이하기 채팅방 / 팀 매칭 채팅방 이렇게 4가지 종류가 있으며,
-
-각 타입에 따라 채팅방 이름이 결정됩니다.
-
-채팅방 첫 입장시 입장안내 메시지,퇴장시에는 퇴장안내 메시지를 채팅방에 보여줍니다.
-
-유저가 좌측 상단에있는 나가기 버튼을 누르면 다른 페이지로 이동을 합니다.(완전한 퇴장 x)
-
-→ 유저가 채팅방에서 마지막으로 본 메시지를 기록하고, 재입장시에는 그 이후의 메시지만 보여줍니다.
-
-또한 채팅방에서 과거 메세지를 조회하고 싶다면 more 버튼을 눌러서 과거 메세지 내역을 조회할 수 있습니다.
-
-- stompJs를 사용한 이유:
-  백엔드 파트에서 소켓 통신을 위해 spring-stomp 통신 환경을 구축하였기 때문에, 그에 호환등의 문제나 동일한 프로토콜을 가져 소통이 원활하고, 기존의 커뮤니티 형성이 잘되어 참고 자료가 많은 점을 장점으로 판단하여 stompJs를 사용하였습니다.
-
-<div style="display: flex; gap: 10px;">
-<div>
-    <img alt="1:1-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/2c8fa872-70b4-48c8-bc64-90853044f195" width="400px" height="560px">
-    <p>농구장 시설 단체 채팅</p>
-<p>1:1 채팅방은 채팅방을 생성할 유저 프로필 카드에서 또는 팀 매칭<br/> 완료후 팀 대표자 간 채팅방 생성이 가능합니다.</p>
-</div>
-  <div>
-    <img alt="시설-채팅" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/85c88777-2e27-407d-86aa-63c8f3cb08bf" width="400px" height="560px">
-    <p>1:1 채팅</p>
-  <p>단체 채팅방은 농구장 지도, 메이트 매칭에서 생성 가능합니다.</p>
-    </div>
-</div>
-
+## 📌 기술 스택
+
+![NPM](https://img.shields.io/badge/NPM-v10.2.4-%23CB3837.svg?&logo=npm&logoColor=%23CB3837)
+![NodeJS](https://img.shields.io/badge/Node.js-v20.11.1-6DA55F?&logo=node.js&logoColor=6DA55F)
+![ESLint](https://img.shields.io/badge/ESLint-v8.56.0-4B3263?&logo=eslint&logoColor=4B3263)
+![Prettier](https://img.shields.io/badge/Prettier-v3.2.2-yellow?&logo=prettier&logoColor=yellow)
+
+![Next.js](https://img.shields.io/badge/Next.js-v14.0.4-000000?&logo=nextdotjs&logoColor=000000)
+![TypeScript](https://img.shields.io/badge/TypeScript-v5.0-007ACC?&logo=typescript&logoColor=007ACC)
+![Zustand](https://img.shields.io/badge/Zustand-v4.5.0-222222?&logoColor=white)
+![React Query](https://img.shields.io/badge/React%20Query-v5.17.9-FF4154?&logo=react%20query&logoColor=FF4154) <br>
+
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v3.3.0-0F172A?&logo=tailwindcss)
+![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-v7.50.1-%23EC5990.svg?&logo=reacthookform&logoColor=%23EC5990)
 <br>
-채팅 리스트에서는 유저가 참여한 채팅방 목록을 조회할 수 있습니다.
 
-채팅방 최신 메세지, 채팅방 제목, 채팅방 타입(DM/BM/MM/TM) 을 함께 확인할 수 있습니다.
+![Vercel](https://img.shields.io/badge/Vercel-000000?&logo=vercel&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?&logo=git&logoColor=ffffff)
 
-<img alt="채팅-리스트" src="https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/936b88a5-67a5-4646-9745-97425f3cdbfe" width="400px">
+> [⭐️ 기술 스택 선정 이유](https://www.notion.so/ab7a4fcc0b0f4682ad274bfa98a9a7b5)
 
-채팅 방 타입에 따라서 정해진 이름과 dm일 경우는 유저의 프로필이 채팅룸의 이미지가 됩니다.
+## 📌 주요 기능 소개
 
-타입별로 구분하여 명시해줍니다.
+| [🔗 로그인](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%A1%9C%EA%B7%B8%EC%9D%B8) | [🔗 회원가입](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85) | [🔗 유저 관리](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EC%9C%A0%EC%A0%80-%EA%B4%80%EB%A6%AC) | [🔗 메인 페이지](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%A9%94%EC%9D%B8%ED%8E%98%EC%9D%B4%EC%A7%80) |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|              <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/748a11ec-be82-460a-a725-bfb8e5e6f8f7'>              |                   <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/eb10d1b3-0b93-491a-8aea-116426c93050'>                    |                    <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/8a4be327-0769-43ae-a792-8f5e095d00dd'>                     |                         <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/593afb21-969d-41e8-b711-2f52ebd0eb76'>                          |
 
-### 관리자 페이지
+| [🔗 농구장 지도](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC%EC%9E%A5-%EC%A7%80%EB%8F%84) | [🔗 농구장 제보](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC%EC%9E%A5-%EC%A0%9C%EB%B3%B4%ED%95%98%EA%B8%B0) | [🔗 상대 팀 찾기](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC%EC%9E%A5-%EC%A0%9C%EB%B3%B4%ED%95%98%EA%B8%B0) | [🔗 농구 메이트 찾기](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC-%EB%A9%94%EC%9D%B4%ED%8A%B8-%EC%B0%BE%EA%B8%B0) |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|                          <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/9835bc39-72b6-4f00-bbd1-815f85900d4f'>                          |                                   <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/e129bec4-576f-408b-bee4-cbacea7b48d0'>                                   |                                   <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/27995d26-fb1a-4253-a26b-d5faf4e659dd'>                                    |                                      <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/98e6d8fc-e058-4be8-a46f-225a3d1a50f0'>                                      |
 
-## Problem Solving
+| [🔗 커뮤니티](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0) | [🔗 1:1 채팅](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-11-%EC%B1%84%ED%8C%85) | [🔗 농구장 시설 채팅](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC%EC%9E%A5-%EC%8B%9C%EC%84%A4-%EC%B1%84%ED%8C%85) | [🔗 관리자 페이지](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EA%B4%80%EB%A6%AC%EC%9E%90-%ED%8E%98%EC%9D%B4%EC%A7%80) |
+| :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|                    <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/76f50d21-a2b1-4727-8b9f-e851d45c6bfa'>                    |            <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/6ebb2284-a133-4343-b6f1-81af871f6e78'>             |                                      <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/35abce74-7444-466e-ab93-1cfe24d6f841'>                                       |                               <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/a3e09059-c57a-47a1-af85-42fc66c5647f'>                                |
 
-> 문제 발생과 해결 방법
+## 🕹 프로젝트 구동 방식
 
-## 협업 방식
+> 우선 Repository clone 후, slam-talk-frontend 폴더에 들어간다. <br>
+> 폴더 바로 밑에 .env 파일을 생성하고 다음과 같은 환경변수를 설정한다. <br>
 
-[프론트엔드 팀 규칙](https://www.notion.so/d2944bc3c6064dd58a8a0d59a2a5ba7a) <br>
+```jsx
+NEXT_PUBLIC_MAP_KEY=[카카오 개발자 JavaScript 키]
+NEXT_PUBLIC_BASE_URL=[프론트 서버 주소 (ex. https://)]
+NEXT_PUBLIC_BACKEND_URL=[백엑드 서버 주소 (ex. https://)]
+NEXT_PUBLIC_SOCKET_URL=[소켓 주소 (ex. wss://)]
+```
 
-> 문서: Notion 활용 <br>
-> 소통: Slack, KakaoTalk 활용
+- 실행
 
-[깃 컨벤션](https://www.notion.so/300caffe87af4fb09eaea24d3cfc31c7) <br>
+```jsx
+cd slam-talk-frontend
+npm install
+npm run dev
+```
+
+## 🗄 문서
+
+> [🌟 기획서 & 기능 명세서](https://www.notion.so/ec211098ba794bff83e6a41a74a3d58c) | [Figma Wireframe](https://www.figma.com/file/ZD66J8VJY2Novju78Z3F1q/Slam-Talk-Wireframe?type=design&node-id=0%3A1&mode=design&t=eljuNXwNhPyvrol6-1)
+>
+> 🌟 [Swagger](http://43.200.131.233:8080/swagger-ui/index.html) | [API 문서](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=f3bf16cf100e45f69a3e0bb075a342b0&pm=s) | [ERD](https://www.erdcloud.com/d/GyK7pkbTanPFqno4F)
+>
+> 📑 [동기와 비동기 팀 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991) | [프론트 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=a0f8672e41df49ce86c681506b707aeb&pm=s) | [백엔드 노션]() <br>
+
+## 🤝 협업 방식
+
+> 🌟 [깃 컨벤션](https://www.notion.so/300caffe87af4fb09eaea24d3cfc31c7) <br>
+>
+> 프로젝트 관리: [Github Projects](https://github.com/orgs/SlamTalk/projects/1) 활용
+>
+> 소통: Slack, KakaoTalk 활용 <br> [프론트엔드 팀 규칙](https://www.notion.so/d2944bc3c6064dd58a8a0d59a2a5ba7a)
+>
+> 개발 기간: 24/01/11 ~ 24/2/22(프로젝트 발표) 이후 유지보수 중<br>
 
 ## 기타
 
 - 구름 풀스택 2회차 최종 프로젝트 인기상 수상 - [발표(24/02/22) PPT](https://github.com/SlamTalk/slam-talk-frontend/files/14399752/slam_talk.pdf)
-- [피그마 와이어프레임](https://www.figma.com/file/AAC8YMtbWw32jkT0XNRS9q/%EB%86%8D%EA%B5%AC-%EC%95%B1?type=design&node-id=0%3A1&mode=design&t=fOLsFQ3RiSAo5Rml-1)

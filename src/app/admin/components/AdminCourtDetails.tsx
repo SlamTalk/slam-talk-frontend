@@ -153,21 +153,13 @@ const AdminCourtDetails: React.FC<AdminCourtDetailsProps> = ({
             </Button>
           </div>
           <div className="relative h-60 w-full">
-            {data.photoUrl ? (
-              <Image
-                layout="fill"
-                alt="농구장 사진"
-                src={data.photoUrl}
-                objectFit="cover"
-              />
-            ) : (
-              <Image
-                layout="fill"
-                alt="농구장 기본 사진"
-                src="/images/han-river-park-court.png"
-                objectFit="cover"
-              />
-            )}
+            <Image
+              fill
+              alt="농구장 사진"
+              src={
+                data.photoUrl ? data.photoUrl : '/images/basketball-court.svg'
+              }
+            />
           </div>
         </div>
         <div className="p-4">

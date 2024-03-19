@@ -17,7 +17,6 @@ import { PiChatsCircle } from 'react-icons/pi';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import getCourtDetails from '@/services/basketballCourt/getCourtDetails';
-import { RiShareBoxFill } from 'react-icons/ri';
 import Link from 'next/link';
 import LocalStorage from '@/utils/localstorage';
 import { CourtIcon } from './icons/CourtIcon';
@@ -33,7 +32,9 @@ interface CourtDetailsProps {
 const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
   const router = useRouter();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
-  const [msg, setMsg] = useState('');
+  const [loginMsg, setLoginMsg] = useState('');
+  const [alertMsg, setAlertMsg] = useState('');
+  const [isTel, setIsTel] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { error, data: selectedPlace } = useQuery({
@@ -49,12 +50,11 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
   if (selectedPlace) {
     const handlePhoneClick = () => {
       if (selectedPlace.phoneNum) {
-        const confirmDial = window.confirm(
+        setAlertMsg(
           `이 전화번호로 연결하시겠습니까? ${selectedPlace.phoneNum}`
         );
-        if (confirmDial) {
-          window.location.href = `tel:${selectedPlace.phoneNum}`;
-        }
+        setIsTel(true);
+        onOpen();
       }
     };
 
@@ -62,10 +62,12 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
       if (selectedPlace.address) {
         try {
           await navigator.clipboard.writeText(selectedPlace.address);
-          alert('주소가 복사되었습니다.');
+          setAlertMsg('주소가 복사되었습니다.');
+          onOpen();
         } catch (copyError) {
-          console.error('주소 복사 중 오류 발생:', error);
-          alert('주소를 복사하는 데 실패했습니다.');
+          console.error('주소 복사 중 오류 발생:', copyError);
+          setAlertMsg('주소를 복사하는 데 실패했습니다.');
+          onOpen();
         }
       }
     };
@@ -74,9 +76,19 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
       if (isLoggedIn === 'true') {
         router.push(`/chatting/chatroom/${selectedPlace.chatroomId}`);
       } else {
-        setMsg('로그인 후 이용할 수 있는 서비스입니다.');
+        setLoginMsg('로그인 후 이용할 수 있는 서비스입니다.');
         onOpen();
       }
+    };
+
+    const handleCloseAlert = () => {
+      setAlertMsg('');
+      onClose();
+    };
+
+    const handleCloseLoginModal = () => {
+      setLoginMsg('');
+      onClose();
     };
 
     return (
@@ -85,55 +97,36 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
         <div className="h-full w-full overflow-y-auto">
           <div className="relative w-full text-sm">
             <div className="relative h-64 w-full sm:h-48">
-              {selectedPlace.photoUrl ? (
-                <Image
-                  layout="fill"
-                  objectFit="contain"
-                  alt="농구장 사진"
-                  src={selectedPlace.photoUrl}
-                />
-              ) : (
-                <Image
-                  layout="fill"
-                  alt="농구장 사진"
-                  src="/images/basketball-court.svg"
-                />
-              )}
+              <Image
+                fill
+                alt="농구장 사진"
+                src={
+                  selectedPlace.photoUrl
+                    ? selectedPlace.photoUrl
+                    : '/images/basketball-court.svg'
+                }
+              />
             </div>
             <div className="mb-5 h-full p-4">
               <div className="flex justify-between">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-xl font-bold">
-                    {selectedPlace.courtName}
-                  </h2>
-                  <span className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
-                    {selectedPlace.indoorOutdoor}
-                  </span>
+                <h2 className="text-xl font-bold">{selectedPlace.courtName}</h2>
+                <div>
+                  <Button
+                    color="primary"
+                    radius="full"
+                    size="md"
+                    startContent={<PiChatsCircle />}
+                    aria-label="시설 채팅 바로가기"
+                    onClick={handleGoChatting}
+                  >
+                    시설 채팅
+                  </Button>
                 </div>
-                <Button
-                  color="primary"
-                  radius="full"
-                  size="md"
-                  startContent={<PiChatsCircle />}
-                  aria-label="시설 채팅 바로가기"
-                  onClick={handleGoChatting}
-                >
-                  시설 채팅
-                </Button>
               </div>
-              <div className="my-4 flex w-full items-center justify-start gap-3">
-                <Button
-                  size="sm"
-                  aria-label="크게 보기"
-                  variant="bordered"
-                  className="border-0 p-0"
-                  radius="full"
-                  startContent={<RiShareBoxFill />}
-                  onClick={() => window.open(`/map/${courtId}`)}
-                >
-                  크게 보기
-                </Button>
-                <hr className="h-4 w-px bg-gray-300" />
+              <span className="break-keep rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
+                {selectedPlace.indoorOutdoor}
+              </span>
+              <div className="my-4 w-full">
                 <Button
                   size="sm"
                   variant="bordered"
@@ -170,7 +163,7 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                   <span>
                     개방 시간:{' '}
                     <span className="text-rose-400">
-                      {selectedPlace.openingHours === true ? '24시간' : '제한'}
+                      {selectedPlace.openingHours}
                     </span>
                   </span>
                 </div>
@@ -187,7 +180,7 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                 <div className="flex gap-2 align-middle">
                   <FeeIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-info text-blue-500">
-                    이용료: {selectedPlace.fee === true ? '유료' : '무료'}
+                    이용료: {selectedPlace.fee}
                   </span>
                 </div>
 
@@ -226,20 +219,14 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>
-                    야간 조명:{' '}
-                    {selectedPlace.nightLighting === true ? '있음' : '없음'}
-                  </span>
+                  <span>야간 조명: {selectedPlace.nightLighting}</span>
                 </div>
                 <div className="flex gap-2 align-middle">
                   <FaParking
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>
-                    주차:{' '}
-                    {selectedPlace.parkingAvailable === true ? '가능' : '불가'}
-                  </span>
+                  <span>주차: {selectedPlace.parkingAvailable}</span>
                 </div>
 
                 <div className="flex gap-2 align-middle text-sm">
@@ -248,9 +235,10 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                     className="text-gray-400 dark:text-gray-200"
                   />
                   <ul className="flex gap-2">
-                    {selectedPlace.convenience
-                      ? selectedPlace.convenience.map(
-                          (tag: string, idx: number) => (
+                    {selectedPlace.convenience &&
+                      selectedPlace.convenience.map(
+                        (tag: string, idx: number) =>
+                          tag !== '' ? (
                             <li
                               // eslint-disable-next-line react/no-array-index-key
                               key={idx}
@@ -258,9 +246,10 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
                             >
                               <span>{tag}</span>
                             </li>
+                          ) : (
+                            '-'
                           )
-                        )
-                      : '-'}
+                      )}
                   </ul>
                 </div>
                 <div className="flex gap-2 align-middle">
@@ -275,28 +264,106 @@ const CourtDetailsFull: React.FC<CourtDetailsProps> = ({ courtId }) => {
             </div>
           </div>
         </div>
-        <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
-          <ModalContent>
-            {() => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  농구장 시설 채팅
-                </ModalHeader>
-                <ModalBody>
-                  <p>{msg}</p>
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="danger" variant="light" onPress={onClose}>
-                    닫기
-                  </Button>
-                  <Button color="primary" onPress={() => router.push('/login')}>
-                    로그인하러 가기
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
+        {loginMsg && (
+          <Modal
+            size="sm"
+            isOpen={isOpen}
+            onClose={handleCloseLoginModal}
+            placement="center"
+          >
+            <ModalContent>
+              {() => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    농구장 시설 채팅
+                  </ModalHeader>
+                  <ModalBody>
+                    <p>{loginMsg}</p>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="danger"
+                      variant="light"
+                      onPress={handleCloseLoginModal}
+                    >
+                      닫기
+                    </Button>
+                    <Button
+                      color="primary"
+                      onPress={() => router.push('/login')}
+                    >
+                      로그인하러 가기
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+        )}
+        {alertMsg && (
+          <Modal
+            size="sm"
+            isOpen={isOpen}
+            onClose={handleCloseAlert}
+            placement="center"
+          >
+            <ModalContent>
+              {() => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    알림
+                  </ModalHeader>
+                  <ModalBody>
+                    <p>{alertMsg}</p>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button color="primary" onPress={handleCloseAlert}>
+                      확인
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+        )}
+        {isTel && (
+          <Modal
+            size="sm"
+            isOpen={isOpen}
+            onClose={handleCloseAlert}
+            placement="center"
+          >
+            <ModalContent>
+              {() => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    전화 연결
+                  </ModalHeader>
+                  <ModalBody>
+                    <p>{alertMsg}</p>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button
+                      color="danger"
+                      variant="light"
+                      onPress={handleCloseLoginModal}
+                    >
+                      취소
+                    </Button>
+                    <Button
+                      color="primary"
+                      onClick={() => {
+                        window.location.href = `tel:${selectedPlace.phoneNum}`;
+                      }}
+                    >
+                      확인
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+        )}
       </>
     );
   }

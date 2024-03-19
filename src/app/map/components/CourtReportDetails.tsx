@@ -63,40 +63,36 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
         >
           <div className="w-full text-sm">
             <div className="relative h-56 w-full sm:h-52">
-              {selectedPlace.photoUrl ? (
-                <Image
-                  layout="fill"
-                  objectFit="contain"
-                  alt="농구장 사진"
-                  src={selectedPlace.photoUrl}
-                />
-              ) : (
-                <Image
-                  layout="fill"
-                  alt="농구장 사진"
-                  src="/images/basketball-court.svg"
-                />
-              )}
+              <Image
+                fill
+                alt="농구장 사진"
+                src={
+                  selectedPlace.photoUrl
+                    ? selectedPlace.photoUrl
+                    : '/images/basketball-court.svg'
+                }
+              />
               <Button
+                size="sm"
+                radius="full"
+                variant="light"
                 isIconOnly
-                className="bg-gradient absolute right-2 top-2"
+                className="absolute right-2 top-2"
                 onClick={handleClose}
                 aria-label="Close"
               >
-                <IoIosClose size={30} className="text-gray-600" />
+                <IoIosClose size={30} />
               </Button>
             </div>
             <div className="p-4">
-              <div className="flex justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-xl font-bold">
-                    {selectedPlace.courtName}
-                  </h2>
-                  <p className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
-                    {selectedPlace.indoorOutdoor && selectedPlace.indoorOutdoor}
-                  </p>
-                </div>
-              </div>
+              <h2 className="mb-1 text-xl font-bold">
+                {selectedPlace.courtName}
+              </h2>
+              {selectedPlace.indoorOutdoor && (
+                <span className="break-keep rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
+                  {selectedPlace.indoorOutdoor}
+                </span>
+              )}
               <div className="my-2 flex w-full items-center justify-start gap-3">
                 <Button
                   size="sm"
@@ -135,7 +131,7 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                   <span>
                     개방 시간:{' '}
                     <span className="text-rose-400">
-                      {selectedPlace.openingHours && '제한'}
+                      {selectedPlace.openingHours}
                     </span>
                   </span>
                 </div>
@@ -151,7 +147,7 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                 <div className="flex gap-2 align-middle">
                   <FeeIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-info text-blue-500">
-                    이용료: {selectedPlace.fee && '무료'}
+                    이용료: {selectedPlace.fee}
                   </span>
                 </div>
 
@@ -200,7 +196,7 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>주차: {selectedPlace.parkingAvailable && '불가'}</span>
+                  <span>주차: {selectedPlace.parkingAvailable}</span>
                 </div>
 
                 <div className="flex gap-2 align-middle text-sm">
@@ -209,7 +205,7 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                     className="text-gray-400 dark:text-gray-200"
                   />
                   <ul className="flex gap-2">
-                    {selectedPlace.convenience
+                    {selectedPlace.convenience?.length
                       ? selectedPlace.convenience.map(
                           (tag: string, idx: number) => (
                             <li

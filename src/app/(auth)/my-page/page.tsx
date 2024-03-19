@@ -21,6 +21,7 @@ import {
 import Link from 'next/link';
 import LocalStorage from '@/utils/localstorage';
 import ThemeSwitcher from '@/app/components/ThemeSwitcher';
+import KakaoChannelImg from './components/KakaoChannel';
 
 const MyPage = () => {
   const router = useRouter();
@@ -84,26 +85,26 @@ const MyPage = () => {
             >
               <IoChevronBackSharp size={24} />
             </div>
-            <Link href="/my-page/settings">
-              <Button
-                isIconOnly
-                size="sm"
-                radius="full"
-                aria-label="설정"
-                variant="light"
-              >
-                <IoSettingsOutline aria-label="settings" size={24} />
-              </Button>
-            </Link>
+            <Button
+              href="/my-page/settings"
+              as={Link}
+              isIconOnly
+              size="sm"
+              radius="full"
+              aria-label="설정"
+              variant="light"
+            >
+              <IoSettingsOutline aria-label="settings" size={24} />
+            </Button>
           </div>
           <div className="mt-7 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Avatar alt="profile-img" src={user.imageUrl} />
               <p className="text-lg font-semibold">{user.nickname}</p>
             </div>
-            <Link href="/my-page/profile">
-              <Button size="sm">프로필 보기</Button>
-            </Link>
+            <Button href="/my-page/profile" as={Link} size="sm">
+              프로필 보기
+            </Button>
           </div>
           <Button
             type="submit"
@@ -117,14 +118,18 @@ const MyPage = () => {
           <div>
             <p className="mb-3 font-semibold">나의 활동</p>
             <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-2">
-                <LuClipboardList className="text-text" />
-                <span>팀 매칭 내역</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <LuClipboardList className="text-text" />
-                <span>농구 메이트 찾기 내역</span>
-              </div>
+              <Link href="/my-page/team-matching-list">
+                <div className="flex items-center gap-2">
+                  <LuClipboardList className="text-text" />
+                  <span>팀 매칭 내역</span>
+                </div>
+              </Link>
+              <Link href="/my-page/mate-matching-list">
+                <div className="flex items-center gap-2">
+                  <LuClipboardList className="text-text" />
+                  <span>농구 메이트 찾기 내역</span>
+                </div>
+              </Link>
             </div>
             <hr className="w-90 my-4 h-px bg-gray-300" />
             <p className="my-3 font-semibold">설정</p>
@@ -138,19 +143,28 @@ const MyPage = () => {
           <hr className="w-90 my-4 h-px bg-gray-300" />
           <p className="my-3 font-semibold">기타</p>
           <div className="mb-4 flex flex-col gap-4">
-            <span>문의하기</span>
+            <Button
+              radius="sm"
+              href="http://pf.kakao.com/_AxisJG/chat"
+              target="_blank"
+              as={Link}
+              startContent={<KakaoChannelImg />}
+              className="w-fit bg-kakao dark:text-background"
+            >
+              카카오톡 채널 문의하기
+            </Button>
           </div>
           {user.role === 'ADMIN' && (
             <div className="absolute bottom-16 right-4">
-              <Link href="/admin">
-                <Button
-                  radius="sm"
-                  color="success"
-                  className="font-medium text-white"
-                >
-                  관리자 페이지
-                </Button>
-              </Link>
+              <Button
+                href="/admin"
+                as={Link}
+                radius="sm"
+                color="success"
+                className="font-medium text-white"
+              >
+                관리자 페이지
+              </Button>
             </div>
           )}
         </div>
