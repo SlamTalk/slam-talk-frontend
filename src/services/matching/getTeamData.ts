@@ -16,10 +16,23 @@ export const infiniteFetchTeamData = async (
   selectedNumberOfMembers: string,
   keywordProp: string | null
 ): Promise<InfiniteTeamPost> => {
+  let queryParams = `/api/match/list?cursorTime=${pageParams || ''}`;
+
+  if (selectedLevel) {
+    queryParams += `&skillLevel=${selectedLevel}`;
+  }
+  if (selectedCity) {
+    queryParams += `&location=${selectedCity}`;
+  }
+  if (selectedNumberOfMembers) {
+    queryParams += `&nov=${selectedNumberOfMembers}`;
+  }
+  if (keywordProp) {
+    queryParams += `&searchWord=${keywordProp}`;
+  }
+
   const response = await axiosInstance
-    .get(
-      `/api/match/list?cursorTime=${pageParams || ''}&skillLevel=${selectedLevel}&location=${selectedCity}&nov=${selectedNumberOfMembers}&searchWord=${keywordProp}`
-    )
+    .get(queryParams)
     .then((res) => res.data.results);
 
   return response;
