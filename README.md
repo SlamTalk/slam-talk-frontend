@@ -11,19 +11,27 @@
 
 ## 🏀 슬램톡 서비스 소개
 
-> 개발 기간: 24/01/11 ~ 24/2/22(프로젝트 발표) 이후 유지보수 중<br>
 ### 🗺 주변의 농구장을 찾을 수 있는 지도 서비스
+
 > - 가까운 농구장을 쉽게 찾을 수 있습니다.
 > - 지도에 없는 농구장이라면 제보하기를 통해 농구장에 대해 제보할 수 있습니다.
+
 ### 👨‍👩‍👧‍👦 농구장 시설마다 연결된 채팅방을 통해 이용할 수 있는 채팅 서비스
+
 > - 근처 농구장을 이용하는 사람들과 편하게 약속을 잡을 수 있습니다.
 > - 지금 이용하는 사람이 있는지 채팅방에 물어보세요!
+
 ### 🤼‍♂️ 시합을 할 상대팀 혹은 용병을 구할 수 있는 매칭 서비스
+
 > - 상대팀 찾기 기능을 이용해서 시합할 상대팀을 찾을 수 있습니다.
 > - 메이트 찾기 기능을 이용해서 조건에 맞는 용병을 구할 수 있습니다.
+
 ### 💬 기능별 용도에 맞는 다양한 채팅 서비스
+
 > - 농구장 시설 채팅, 팀 채팅, 메이트 채팅, 1:1 채팅 종류별 채팅 리스트를 한 눈에 확인할 수 있습니다.
+
 ### 📋 카테고리별 게시판
+
 > - 중고거래, 질문, 대관양도, 자유게시판 등 목적에 맞는 게시판을 이용할 수 있습니다.
 
 ## 😄 동기와 비동기 프론트엔드 팀원 소개
@@ -111,8 +119,7 @@
 </tbody>
 </table>
 
-> 팀 구성: 프론트엔드 3명, 백엔드 4명<br>
-> [👉 백엔드 팀원 소개 바로가기](https://github.com/SlamTalk/slam-talk-backend)
+> 팀 구성: 프론트엔드 3명, 백엔드 4명<br> [👉 백엔드 팀원 소개 바로가기](https://github.com/SlamTalk/slam-talk-backend)
 
 ## 📌 프로젝트 아키텍처 <br>
 
@@ -156,24 +163,42 @@
 |                    <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/76f50d21-a2b1-4727-8b9f-e851d45c6bfa'>                    |            <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/6ebb2284-a133-4343-b6f1-81af871f6e78'>             |                                      <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/35abce74-7444-466e-ab93-1cfe24d6f841'>                                       |                               <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/a3e09059-c57a-47a1-af85-42fc66c5647f'>                                |
 
 ## 🕹 프로젝트 구동 방식
-> .env.local 파일에서 다음과 같은 환경변수 설정 필요 <br>
-> NEXT_PUBLIC_MAP_KEY <br> NEXT_PUBLIC_BASE_URL <br> NEXT_PUBLIC_BACKEND_URL <br> NEXT_PUBLIC_SOCKET_URL <br>
-- clone 후 ``` npm i ``` 또는 ``` npm install ```
-- 실행 : ``` npm run dev ```
+
+> 우선 Repository clone 후, slam-talk-frontend 폴더에 들어간다. <br>
+> 폴더 바로 밑에 .env 파일을 생성하고 다음과 같은 환경변수를 설정한다. <br>
+
+```jsx
+NEXT_PUBLIC_MAP_KEY=[카카오 개발자 JavaScript 키]
+NEXT_PUBLIC_BASE_URL=[프론트 서버 주소 (ex. https://)]
+NEXT_PUBLIC_BACKEND_URL=[백엑드 서버 주소 (ex. https://)]
+NEXT_PUBLIC_SOCKET_URL=[소켓 주소 (ex. wss://)]
+```
+
+- 실행
+
+```jsx
+cd slam-talk-frontend
+npm install
+npm run dev
+```
 
 ## 🗄 문서
-> [🌟 기획서 & 기능 명세서](https://www.notion.so/ec211098ba794bff83e6a41a74a3d58c) <br>
-> 📄 [Swagger](http://43.200.131.233:8080/swagger-ui/index.html) | [API 문서](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=f3bf16cf100e45f69a3e0bb075a342b0&pm=s) | [ERD](https://www.erdcloud.com/d/GyK7pkbTanPFqno4F) | [Figma Wireframe](https://www.figma.com/file/ZD66J8VJY2Novju78Z3F1q/Slam-Talk-Wireframe?type=design&node-id=0%3A1&mode=design&t=eljuNXwNhPyvrol6-1)
+
+> [🌟 기획서 & 기능 명세서](https://www.notion.so/ec211098ba794bff83e6a41a74a3d58c) | [Figma Wireframe](https://www.figma.com/file/ZD66J8VJY2Novju78Z3F1q/Slam-Talk-Wireframe?type=design&node-id=0%3A1&mode=design&t=eljuNXwNhPyvrol6-1)
+>
+> 🌟 [Swagger](http://43.200.131.233:8080/swagger-ui/index.html) | [API 문서](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=f3bf16cf100e45f69a3e0bb075a342b0&pm=s) | [ERD](https://www.erdcloud.com/d/GyK7pkbTanPFqno4F)
+>
+> 📑 [동기와 비동기 팀 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991) | [프론트 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=a0f8672e41df49ce86c681506b707aeb&pm=s) | [백엔드 노션]() <br>
 
 ## 🤝 협업 방식
 
-> [🌟 깃 컨벤션](https://www.notion.so/300caffe87af4fb09eaea24d3cfc31c7) <br>
->
-> 문서: Notion 활용 - [동기와 비동기 팀 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991) | [프론트 노션](https://www.notion.so/7460cade2e63406481e110249fc6f991?p=a0f8672e41df49ce86c681506b707aeb&pm=s) | [백엔드 노션]() <br>
+> 🌟 [깃 컨벤션](https://www.notion.so/300caffe87af4fb09eaea24d3cfc31c7) <br>
 >
 > 프로젝트 관리: [Github Projects](https://github.com/orgs/SlamTalk/projects/1) 활용
 >
 > 소통: Slack, KakaoTalk 활용 <br> [프론트엔드 팀 규칙](https://www.notion.so/d2944bc3c6064dd58a8a0d59a2a5ba7a)
+>
+> 개발 기간: 24/01/11 ~ 24/2/22(프로젝트 발표) 이후 유지보수 중<br>
 
 ## 기타
 
