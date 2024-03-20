@@ -121,6 +121,7 @@ const Page = () => {
         <Button
           onClick={() => {
             setTag('FREE');
+            setPage(1);
           }}
           aria-label="태그 버튼 free"
           size={isMobile ? 'sm' : 'md'}
@@ -135,6 +136,7 @@ const Page = () => {
           aria-label="태그 버튼 usedtrade"
           onClick={() => {
             setTag('USED');
+            setPage(1);
           }}
           size={isMobile ? 'sm' : 'md'}
           key="USED"
@@ -146,6 +148,7 @@ const Page = () => {
         <Button
           onClick={() => {
             setTag('QUESTION');
+            setPage(1);
           }}
           size={isMobile ? 'sm' : 'md'}
           aria-label="태그 버튼 question"
@@ -159,6 +162,7 @@ const Page = () => {
           aria-label="태그 버튼 rentaltransfer"
           onClick={() => {
             setTag('TRANSFER');
+            setPage(1);
           }}
           size={isMobile ? 'sm' : 'md'}
           key="TRANSFER"
