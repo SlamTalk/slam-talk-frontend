@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
-import { Card } from '@nextui-org/react';
+import { Button, Card, CardFooter, Image } from '@nextui-org/react';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -112,7 +111,7 @@ const Home = () => {
                 </Link>
               </Card>
             ) : (
-              <div className="flex min-h-[100px] items-center justify-center rounded-medium bg-gray-200">
+              <div className="flex min-h-[100px] items-center justify-center rounded-medium bg-gray-100">
                 <div className="text-md m-2 h-[50%] text-gray-400">
                   예정된 매칭이 없습니다.
                 </div>
@@ -120,25 +119,32 @@ const Home = () => {
             )}
           </div>
           <div className="mx-[16px] mt-2">
-            <div className="mt-4 text-lg font-bold">
+            <div className="mb-2 mt-4 text-lg font-bold">
               집 주변의 농구장을 찾아보세요!
             </div>
             <Link href="/map">
-              <div className="mt-2">
+              <Card>
                 <Image
-                  src="/images/map_image.png"
+                  isZoomed
+                  src="/images/map-image.png"
                   alt="map-image"
-                  style={{ borderRadius: '8px', overflow: 'hidden' }}
-                  width={600}
                   height={200}
+                  width={600}
                 />
-              </div>
-              <div className="relative bottom-10 z-10 m-auto w-[150px] rounded bg-[#FF644C] py-1 text-center text-sm font-bold text-white">
-                농구장 찾으러 가기
-              </div>
+                <CardFooter className="absolute bottom-1 z-10 justify-center">
+                  <Button
+                    className="w-1/3 font-semibold sm:h-8 sm:w-2/5 sm:text-xs"
+                    color="primary"
+                    radius="sm"
+                    size="md"
+                  >
+                    농구장 찾으러 가기
+                  </Button>
+                </CardFooter>
+              </Card>
             </Link>
           </div>
-          <div className="mx-[16px] ">
+          <div className="mx-[16px] mt-4">
             <div className="flex justify-between ">
               <div className="text-lg font-bold">경기할 팀을 찾고 있어요!</div>
               <Link href="/matching?tab=team">
