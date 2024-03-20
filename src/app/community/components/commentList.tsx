@@ -32,7 +32,7 @@ const CommentList = () => {
   }
 
   return (
-    <div className="h-[500px] overflow-y-scroll">
+    <div className="h-[280px] overflow-y-auto">
       {commentListData?.comments.map((i: ICommentItemProps) => (
         <div key={i.commentId}>
           <CommentItem
