@@ -137,7 +137,10 @@ const Page = () => {
                     src={writerInfo?.imageUrl}
                     className="me-2"
                   />
-                  <p aria-label="작성자 닉네임" className="w-[180px] text-lg">
+                  <p
+                    aria-label="작성자 닉네임"
+                    className="w-[180px] text-lg font-bold"
+                  >
                     {articleData.userNickname}
                   </p>
                 </div>
