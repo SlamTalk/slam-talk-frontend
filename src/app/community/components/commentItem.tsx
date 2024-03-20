@@ -61,18 +61,18 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   return (
     <div
       key={commentId}
-      className="border-gray mt-2 flex items-center border-b-2"
+      className="border-gray mt-2 flex items-center overflow-x-hidden border-b-2"
     >
       <UserProfile isOpen={isOpen} userId={userId} onClose={onClose} />
 
       <div aria-label="작성자 정보" style={{ cursor: 'pointer' }}>
         <Avatar
+          size="lg"
           src={writerUserInfo?.imageUrl}
           onClick={() => {
             onOpen();
           }}
         />
-        <p className="text-center">{writerUserInfo?.nickname}</p>
       </div>
 
       {editToggle ? (
@@ -84,7 +84,10 @@ const CommentItem: React.FC<ICommentItemProps> = ({
           }}
         />
       ) : (
-        <h2 className="ml-2 ms-5 mt-2 h-10 w-[750px]">{content}</h2>
+        <div className="m-2">
+          <p className="ms-5 font-bold">{writerUserInfo?.nickname}</p>
+          <h2 className="ms-5 h-10 w-[750px]">{content}</h2>
+        </div>
       )}
       {loginUserData?.id === writerUserInfo?.id && writerUserInfo !== null ? (
         <div aria-label="comment button group" className="w-40">
