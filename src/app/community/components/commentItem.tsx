@@ -67,7 +67,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
 
       <div aria-label="작성자 정보" style={{ cursor: 'pointer' }}>
         <Avatar
-          size="lg"
+          size="md"
           src={writerUserInfo?.imageUrl}
           onClick={() => {
             onOpen();
@@ -84,8 +84,8 @@ const CommentItem: React.FC<ICommentItemProps> = ({
           }}
         />
       ) : (
-        <div className="m-2">
-          <p className="ms-5 font-bold">{writerUserInfo?.nickname}</p>
+        <div className="mt-2">
+          <p className="mb-1 ms-5 font-bold">{writerUserInfo?.nickname}</p>
           <h2 className="ms-5 h-10 w-[750px]">{content}</h2>
         </div>
       )}
