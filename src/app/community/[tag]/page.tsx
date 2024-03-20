@@ -44,7 +44,7 @@ const Page = () => {
   }, []);
 
   const [page, setPage] = useState(1);
-  const rowsPerPage = 10;
+  const rowsPerPage = 11;
   const pages = useMemo(
     () =>
       communityBoard && tag === ''
@@ -168,7 +168,7 @@ const Page = () => {
           대관양도
         </Button>
       </div>
-      <div className="h-[540px] overflow-y-scroll">
+      <div className="h-full">
         <Table
           color="primary"
           aria-label="게시글 목록"
