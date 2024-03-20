@@ -104,7 +104,7 @@ const Page = () => {
           <IoSearchSharp className="w-full text-gray-400 hover:text-black" />
         </button>
       </div>
-      <div className="sm:ap flex flex-wrap justify-center sm:space-x-2 md:space-x-12 ">
+      <div className="sm:ap flex flex-wrap justify-center py-2 sm:space-x-2 md:space-x-12 ">
         <Button
           onClick={() => {
             setTag('');
