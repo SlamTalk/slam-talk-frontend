@@ -89,7 +89,7 @@ const MateMatchingApplication = () => {
             입문
           </SelectItem>
           <SelectItem key="LOW" value="LOW">
-            초보
+            하수
           </SelectItem>
           <SelectItem key="MIDDLE" value="MIDDLE">
             중수

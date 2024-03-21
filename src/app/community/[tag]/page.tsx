@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@nextui-org/button';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { FaPlus } from 'react-icons/fa';
 import { IoSearchSharp } from 'react-icons/io5';
 import {
@@ -12,26 +12,46 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  Pagination,
+  Spinner,
 } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
+import { getCommunityTag } from '@/services/community/getCommunityTag';
 import { getCommunityBoard } from '../../../services/community/getCommunityBoard';
 import { IBoard } from '../../../types/community/board';
 
 import LocalStorage from '../../../utils/localstorage';
 
 const Page = () => {
-  const params = useParams<{ tag: string }>();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
-
+  const [tag, setTag] = useState('');
   const router = useRouter();
   const [inputData, setInputData] = useState('');
   const [isFocus, setIsFocus] = useState(false);
 
   const [searchKey, setSearchKey] = useState('');
-  const { data: communityBoard } = useQuery<IBoard[]>({
+  const { data: communityBoard, refetch } = useQuery<IBoard[]>({
     queryKey: ['communityBoard'],
     queryFn: getCommunityBoard,
   });
+  const { data: categoriedBoard } = useQuery<IBoard[]>({
+    queryKey: ['categoriedBoard', tag],
+    queryFn: useCallback(() => getCommunityTag(tag), [tag]),
+  });
+  useEffect(() => {
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 10;
+  const pages = useMemo(
+    () =>
+      communityBoard && tag === ''
+        ? Math.ceil((communityBoard || []).length / rowsPerPage)
+        : Math.ceil((categoriedBoard || []).length / rowsPerPage),
+    [communityBoard, tag, categoriedBoard]
+  );
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -87,7 +107,7 @@ const Page = () => {
       <div className="sm:ap flex flex-wrap justify-center sm:space-x-2 md:space-x-12 ">
         <Button
           onClick={() => {
-            router.push('/community/all');
+            setTag('');
           }}
           aria-label="태그 버튼 all"
           size={isMobile ? 'sm' : 'md'}
@@ -100,7 +120,7 @@ const Page = () => {
 
         <Button
           onClick={() => {
-            router.push('/community/FREE');
+            setTag('FREE');
           }}
           aria-label="태그 버튼 free"
           size={isMobile ? 'sm' : 'md'}
@@ -114,7 +134,7 @@ const Page = () => {
         <Button
           aria-label="태그 버튼 usedtrade"
           onClick={() => {
-            router.push('/community/USED');
+            setTag('USED');
           }}
           size={isMobile ? 'sm' : 'md'}
           key="USED"
@@ -125,7 +145,7 @@ const Page = () => {
         </Button>
         <Button
           onClick={() => {
-            router.push('/community/QUESTION');
+            setTag('QUESTION');
           }}
           size={isMobile ? 'sm' : 'md'}
           aria-label="태그 버튼 question"
@@ -138,7 +158,7 @@ const Page = () => {
         <Button
           aria-label="태그 버튼 rentaltransfer"
           onClick={() => {
-            router.push('/community/TRANSFER');
+            setTag('TRANSFER');
           }}
           size={isMobile ? 'sm' : 'md'}
           key="TRANSFER"
@@ -149,15 +169,37 @@ const Page = () => {
         </Button>
       </div>
       <div className="h-[540px] overflow-y-scroll">
-        <Table color="primary" aria-label="게시글 목록" fullWidth>
+        <Table
+          color="primary"
+          aria-label="게시글 목록"
+          fullWidth
+          bottomContent={
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="primary"
+                page={page}
+                total={pages}
+                onChange={(num) => setPage(num)}
+              />
+            </div>
+          }
+        >
           <TableHeader>
             <TableColumn>TITLE</TableColumn>
             <TableColumn>USER</TableColumn>
           </TableHeader>
 
-          <TableBody>
-            {params.tag === 'all'
-              ? (communityBoard || [])
+          <TableBody items={communityBoard ?? []} loadingContent={<Spinner />}>
+            {tag === ''
+              ? (
+                  communityBoard?.slice(
+                    (page - 1) * rowsPerPage,
+                    (page - 1) * rowsPerPage + rowsPerPage
+                  ) || []
+                )
                   .filter(
                     (item: IBoard) =>
                       searchKey === '' || item.title.includes(searchKey)
@@ -173,8 +215,12 @@ const Page = () => {
                       <TableCell>{item.userNickname}</TableCell>
                     </TableRow>
                   ))
-              : (communityBoard || [])
-                  .filter((item: IBoard) => item.category === params.tag)
+              : (
+                  categoriedBoard?.slice(
+                    (page - 1) * rowsPerPage,
+                    (page - 1) * rowsPerPage + rowsPerPage
+                  ) || []
+                )
                   .filter(
                     (item: IBoard) =>
                       searchKey === '' || item.title.includes(searchKey)
