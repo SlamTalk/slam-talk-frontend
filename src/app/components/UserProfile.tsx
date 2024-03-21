@@ -59,7 +59,6 @@ const UserProfile: React.FC<UserProfileProps> = ({
         });
         if (response.status === 200) {
           const room = response.data.results;
-          console.log(room);
           router.push(`/chatting/chatroom/${room}`);
         }
       } catch (error) {
