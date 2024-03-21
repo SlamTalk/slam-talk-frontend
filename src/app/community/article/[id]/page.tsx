@@ -126,7 +126,7 @@ const Page = () => {
             <div aria-label="contentsCard">
               <div
                 aria-label="유저 아바타"
-                className="mt-1 flex items-center border-b-1 sm:space-x-[14vw] md:space-x-[260px]"
+                className="mt-1 flex items-center border-b-1 sm:space-x-[60px] md:space-x-[260px]"
                 style={{ cursor: 'pointer' }}
               >
                 <div className="flex items-center">
