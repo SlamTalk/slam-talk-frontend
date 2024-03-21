@@ -9,7 +9,7 @@ import { Avatar, useDisclosure } from '@nextui-org/react';
 import { getUserData } from '@/services/user/getUserData';
 import UserProfile from '@/app/components/UserProfile';
 
-interface ICommentItemProps {
+export interface ICommentItemProps {
   commentId: number;
   communityId: number;
   userId: number;

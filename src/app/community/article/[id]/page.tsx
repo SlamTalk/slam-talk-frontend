@@ -213,7 +213,7 @@ const Page = () => {
               </Button>
             </Tooltip>
           </div>
-          <CommentList />
+          <CommentList commentListData={articleData?.comments} />
         </div>
       ) : (
         <p>404 not found</p>
