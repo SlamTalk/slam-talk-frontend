@@ -9,7 +9,7 @@ import { Avatar, useDisclosure } from '@nextui-org/react';
 import { getUserData } from '@/services/user/getUserData';
 import UserProfile from '@/app/components/UserProfile';
 
-interface ICommentItemProps {
+export interface ICommentItemProps {
   commentId: number;
   communityId: number;
   userId: number;
@@ -43,7 +43,6 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   const handleEdit = () => {
     setEditToggle(!editToggle);
     if (editToggle && editedComment !== '') {
-      console.log(editedComment);
       patchArticleComment.mutate();
       setEditToggle(false);
     }
@@ -58,6 +57,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   const handleDelete = () => {
     deleteArticleComment.mutate();
   };
+
   return (
     <div
       key={commentId}
@@ -67,12 +67,12 @@ const CommentItem: React.FC<ICommentItemProps> = ({
 
       <div aria-label="작성자 정보" style={{ cursor: 'pointer' }}>
         <Avatar
+          size="md"
           src={writerUserInfo?.imageUrl}
           onClick={() => {
             onOpen();
           }}
         />
-        <p className="text-center">{writerUserInfo?.nickname}</p>
       </div>
 
       {editToggle ? (
@@ -84,9 +84,12 @@ const CommentItem: React.FC<ICommentItemProps> = ({
           }}
         />
       ) : (
-        <h2 className="ml-2 ms-5 mt-2 h-10 w-[750px]">{content}</h2>
+        <div className="mt-2">
+          <p className="mb-1 ms-5  font-bold">{writerUserInfo?.nickname}</p>
+          <h2 className="ms-5 h-10 w-[460px] sm:w-[240px]">{content}</h2>
+        </div>
       )}
-      {loginUserData?.id === writerUserInfo?.id && writerUserInfo !== null ? (
+      {loginUserData?.id === userId ? (
         <div aria-label="comment button group" className="w-40">
           <button
             onClick={handleEdit}

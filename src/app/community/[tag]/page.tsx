@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
 import { FaPlus } from 'react-icons/fa';
@@ -44,13 +44,13 @@ const Page = () => {
   }, []);
 
   const [page, setPage] = useState(1);
-  const rowsPerPage = 10;
+  const rowsPerPage = 11;
   const pages = useMemo(
     () =>
       communityBoard && tag === ''
         ? Math.ceil((communityBoard || []).length / rowsPerPage)
-        : Math.ceil((categoriedBoard || []).length / rowsPerPage),
-    [communityBoard, tag, categoriedBoard]
+        : Math.ceil((communityBoard || []).length / rowsPerPage),
+    [communityBoard, tag]
   );
 
   const [isMobile, setIsMobile] = useState(false);
@@ -104,7 +104,7 @@ const Page = () => {
           <IoSearchSharp className="w-full text-gray-400 hover:text-black" />
         </button>
       </div>
-      <div className="sm:ap flex flex-wrap justify-center sm:space-x-2 md:space-x-12 ">
+      <div className="sm:ap flex flex-wrap justify-center py-2 sm:space-x-2 md:space-x-12 ">
         <Button
           onClick={() => {
             setTag('');
@@ -121,6 +121,7 @@ const Page = () => {
         <Button
           onClick={() => {
             setTag('FREE');
+            setPage(1);
           }}
           aria-label="태그 버튼 free"
           size={isMobile ? 'sm' : 'md'}
@@ -135,6 +136,7 @@ const Page = () => {
           aria-label="태그 버튼 usedtrade"
           onClick={() => {
             setTag('USED');
+            setPage(1);
           }}
           size={isMobile ? 'sm' : 'md'}
           key="USED"
@@ -146,6 +148,7 @@ const Page = () => {
         <Button
           onClick={() => {
             setTag('QUESTION');
+            setPage(1);
           }}
           size={isMobile ? 'sm' : 'md'}
           aria-label="태그 버튼 question"
@@ -159,6 +162,7 @@ const Page = () => {
           aria-label="태그 버튼 rentaltransfer"
           onClick={() => {
             setTag('TRANSFER');
+            setPage(1);
           }}
           size={isMobile ? 'sm' : 'md'}
           key="TRANSFER"
@@ -168,7 +172,7 @@ const Page = () => {
           대관양도
         </Button>
       </div>
-      <div className="h-[540px] overflow-y-scroll">
+      <div className="h-screen">
         <Table
           color="primary"
           aria-label="게시글 목록"

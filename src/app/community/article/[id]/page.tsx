@@ -126,7 +126,7 @@ const Page = () => {
             <div aria-label="contentsCard">
               <div
                 aria-label="유저 아바타"
-                className="mt-1 flex items-center space-x-[400px] border-b-1"
+                className="mt-1 flex items-center border-b-1 sm:space-x-[60px] md:space-x-[260px]"
                 style={{ cursor: 'pointer' }}
               >
                 <div className="flex items-center">
@@ -137,9 +137,14 @@ const Page = () => {
                     src={writerInfo?.imageUrl}
                     className="me-2"
                   />
-                  <p className="text-lg">{articleData.userNickname}</p>
+                  <p
+                    aria-label="작성자 닉네임"
+                    className="w-[180px] text-lg font-bold"
+                  >
+                    {articleData.userNickname}
+                  </p>
                 </div>
-                <p className="text-gray-400">
+                <p aria-label="작성일자" className="w-[100px] text-gray-400">
                   {articleData.updatedAt.toString().split('T')[0]}
                 </p>
               </div>
@@ -208,7 +213,7 @@ const Page = () => {
               </Button>
             </Tooltip>
           </div>
-          <CommentList />
+          <CommentList commentListData={articleData?.comments} />
         </div>
       ) : (
         <p>404 not found</p>
