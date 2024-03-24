@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { Button } from '@nextui-org/button';
 import { useRouter } from 'next/navigation';
 import { FaPlus } from 'react-icons/fa';
@@ -16,7 +16,7 @@ import {
   Spinner,
 } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
-// import { getCommunityTag } from '@/services/community/getCommunityTag';
+import { getCommunityTag } from '@/services/community/getCommunityTag';
 import { getCommunityBoard } from '../../../services/community/getCommunityBoard';
 import { IBoard } from '../../../types/community/board';
 
@@ -34,10 +34,10 @@ const Page = () => {
     queryKey: ['communityBoard'],
     queryFn: getCommunityBoard,
   });
-  // const { data: categoriedBoard } = useQuery<IBoard[]>({
-  //   queryKey: ['categoriedBoard', tag],
-  //   queryFn: useCallback(() => getCommunityTag(tag), [tag]),
-  // });
+  const { data: categoriedBoard } = useQuery<IBoard[]>({
+    queryKey: ['categoriedBoard', tag],
+    queryFn: useCallback(() => getCommunityTag(tag), [tag]),
+  });
   useEffect(() => {
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -172,7 +172,7 @@ const Page = () => {
           대관양도
         </Button>
       </div>
-      <div className="h-full">
+      <div className="h-screen">
         <Table
           color="primary"
           aria-label="게시글 목록"
@@ -220,7 +220,7 @@ const Page = () => {
                     </TableRow>
                   ))
               : (
-                  communityBoard?.slice(
+                  categoriedBoard?.slice(
                     (page - 1) * rowsPerPage,
                     (page - 1) * rowsPerPage + rowsPerPage
                   ) || []
