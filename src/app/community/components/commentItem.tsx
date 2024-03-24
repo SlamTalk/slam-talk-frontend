@@ -43,7 +43,6 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   const handleEdit = () => {
     setEditToggle(!editToggle);
     if (editToggle && editedComment !== '') {
-      console.log(editedComment);
       patchArticleComment.mutate();
       setEditToggle(false);
     }
@@ -58,10 +57,11 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   const handleDelete = () => {
     deleteArticleComment.mutate();
   };
+
   return (
     <div
       key={commentId}
-      className="border-gray mt-2 flex items-center overflow-x-hidden border-b-2"
+      className="border-gray mt-2 flex items-center border-b-2"
     >
       <UserProfile isOpen={isOpen} userId={userId} onClose={onClose} />
 
@@ -85,11 +85,11 @@ const CommentItem: React.FC<ICommentItemProps> = ({
         />
       ) : (
         <div className="mt-2">
-          <p className="mb-1 ms-5 font-bold">{writerUserInfo?.nickname}</p>
-          <h2 className="ms-5 h-10 w-[750px]">{content}</h2>
+          <p className="mb-1 ms-5  font-bold">{writerUserInfo?.nickname}</p>
+          <h2 className="ms-5 h-10 w-[460px] sm:w-[240px]">{content}</h2>
         </div>
       )}
-      {loginUserData?.id === writerUserInfo?.id && writerUserInfo !== null ? (
+      {loginUserData?.id === userId ? (
         <div aria-label="comment button group" className="w-40">
           <button
             onClick={handleEdit}
