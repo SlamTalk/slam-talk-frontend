@@ -133,7 +133,7 @@ const ChatList = () => {
     </div>
   ) : (
     <div>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
         <ModalContent>
           {() => (
             <>
