@@ -207,7 +207,7 @@ const Chatting = () => {
   }, []);
 
   return (
-    <div aria-label="chat room wrapper" className="min-h-[667px]">
+    <div aria-label="chat room wrapper" className="min-h-[50px]">
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
         <ModalContent>
           {(onClose) => (

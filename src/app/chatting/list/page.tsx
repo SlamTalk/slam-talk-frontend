@@ -29,6 +29,14 @@ const ChatList = () => {
   const router = useRouter();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  useEffect(() => {
+    if (isLoggedIn === 'false') {
+      onOpen();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // const { data: loginData } = useQuery({
   //   queryKey: ['loginData'],
   //   queryFn: getUserData,
@@ -51,27 +59,10 @@ const ChatList = () => {
     queryFn: getChatList,
   });
 
-  // if (!myChatList) {
-  //   return (
-  //     <div>
-  //       참여중인 채팅방이 없습니다
-  //       <button
-  //         type="button"
-  //         onClick={() => {
-  //           postChatRoom();
-  //         }}
-  //       >
-  //         testroom
-  //       </button>
-  //     </div>
-  //   );
-  // }
-  useEffect(() => {
-    if (isLoggedIn === 'false') {
-      onOpen();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  if (myChatList?.length === 0) {
+    return <div>참여중인 채팅방이 없습니다</div>;
+  }
+
   return myChatList ? (
     <div>
       <div className="text-xl">나의 채팅 목록</div>
