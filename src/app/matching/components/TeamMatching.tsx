@@ -13,7 +13,12 @@ import { infiniteFetchTeamData } from '@/services/matching/getTeamData';
 import { useInView } from 'react-intersection-observer';
 import TeamPostCard from './TeamPostCard';
 
-const levels = ['입문', '하수', '중수', '고수'];
+const levels = [
+  { label: '입문', value: 'BEGINER' },
+  { label: '하수', value: 'LOW' },
+  { label: '중수', value: 'MIDDLE' },
+  { label: '고수', value: 'HIGH' },
+];
 
 const cities = [
   '서울',
@@ -151,8 +156,8 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
             className="ml-[16px] sm:ml-0"
           >
             {levels.map((level) => (
-              <SelectItem key={level} value={level}>
-                {level}
+              <SelectItem key={level.value} value={level.value}>
+                {level.label}
               </SelectItem>
             ))}
           </Select>
