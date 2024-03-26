@@ -21,8 +21,7 @@ import LocalStorage from '@/utils/localstorage';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { IChatRoomListItem } from '../../../types/chat/chatRoomListItem';
-// import axiosInstance from '../../api/axiosInstance';
-// import { getUserData } from '../../../services/user/getUserData';
+
 import { getChatList } from '../../../services/chatting/getChatList';
 
 const ChatList = () => {
@@ -37,23 +36,6 @@ const ChatList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const { data: loginData } = useQuery({
-  //   queryKey: ['loginData'],
-  //   queryFn: getUserData,
-  // });
-  // const createData = {
-  //   participants: [1, loginData?.id, 4, 10],
-  //   roomType: 'TM',
-  //   together_id: '47000',
-  //   name: '함께 즐겨요~',
-  // };
-  // const postChatRoom = async () => {
-  //   const res = await axiosInstance.post(
-  //     `/api/chat/create`,
-  //     JSON.stringify(createData)
-  //   );
-  //   return res.data.results;
-  // };
   const { data: myChatList } = useQuery<IChatRoomListItem[]>({
     queryKey: ['myChatlist'],
     queryFn: getChatList,
@@ -111,16 +93,6 @@ const ChatList = () => {
           </div>
         </div>
       ))}
-      <div>
-        {/* <button
-          type="button"
-          onClick={() => {
-            postChatRoom();
-          }}
-        >
-          testroom
-        </button> */}
-      </div>
     </div>
   ) : (
     <div>
