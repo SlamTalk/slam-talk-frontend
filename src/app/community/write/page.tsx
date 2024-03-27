@@ -118,7 +118,7 @@ const Page = () => {
     <form method="post" encType="multipart/form-data">
       <title>슬램톡 | 커뮤니티 작성하기</title>
       <div className="flex flex-col">
-        <div className="flex space-x-96">
+        <div className="flex space-x-[460px] sm:space-x-60">
           <Dropdown>
             <DropdownTrigger>
               <Button variant="bordered">{selectedValue}</Button>
@@ -144,7 +144,7 @@ const Page = () => {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <div className="space-x-4">
+          <div className="space-x-1">
             <button
               className="font-bold text-orange-600"
               type="button"
