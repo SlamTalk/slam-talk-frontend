@@ -111,7 +111,7 @@ const Home = () => {
                 </Link>
               </Card>
             ) : (
-              <div className="flex min-h-[100px] items-center justify-center rounded-medium bg-gray-100">
+              <div className="flex min-h-[130px] items-center justify-center rounded-medium bg-gray-100">
                 <div className="text-md m-2 h-[50%] text-gray-400">
                   예정된 매칭이 없습니다.
                 </div>
