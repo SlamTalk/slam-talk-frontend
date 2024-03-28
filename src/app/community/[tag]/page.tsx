@@ -174,7 +174,7 @@ const Page = () => {
             대관양도
           </Button>
         </div>
-        <div>
+        <div className="pb-[48px]">
           <Table
             color="primary"
             aria-label="게시글 목록"
