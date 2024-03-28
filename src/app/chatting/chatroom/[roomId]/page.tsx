@@ -173,7 +173,7 @@ const Chatting = () => {
       }),
     });
     client.current?.deactivate();
-    console.log('퇴장~');
+
     router.back();
   };
   const postMore = async () => {
@@ -207,7 +207,10 @@ const Chatting = () => {
   }, []);
 
   return (
-    <div aria-label="chat room wrapper" className="min-h-[50px]">
+    <div
+      aria-label="chat room wrapper"
+      className="h-[calc(100vh-109px)] min-h-[50px] w-full"
+    >
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
         <ModalContent>
           {(onClose) => (

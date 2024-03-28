@@ -14,7 +14,6 @@ import {
 
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-// import { getChatList } from '@/services/chatting/getChatList';
 
 import LocalStorage from '@/utils/localstorage';
 
