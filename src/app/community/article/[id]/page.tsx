@@ -2,7 +2,7 @@
 
 import { Button } from '@nextui-org/button';
 import { useParams, useRouter } from 'next/navigation';
-import { Avatar, Tooltip, useDisclosure, Spinner } from '@nextui-org/react';
+import { Avatar, useDisclosure, Spinner } from '@nextui-org/react';
 import { IoChevronBackSharp } from 'react-icons/io5';
 // import { FaHeart } from 'react-icons/fa';
 
@@ -207,11 +207,14 @@ const Page = () => {
                 입력
               </Button>
             ) : (
-              <Tooltip content="로그인이 필요한 기능입니다">
-                <Button radius="sm" color="primary" onClick={handlePostComment}>
-                  입력
-                </Button>
-              </Tooltip>
+              <Button
+                isDisabled
+                radius="sm"
+                color="primary"
+                onClick={handlePostComment}
+              >
+                입력
+              </Button>
             )}
           </div>
           <CommentList commentListData={articleData?.comments} />
