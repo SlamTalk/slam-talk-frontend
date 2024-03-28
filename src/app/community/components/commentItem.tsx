@@ -1,6 +1,5 @@
 import { deleteComment } from '@/services/community/comment/deleteComment';
 import { patchComment } from '@/services/community/comment/patchComment';
-
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { getOtherUserData } from '@/services/user/getOtherUserData';
@@ -61,11 +60,11 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   return (
     <div
       key={commentId}
-      className="border-gray mt-2 flex items-center border-b-2"
+      className="border-gray mt-2 flex items-center border-b-1"
     >
       <UserProfile isOpen={isOpen} userId={userId} onClose={onClose} />
 
-      <div aria-label="작성자 정보" style={{ cursor: 'pointer' }}>
+      <div aria-label="작성자 정보" className="cursor-pointer p-2">
         <Avatar
           size="md"
           src={writerUserInfo?.imageUrl}
@@ -84,29 +83,34 @@ const CommentItem: React.FC<ICommentItemProps> = ({
           }}
         />
       ) : (
-        <div className="mt-2">
-          <p className="mb-1 ms-5  font-bold">{writerUserInfo?.nickname}</p>
-          <h2 className="ms-5 h-10 w-[460px] sm:w-[240px]">{content}</h2>
+        <div className="flex w-full justify-between">
+          <div className="my-2 ml-1 flex flex-col">
+            <p className="font-bold">{writerUserInfo?.nickname}</p>
+            <p className="">{content}</p>
+          </div>
+          {loginUserData?.id === userId && (
+            <div
+              aria-label="comment button group"
+              className="my-2 mr-4 flex flex-col break-keep text-sm"
+            >
+              <button
+                onClick={handleEdit}
+                className="text-gray-600 hover:text-primary"
+                type="button"
+              >
+                수정
+              </button>
+              <button
+                onClick={handleDelete}
+                type="button"
+                className="text-gray-600 hover:text-primary"
+              >
+                삭제
+              </button>
+            </div>
+          )}
         </div>
       )}
-      {loginUserData?.id === userId ? (
-        <div aria-label="comment button group" className="w-40">
-          <button
-            onClick={handleEdit}
-            className="text-gray-600 hover:text-primary"
-            type="button"
-          >
-            수정
-          </button>
-          <button
-            onClick={handleDelete}
-            type="button"
-            className="mx-3 text-gray-600 hover:text-primary"
-          >
-            삭제
-          </button>
-        </div>
-      ) : null}
     </div>
   );
 };
