@@ -107,8 +107,6 @@ const Chatting = () => {
             }),
             headers: { authorization: `Bearer ${accessToken}` },
           });
-
-          messageListData();
         }
       },
       onStompError: (err) => {
@@ -202,7 +200,9 @@ const Chatting = () => {
     const fetchData = async () => {
       connect();
     };
+    messageListData();
     fetchData();
+    postMore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -260,7 +260,6 @@ const Chatting = () => {
         </div>
       </div>
       <div className=" fixed	flex h-[80px] w-full max-w-[600px] flex-col items-center justify-center space-y-5">
-        <Button onClick={postMore}>more</Button>
         {greeting ? (
           <div
             aria-label="첫 방문 메시지 wrapper"
