@@ -49,8 +49,8 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
   }, [messages]);
   return (
     <div
-      key={messages[0]?.roomId}
-      className="mt-16 h-[calc(100vh-121px)] min-h-[50px] w-full	overflow-y-scroll"
+      key={messages[0]?.messageId}
+      className="h-[calc(100vh-109px)] min-h-[50px]	w-full overflow-y-scroll"
     >
       {messages.map((i: IMessage) =>
         i.senderNickname?.replace(/"/g, '') === nickname
