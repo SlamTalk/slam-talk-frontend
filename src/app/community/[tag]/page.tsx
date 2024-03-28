@@ -84,7 +84,7 @@ const Page = () => {
   };
 
   return (
-    <div className="relative h-[calc(100vh-109px)] w-full overflow-y-scroll">
+    <div className="relative h-[calc(100vh-109px)] w-full">
       <title>슬램톡 | 커뮤니티</title>
       <div className="">
         <div className="z-10 flex transform items-center justify-center rounded-md bg-background p-1 shadow-md">
@@ -174,7 +174,7 @@ const Page = () => {
             대관양도
           </Button>
         </div>
-        <div className="">
+        <div>
           <Table
             color="primary"
             aria-label="게시글 목록"

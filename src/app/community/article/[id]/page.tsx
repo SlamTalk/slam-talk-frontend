@@ -68,9 +68,6 @@ const Page = () => {
     mutationFn: () => postComment(commentData),
   });
   const handlePostComment = () => {
-    if (!loginData) {
-      router.push('/login');
-    }
     if (comment !== '') {
       setCommentData({
         communityId: +params.id,
@@ -99,14 +96,14 @@ const Page = () => {
   };
   if (isLoading) {
     return (
-      <div className="align-center flex h-screen justify-center">
+      <div className="align-center flex h-[calc(100vh-109px)] w-full justify-center">
         <Spinner size="lg" color="primary" />
       </div>
     ); // 로딩 중일 때 로딩 화면을 표시합니다.
   }
 
   return (
-    <div className="h-[90vh]">
+    <div className="relative h-[calc(100vh-109px)] w-full overflow-hidden">
       <UserProfile isOpen={isOpen} userId={writerId} onClose={onClose} />
       {articleData ? (
         <div>
@@ -122,14 +119,14 @@ const Page = () => {
             />
             <h1 className="flex-grow text-center">{articleData.title}</h1>
           </div>
-          <div className="flex h-[295px] flex-col">
+          <div className="flex flex-col">
             <div aria-label="contentsCard">
               <div
                 aria-label="유저 아바타"
                 className="mt-1 flex items-center border-b-1 sm:space-x-[60px] md:space-x-[260px]"
                 style={{ cursor: 'pointer' }}
               >
-                <div className="flex items-center">
+                <div className="ml-1 flex items-center p-1">
                   <Avatar
                     onClick={() => {
                       onOpen();
@@ -139,17 +136,20 @@ const Page = () => {
                   />
                   <p
                     aria-label="작성자 닉네임"
-                    className="w-[180px] text-lg font-bold"
+                    className="text-md w-[180px] font-bold"
                   >
                     {articleData.userNickname}
                   </p>
                 </div>
-                <p aria-label="작성일자" className="w-[100px] text-gray-400">
+                <p
+                  aria-label="작성일자"
+                  className="w-[100px] text-sm text-gray-400"
+                >
                   {articleData.updatedAt.toString().split('T')[0]}
                 </p>
               </div>
 
-              <div className="h-[200px] border-b-2">
+              <div className="min-h-[200px] border-b-2">
                 <p aria-label="게시글 컨텐츠" className="m-2">
                   {articleData.content}
                 </p>
@@ -196,28 +196,27 @@ const Page = () => {
           <div className="flex" aria-label="댓글 입력">
             <input
               placeholder="댓글을 입력해주세요"
-              className="w-11/12 rounded-md bg-background p-1 p-2 shadow-md focus:outline-none focus:ring-0"
+              className="w-11/12 rounded-md bg-background p-2 shadow-md focus:outline-none focus:ring-0"
               value={comment}
               onChange={(e) => {
                 setComment(e.target.value);
               }}
             />
-            <Tooltip
-              content={loginData !== null ? '' : '로그인이 필요한 기능입니다'}
-            >
-              <Button
-                className="w-[10px] hover:bg-primary hover:text-white"
-                onClick={handlePostComment}
-              >
+            {loginData ? (
+              <Button radius="sm" color="primary" onClick={handlePostComment}>
                 입력
               </Button>
-            </Tooltip>
+            ) : (
+              <Tooltip content="로그인이 필요한 기능입니다">
+                <Button radius="sm" color="primary" onClick={handlePostComment}>
+                  입력
+                </Button>
+              </Tooltip>
+            )}
           </div>
           <CommentList commentListData={articleData?.comments} />
         </div>
-      ) : (
-        <p>404 not found</p>
-      )}
+      ) : null}
     </div>
   );
 };
