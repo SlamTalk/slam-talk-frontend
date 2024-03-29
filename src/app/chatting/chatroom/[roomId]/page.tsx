@@ -188,7 +188,7 @@ const Chatting = () => {
           ])
         ).values()
       );
-      setMessageListState(() => [...messageListState, ...unique.reverse()]);
+      setMessageListState(() => [...messageListState, ...unique].reverse());
     } catch (err) {
       console.error(err);
     }

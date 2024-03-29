@@ -48,10 +48,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
   return (
-    <div
-      key={messages[0]?.messageId}
-      className="h-[calc(100vh-109px)] min-h-[50px]	w-full overflow-y-scroll"
-    >
+    <div className="h-[calc(100vh-109px)] min-h-[50px]	w-full overflow-y-scroll">
       {messages.map((i: IMessage) =>
         i.senderNickname?.replace(/"/g, '') === nickname
           ? i.senderNickname?.replace(/"/g, '') && (
