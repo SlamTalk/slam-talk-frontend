@@ -92,7 +92,6 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
-      console.log(inView);
     }
   }, [inView, fetchNextPage, hasNextPage]);
 
