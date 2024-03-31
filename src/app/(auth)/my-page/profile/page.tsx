@@ -3,9 +3,9 @@
 'use client';
 
 import {
-  basketballUserPositionData,
-  basketballUserSkillData,
-} from '@/constants/basketballUserData';
+  basketballSkillData,
+  basketballPositionUserData,
+} from '@/constants/basketballInfoData';
 import { getUserData } from '@/services/user/getUserData';
 import LocalStorage from '@/utils/localstorage';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -344,7 +344,7 @@ const MyProfile = () => {
                     onSelectionChange={() => setEdit(true)}
                     {...register('basketballPosition')}
                   >
-                    {basketballUserPositionData.map((position) => (
+                    {basketballPositionUserData.map((position) => (
                       <SelectItem key={position.value} value={position.value}>
                         {position.value}
                       </SelectItem>
@@ -361,7 +361,7 @@ const MyProfile = () => {
                     onSelectionChange={() => setEdit(true)}
                     {...register('basketballSkillLevel')}
                   >
-                    {basketballUserSkillData.map((skill) => (
+                    {basketballSkillData.map((skill) => (
                       <SelectItem key={skill.value} value={skill.value}>
                         {skill.value}
                       </SelectItem>
