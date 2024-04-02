@@ -12,6 +12,18 @@ export const basketballPositionUserData = [
   { value: '미정', key: 'UNSPECIFIED' },
 ];
 
+export const basketballPositionSurveyData = [
+  {
+    value: '가드',
+  },
+  {
+    value: '포워드',
+  },
+  { value: '센터' },
+  { value: '몰라요' },
+  { value: '이것저것 해요' },
+];
+
 export const basketballPositionApplyData = [
   {
     value: '가드',
@@ -38,7 +50,7 @@ export const basketballPositionFilterData = [
 ];
 
 export const basketballSkillData = [
-  { value: '입문', key: 'BEGINER' },
+  { value: '입문', key: 'BEGINNER' },
   { value: '하수', key: 'LOW' },
   { value: '중수', key: 'MIDDLE' },
   { value: '고수', key: 'HIGH' },
