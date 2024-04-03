@@ -52,6 +52,11 @@ export interface MatePost {
   createdAt: string;
 }
 
+export interface InfiniteMatePost {
+  nextCursor: string | null;
+  matePostList: MatePost[];
+}
+
 export interface MatePostLists {
   matePostList: MatePost[];
   nextCursor: string | null;

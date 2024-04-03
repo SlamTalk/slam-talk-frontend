@@ -43,17 +43,8 @@ const Page = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [page, setPage] = useState(1);
-  const rowsPerPage = 11;
-  const pages = useMemo(
-    () =>
-      communityBoard && tag === ''
-        ? Math.ceil((communityBoard || []).length / rowsPerPage)
-        : Math.ceil((communityBoard || []).length / rowsPerPage),
-    [communityBoard, tag]
-  );
-
   const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 415);
@@ -64,6 +55,16 @@ const Page = () => {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const [page, setPage] = useState(1);
+  const rowsPerPage = isMobile ? 13 : 16;
+  const pages = useMemo(
+    () =>
+      communityBoard && tag === ''
+        ? Math.ceil((communityBoard || []).length / rowsPerPage)
+        : Math.ceil((communityBoard || []).length / rowsPerPage),
+    [communityBoard, tag, rowsPerPage]
+  );
 
   const handleLink = (id: number) => {
     router.push(`/community/article/${id}`);
@@ -83,9 +84,9 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="relative h-[calc(100vh-109px)] w-full">
       <title>슬램톡 | 커뮤니티</title>
-      <div className="z-10 flex w-full transform items-center justify-center rounded-md bg-background p-1 shadow-md">
+      <div className="z-10 flex transform items-center justify-center rounded-md bg-background p-1 shadow-md">
         <input
           aria-label="검색창"
           value={inputData}
@@ -104,7 +105,7 @@ const Page = () => {
           <IoSearchSharp className="w-full text-gray-400 hover:text-black" />
         </button>
       </div>
-      <div className="sm:ap flex flex-wrap justify-center py-2 sm:space-x-2 md:space-x-12 ">
+      <div className="my-2 flex justify-between">
         <Button
           onClick={() => {
             setTag('');
@@ -172,7 +173,7 @@ const Page = () => {
           대관양도
         </Button>
       </div>
-      <div className="h-screen">
+      <div className="pb-[48px]">
         <Table
           color="primary"
           aria-label="게시글 목록"
@@ -190,10 +191,13 @@ const Page = () => {
               />
             </div>
           }
+          classNames={{
+            wrapper: 'h-full min-h-[710px] sm:min-h-[637px]',
+          }}
         >
           <TableHeader>
-            <TableColumn>TITLE</TableColumn>
-            <TableColumn>USER</TableColumn>
+            <TableColumn>제목</TableColumn>
+            <TableColumn>글쓴이</TableColumn>
           </TableHeader>
 
           <TableBody items={communityBoard ?? []} loadingContent={<Spinner />}>
@@ -243,7 +247,7 @@ const Page = () => {
           </TableBody>
         </Table>
       </div>
-      <div className="fixed bottom-14 w-full max-w-[600px]">
+      <div className="fixed bottom-14 right-0">
         <div className="mr-4 flex justify-end">
           <Button
             aria-label="Write new post"

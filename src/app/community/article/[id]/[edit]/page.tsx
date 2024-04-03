@@ -28,9 +28,6 @@ const Page = () => {
       setEditedContent('');
       router.push(`/community/article/${params.id}`);
     },
-    onError: (err) => {
-      console.log(err);
-    },
   });
 
   const onClickImageUpload = useCallback(() => {
