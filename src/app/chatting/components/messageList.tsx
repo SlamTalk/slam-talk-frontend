@@ -49,62 +49,97 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
   }, [messages]);
   return (
     <div className="h-[calc(100vh-109px)] min-h-[50px]	w-full overflow-y-scroll">
-      {messages.map((i: IMessage) =>
-        i.senderNickname?.replace(/"/g, '') === nickname
-          ? i.senderNickname?.replace(/"/g, '') && (
-              <div
-                key={i.messageId}
-                className="mt-5 flex h-20 w-full justify-end"
-              >
-                <div aria-label="나의 닉네임과 채팅 메시지">
-                  <p className="text-end">
-                    {i.senderNickname?.replace(/"/g, '')}
-                  </p>
-                  <div className="my-3 w-fit max-w-sm rounded-lg bg-primary px-3 py-2 text-white">
-                    {i.content.replace(/"/g, '')}
+      {messages.map((i: IMessage, index) => (
+        <div>
+          {new Date(i.timestamp).toLocaleDateString() !==
+          new Date(messages[index - 1]?.timestamp).toLocaleDateString() ? (
+            <div
+              aria-label="채팅 날짜"
+              className="m-6 flex h-6 items-center justify-center rounded bg-gray-300"
+            >
+              <p className="text-center text-white">
+                {new Date(i.timestamp).toLocaleDateString().split('.')[0]}년
+                {new Date(i.timestamp).toLocaleDateString().split('.')[1]}월
+                {new Date(i.timestamp).toLocaleDateString().split('.')[2]}일
+              </p>
+            </div>
+          ) : null}
+          {i.senderNickname?.replace(/"/g, '') === nickname
+            ? i.senderNickname?.replace(/"/g, '') && (
+                <div
+                  key={i.messageId}
+                  className="mt-5 flex h-20 w-full justify-end"
+                >
+                  <div aria-label="나의 닉네임과 채팅 메시지">
+                    <p className="text-end">
+                      {i.senderNickname?.replace(/"/g, '')}
+                    </p>
+                    <div className="flex items-center">
+                      <p aria-label="나의 채팅 시간">
+                        {new Date(i.timestamp).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
+                      <div className="my-3 ms-3 w-fit max-w-sm rounded-lg bg-primary px-3 py-2 text-white">
+                        {i.content.replace(/"/g, '')}
+                      </div>
+                    </div>
+                  </div>
+                  <div aria-label="userIcon">
+                    <Avatar
+                      className="z-10 mx-2"
+                      alt="my-profile"
+                      src={i?.imgUrl}
+                    />
                   </div>
                 </div>
-                <div aria-label="userIcon">
-                  <Avatar
-                    className="z-10 mx-2"
-                    alt="my-profile"
-                    src={i?.imgUrl}
-                  />
-                </div>
-              </div>
-            )
-          : i.senderNickname?.replace(/"/g, '') !== nickname && (
-              <div
-                key={i.messageId}
-                className="mt-5 flex h-20 w-full justify-start"
-              >
-                <div aria-label="userIcon">
-                  <UserProfile
-                    isOpen={isOpen}
-                    userId={+i.senderId}
-                    onClose={onClose}
-                  />
+              )
+            : i.senderNickname?.replace(/"/g, '') !== nickname && (
+                <div
+                  key={i.messageId}
+                  className="mt-5 flex h-20 w-full justify-start"
+                >
+                  <div aria-label="userIcon">
+                    <UserProfile
+                      isOpen={isOpen}
+                      userId={+i.senderId}
+                      onClose={onClose}
+                    />
 
-                  <Avatar
-                    onClick={onOpen}
-                    style={{ cursor: 'pointer' }}
-                    className="mx-2"
-                    alt="others-profile"
-                    src={i?.imgUrl}
-                  />
-                </div>
-                <div aria-label="상대방의 닉네임과 채팅 메시지">
-                  <p className="text-start">
-                    {i.senderNickname?.replace(/"/g, '')}
-                  </p>
+                    <Avatar
+                      onClick={onOpen}
+                      style={{ cursor: 'pointer' }}
+                      className="mx-2"
+                      alt="others-profile"
+                      src={i?.imgUrl}
+                    />
+                  </div>
 
-                  <div className="my-1 w-fit max-w-sm rounded-lg bg-gray-200 px-3 py-2 text-black">
-                    {i.content?.replace(/"/g, '')}
+                  <div className="item-center flex">
+                    <div aria-label="상대방의 닉네임과 채팅 메시지">
+                      <p className="text-start">
+                        {i.senderNickname?.replace(/"/g, '')}
+                      </p>
+
+                      <div className="flex items-center">
+                        <div className="my-1 me-3 w-fit max-w-sm rounded-lg bg-gray-200 px-3 py-2 text-black">
+                          {i.content?.replace(/"/g, '')}
+                        </div>
+                        <p aria-label="나의 채팅 시간">
+                          {new Date(i.timestamp).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
-      )}
+              )}
+        </div>
+      ))}
+
       <div ref={messageEndRef}> </div>
     </div>
   );
