@@ -76,7 +76,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                     </p>
                     <div className="flex items-center">
                       <p aria-label="나의 채팅 시간">
-                        {new Date(i.timestamp).toLocaleTimeString([], {
+                        {new Date(i.timestamp).toLocaleTimeString('ko-KR', {
                           hour: '2-digit',
                           minute: '2-digit',
                         })}

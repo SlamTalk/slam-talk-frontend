@@ -195,11 +195,10 @@ const Chatting = () => {
   };
   useEffect(() => {
     inputRef.current?.focus();
-    const fetchData = async () => {
-      connect();
-    };
+
     messageListData();
-    fetchData();
+
+    connect();
     postMore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
