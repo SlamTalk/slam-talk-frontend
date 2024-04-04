@@ -106,11 +106,9 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                       userId={+i.senderId}
                       onClose={onClose}
                     />
-
                     <Avatar
                       onClick={onOpen}
-                      style={{ cursor: 'pointer' }}
-                      className="mx-2"
+                      className="mx-2 cursor-pointer"
                       alt="others-profile"
                       src={i?.imgUrl}
                     />
