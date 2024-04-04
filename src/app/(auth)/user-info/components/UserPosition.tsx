@@ -2,12 +2,11 @@
 
 import React from 'react';
 import { Button } from '@nextui-org/react';
+import { basketballPositionSurveyData } from '@/constants/basketballInfoData';
 
 interface UserPositionProps {
   onPositionSelect: (position: string) => void;
 }
-
-const positions = ['가드', '포워드', '센터', '몰라요', '이것저것 해요'];
 
 const UserPosition: React.FC<UserPositionProps> = ({ onPositionSelect }) => {
   const handlePositionSelect = (selectedPosition: string) => {
@@ -19,15 +18,15 @@ const UserPosition: React.FC<UserPositionProps> = ({ onPositionSelect }) => {
         포지션을 알려주세요
       </h1>
       <div className="flex flex-col gap-6 p-20 sm:p-10">
-        {positions.map((pos) => (
+        {basketballPositionSurveyData.map((position) => (
           <Button
-            key={pos}
+            key={position.value}
             size="lg"
             radius="full"
             className="bg-gradient-to-tr from-primary to-secondary text-xl font-semibold text-white shadow-lg dark:shadow-gray-600"
-            onClick={() => handlePositionSelect(pos)}
+            onClick={() => handlePositionSelect(position.value)}
           >
-            {pos}
+            {position.value}
           </Button>
         ))}
       </div>

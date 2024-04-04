@@ -40,7 +40,7 @@ const TeamPostCard: React.FC<TeamCardInfo> = ({
     <Card className="m-3">
       <div className="p-4">
         <div className="flex justify-between">
-          <h4 className="text-md max-w-[450px] overflow-hidden text-ellipsis whitespace-nowrap font-bold">
+          <h4 className="text-md overflow-hidden text-ellipsis whitespace-nowrap font-bold sm:max-w-[250px] md:max-w-[450px]">
             [{teamName}]{title}
           </h4>
           <span
