@@ -14,64 +14,36 @@ import {
 
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-// import { getChatList } from '@/services/chatting/getChatList';
 
 import LocalStorage from '@/utils/localstorage';
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { IChatRoomListItem } from '../../../types/chat/chatRoomListItem';
-// import axiosInstance from '../../api/axiosInstance';
-// import { getUserData } from '../../../services/user/getUserData';
+
 import { getChatList } from '../../../services/chatting/getChatList';
 
 const ChatList = () => {
   const router = useRouter();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  // const { data: loginData } = useQuery({
-  //   queryKey: ['loginData'],
-  //   queryFn: getUserData,
-  // });
-  // const createData = {
-  //   participants: [1, loginData?.id, 4, 10],
-  //   roomType: 'TM',
-  //   together_id: '47000',
-  //   name: '함께 즐겨요~',
-  // };
-  // const postChatRoom = async () => {
-  //   const res = await axiosInstance.post(
-  //     `/api/chat/create`,
-  //     JSON.stringify(createData)
-  //   );
-  //   return res.data.results;
-  // };
-  const { data: myChatList } = useQuery<IChatRoomListItem[]>({
-    queryKey: ['myChatlist'],
-    queryFn: getChatList,
-  });
 
-  // if (!myChatList) {
-  //   return (
-  //     <div>
-  //       참여중인 채팅방이 없습니다
-  //       <button
-  //         type="button"
-  //         onClick={() => {
-  //           postChatRoom();
-  //         }}
-  //       >
-  //         testroom
-  //       </button>
-  //     </div>
-  //   );
-  // }
   useEffect(() => {
     if (isLoggedIn === 'false') {
       onOpen();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const { data: myChatList } = useQuery<IChatRoomListItem[]>({
+    queryKey: ['myChatlist'],
+    queryFn: getChatList,
+  });
+
+  if (myChatList?.length === 0) {
+    return <div>참여중인 채팅방이 없습니다</div>;
+  }
+
   return myChatList ? (
     <div>
       <div className="text-xl">나의 채팅 목록</div>
@@ -120,20 +92,10 @@ const ChatList = () => {
           </div>
         </div>
       ))}
-      <div>
-        {/* <button
-          type="button"
-          onClick={() => {
-            postChatRoom();
-          }}
-        >
-          testroom
-        </button> */}
-      </div>
     </div>
   ) : (
     <div>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
         <ModalContent>
           {() => (
             <>
