@@ -177,11 +177,11 @@ const MyProfile = () => {
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-2">
                     <input
+                      className="hidden"
                       id="fileInput"
                       type="file"
                       accept="image/png, image/jpg, image/jpeg"
                       onChange={handleFileChange}
-                      style={{ display: 'none' }}
                     />
                     <Button
                       size="sm"

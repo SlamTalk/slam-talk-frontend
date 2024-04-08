@@ -219,14 +219,13 @@ const KakaoMap = () => {
 
   return (
     <>
-      <div className="relative h-[calc(100vh-109px)] w-full">
+      <div className="relative h-[calc(100vh-109px)] w-full max-w-[600px]">
         <title>슬램톡 | 농구장 지도</title>
         <Map
-          className="relative z-0"
+          className="relative z-0 h-full w-full"
           id="map"
           center={location.center}
           level={3}
-          style={{ width: '100%', height: '100%' }}
           onCreate={setMap}
           onClick={handleClickReport}
         >
@@ -373,25 +372,27 @@ const KakaoMap = () => {
             onReportSuccess={() => setMode(false)}
           />
         )}
-        <div className="absolute bottom-10 right-6 z-10 flex flex-col items-end gap-y-3">
-          <Button
-            isIconOnly
-            aria-label="Current Location"
-            type="button"
-            className="justify-center rounded-full bg-primary shadow-md"
-            onClick={handleMoveUserLocation}
-          >
-            <MdMyLocation size={22} className="text-white" />
-          </Button>
-          <Button
-            startContent={<BiSolidLocationPlus size={20} />}
-            aria-label="Court Report"
-            type="button"
-            className="justify-center rounded-full bg-primary text-white shadow-md"
-            onClick={handleToggleMapClickEvent}
-          >
-            {mode ? '취소' : '농구장 제보'}
-          </Button>
+        <div className="fixed bottom-14 w-full max-w-[600px]">
+          <div className="mr-4 flex flex-col items-end gap-3">
+            <Button
+              isIconOnly
+              aria-label="Current Location"
+              type="button"
+              className="justify-center rounded-full bg-primary shadow-md"
+              onClick={handleMoveUserLocation}
+            >
+              <MdMyLocation size={22} className="text-white" />
+            </Button>
+            <Button
+              startContent={<BiSolidLocationPlus size={20} />}
+              aria-label="Court Report"
+              type="button"
+              className="justify-center rounded-full bg-primary text-white shadow-md"
+              onClick={handleToggleMapClickEvent}
+            >
+              {mode ? '취소' : '농구장 제보'}
+            </Button>
+          </div>
         </div>
       </div>
       <Modal size="sm" isOpen={isOpen} onClose={onClose} placement="center">
