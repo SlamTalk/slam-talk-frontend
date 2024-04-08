@@ -82,6 +82,12 @@ const EmailLogin = () => {
   };
   const handleToggleVisibility = () => setIsVisible(!isVisible);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
   return (
     <>
       <title>슬램톡 | 로그인</title>
@@ -131,7 +137,13 @@ const EmailLogin = () => {
         />
         <div className="mb-3 h-3 text-sm text-danger" />
         {validateEmail(email) && validatePassword(password) ? (
-          <Button size="lg" radius="sm" color="primary" onClick={handleLogin}>
+          <Button
+            size="lg"
+            radius="sm"
+            color="primary"
+            onClick={handleLogin}
+            onKeyDown={handleKeyDown}
+          >
             로그인
           </Button>
         ) : (
