@@ -10,6 +10,13 @@ const Loginlayout = ({ children }: { children: React.ReactNode }) => {
   const handleGoBack = () => {
     router.back();
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleGoBack();
+    }
+  };
+
   return (
     <div className="md:h-100 sm:h-100 relative h-full w-full">
       <div
@@ -18,11 +25,7 @@ const Loginlayout = ({ children }: { children: React.ReactNode }) => {
         tabIndex={0}
         className="absolute left-4 top-0"
         onClick={handleGoBack}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleGoBack();
-          }
-        }}
+        onKeyDown={handleKeyDown}
       >
         <IoChevronBackSharp size={24} />
       </div>

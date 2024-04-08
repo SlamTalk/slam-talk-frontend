@@ -135,6 +135,12 @@ const NicknamePassword: React.FC<EmailProps> = ({ validEmail }) => {
     onOpen();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleShowAlert();
+    }
+  };
+
   const handleCloseAlert = () => {
     setAlert(false);
     onClose();
@@ -149,11 +155,7 @@ const NicknamePassword: React.FC<EmailProps> = ({ validEmail }) => {
           tabIndex={0}
           className="absolute left-0 top-0"
           onClick={handleShowAlert}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleShowAlert();
-            }
-          }}
+          onKeyDown={handleKeyDown}
         >
           <IoChevronBackSharp size={24} />
         </div>
