@@ -225,11 +225,11 @@ const CourtReport: React.FC<CourtReportProps> = ({
               </Button>
             </div>
             <input
+              className="hidden"
               id="fileInput"
               type="file"
               accept="image/png, image/jpg, image/jpeg"
               onChange={handleFileChange}
-              style={{ display: 'none' }}
             />
             {previewUrl && (
               <>

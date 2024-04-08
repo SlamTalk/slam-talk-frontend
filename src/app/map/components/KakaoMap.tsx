@@ -222,11 +222,10 @@ const KakaoMap = () => {
       <div className="relative h-[calc(100vh-109px)] w-full">
         <title>슬램톡 | 농구장 지도</title>
         <Map
-          className="relative z-0"
+          className="relative z-0 h-full w-full"
           id="map"
           center={location.center}
           level={3}
-          style={{ width: '100%', height: '100%' }}
           onCreate={setMap}
           onClick={handleClickReport}
         >
