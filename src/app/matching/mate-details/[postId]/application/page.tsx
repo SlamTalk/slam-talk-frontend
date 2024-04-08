@@ -7,6 +7,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { postNewApplication } from '@/services/matching/postNewApplication';
 import { ParticipantApplication } from '@/types/matching/mateDataType';
+import {
+  basketballSkillData,
+  basketballPositionApplyData,
+} from '@/constants/basketballInfoData';
 
 const MateMatchingApplication = () => {
   const [skillLevel, setSkillLevel] = useState('');
@@ -59,18 +63,14 @@ const MateMatchingApplication = () => {
           className="w-full"
           placeholder="포지션을 선택하세요"
         >
-          <SelectItem key="CENTER" value="CENTER">
-            센터
-          </SelectItem>
-          <SelectItem key="FORWARD" value="FORWARD">
-            포워드
-          </SelectItem>
-          <SelectItem key="GUARD" value="GUARD">
-            가드
-          </SelectItem>
-          <SelectItem key="UNSPECIFIED" value="UNSPECIFIED">
-            무관
-          </SelectItem>
+          {basketballPositionApplyData.map((selectedPosition) => (
+            <SelectItem
+              key={selectedPosition.value}
+              value={selectedPosition.value}
+            >
+              {selectedPosition.value}
+            </SelectItem>
+          ))}
         </Select>
       </div>
       <div className="mb-4">
@@ -85,18 +85,11 @@ const MateMatchingApplication = () => {
           className="w-full"
           placeholder="실력대를 선택하세요"
         >
-          <SelectItem key="BEGINNER" value="BEGINNER">
-            입문
-          </SelectItem>
-          <SelectItem key="LOW" value="LOW">
-            하수
-          </SelectItem>
-          <SelectItem key="MIDDLE" value="MIDDLE">
-            중수
-          </SelectItem>
-          <SelectItem key="HIGH" value="HIGH">
-            고수
-          </SelectItem>
+          {basketballSkillData.map((level) => (
+            <SelectItem key={level.key} value={level.key}>
+              {level.value}
+            </SelectItem>
+          ))}
         </Select>
       </div>
       <div className="mt-10 flex w-full">
