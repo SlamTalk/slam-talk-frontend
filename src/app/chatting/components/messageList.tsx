@@ -20,7 +20,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
   useEffect(() => {
     // messageListData();
     setMessages(list);
-
+    console.log(messages);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
@@ -58,9 +58,18 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
               className="m-6 flex h-6 items-center justify-center rounded bg-gray-300"
             >
               <p className="text-center text-white">
-                {new Date(i.timestamp).toLocaleDateString().split('.')[0]}년
-                {new Date(i.timestamp).toLocaleDateString().split('.')[1]}월
-                {new Date(i.timestamp).toLocaleDateString().split('.')[2]}일
+                {i.timestamp
+                  ? new Date(i.timestamp).toLocaleDateString().split('.')[0]
+                  : new Date().toLocaleDateString().split('.')[0]}
+                년{' '}
+                {i.timestamp
+                  ? new Date(i.timestamp).toLocaleDateString().split('.')[1]
+                  : new Date().toLocaleDateString().split('.')[1]}
+                월
+                {i.timestamp
+                  ? new Date(i.timestamp).toLocaleDateString().split('.')[2]
+                  : new Date().toLocaleDateString().split('.')[2]}
+                일
               </p>
             </div>
           ) : null}
@@ -76,10 +85,15 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                     </p>
                     <div className="flex items-center">
                       <p aria-label="나의 채팅 시간">
-                        {new Date(i.timestamp).toLocaleTimeString('ko-KR', {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
+                        {i.timestamp
+                          ? new Date(i.timestamp).toLocaleTimeString('ko-KR', {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })
+                          : new Date().toLocaleTimeString('ko-KR', {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
                       </p>
                       <div className="my-3 ms-3 w-fit max-w-sm rounded-lg bg-primary px-3 py-2 text-white">
                         {i.content.replace(/"/g, '')}
@@ -125,10 +139,15 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                           {i.content?.replace(/"/g, '')}
                         </div>
                         <p aria-label="나의 채팅 시간">
-                          {new Date(i.timestamp).toLocaleTimeString([], {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })}
+                          {i.timestamp
+                            ? new Date(i.timestamp).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })
+                            : new Date().toLocaleTimeString('ko-KR', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
                         </p>
                       </div>
                     </div>
