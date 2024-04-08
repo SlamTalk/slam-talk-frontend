@@ -84,7 +84,7 @@ const Page = () => {
   };
 
   return (
-    <div className="relative h-[calc(100vh-109px)] w-full">
+    <div className="relative h-[calc(100vh-109px)] w-full max-w-[600px]">
       <title>슬램톡 | 커뮤니티</title>
       <div className="z-10 flex transform items-center justify-center rounded-md bg-background p-1 shadow-md">
         <input
@@ -247,7 +247,7 @@ const Page = () => {
           </TableBody>
         </Table>
       </div>
-      <div className="fixed bottom-14 right-0">
+      <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Button
             aria-label="Write new post"
