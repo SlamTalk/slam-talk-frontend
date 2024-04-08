@@ -82,7 +82,7 @@ const EmailLogin = () => {
   };
   const handleToggleVisibility = () => setIsVisible(!isVisible);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleLogin();
     }
