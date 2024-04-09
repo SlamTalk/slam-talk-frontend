@@ -9,37 +9,13 @@ import { useRouter } from 'next/navigation';
 import { infiniteFetchMateData } from '@/services/matching/getMateData';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
+import {
+  basketballSkillData,
+  basketballPositionFilterData,
+} from '@/constants/basketballInfoData';
+import { locationFilterData } from '@/constants/locationData';
 import MatePostCard from './MatePostCard';
 import { InfiniteMatePost } from '../../../types/matching/mateDataType';
-
-const levels = [
-  { label: '입문', value: 'BEGINER' },
-  { label: '하수', value: 'LOW' },
-  { label: '중수', value: 'MIDDLE' },
-  { label: '고수', value: 'HIGH' },
-];
-
-const cities = [
-  '서울',
-  '부산',
-  '대구',
-  '인천',
-  '광주',
-  '대전',
-  '울산',
-  '세종',
-  '경기',
-  '강원',
-  '충북',
-  '충남',
-  '전북',
-  '전남',
-  '경북',
-  '경남',
-  '제주',
-];
-
-const positions = ['센터', '포워드', '가드'];
 
 interface MateMatchingProps {
   keywordProp: string | null;
@@ -115,9 +91,9 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
             }}
             className="text-bold"
           >
-            {cities.map((city) => (
-              <SelectItem key={city} value={city}>
-                {city}
+            {locationFilterData.map((city) => (
+              <SelectItem key={city.value} value={city.value}>
+                {city.value}
               </SelectItem>
             ))}
           </Select>
@@ -135,9 +111,9 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
                 fontWeight: 'bold',
               }}
             >
-              {positions.map((position) => (
-                <SelectItem key={position} value={position}>
-                  {position}
+              {basketballPositionFilterData.map((position) => (
+                <SelectItem key={position.value} value={position.value}>
+                  {position.value}
                 </SelectItem>
               ))}
             </Select>
@@ -155,9 +131,9 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
               }}
               className="ml-[16px] sm:ml-0"
             >
-              {levels.map((level) => (
-                <SelectItem key={level.value} value={level.value}>
-                  {level.label}
+              {basketballSkillData.map((level) => (
+                <SelectItem key={level.key} value={level.key}>
+                  {level.value}
                 </SelectItem>
               ))}
             </Select>
