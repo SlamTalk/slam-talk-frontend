@@ -28,8 +28,32 @@ const MyPageSettings = () => {
     router.back();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleGoBack();
+    }
+  };
+
   const handleLogout = async () => {
     onOpen();
+  };
+
+  const handleKeyDownLogout = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLogout();
+    }
+  };
+
+  const handleGoChangePassword = () => {
+    router.push('/my-page/settings/change-password');
+  };
+
+  const handleKeyDownMoveToChangePassword = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === 'Enter') {
+      handleGoChangePassword();
+    }
   };
 
   const handleConfirmLogout = async () => {
@@ -55,11 +79,7 @@ const MyPageSettings = () => {
           tabIndex={0}
           className="absolute left-4 top-4"
           onClick={handleGoBack}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleGoBack();
-            }
-          }}
+          onKeyDown={handleKeyDown}
         >
           <IoChevronBackSharp size={24} />
         </div>
@@ -76,23 +96,15 @@ const MyPageSettings = () => {
               onClick={handleLogout}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleLogout();
-                }
-              }}
+              onKeyDown={handleKeyDownLogout}
             >
               로그아웃
             </div>
             <div
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleLogout();
-                }
-              }}
-              onClick={() => router.push('/my-page/settings/change-password')}
+              onKeyDown={handleKeyDownMoveToChangePassword}
+              onClick={handleGoChangePassword}
             >
               <p>비밀번호 변경</p>
             </div>

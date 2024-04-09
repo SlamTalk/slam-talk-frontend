@@ -87,6 +87,12 @@ const EmailValidation: React.FC<EmailValidateProps> = ({ onEmailValidate }) => {
     router.back();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleGoBack();
+    }
+  };
+
   return (
     <div className="relative h-full w-full">
       <div
@@ -95,11 +101,7 @@ const EmailValidation: React.FC<EmailValidateProps> = ({ onEmailValidate }) => {
         tabIndex={0}
         className="absolute left-0 top-0"
         onClick={handleGoBack}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleGoBack();
-          }
-        }}
+        onKeyDown={handleKeyDown}
       >
         <IoChevronBackSharp size={24} />
       </div>

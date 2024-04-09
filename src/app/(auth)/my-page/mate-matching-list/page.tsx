@@ -17,6 +17,12 @@ const MateMatchingList = () => {
     router.back();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleGoBack();
+    }
+  };
+
   return (
     <>
       <title>슬램톡 | 농구 메이트 찾기 내역</title>
@@ -27,11 +33,7 @@ const MateMatchingList = () => {
           tabIndex={0}
           className="absolute left-4 top-4"
           onClick={handleGoBack}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleGoBack();
-            }
-          }}
+          onKeyDown={handleKeyDown}
         >
           <IoChevronBackSharp size={24} />
         </div>
