@@ -78,14 +78,12 @@ const Chatting = () => {
         id: 'sub-0',
         authorization: `Bearer ${accessToken}`,
       },
-      onConnect: (msg) => {
-        console.log({ msg });
+      onConnect: () => {
         if (client.current !== null) {
           client.current.subscribe(
             `/sub/chat/room/${params.roomId}`,
             (frame) => {
               const dataMessage = JSON.parse(frame.body);
-              console.log({ dataMessage });
               setMessageListState((prev: IMessage[]) => [...prev, dataMessage]);
             },
             { authorization: `Bearer ${accessToken}` }
@@ -107,8 +105,6 @@ const Chatting = () => {
             }),
             headers: { authorization: `Bearer ${accessToken}` },
           });
-
-          messageListData();
         }
       },
       onStompError: (err) => {
@@ -173,7 +169,7 @@ const Chatting = () => {
       }),
     });
     client.current?.deactivate();
-    console.log('퇴장~');
+
     router.back();
   };
   const postMore = async () => {
@@ -192,23 +188,26 @@ const Chatting = () => {
           ])
         ).values()
       );
-      setMessageListState(() => [...messageListState, ...unique.reverse()]);
+      setMessageListState(() => [...messageListState, ...unique].reverse());
     } catch (err) {
       console.error(err);
     }
   };
   useEffect(() => {
     inputRef.current?.focus();
-    const fetchData = async () => {
-      connect();
-    };
-    fetchData();
+
+    messageListData();
+
+    connect();
+    postMore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div aria-label="chat room wrapper" className="min-h-[667px]">
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
+    <div aria-label="chat room wrapper" className="flex h-screen flex-col">
+      <title>슬램톡 | 채팅</title>
+
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
         <ModalContent>
           {(onClose) => (
             <>
@@ -230,53 +229,52 @@ const Chatting = () => {
           )}
         </ModalContent>
       </Modal>
-      <div>
-        <title>슬램톡 | 채팅</title>
-        <div className="fixed top-0 z-30 flex h-[61px] w-full max-w-[600px] items-center rounded-md bg-primary">
-          <IoChevronBackSharp
-            className="left-[20px] top-[20px] w-[50px] text-xl text-white"
-            cursor="pointer"
-            size={24}
-            onClick={handleToBack}
-          />
-          <h2 className="w-[525px] text-center text-xl text-white">
-            {roomInfo?.roomType === 'DIRECT' && roomInfo?.name}
-            {roomInfo?.roomType === 'BASKETBALL' && roomInfo?.name}
-            {roomInfo?.roomType === 'TOGETHER' && roomInfo?.name}
-            {roomInfo?.roomType === 'MATCHING' && roomInfo?.name}
-          </h2>
-          <div className="cursor-pointer">
-            <Button
-              isIconOnly
-              className="h-auto w-14 border-none bg-transparent"
-              onPress={onOpen}
-            >
-              <IoLogOutOutline className="w-[50px] text-2xl text-white" />
-            </Button>
-          </div>
-        </div>
-      </div>
-      <div className=" fixed	flex h-[80px] w-full max-w-[600px] flex-col items-center justify-center space-y-5">
-        <Button onClick={postMore}>more</Button>
-        {greeting ? (
-          <div
-            aria-label="첫 방문 메시지 wrapper"
-            className="flex	 w-full justify-center"
-          >
-            <p
-              aria-label="첫 방문 메시지"
-              className="z-50 h-[50px] w-[150px] rounded bg-gray-300 text-center text-white"
-            >
-              {greeting.split(' ')[0]}
-              {greeting.split(' ')[1]}
-              <br />
-              {greeting.split(' ')[2]}
-            </p>
-          </div>
-        ) : null}
+
+      <div
+        aria-label="채팅 헤더"
+        className="flex h-[60px] w-full max-w-[600px] items-center rounded-md bg-primary"
+      >
+        <IoChevronBackSharp
+          className="left-[20px] top-[20px] w-[50px] text-xl text-white"
+          cursor="pointer"
+          size={24}
+          onClick={handleToBack}
+        />
+        <h2 className="w-[525px] text-center text-xl text-white">
+          {roomInfo?.roomType === 'DIRECT' && roomInfo?.name}
+          {roomInfo?.roomType === 'BASKETBALL' && roomInfo?.name}
+          {roomInfo?.roomType === 'TOGETHER' && roomInfo?.name}
+          {roomInfo?.roomType === 'MATCHING' && roomInfo?.name}
+        </h2>
+
+        <Button
+          isIconOnly
+          className="h-auto w-14 cursor-pointer border-none bg-transparent"
+          onPress={onOpen}
+        >
+          <IoLogOutOutline className="w-[50px] text-2xl text-white" />
+        </Button>
       </div>
 
+      {greeting ? (
+        <div
+          aria-label="첫 방문 메시지 wrapper"
+          className="m-6 flex items-center justify-center"
+        >
+          <p
+            aria-label="첫 방문 메시지"
+            className="h-[50px] w-[150px] rounded bg-gray-300 text-center text-white"
+          >
+            {greeting.split(' ')[0]}
+            {greeting.split(' ')[1]}
+            <br />
+            {greeting.split(' ')[2]}
+          </p>
+        </div>
+      ) : null}
+
       <MessageList list={messageListState} />
+
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -284,8 +282,8 @@ const Chatting = () => {
         }}
       >
         <div
-          aria-label="chat input section"
-          className="b-0 fixed flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"
+          aria-label="채팅 입력창"
+          className="b-0 flex w-full min-w-full rounded-lg border border-gray-300 md:w-[600px] md:min-w-[375px]"
         >
           <Input
             ref={inputRef}

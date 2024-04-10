@@ -38,6 +38,12 @@ const MyPage = () => {
     router.back();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleGoBack();
+    }
+  };
+
   const handleAttend = async () => {
     try {
       const response = await axiosInstance.post('/api/user/attend');
@@ -77,11 +83,7 @@ const MyPage = () => {
               role="link"
               tabIndex={0}
               onClick={handleGoBack}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleGoBack();
-                }
-              }}
+              onKeyDown={handleKeyDown}
             >
               <IoChevronBackSharp size={24} />
             </div>

@@ -37,6 +37,12 @@ const ChangePassword = () => {
     router.back();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleGoBack();
+    }
+  };
+
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
@@ -91,11 +97,7 @@ const ChangePassword = () => {
             tabIndex={0}
             className="absolute left-4 top-4"
             onClick={handleGoBack}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleGoBack();
-              }
-            }}
+            onKeyDown={handleKeyDown}
           >
             <IoChevronBackSharp size={24} />
           </div>

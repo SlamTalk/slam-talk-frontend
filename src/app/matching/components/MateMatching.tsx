@@ -1,39 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Select, SelectItem, Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { FaPlus } from 'react-icons/fa';
-import { fetchMateData } from '@/services/matching/getMateData';
-import { useQuery } from '@tanstack/react-query';
 import LocalStorage from '@/utils/localstorage';
 import { useRouter } from 'next/navigation';
+import { infiniteFetchMateData } from '@/services/matching/getMateData';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInView } from 'react-intersection-observer';
+import {
+  basketballSkillData,
+  basketballPositionFilterData,
+} from '@/constants/basketballInfoData';
+import { locationFilterData } from '@/constants/locationData';
 import MatePostCard from './MatePostCard';
-import { MatePost } from '../../../types/matching/mateDataType';
-
-const levels = ['입문', '하수', '중수', '고수'];
-
-const cities = [
-  '서울',
-  '부산',
-  '대구',
-  '인천',
-  '광주',
-  '대전',
-  '울산',
-  '세종',
-  '경기',
-  '강원',
-  '충북',
-  '충남',
-  '전북',
-  '전남',
-  '경북',
-  '경남',
-  '제주',
-];
-
-const positions = ['센터', '포워드', '가드'];
+import { InfiniteMatePost } from '../../../types/matching/mateDataType';
 
 interface MateMatchingProps {
   keywordProp: string | null;
@@ -41,49 +23,45 @@ interface MateMatchingProps {
 
 const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   const router = useRouter();
+  const { ref, inView } = useInView({ threshold: 0, delay: 0 });
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedPosition, setSelectedPosition] = useState<string>('');
 
-  const { data } = useQuery<MatePost[], Error>({
-    queryKey: ['mate'],
-    queryFn: fetchMateData,
+  const { data, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<
+    InfiniteMatePost,
+    Error
+  >({
+    queryKey: ['mate', 'infinite'],
+    queryFn: ({ pageParam }: any) =>
+      infiniteFetchMateData(
+        pageParam,
+        selectedLevel,
+        selectedCity,
+        selectedPosition,
+        keywordProp
+      ),
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => lastPage?.nextCursor,
   });
 
-  const filteredMatePost = Array.isArray(data)
-    ? data.filter((post: MatePost) => {
-        // 장소 필터
-        const matchesCity = selectedCity
-          ? post.locationDetail.includes(selectedCity)
-          : true;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await refetch();
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
 
-        // 포지션 필터
-        const matchesPosition = selectedPosition
-          ? post.positionList.some(
-              (position) =>
-                position.position === selectedPosition ||
-                position.position === '무관'
-            )
-          : true;
+    fetchData();
+  }, [selectedCity, selectedLevel, selectedPosition, keywordProp, refetch]);
 
-        // 실력 필터
-        const matchesLevel = selectedLevel
-          ? post.skillLevelList.includes(selectedLevel)
-          : true;
-
-        // 검색어 필터링
-
-        const keyword = keywordProp?.toLowerCase();
-        const matchesKeyword = keyword
-          ? post.title.toLowerCase().includes(keyword) ||
-            post.content.toLowerCase().includes(keyword) ||
-            post.locationDetail.toLowerCase().includes(keyword) ||
-            post.writerNickname.toLowerCase().includes(keyword)
-          : true;
-
-        return matchesCity && matchesLevel && matchesPosition && matchesKeyword;
-      })
-    : [];
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
 
   const handleCreateNewPost = () => {
     const isLoggedIn = LocalStorage.getItem('isLoggedIn');
@@ -93,28 +71,6 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
       router.push(`/login`);
     }
   };
-
-  if (data?.length === 0) {
-    return (
-      <div>
-        <div className="mx-auto mt-[50px] max-w-[250px]">
-          게시글이 존재하지 않습니다.
-        </div>
-        <div className="fixed bottom-14 w-full max-w-[600px]">
-          <div className="mr-4 flex justify-end">
-            <Button
-              startContent={<FaPlus />}
-              color="primary"
-              className="rounded-full bg-primary text-white shadow-md"
-              onClick={handleCreateNewPost}
-            >
-              새 모집글 작성
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="relative mx-auto max-w-[600px] pb-[80px]">
@@ -135,9 +91,9 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
             }}
             className="text-bold"
           >
-            {cities.map((city) => (
-              <SelectItem key={city} value={city}>
-                {city}
+            {locationFilterData.map((city) => (
+              <SelectItem key={city.value} value={city.value}>
+                {city.value}
               </SelectItem>
             ))}
           </Select>
@@ -155,9 +111,9 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
                 fontWeight: 'bold',
               }}
             >
-              {positions.map((position) => (
-                <SelectItem key={position} value={position}>
-                  {position}
+              {basketballPositionFilterData.map((position) => (
+                <SelectItem key={position.value} value={position.value}>
+                  {position.value}
                 </SelectItem>
               ))}
             </Select>
@@ -175,31 +131,33 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
               }}
               className="ml-[16px] sm:ml-0"
             >
-              {levels.map((level) => (
-                <SelectItem key={level} value={level}>
-                  {level}
+              {basketballSkillData.map((level) => (
+                <SelectItem key={level.key} value={level.key}>
+                  {level.value}
                 </SelectItem>
               ))}
             </Select>
           </div>
         </div>
       </div>
-      {filteredMatePost.map((post: MatePost) => (
-        <Link
-          key={post.matePostId}
-          href={`/matching/mate-details/${post.matePostId}`}
-        >
-          <MatePostCard
-            title={post.title}
-            date={post.scheduledDate}
-            startTime={post.startTime}
-            location={post.locationDetail}
-            level={post.skillLevelList}
-            positionNeeds={post.positionList}
-            recruitmentStatus={post.recruitmentStatus}
-          />
-        </Link>
-      ))}
+      {data?.pages.map((page) =>
+        page.matePostList.map((post) => (
+          <Link
+            key={post.matePostId}
+            href={`/matching/mate-details/${post.matePostId}`}
+          >
+            <MatePostCard
+              title={post.title}
+              date={post.scheduledDate}
+              startTime={post.startTime}
+              location={post.locationDetail}
+              level={post.skillLevelList}
+              positionNeeds={post.positionList}
+              recruitmentStatus={post.recruitmentStatus}
+            />
+          </Link>
+        ))
+      )}
       <div className="fixed bottom-14 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Button
@@ -212,6 +170,7 @@ const MateMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
           </Button>
         </div>
       </div>
+      <div ref={ref} style={{ height: '10px' }} />
     </div>
   );
 };

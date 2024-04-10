@@ -11,31 +11,12 @@ import { useRouter } from 'next/navigation';
 import { infiniteFetchTeamData } from '@/services/matching/getTeamData';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useInView } from 'react-intersection-observer';
+import {
+  basketballSkillData,
+  basketballGameScaleFilterData,
+} from '@/constants/basketballInfoData';
+import { locationFilterData } from '@/constants/locationData';
 import TeamPostCard from './TeamPostCard';
-
-const levels = ['입문', '하수', '중수', '고수'];
-
-const cities = [
-  '서울',
-  '부산',
-  '대구',
-  '인천',
-  '광주',
-  '대전',
-  '울산',
-  '세종',
-  '경기',
-  '강원',
-  '충북',
-  '충남',
-  '전북',
-  '전남',
-  '경북',
-  '경남',
-  '제주',
-];
-
-const scale = ['2', '3', '4', '5'];
 
 interface MateMatchingProps {
   keywordProp: string | null;
@@ -87,7 +68,6 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
-      console.log(inView);
     }
   }, [inView, fetchNextPage, hasNextPage]);
 
@@ -119,9 +99,9 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
             }}
             className="text-bold"
           >
-            {cities.map((city) => (
-              <SelectItem key={city} value={city}>
-                {city}
+            {locationFilterData.map((city) => (
+              <SelectItem key={city.value} value={city.value}>
+                {city.value}
               </SelectItem>
             ))}
           </Select>
@@ -135,9 +115,9 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
             onChange={(e) => setSelectedNumberOfMembers(e.target.value)}
             style={{ width: '100px', fontWeight: 'bold' }}
           >
-            {scale.map((number) => (
-              <SelectItem key={number} value={number}>
-                {`${number} vs ${number}`}
+            {basketballGameScaleFilterData.map((number) => (
+              <SelectItem key={number.value} value={number.value}>
+                {`${number.value} vs ${number.value}`}
               </SelectItem>
             ))}
           </Select>
@@ -150,9 +130,9 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
             style={{ width: '80px', fontWeight: 'bold' }}
             className="ml-[16px] sm:ml-0"
           >
-            {levels.map((level) => (
-              <SelectItem key={level} value={level}>
-                {level}
+            {basketballSkillData.map((level) => (
+              <SelectItem key={level.key} value={level.key}>
+                {level.value}
               </SelectItem>
             ))}
           </Select>

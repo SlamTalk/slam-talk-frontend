@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Button, Card, CardFooter, Image } from '@nextui-org/react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Button, Card, CardFooter, Image, Link } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Schedule,
@@ -37,6 +37,8 @@ const convertToSchedule = (
 };
 
 const Home = () => {
+  const router = useRouter();
+
   const { data: schedule } = useQuery<ScheduleResponse['results'], Error>({
     queryKey: ['scheduleList'],
     queryFn: fetchScheduleList,
@@ -81,6 +83,12 @@ const Home = () => {
     return mostImminent;
   }, [schedule]);
 
+  const handleKeyDownGoMap = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      router.push('/map');
+    }
+  };
+
   return (
     <>
       <title>슬램톡 | 농구 플랫폼</title>
@@ -111,7 +119,7 @@ const Home = () => {
                 </Link>
               </Card>
             ) : (
-              <div className="flex min-h-[100px] items-center justify-center rounded-medium bg-gray-100">
+              <div className="flex min-h-[130px] items-center justify-center rounded-medium bg-gray-100">
                 <div className="text-md m-2 h-[50%] text-gray-400">
                   예정된 매칭이 없습니다.
                 </div>
@@ -122,7 +130,7 @@ const Home = () => {
             <div className="mb-2 mt-4 text-lg font-bold">
               집 주변의 농구장을 찾아보세요!
             </div>
-            <Link href="/map">
+            <Link href="/map" onKeyDown={handleKeyDownGoMap}>
               <Card>
                 <Image
                   isZoomed
@@ -137,6 +145,7 @@ const Home = () => {
                     color="primary"
                     radius="sm"
                     size="md"
+                    onKeyDown={handleKeyDownGoMap}
                   >
                     농구장 찾으러 가기
                   </Button>

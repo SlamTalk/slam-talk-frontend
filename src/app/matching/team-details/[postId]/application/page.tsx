@@ -7,6 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { TeamApplication } from '@/types/matching/teamDataType';
 import { useMutation } from '@tanstack/react-query';
 import { postNewTeamApplication } from '@/services/matching/postNewTeamApplication';
+import { basketballSkillData } from '@/constants/basketballInfoData';
 
 const TeamMatchingApplication = () => {
   const [skillLevel, setSkillLevel] = useState('');
@@ -70,18 +71,11 @@ const TeamMatchingApplication = () => {
           className="w-full"
           placeholder="실력대를 선택하세요"
         >
-          <SelectItem key="BEGINNER" value="BEGINNER">
-            입문
-          </SelectItem>
-          <SelectItem key="LOW" value="LOW">
-            하수
-          </SelectItem>
-          <SelectItem key="MIDDLE" value="MIDDLE">
-            중수
-          </SelectItem>
-          <SelectItem key="HIGH" value="HIGH">
-            고수
-          </SelectItem>
+          {basketballSkillData.map((level) => (
+            <SelectItem key={level.key} value={level.key}>
+              {level.value}
+            </SelectItem>
+          ))}
         </Select>
       </div>
       <div className="mt-10 flex w-full">

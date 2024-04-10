@@ -2,10 +2,6 @@
 
 'use client';
 
-import {
-  basketballUserPositionData,
-  basketballUserSkillData,
-} from '@/constants/basketballUserData';
 import { getUserData } from '@/services/user/getUserData';
 import LocalStorage from '@/utils/localstorage';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -36,14 +32,11 @@ import axiosInstance from '@/app/api/axiosInstance';
 import { IoMdInformationCircleOutline } from 'react-icons/io';
 import Image from 'next/image';
 import { AxiosError } from 'axios';
-
-// [TO DO] 뒤로 가기 넣기 ✅
-// 닉네임, 이메일, 한마디, 포지션, 농구 실력, 활동 내역(레벨, 팀 매칭 횟수, 농구 메이트 참여 횟수)를 표시 ✅
-// 자기소개 ✅
-// 추가 정보: 소셜 ✅
-// 프로필 수정하기 ✅
-// 닉네임 수정시 닉네임 validate ✅ / 중복 errorMsg 표시 ✅
-// 수정 완료/실패 모달 ✅
+import { mapPositionToKey, mapSkillToKey } from '@/utils/mappingUtils';
+import {
+  basketballPositionUserData,
+  basketballSkillData,
+} from '@/constants/basketballInfoData';
 
 export interface ProfileEdit {
   file: File | null;
@@ -67,6 +60,7 @@ const MyProfile = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<ProfileEdit>();
+
   const onSubmit: SubmitHandler<ProfileEdit> = async (data) => {
     const formData = new FormData();
 
@@ -74,31 +68,12 @@ const MyProfile = () => {
       formData.append('file', file);
     }
 
-    const skillMapping: Record<string, string | null> = {
-      고수: 'HIGH',
-      중수: 'LOW',
-      하수: 'MIDDLE',
-      입문: 'BEGINNER',
-    };
-
-    const positionMapping: Record<string, string | null> = {
-      가드: 'GUARD',
-      포워드: 'FORWARD',
-      센터: 'CENTER',
-      몰라요: 'UNDEFINED',
-      미정: 'UNSPECIFIED',
-    };
-
     if (data.basketballPosition !== null) {
-      data.basketballPosition = positionMapping[data.basketballPosition];
-    } else if (data.basketballPosition === undefined) {
-      data.basketballPosition = null;
+      data.basketballPosition = mapPositionToKey(data.basketballPosition);
     }
 
     if (data.basketballSkillLevel !== null) {
-      data.basketballSkillLevel = skillMapping[data.basketballSkillLevel];
-    } else if (data.basketballSkillLevel === undefined) {
-      data.basketballSkillLevel = null;
+      data.basketballSkillLevel = mapSkillToKey(data.basketballSkillLevel);
     }
 
     formData.append(
@@ -109,16 +84,14 @@ const MyProfile = () => {
     );
 
     try {
-      const response = await axiosInstance.post('/api/user/update', formData, {
+      await axiosInstance.post('/api/user/update', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      if (response.status === 200) {
-        setEdit(false);
-        SetEditSuccess(true);
-        onOpen();
-      }
+      setEdit(false);
+      SetEditSuccess(true);
+      onOpen();
     } catch (error) {
       if (error instanceof AxiosError && error.response) {
         setErrorMsg(error.response.data.message);
@@ -163,6 +136,12 @@ const MyProfile = () => {
     router.back();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleGoBack();
+    }
+  };
+
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
@@ -183,11 +162,7 @@ const MyProfile = () => {
             tabIndex={0}
             className="absolute left-4 top-4"
             onClick={handleGoBack}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleGoBack();
-              }
-            }}
+            onKeyDown={handleKeyDown}
           >
             <IoChevronBackSharp size={24} />
           </div>
@@ -204,11 +179,11 @@ const MyProfile = () => {
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-2">
                     <input
+                      className="hidden"
                       id="fileInput"
                       type="file"
                       accept="image/png, image/jpg, image/jpeg"
                       onChange={handleFileChange}
-                      style={{ display: 'none' }}
                     />
                     <Button
                       size="sm"
@@ -344,7 +319,7 @@ const MyProfile = () => {
                     onSelectionChange={() => setEdit(true)}
                     {...register('basketballPosition')}
                   >
-                    {basketballUserPositionData.map((position) => (
+                    {basketballPositionUserData.map((position) => (
                       <SelectItem key={position.value} value={position.value}>
                         {position.value}
                       </SelectItem>
@@ -361,7 +336,7 @@ const MyProfile = () => {
                     onSelectionChange={() => setEdit(true)}
                     {...register('basketballSkillLevel')}
                   >
-                    {basketballUserSkillData.map((skill) => (
+                    {basketballSkillData.map((skill) => (
                       <SelectItem key={skill.value} value={skill.value}>
                         {skill.value}
                       </SelectItem>
