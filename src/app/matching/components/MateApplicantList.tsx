@@ -1,9 +1,13 @@
+'use client';
+
 import React from 'react';
 import { useParams } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import axiosInstance from '@/app/api/axiosInstance';
 import { UserInfo } from '@/types/user/userInfo';
+import { useDisclosure } from '@nextui-org/react';
+import UserProfile from '@/app/components/UserProfile';
 import { Participant } from '../../../types/matching/mateDataType';
 
 interface PatchParticipantStatusParams {
@@ -38,6 +42,11 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
   isWriter,
 }) => {
   const { postId } = useParams();
+  const {
+    isOpen: profileModalIsOpen,
+    onOpen: profileModalOnOpen,
+    onClose: profileModalOnClose,
+  } = useDisclosure();
 
   const patchParticipantStatus = async ({
     participantTableId,
@@ -101,9 +110,27 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
       className="mb-2 mt-2 flex justify-between rounded-md border-2 px-3 py-1 sm:px-1"
     >
       <div className="flex items-center">
-        <span className="mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]">
-          {applicant.participantNickname}
-        </span>
+        <div>
+          <UserProfile
+            isOpen={profileModalIsOpen}
+            userId={applicant?.participantId || -1}
+            onClose={profileModalOnClose}
+          />
+          <span
+            className="mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]"
+            role="button"
+            tabIndex={0}
+            onClick={profileModalOnOpen}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                profileModalOnOpen();
+              }
+            }}
+          >
+            {applicant.participantNickname}
+          </span>
+        </div>
+
         <div className="mr-1 rounded-md bg-gray-200 px-2 py-1 text-xs dark:bg-gray-400">
           {applicant.position}
         </div>
