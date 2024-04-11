@@ -126,6 +126,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
                 profileModalOnOpen();
               }
             }}
+            aria-label={`${applicant.participantNickname}의 프로필 모달 열기`}
           >
             {applicant.participantNickname}
           </span>

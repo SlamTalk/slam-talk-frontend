@@ -126,6 +126,7 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
                 profileModalOnOpen();
               }
             }}
+            aria-label={`${applicant.applicantNickname}의 프로필 모달 열기`}
           >
             {applicant.applicantNickname}
           </span>
