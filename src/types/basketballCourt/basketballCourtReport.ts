@@ -14,6 +14,13 @@ export interface BasketballCourtReport {
   parkingAvailable: string | null; // 불가능
   phoneNum: string | null;
   website: string | null;
-  convenience: string | null;
+  convenience: string[] | null;
   additionalInfo: string | null;
+}
+
+export interface BasketballCourtReportAdmin
+  extends Omit<BasketballCourtReport, 'file'> {
+  courtId: number;
+  photoUrl: string;
+  informerId: number;
 }

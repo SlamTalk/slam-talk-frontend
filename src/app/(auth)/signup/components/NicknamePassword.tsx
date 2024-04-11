@@ -11,7 +11,6 @@ import {
   ModalFooter,
   useDisclosure,
 } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
 import { validateNickname, validatePassword } from '@/utils/validations';
 
 import axiosInstance from '@/app/api/axiosInstance';
@@ -26,7 +25,6 @@ interface EmailProps {
 }
 
 const NicknamePassword: React.FC<EmailProps> = ({ validEmail }) => {
-  const router = useRouter();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
@@ -126,8 +124,8 @@ const NicknamePassword: React.FC<EmailProps> = ({ validEmail }) => {
     }
   };
 
-  const handleGoBack = () => {
-    router.back();
+  const handleReload = () => {
+    window.location.reload();
   };
 
   const handleShowAlert = () => {
@@ -293,7 +291,7 @@ const NicknamePassword: React.FC<EmailProps> = ({ validEmail }) => {
                   >
                     취소
                   </Button>
-                  <Button color="primary" onPress={handleGoBack}>
+                  <Button color="primary" onPress={handleReload}>
                     확인
                   </Button>
                 </ModalFooter>

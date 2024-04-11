@@ -9,7 +9,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import LocalStorage from '@/utils/localstorage';
 import { getAddressFromCoords, getUserLocation } from '@/utils/getUserLocation';
 import useLocationStore from '@/store/userLocationStore';
-import Header from './components/Header';
+import Header from './components/header/Header';
 import Footer from './components/Footer';
 import Providers from './components/Providers';
 
