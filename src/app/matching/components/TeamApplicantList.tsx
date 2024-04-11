@@ -7,6 +7,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { AxiosResponse } from 'axios';
 import axiosInstance from '@/app/api/axiosInstance';
+import { useDisclosure } from '@nextui-org/react';
+import UserProfile from '@/app/components/UserProfile';
 
 interface PatchTeamApplicantStatusParams {
   teamApplicantTableId: number;
@@ -40,6 +42,11 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
   isWriter,
 }) => {
   const { postId } = useParams();
+  const {
+    isOpen: profileModalIsOpen,
+    onOpen: profileModalOnOpen,
+    onClose: profileModalOnClose,
+  } = useDisclosure();
 
   const patchTeamApplicantStatus = async ({
     teamApplicantTableId,
@@ -103,9 +110,26 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
       className="mb-2 mt-2 flex justify-between rounded-md border-2 px-3 py-1 sm:px-1"
     >
       <div className="flex items-center">
-        <span className="mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]">
-          {applicant.applicantNickname}
-        </span>
+        <div>
+          <UserProfile
+            isOpen={profileModalIsOpen}
+            userId={applicant?.applicantId || -1}
+            onClose={profileModalOnClose}
+          />
+          <span
+            className="mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]"
+            role="button"
+            tabIndex={0}
+            onClick={profileModalOnOpen}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                profileModalOnOpen();
+              }
+            }}
+          >
+            {applicant.applicantNickname}
+          </span>
+        </div>
         <div className="y-1 mr-2 font-semibold">[{applicant.teamName}]</div>
         <div className="rounded-md bg-gray-200 px-2 py-1 text-xs dark:bg-gray-400">
           {applicant.skillLevel}
