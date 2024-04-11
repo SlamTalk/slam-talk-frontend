@@ -19,7 +19,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { AxiosResponse } from 'axios';
 import LocalStorage from '@/utils/localstorage';
 import { getUserData } from '@/services/user/getUserData';
-import UserProfile from '@/app/components/UserProfile';
+import UserProfile from '@/app/components/profile/UserProfile';
 import MateApplicantList from '../../components/MateApplicantList';
 import { MatePost } from '../../../../types/matching/mateDataType';
 

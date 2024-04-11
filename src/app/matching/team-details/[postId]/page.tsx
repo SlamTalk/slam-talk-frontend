@@ -20,7 +20,7 @@ import axiosInstance from '@/app/api/axiosInstance';
 import { TeamPost } from '@/types/matching/teamDataType';
 import LocalStorage from '@/utils/localstorage';
 import { AxiosResponse } from 'axios';
-import UserProfile from '@/app/components/UserProfile';
+import UserProfile from '@/app/components/profile/UserProfile';
 import TeamApplicantList from '../../components/TeamApplicantList';
 
 interface TeamChatRoomType {

@@ -7,7 +7,7 @@ import { AxiosResponse } from 'axios';
 import axiosInstance from '@/app/api/axiosInstance';
 import { UserInfo } from '@/types/user/userInfo';
 import { useDisclosure } from '@nextui-org/react';
-import UserProfile from '@/app/components/UserProfile';
+import UserProfile from '@/app/components/profile/UserProfile';
 import { Participant } from '../../../types/matching/mateDataType';
 
 interface PatchParticipantStatusParams {

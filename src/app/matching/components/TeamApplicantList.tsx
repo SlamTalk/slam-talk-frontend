@@ -8,7 +8,7 @@ import { useParams } from 'next/navigation';
 import { AxiosResponse } from 'axios';
 import axiosInstance from '@/app/api/axiosInstance';
 import { useDisclosure } from '@nextui-org/react';
-import UserProfile from '@/app/components/UserProfile';
+import UserProfile from '@/app/components/profile/UserProfile';
 
 interface PatchTeamApplicantStatusParams {
   teamApplicantTableId: number;
