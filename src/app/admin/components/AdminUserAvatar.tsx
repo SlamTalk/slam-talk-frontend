@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Avatar } from '@nextui-org/react';
 import { getOtherUserData } from '@/services/user/getOtherUserData';
-import UserProfile from '@/app/components/UserProfile';
+import UserProfile from '@/app/components/profile/UserProfile';
+import SmallLoading from '@/app/components/loading/SmallLoading';
 
 interface AdminUserAvatarProps {
   userId: number;
@@ -22,8 +23,8 @@ const AdminUserAvatar: React.FC<AdminUserAvatarProps> = ({ userId }) => {
     setIsProfileOpen(true);
   };
 
-  if (isLoading || !userData) {
-    return <div>Loading...</div>;
+  if (isLoading) {
+    return <SmallLoading />;
   }
 
   if (!userData) {
@@ -45,7 +46,7 @@ const AdminUserAvatar: React.FC<AdminUserAvatarProps> = ({ userId }) => {
         className="cursor-pointer"
         onClick={handleAvatarClick}
       >
-        <Avatar size="sm" src={userData.imageUrl} />
+        <Avatar showFallback size="sm" src={userData.imageUrl} />
         <span>{userData.nickname}</span>
       </div>
       {isProfileOpen && (

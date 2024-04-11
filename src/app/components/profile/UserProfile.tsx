@@ -18,7 +18,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
 
 export interface UserProfileProps {
   userId: number;
@@ -80,6 +80,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
                   <div className="flex max-w-md flex-col gap-3 p-4">
                     <div className="flex flex-col items-center gap-3">
                       <Avatar
+                        showFallback
                         size="lg"
                         alt="profile-img"
                         src={otherUser.imageUrl}
