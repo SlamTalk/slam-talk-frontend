@@ -20,6 +20,7 @@ import axiosInstance from '@/app/api/axiosInstance';
 import { TeamPost } from '@/types/matching/teamDataType';
 import LocalStorage from '@/utils/localstorage';
 import { AxiosResponse } from 'axios';
+import UserProfile from '@/app/components/UserProfile';
 import TeamApplicantList from '../../components/TeamApplicantList';
 
 interface TeamChatRoomType {
@@ -30,7 +31,16 @@ interface TeamChatRoomType {
 }
 
 const TeamDetailsPage = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: completeModalIsOpen,
+    onOpen: completeModalOnOpen,
+    onClose: completeModalOnClose,
+  } = useDisclosure();
+  const {
+    isOpen: profileModalIsOpen,
+    onOpen: profileModalOnOpen,
+    onClose: profileModalOnClose,
+  } = useDisclosure();
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
@@ -158,7 +168,7 @@ const TeamDetailsPage = () => {
     onSuccess: (response) => {
       const newChatRoomId = response.data.results;
       setChatRoomId(newChatRoomId);
-      onOpen();
+      completeModalOnOpen();
     },
     onError: (er) => {
       console.error(er);
@@ -206,9 +216,17 @@ const TeamDetailsPage = () => {
       {/* 유저 프로필 */}
       <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
         <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gray-300">
+          <UserProfile
+            isOpen={profileModalIsOpen}
+            userId={writer?.userId || -1}
+            onClose={profileModalOnClose}
+          />
           <Avatar
+            onClick={profileModalOnOpen}
+            showFallback
+            className="cursor-pointer"
             alt="profile-img"
-            src={writer.userProfile || '/images/userprofile-default.png'}
+            src={writer?.userProfile}
           />
         </div>
         <span className="font-bold">
@@ -333,7 +351,11 @@ const TeamDetailsPage = () => {
           </Button>
         )}
       </div>
-      <Modal isOpen={isOpen} onClose={onClose} placement="center">
+      <Modal
+        isOpen={completeModalIsOpen}
+        onClose={completeModalOnClose}
+        placement="center"
+      >
         <ModalContent>
           {() => (
             <>
@@ -345,7 +367,11 @@ const TeamDetailsPage = () => {
                 <p>상대팀과의 채팅방이 개설되었습니다.</p>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={completeModalOnClose}
+                >
                   닫기
                 </Button>
                 <Button
