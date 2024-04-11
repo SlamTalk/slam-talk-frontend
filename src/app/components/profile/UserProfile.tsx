@@ -4,13 +4,11 @@
 
 import { getOtherUserData } from '@/services/user/getOtherUserData';
 import { getUserData } from '@/services/user/getUserData';
-
 import {
   Avatar,
   Button,
   Card,
   CardBody,
-  Input,
   Modal,
   ModalContent,
   ModalHeader,
@@ -20,7 +18,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
 
 export interface UserProfileProps {
   userId: number;
@@ -82,6 +80,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
                   <div className="flex max-w-md flex-col gap-3 p-4">
                     <div className="flex flex-col items-center gap-3">
                       <Avatar
+                        showFallback
                         size="lg"
                         alt="profile-img"
                         src={otherUser.imageUrl}
@@ -89,17 +88,13 @@ const UserProfile: React.FC<UserProfileProps> = ({
                       <p className="text-xl font-semibold">
                         {otherUser.nickname}
                       </p>
-                      <Input
-                        isDisabled
-                        className="h-10"
-                        size="sm"
-                        label="소개 한마디"
-                        value={
-                          otherUser.selfIntroduction
+                      <Card className="w-full rounded-md">
+                        <CardBody className="w-full text-sm">
+                          {otherUser.selfIntroduction
                             ? otherUser.selfIntroduction
-                            : ''
-                        }
-                      />
+                            : '소개'}
+                        </CardBody>
+                      </Card>
                     </div>
                     <div className="mt-4 flex w-full justify-center gap-10">
                       <div className="flex w-1/3 flex-col gap-3 font-semibold opacity-100">
@@ -122,7 +117,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
                       </div>
                       <div>
                         <p className="mb-1 text-sm font-semibold">활동 내역</p>
-                        <Card>
+                        <Card className="rounded-md">
                           <CardBody>
                             <div className="flex flex-col gap-6 text-sm">
                               <p className="underline underline-offset-2">

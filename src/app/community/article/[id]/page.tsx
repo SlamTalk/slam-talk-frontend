@@ -13,7 +13,7 @@ import Image from 'next/image';
 import { deleteCommunityArticle } from '@/services/community/deleteCommunityArticle';
 import { postComment } from '@/services/community/comment/postComment';
 import { getUserData } from '@/services/user/getUserData';
-import UserProfile from '@/app/components/UserProfile';
+import UserProfile from '@/app/components/profile/UserProfile';
 import { getOtherUserData } from '@/services/user/getOtherUserData';
 import { OtherUserInfo } from '@/types/user/otherUserInfo';
 import CommentList from '../../components/commentList';

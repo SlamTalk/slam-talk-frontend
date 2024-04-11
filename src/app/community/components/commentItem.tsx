@@ -6,7 +6,7 @@ import { getOtherUserData } from '@/services/user/getOtherUserData';
 import { OtherUserInfo } from '@/types/user/otherUserInfo';
 import { Avatar, useDisclosure } from '@nextui-org/react';
 import { getUserData } from '@/services/user/getUserData';
-import UserProfile from '@/app/components/UserProfile';
+import UserProfile from '@/app/components/profile/UserProfile';
 
 export interface ICommentItemProps {
   commentId: number;

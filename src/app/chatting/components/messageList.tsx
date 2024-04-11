@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import IMessage from '@/types/chat/message';
 
-import UserProfile from '@/app/components/UserProfile';
+import UserProfile from '@/app/components/profile/UserProfile';
 
 const MessageList = ({ list }: { list: IMessage[] }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
