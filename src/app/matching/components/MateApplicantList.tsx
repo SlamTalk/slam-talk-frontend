@@ -107,11 +107,13 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
     >
       <div className="flex items-center">
         <div>
-          <UserProfile
-            isOpen={isOpen}
-            userId={applicant?.participantId || -1}
-            onClose={onClose}
-          />
+          {applicant && (
+            <UserProfile
+              isOpen={isOpen}
+              userId={applicant.participantId}
+              onClose={onClose}
+            />
+          )}
           <div
             className="mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]"
             role="button"
