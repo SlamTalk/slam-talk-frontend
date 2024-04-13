@@ -112,7 +112,7 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
             userId={applicant?.applicantId || -1}
             onClose={onClose}
           />
-          <span
+          <div
             className="mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]"
             role="button"
             tabIndex={0}
@@ -125,7 +125,7 @@ const TeamApplicantList: React.FC<TeamApplicantListProps> = ({
             aria-label={`${applicant.applicantNickname}의 프로필 모달 열기`}
           >
             {applicant.applicantNickname}
-          </span>
+          </div>
         </div>
         <div className="y-1 mr-2 font-semibold">[{applicant.teamName}]</div>
         <div className="rounded-md bg-gray-200 px-2 py-1 text-xs dark:bg-gray-400">

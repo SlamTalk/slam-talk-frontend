@@ -112,7 +112,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
             userId={applicant?.participantId || -1}
             onClose={onClose}
           />
-          <span
+          <div
             className="mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]"
             role="button"
             tabIndex={0}
@@ -125,7 +125,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
             aria-label={`${applicant.participantNickname}의 프로필 모달 열기`}
           >
             {applicant.participantNickname}
-          </span>
+          </div>
         </div>
 
         <div className="mr-1 rounded-md bg-gray-200 px-2 py-1 text-xs dark:bg-gray-400">
