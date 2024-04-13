@@ -19,6 +19,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { AxiosResponse } from 'axios';
 import LocalStorage from '@/utils/localstorage';
 import { getUserData } from '@/services/user/getUserData';
+import UserProfile from '@/app/components/profile/UserProfile';
 import MateApplicantList from '../../components/MateApplicantList';
 import { MatePost } from '../../../../types/matching/mateDataType';
 
@@ -31,6 +32,11 @@ interface MateChatRoomType {
 
 const MateDetailsPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isProfileOpen,
+    onOpen: handleProfileOpen,
+    onClose: handleProfileClose,
+  } = useDisclosure();
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
@@ -199,9 +205,17 @@ const MateDetailsPage = () => {
       {/* 유저 프로필 */}
       <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
         <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gray-300">
+          <UserProfile
+            isOpen={isProfileOpen}
+            userId={writer?.userId || -1}
+            onClose={handleProfileClose}
+          />
           <Avatar
+            onClick={handleProfileOpen}
+            showFallback
+            className="cursor-pointer"
             alt="profile-img"
-            src={writer.userProfile || '/images/userprofile-default.png'}
+            src={writer?.userProfile}
           />
         </div>
         <span className="font-bold">{writer.userNickname}</span>

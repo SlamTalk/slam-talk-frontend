@@ -20,6 +20,7 @@ import axiosInstance from '@/app/api/axiosInstance';
 import { TeamPost } from '@/types/matching/teamDataType';
 import LocalStorage from '@/utils/localstorage';
 import { AxiosResponse } from 'axios';
+import UserProfile from '@/app/components/profile/UserProfile';
 import TeamApplicantList from '../../components/TeamApplicantList';
 
 interface TeamChatRoomType {
@@ -31,6 +32,11 @@ interface TeamChatRoomType {
 
 const TeamDetailsPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isProfileOpen,
+    onOpen: handleProfileOpen,
+    onClose: handleProfileClose,
+  } = useDisclosure();
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
@@ -206,9 +212,17 @@ const TeamDetailsPage = () => {
       {/* 유저 프로필 */}
       <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
         <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gray-300">
+          <UserProfile
+            isOpen={isProfileOpen}
+            userId={writer?.userId || -1}
+            onClose={handleProfileClose}
+          />
           <Avatar
+            onClick={handleProfileOpen}
+            showFallback
+            className="cursor-pointer"
             alt="profile-img"
-            src={writer.userProfile || '/images/userprofile-default.png'}
+            src={writer?.userProfile}
           />
         </div>
         <span className="font-bold">
