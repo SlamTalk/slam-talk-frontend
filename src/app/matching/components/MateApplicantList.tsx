@@ -42,11 +42,7 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
   isWriter,
 }) => {
   const { postId } = useParams();
-  const {
-    isOpen: profileModalIsOpen,
-    onOpen: profileModalOnOpen,
-    onClose: profileModalOnClose,
-  } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const patchParticipantStatus = async ({
     participantTableId,
@@ -112,18 +108,18 @@ const MateApplicantList: React.FC<MateApplicantListProps> = ({
       <div className="flex items-center">
         <div>
           <UserProfile
-            isOpen={profileModalIsOpen}
+            isOpen={isOpen}
             userId={applicant?.participantId || -1}
-            onClose={profileModalOnClose}
+            onClose={onClose}
           />
           <span
             className="mr-2 w-[110px] overflow-hidden truncate font-semibold sm:max-w-[40px]"
             role="button"
             tabIndex={0}
-            onClick={profileModalOnOpen}
+            onClick={onOpen}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                profileModalOnOpen();
+                onOpen();
               }
             }}
             aria-label={`${applicant.participantNickname}의 프로필 모달 열기`}

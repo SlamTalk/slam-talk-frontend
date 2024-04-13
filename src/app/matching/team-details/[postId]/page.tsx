@@ -31,15 +31,11 @@ interface TeamChatRoomType {
 }
 
 const TeamDetailsPage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const {
-    isOpen: completeModalIsOpen,
-    onOpen: completeModalOnOpen,
-    onClose: completeModalOnClose,
-  } = useDisclosure();
-  const {
-    isOpen: profileModalIsOpen,
-    onOpen: profileModalOnOpen,
-    onClose: profileModalOnClose,
+    isOpen: isProfileOpen,
+    onOpen: handleProfileOpen,
+    onClose: handleProfileClose,
   } = useDisclosure();
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
@@ -168,7 +164,7 @@ const TeamDetailsPage = () => {
     onSuccess: (response) => {
       const newChatRoomId = response.data.results;
       setChatRoomId(newChatRoomId);
-      completeModalOnOpen();
+      onOpen();
     },
     onError: (er) => {
       console.error(er);
@@ -217,12 +213,12 @@ const TeamDetailsPage = () => {
       <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
         <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gray-300">
           <UserProfile
-            isOpen={profileModalIsOpen}
+            isOpen={isProfileOpen}
             userId={writer?.userId || -1}
-            onClose={profileModalOnClose}
+            onClose={handleProfileClose}
           />
           <Avatar
-            onClick={profileModalOnOpen}
+            onClick={handleProfileOpen}
             showFallback
             className="cursor-pointer"
             alt="profile-img"
@@ -351,11 +347,7 @@ const TeamDetailsPage = () => {
           </Button>
         )}
       </div>
-      <Modal
-        isOpen={completeModalIsOpen}
-        onClose={completeModalOnClose}
-        placement="center"
-      >
+      <Modal isOpen={isOpen} onClose={onClose} placement="center">
         <ModalContent>
           {() => (
             <>
@@ -367,11 +359,7 @@ const TeamDetailsPage = () => {
                 <p>상대팀과의 채팅방이 개설되었습니다.</p>
               </ModalBody>
               <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="light"
-                  onPress={completeModalOnClose}
-                >
+                <Button color="danger" variant="light" onPress={onClose}>
                   닫기
                 </Button>
                 <Button
