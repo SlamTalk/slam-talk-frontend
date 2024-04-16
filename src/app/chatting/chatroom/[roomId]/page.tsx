@@ -31,7 +31,7 @@ const Chatting = () => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [message, setMessage] = useState('');
-  const [moreCount, setMoreCount] = useState(0);
+  // const [moreCount, setMoreCount] = useState(0);
   const [greeting, setGreeting] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -49,7 +49,38 @@ const Chatting = () => {
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
+  // const postMore = async () => {
+  //   try {
+  //     setMoreCount(moreCount + 1);
+  //     const res = await axiosInstance.post(
+  //       `/api/chat/history?roomId=${params.roomId}&count=${moreCount}`
+  //     );
 
+  //     const duplicatedMessage = res.data.results as IMessage[];
+  //     const unique = Array.from(
+  //       new Map(
+  //         duplicatedMessage.map((messageItem: IMessage) => [
+  //           messageItem.messageId,
+  //           messageItem,
+  //         ])
+  //       ).values()
+  //     );
+  //     setMessageListState(() => [...messageListState, ...unique].reverse());
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  // const {
+  //   fetchPreviousPage,
+  //   hasPreviousPage,
+  //   isFetchingNextPage,
+  //   data: moreMessageData,
+  // } = useInfiniteQuery({
+  //   queryKey: ['moreMessage'],
+  //   queryFn: () => postMore(),
+  //   getNextPageParam: (lastPage, allPages) => lastPage.nextCursor,
+  //   getPreviousPageParam: (firstPage, allPages) => firstPage.prevCursor,
+  // });
   const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
   // 농구장은 basketballId, 개인은 유저 id? 사용해서 링크 넣어주기
 
@@ -172,34 +203,14 @@ const Chatting = () => {
 
     router.back();
   };
-  const postMore = async () => {
-    try {
-      setMoreCount(moreCount + 1);
-      const res = await axiosInstance.post(
-        `/api/chat/history?roomId=${params.roomId}&count=${moreCount}`
-      );
 
-      const duplicatedMessage = res.data.results as IMessage[];
-      const unique = Array.from(
-        new Map(
-          duplicatedMessage.map((messageItem: IMessage) => [
-            messageItem.messageId,
-            messageItem,
-          ])
-        ).values()
-      );
-      setMessageListState(() => [...messageListState, ...unique].reverse());
-    } catch (err) {
-      console.error(err);
-    }
-  };
   useEffect(() => {
     inputRef.current?.focus();
 
     messageListData();
 
     connect();
-    postMore();
+    // postMore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
