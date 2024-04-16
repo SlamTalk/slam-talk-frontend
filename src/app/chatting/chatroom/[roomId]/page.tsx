@@ -38,7 +38,6 @@ const Chatting = () => {
   const { data: token } = useQuery({
     queryKey: ['tokenData'],
     queryFn: postTokenRefresh,
-    gcTime: 3000,
   });
   const { data: myChatList } = useQuery<IChatRoomListItem[]>({
     queryKey: ['myChatlist'],
@@ -77,7 +76,7 @@ const Chatting = () => {
   //   data: moreMessageData,
   // } = useInfiniteQuery({
   //   queryKey: ['moreMessage'],
-  //   queryFn: () => postMore(),
+  //   queryFn: ({ pageParam = 1 }) => postMore(pageParam),
   //   getNextPageParam: (lastPage, allPages) => lastPage.nextCursor,
   //   getPreviousPageParam: (firstPage, allPages) => firstPage.prevCursor,
   // });
@@ -136,6 +135,7 @@ const Chatting = () => {
             }),
             headers: { authorization: `Bearer ${accessToken}` },
           });
+          messageListData();
         }
       },
       onStompError: (err) => {
@@ -206,8 +206,6 @@ const Chatting = () => {
 
   useEffect(() => {
     inputRef.current?.focus();
-
-    messageListData();
 
     connect();
     // postMore();
