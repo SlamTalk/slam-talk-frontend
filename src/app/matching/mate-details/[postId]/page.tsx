@@ -72,7 +72,7 @@ const MateDetailsPage = () => {
     userNickname: data?.writerNickname,
     userProfile: data?.writerImageUrl,
   };
-  const isWriter = user?.id === writer.userId;
+  const isWriter = user?.id === writer.userId; // 작성자인지 확인하는 변수
 
   // const deleteRecruitment = async (): Promise<AxiosResponse> => {
   //   const response = await axiosInstance.delete<AxiosResponse>(
