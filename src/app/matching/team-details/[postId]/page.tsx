@@ -3,17 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import {
-  Snippet,
-  Button,
-  Avatar,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-} from '@nextui-org/react';
+import { Snippet, Button, Avatar, useDisclosure } from '@nextui-org/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import axiosInstance from '@/app/api/axiosInstance';
@@ -21,7 +11,9 @@ import { TeamPost } from '@/types/matching/teamDataType';
 import LocalStorage from '@/utils/localstorage';
 import { AxiosResponse } from 'axios';
 import UserProfile from '@/app/components/profile/UserProfile';
+import { FaTrashCan } from 'react-icons/fa6';
 import TeamApplicantList from '../../components/TeamApplicantList';
+import CheckModal from '../../components/CheckModal';
 
 interface TeamChatRoomType {
   participants: number[];
@@ -31,17 +23,31 @@ interface TeamChatRoomType {
 }
 
 const TeamDetailsPage = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isCompleteRecruitModalOpen,
+    onOpen: handleCompleteRecruitModalOpen,
+    onClose: handleCompleteRecruitModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCompleteConfirmationModalOpen,
+    onOpen: handleCompleteConfirmationModalOpen,
+    onClose: handleCompleteConfirmationModalClose,
+  } = useDisclosure();
+  // const {
+  //   isOpen: isDeleteConfirmationModalOpen,
+  //   onOpen: handleDeleteConfirmationModalOpen,
+  //   onClose: handleDeleteConfirmationModalClose,
+  // } = useDisclosure();
   const {
     isOpen: isProfileOpen,
     onOpen: handleProfileOpen,
     onClose: handleProfileClose,
   } = useDisclosure();
+
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
-
   if (error) {
     console.log({ error });
   }
@@ -112,13 +118,15 @@ const TeamDetailsPage = () => {
     }
   };
 
-  // const deleteRecruitment = async (): Promise<AxiosResponse> => {
-  //   const response = await axiosInstance.delete<AxiosResponse>(
-  //     `/api/match/read/${postId}`
-  //   );
+  const deleteRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.delete<AxiosResponse>(
+      `/api/match/${postId}`
+    );
 
-  //   return response;
-  // };
+    router.push(`/matching?tab=team`);
+
+    return response;
+  };
 
   const patchCompleteRecruitment = async (): Promise<AxiosResponse> => {
     const response = await axiosInstance.patch<AxiosResponse>(
@@ -164,7 +172,7 @@ const TeamDetailsPage = () => {
     onSuccess: (response) => {
       const newChatRoomId = response.data.results;
       setChatRoomId(newChatRoomId);
-      onOpen();
+      handleCompleteRecruitModalOpen();
     },
     onError: (er) => {
       console.error(er);
@@ -172,6 +180,8 @@ const TeamDetailsPage = () => {
   });
 
   const handleFinishRecruitment = () => {
+    handleCompleteConfirmationModalClose();
+
     try {
       patchPostStatusMutation.mutate();
 
@@ -205,6 +215,18 @@ const TeamDetailsPage = () => {
       console.error(err);
       alert('모집 완료 처리 중 오류가 발생했습니다.');
     }
+  };
+
+  const completeConfirmationModalLeftFunc = () => {
+    handleCompleteConfirmationModalClose();
+  };
+
+  const completeRecruitModalLeftFunc = () => {
+    handleCompleteRecruitModalClose();
+  };
+
+  const completeRecruitModalRightFunc = () => {
+    router.push(`/chatting/chatroom/${chatRoomId}`);
   };
 
   return (
@@ -323,18 +345,26 @@ const TeamDetailsPage = () => {
             <>
               <Button
                 color="primary"
-                className="mx-2"
-                onClick={handleFinishRecruitment}
+                className="mx-1"
+                onClick={handleCompleteConfirmationModalOpen}
               >
                 모집 완료
               </Button>
               <Link
                 href={`/matching/team-details/${data?.teamMatchingId}/revise`}
               >
-                <Button color="default" className="mx-2 bg-gray-400 text-white">
+                <Button color="default" className="mx-1 bg-gray-400 text-white">
                   모집글 수정
                 </Button>
               </Link>
+              <Button
+                color="default"
+                isIconOnly
+                className="mx-1 w-[30px] bg-gray-400 px-[0px] text-white"
+                onClick={deleteRecruitment}
+              >
+                <FaTrashCan />
+              </Button>
             </>
           )
         ) : (
@@ -347,34 +377,27 @@ const TeamDetailsPage = () => {
           </Button>
         )}
       </div>
-      <Modal isOpen={isOpen} onClose={onClose} placement="center">
-        <ModalContent>
-          {() => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                상대팀 찾기 모집 완료
-              </ModalHeader>
-              <ModalBody>
-                <p>상대팀 찾기 모집이 완료되었습니다.</p>
-                <p>상대팀과의 채팅방이 개설되었습니다.</p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  닫기
-                </Button>
-                <Button
-                  color="primary"
-                  onPress={() =>
-                    router.push(`/chatting/chatroom/${chatRoomId}`)
-                  }
-                >
-                  채팅방으로 이동
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      <CheckModal
+        isOpen={isCompleteConfirmationModalOpen}
+        onClose={handleCompleteConfirmationModalClose}
+        title="상대팀 찾기 모집 완료"
+        content="정말로 모집을 완료하시겠습니까?"
+        leftBtn="닫기"
+        rightBtn="모집 완료"
+        leftFunc={completeConfirmationModalLeftFunc}
+        rightFunc={handleFinishRecruitment}
+      />
+      <CheckModal
+        isOpen={isCompleteRecruitModalOpen}
+        onClose={handleCompleteRecruitModalClose}
+        title="상대팀 찾기 모집 완료"
+        content="상대팀 찾기 모집이 완료되었습니다. 상대팀과의 채팅방이
+        생성되었습니다."
+        leftBtn="닫기"
+        rightBtn="채팅방으로 이동"
+        leftFunc={completeRecruitModalLeftFunc}
+        rightFunc={completeRecruitModalRightFunc}
+      />
     </div>
   );
 };
