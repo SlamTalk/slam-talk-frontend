@@ -29,15 +29,20 @@ const MateDetailsPage = () => {
     onClose: handleCompleteRecruitModalClose,
   } = useDisclosure();
   const {
+    isOpen: isCompleteConfirmationModalOpen,
+    onOpen: handleCompleteConfirmationModalOpen,
+    onClose: handleCompleteConfirmationModalClose,
+  } = useDisclosure();
+  const {
     isOpen: isProfileOpen,
     onOpen: handleProfileOpen,
     onClose: handleProfileClose,
   } = useDisclosure();
+
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
-
   if (error) {
     console.log({ error });
   }
@@ -132,6 +137,8 @@ const MateDetailsPage = () => {
   });
 
   const handleFinishRecruitment = () => {
+    handleCompleteConfirmationModalClose();
+
     try {
       patchPostStatusMutation.mutate();
 
@@ -157,6 +164,10 @@ const MateDetailsPage = () => {
       console.error(err);
       alert('모집 완료 처리 중 오류가 발생했습니다.');
     }
+  };
+
+  const completeConfirmationModalLeftFunc = () => {
+    handleCompleteConfirmationModalClose();
   };
 
   const completeRecruitModalLeftFunc = () => {
@@ -317,7 +328,7 @@ const MateDetailsPage = () => {
               <Button
                 color="primary"
                 className="mx-1"
-                onClick={handleFinishRecruitment}
+                onClick={handleCompleteConfirmationModalOpen}
               >
                 모집 완료
               </Button>
@@ -346,6 +357,17 @@ const MateDetailsPage = () => {
           </Button>
         )}
       </div>
+      {/* 모집 완료 확인 모달 */}
+      <CheckModal
+        isOpen={isCompleteConfirmationModalOpen}
+        onClose={handleCompleteConfirmationModalClose}
+        title="메이트 찾기 모집 완료"
+        content="정말로 모집을 완료하시겠습니까?"
+        leftBtn="닫기"
+        rightBtn="모집 완료"
+        leftFunc={completeConfirmationModalLeftFunc}
+        rightFunc={handleFinishRecruitment}
+      />
       {/* 모집 완료 안내 모달 */}
       <CheckModal
         isOpen={isCompleteRecruitModalOpen}
