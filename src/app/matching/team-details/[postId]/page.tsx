@@ -33,11 +33,11 @@ const TeamDetailsPage = () => {
     onOpen: handleCompleteConfirmationModalOpen,
     onClose: handleCompleteConfirmationModalClose,
   } = useDisclosure();
-  // const {
-  //   isOpen: isDeleteConfirmationModalOpen,
-  //   onOpen: handleDeleteConfirmationModalOpen,
-  //   onClose: handleDeleteConfirmationModalClose,
-  // } = useDisclosure();
+  const {
+    isOpen: isDeleteConfirmationModalOpen,
+    onOpen: handleDeleteConfirmationModalOpen,
+    onClose: handleDeleteConfirmationModalClose,
+  } = useDisclosure();
   const {
     isOpen: isProfileOpen,
     onOpen: handleProfileOpen,
@@ -229,6 +229,14 @@ const TeamDetailsPage = () => {
     router.push(`/chatting/chatroom/${chatRoomId}`);
   };
 
+  const deleteConfirmationModalLeftFunc = () => {
+    handleDeleteConfirmationModalClose();
+  };
+
+  const deleteConfirmationModalRightFunc = () => {
+    deleteRecruitment();
+  };
+
   return (
     <div className="mx-[16px] mt-4 rounded-md border-2">
       {/* 유저 프로필 */}
@@ -361,7 +369,7 @@ const TeamDetailsPage = () => {
                 color="default"
                 isIconOnly
                 className="mx-1 w-[30px] bg-gray-400 px-[0px] text-white"
-                onClick={deleteRecruitment}
+                onClick={handleDeleteConfirmationModalOpen}
               >
                 <FaTrashCan />
               </Button>
@@ -377,6 +385,7 @@ const TeamDetailsPage = () => {
           </Button>
         )}
       </div>
+      {/* 모집 완료 확인 모달 */}
       <CheckModal
         isOpen={isCompleteConfirmationModalOpen}
         onClose={handleCompleteConfirmationModalClose}
@@ -387,6 +396,7 @@ const TeamDetailsPage = () => {
         leftFunc={completeConfirmationModalLeftFunc}
         rightFunc={handleFinishRecruitment}
       />
+      {/* 모집 완료 안내 모달 */}
       <CheckModal
         isOpen={isCompleteRecruitModalOpen}
         onClose={handleCompleteRecruitModalClose}
@@ -397,6 +407,17 @@ const TeamDetailsPage = () => {
         rightBtn="채팅방으로 이동"
         leftFunc={completeRecruitModalLeftFunc}
         rightFunc={completeRecruitModalRightFunc}
+      />
+      {/* 게시글 삭제 확인 모달 */}
+      <CheckModal
+        isOpen={isDeleteConfirmationModalOpen}
+        onClose={handleDeleteConfirmationModalClose}
+        title="상대팀 찾기 게시글 삭제"
+        content="정말로 게시글을 삭제하시겠습니까?"
+        leftBtn="닫기"
+        rightBtn="삭제"
+        leftFunc={deleteConfirmationModalLeftFunc}
+        rightFunc={deleteConfirmationModalRightFunc}
       />
     </div>
   );
