@@ -2,17 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import {
-  Snippet,
-  Button,
-  Avatar,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-} from '@nextui-org/react';
+import { Snippet, Button, Avatar, useDisclosure } from '@nextui-org/react';
 import axiosInstance from '@/app/api/axiosInstance';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
@@ -23,6 +13,7 @@ import UserProfile from '@/app/components/profile/UserProfile';
 import { FaTrashCan } from 'react-icons/fa6';
 import MateApplicantList from '../../components/MateApplicantList';
 import { MatePost } from '../../../../types/matching/mateDataType';
+import CheckModal from '../../components/CheckModal';
 
 interface MateChatRoomType {
   participants: number[];
@@ -32,7 +23,11 @@ interface MateChatRoomType {
 }
 
 const MateDetailsPage = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isCompleteRecruitModalOpen,
+    onOpen: handleCompleteRecruitModalOpen,
+    onClose: handleCompleteRecruitModalClose,
+  } = useDisclosure();
   const {
     isOpen: isProfileOpen,
     onOpen: handleProfileOpen,
@@ -118,7 +113,7 @@ const MateDetailsPage = () => {
     onSuccess: (response) => {
       const newChatRoomId = response.data.results;
       setChatRoomId(newChatRoomId);
-      onOpen();
+      handleCompleteRecruitModalOpen();
     },
     onError: (er) => {
       console.error(er);
@@ -162,6 +157,14 @@ const MateDetailsPage = () => {
       console.error(err);
       alert('모집 완료 처리 중 오류가 발생했습니다.');
     }
+  };
+
+  const completeRecruitModalLeftFunc = () => {
+    handleCompleteRecruitModalClose();
+  };
+
+  const completeRecruitModalRightFunc = () => {
+    router.push(`/chatting/chatroom/${chatRoomId}`);
   };
 
   useEffect(() => {
@@ -343,34 +346,18 @@ const MateDetailsPage = () => {
           </Button>
         )}
       </div>
-      <Modal isOpen={isOpen} onClose={onClose} placement="center">
-        <ModalContent>
-          {() => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                메이트 찾기 모집 완료
-              </ModalHeader>
-              <ModalBody>
-                <p>메이트 찾기 모집이 완료되었습니다.</p>
-                <p>메이트 채팅방이 개설되었습니다.</p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  닫기
-                </Button>
-                <Button
-                  color="primary"
-                  onPress={() =>
-                    router.push(`/chatting/chatroom/${chatRoomId}`)
-                  }
-                >
-                  채팅방으로 이동
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      {/* 모집 완료 안내 모달 */}
+      <CheckModal
+        isOpen={isCompleteRecruitModalOpen}
+        onClose={handleCompleteRecruitModalClose}
+        title="메이트 찾기 모집 완료"
+        content="메이트 찾기 모집이 완료되었습니다. 단체 채팅방이
+        생성되었습니다."
+        leftBtn="닫기"
+        rightBtn="채팅방으로 이동"
+        leftFunc={completeRecruitModalLeftFunc}
+        rightFunc={completeRecruitModalRightFunc}
+      />
     </div>
   );
 };
