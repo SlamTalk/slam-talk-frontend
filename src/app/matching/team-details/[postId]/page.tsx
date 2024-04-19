@@ -182,39 +182,40 @@ const TeamDetailsPage = () => {
   const handleFinishRecruitment = () => {
     handleCompleteConfirmationModalClose();
 
-    try {
-      patchPostStatusMutation.mutate();
+    patchPostStatusMutation.mutate(undefined, {
+      onSuccess: () => {
+        const acceptedParticipantIds =
+          data?.teamApplicants
+            .filter((applicant) => applicant.applyStatus === 'ACCEPTED')
+            .map((applicant) => applicant.applicantId) || [];
 
-      const acceptedParticipantIds =
-        data?.teamApplicants
-          .filter((applicant) => applicant.applyStatus === 'ACCEPTED')
-          .map((applicant) => applicant.applicantId) || [];
+        const participantsIds = [
+          data?.writerId,
+          ...acceptedParticipantIds,
+        ].filter((id): id is number => id !== undefined);
 
-      const participantsIds = [
-        data?.writerId,
-        ...acceptedParticipantIds,
-      ].filter((id): id is number => id !== undefined);
+        const title = `${data?.teamName} vs ${
+          acceptedParticipantIds.length > 0
+            ? data?.teamApplicants.find(
+                (applicant) =>
+                  applicant.applicantId === acceptedParticipantIds[0]
+              )?.teamName
+            : ''
+        }`;
 
-      const title = `${data?.teamName} vs ${
-        acceptedParticipantIds.length > 0
-          ? data?.teamApplicants.find(
-              (applicant) => applicant.applicantId === acceptedParticipantIds[0]
-            )?.teamName
-          : ''
-      }`;
+        const newRoomData: TeamChatRoomType = {
+          participants: participantsIds,
+          roomType: 'MM',
+          teamMatching_id: data?.teamMatchingId.toString() ?? '',
+          name: title,
+        };
 
-      const newRoomData: TeamChatRoomType = {
-        participants: participantsIds,
-        roomType: 'MM',
-        teamMatching_id: data?.teamMatchingId.toString() ?? '',
-        name: title,
-      };
-
-      createTeamChatRoomMutation.mutate(newRoomData);
-    } catch (err) {
-      console.error(err);
-      alert('모집 완료 처리 중 오류가 발생했습니다.');
-    }
+        createTeamChatRoomMutation.mutate(newRoomData);
+      },
+      onError: () => {
+        alert('모집 완료 처리 중 오류가 발생했습니다.');
+      },
+    });
   };
 
   const completeConfirmationModalLeftFunc = () => {

@@ -144,31 +144,31 @@ const MateDetailsPage = () => {
   const handleFinishRecruitment = () => {
     handleCompleteConfirmationModalClose();
 
-    try {
-      patchPostStatusMutation.mutate();
+    patchPostStatusMutation.mutate(undefined, {
+      onSuccess: () => {
+        const acceptedParticipantIds =
+          data?.participants
+            .filter((participant) => participant.applyStatus === 'ACCEPTED')
+            .map((acceptedParticipant) => acceptedParticipant.participantId) ||
+          [];
+        const participantsIds = [
+          data?.writerId,
+          ...acceptedParticipantIds,
+        ].filter((id): id is number => id !== undefined);
 
-      const acceptedParticipantIds =
-        data?.participants
-          .filter((participant) => participant.applyStatus === 'ACCEPTED')
-          .map((acceptedParticipant) => acceptedParticipant.participantId) ||
-        [];
-      const participantsIds = [
-        data?.writerId,
-        ...acceptedParticipantIds,
-      ].filter((id): id is number => id !== undefined);
+        const newRoomData: MateChatRoomType = {
+          participants: participantsIds,
+          roomType: 'TM',
+          together_id: data?.matePostId.toString() ?? '',
+          name: data?.title ?? '',
+        };
 
-      const newRoomData: MateChatRoomType = {
-        participants: participantsIds,
-        roomType: 'TM',
-        together_id: data?.matePostId.toString() ?? '',
-        name: data?.title ?? '',
-      };
-
-      createMateChatRoomMutation.mutate(newRoomData);
-    } catch (err) {
-      console.error(err);
-      alert('모집 완료 처리 중 오류가 발생했습니다.');
-    }
+        createMateChatRoomMutation.mutate(newRoomData);
+      },
+      onError: () => {
+        alert('모집 완료 처리 중 오류가 발생했습니다.');
+      },
+    });
   };
 
   useEffect(() => {
@@ -393,6 +393,7 @@ const MateDetailsPage = () => {
         leftFunc={completeRecruitModalLeftFunc}
         rightFunc={completeRecruitModalRightFunc}
       />
+      {/* 게시글 삭제 확인 모달 */}
       <CheckModal
         isOpen={isDeleteConfirmationModalOpen}
         onClose={handleDeleteConfirmationModalClose}
