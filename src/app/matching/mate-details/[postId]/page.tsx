@@ -20,6 +20,7 @@ import { AxiosResponse } from 'axios';
 import LocalStorage from '@/utils/localstorage';
 import { getUserData } from '@/services/user/getUserData';
 import UserProfile from '@/app/components/profile/UserProfile';
+import { FaTrashCan } from 'react-icons/fa6';
 import MateApplicantList from '../../components/MateApplicantList';
 import { MatePost } from '../../../../types/matching/mateDataType';
 
@@ -74,13 +75,15 @@ const MateDetailsPage = () => {
   };
   const isWriter = user?.id === writer.userId;
 
-  // const deleteRecruitment = async (): Promise<AxiosResponse> => {
-  //   const response = await axiosInstance.delete<AxiosResponse>(
-  //     `/api/mate/${postId}`
-  //   );
+  const deleteRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.delete<AxiosResponse>(
+      `/api/mate/${postId}`
+    );
 
-  //   return response;
-  // };
+    router.push(`/matching?tab=mate`);
+
+    return response;
+  };
 
   const patchCompleteRecruitment = async (): Promise<AxiosResponse> => {
     const response = await axiosInstance.patch<AxiosResponse>(
@@ -310,16 +313,24 @@ const MateDetailsPage = () => {
             <>
               <Button
                 color="primary"
-                className="mx-2"
+                className="mx-1"
                 onClick={handleFinishRecruitment}
               >
                 모집 완료
               </Button>
               <Link href={`/matching/mate-details/${data?.matePostId}/revise`}>
-                <Button color="default" className="mx-2 bg-gray-400 text-white">
+                <Button color="default" className="mx-1 bg-gray-400 text-white">
                   모집글 수정
                 </Button>
               </Link>
+              <Button
+                color="default"
+                isIconOnly
+                className="mx-1 w-[30px] bg-gray-400 px-[0px] text-white"
+                onClick={deleteRecruitment}
+              >
+                <FaTrashCan />
+              </Button>
             </>
           )
         ) : (
