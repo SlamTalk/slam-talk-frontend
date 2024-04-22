@@ -29,12 +29,16 @@ import LocalStorage from '@/utils/localstorage';
 import axiosInstance from '../../../api/axiosInstance';
 import MessageList from '../../components/messageList';
 
+interface LastCursorData {
+  [key: string]: string;
+}
+
 const Chatting = () => {
   const params = useParams();
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [message, setMessage] = useState('');
-  // const [lastCursor, setLastCursor] = useState(0);
+  const [lastCursor, setLastCursor] = useState(0);
   const [greeting, setGreeting] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -84,7 +88,7 @@ const Chatting = () => {
     queryFn: ({ pageParam }) => postMore(pageParam),
     getNextPageParam: (lastPage: any) => lastPage,
     getPreviousPageParam: (firstPage: any) => firstPage,
-    initialPageParam: 0, // localstorage 변수 추가
+    initialPageParam: lastCursor, // localstorage 변수 추가
   });
   useEffect(() => {
     const duplicatedMessage = moreMessageData?.pages.flatMap((page) => page);
@@ -227,27 +231,39 @@ const Chatting = () => {
   };
 
   const { ref, inView } = useInView({ threshold: 0, delay: 0 });
-
   useEffect(() => {
     // 이전 로컬 스토리지 데이터 가져오기
     const localLastCursorString = LocalStorage.getItem('lastCursor');
-    let localLastCursor = [];
+    let localLastCursor: LastCursorData = {};
 
     // 이전 로컬 스토리지 데이터가 존재하는 경우 파싱하여 변수에 할당
     if (localLastCursorString) {
       localLastCursor = JSON.parse(localLastCursorString);
+
+      // 객체가 아닌 경우 빈 객체로 초기화
+      if (
+        typeof localLastCursor !== 'object' ||
+        Array.isArray(localLastCursor)
+      ) {
+        localLastCursor = {};
+      }
     }
 
     // 새로운 데이터 추가
-    const nowCursor = {
-      [`${params.roomId}`]:
-        messageListState[messageListState.length - 1]?.messageId,
-    };
-    localLastCursor.push(nowCursor);
+    localLastCursor[`${params.roomId}`] =
+      messageListState[messageListState.length - 1]?.messageId;
 
     // 로컬 스토리지에 새로운 데이터 저장
     LocalStorage.setItem('lastCursor', JSON.stringify(localLastCursor));
+    const storedLastCursor = LocalStorage.getItem('lastCursor');
+
+    if (storedLastCursor !== null) {
+      const parsedData: any = storedLastCursor;
+      const cursorKey: any = String(params.roomId);
+      setLastCursor(parsedData[cursorKey]);
+    }
   }, [messageListState, params.roomId]);
+
   useEffect(() => {
     if (inView && hasPreviousPage) {
       fetchPreviousPage();
