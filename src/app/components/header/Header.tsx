@@ -6,6 +6,7 @@ import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 import Logo from './Logo';
 import GoMyPage from './GoMyPage';
 import GoLogin from './GoLogin';
+import Notifications from './Notifications';
 
 const Header = () => {
   const { data: token } = useQuery({
@@ -29,6 +30,7 @@ const Header = () => {
       <Logo />
       <div className="flex items-center gap-2 pr-4">
         <GoMyPage />
+        <Notifications />
       </div>
     </div>
   );
