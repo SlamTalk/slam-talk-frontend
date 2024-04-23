@@ -35,15 +35,17 @@ const Chatting = () => {
   const [greeting, setGreeting] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
   const { data: token } = useQuery({
     queryKey: ['tokenData'],
     queryFn: postTokenRefresh,
   });
+  const accessToken = token;
   const { data: myChatList } = useQuery<IChatRoomListItem[]>({
     queryKey: ['myChatlist'],
     queryFn: getChatList,
   });
-  const accessToken = token;
+
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
@@ -103,7 +105,6 @@ const Chatting = () => {
   const connect = async () => {
     client.current = new StompJs.Client({
       brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
-
       connectHeaders: {
         id: 'sub-0',
         authorization: `Bearer ${accessToken}`,
@@ -141,7 +142,7 @@ const Chatting = () => {
       onStompError: (err) => {
         console.log({ err });
         if (client.current) {
-          client.current.deactivate();
+          client.current.activate();
         }
       },
       reconnectDelay: 5000,
@@ -208,9 +209,10 @@ const Chatting = () => {
     inputRef.current?.focus();
 
     connect();
+
     // postMore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [token]);
 
   return (
     <div aria-label="chat room wrapper" className="flex h-screen flex-col">
