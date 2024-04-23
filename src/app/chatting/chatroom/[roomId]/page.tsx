@@ -25,13 +25,9 @@ import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
 import { getChatList } from '@/services/chatting/getChatList';
 
 import { useInView } from 'react-intersection-observer';
-import LocalStorage from '@/utils/localstorage';
+
 import axiosInstance from '../../../api/axiosInstance';
 import MessageList from '../../components/messageList';
-
-interface LastCursorData {
-  [key: string]: string;
-}
 
 const Chatting = () => {
   const params = useParams();
@@ -42,7 +38,7 @@ const Chatting = () => {
   const [greeting, setGreeting] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
-
+  const [moreCount, setMoreCount] = useState(0);
   const { data: token } = useQuery({
     queryKey: ['tokenData'],
     queryFn: postTokenRefresh,
@@ -57,11 +53,12 @@ const Chatting = () => {
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
-  const postMore = async (pageParam: number) => {
+  const postMore = async () => {
+    setMoreCount(moreCount + 1);
     // TODO:localStorage 값 넣기
     try {
       const res = await axiosInstance.post(
-        `/api/chat/history?roomId=${params.roomId}&count=${pageParam}`
+        `/api/chat/history?roomId=${params.roomId}&count=${moreCount}`
       );
       return res.data.results as IMessage[];
       // const duplicatedMessage = res.data.results as IMessage[];
@@ -85,7 +82,7 @@ const Chatting = () => {
     data: moreMessageData,
   } = useInfiniteQuery({
     queryKey: ['moreMessage'],
-    queryFn: ({ pageParam }) => postMore(pageParam),
+    queryFn: () => postMore(),
     getNextPageParam: (lastPage: any) => lastPage,
     getPreviousPageParam: (firstPage: any) => firstPage,
     initialPageParam: lastCursor, // localstorage 변수 추가
@@ -122,6 +119,7 @@ const Chatting = () => {
       const listData = JSON.stringify(res.data.results);
 
       setMessageListState(JSON.parse(listData));
+      setLastCursor(+messageListState[messageListData.length - 1].messageId);
     } catch (err) {
       console.error(err);
     }
@@ -231,38 +229,6 @@ const Chatting = () => {
   };
 
   const { ref, inView } = useInView({ threshold: 0, delay: 0 });
-  useEffect(() => {
-    // 이전 로컬 스토리지 데이터 가져오기
-    const localLastCursorString = LocalStorage.getItem('lastCursor');
-    let localLastCursor: LastCursorData = {};
-
-    // 이전 로컬 스토리지 데이터가 존재하는 경우 파싱하여 변수에 할당
-    if (localLastCursorString) {
-      localLastCursor = JSON.parse(localLastCursorString);
-
-      // 객체가 아닌 경우 빈 객체로 초기화
-      if (
-        typeof localLastCursor !== 'object' ||
-        Array.isArray(localLastCursor)
-      ) {
-        localLastCursor = {};
-      }
-    }
-
-    // 새로운 데이터 추가
-    localLastCursor[`${params.roomId}`] =
-      messageListState[messageListState.length - 1]?.messageId;
-
-    // 로컬 스토리지에 새로운 데이터 저장
-    LocalStorage.setItem('lastCursor', JSON.stringify(localLastCursor));
-    const storedLastCursor = LocalStorage.getItem('lastCursor');
-
-    if (storedLastCursor !== null) {
-      const parsedData: any = storedLastCursor;
-      const cursorKey: any = String(params.roomId);
-      setLastCursor(parsedData[cursorKey]);
-    }
-  }, [messageListState, params.roomId]);
 
   useEffect(() => {
     if (inView && hasPreviousPage) {
