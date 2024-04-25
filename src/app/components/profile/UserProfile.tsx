@@ -65,6 +65,10 @@ const UserProfile: React.FC<UserProfileProps> = ({
     }
   };
 
+  const handleGoMyPage = () => {
+    router.push('/my-page/profile');
+  };
+
   if (otherUser) {
     return (
       <>
@@ -144,9 +148,15 @@ const UserProfile: React.FC<UserProfileProps> = ({
                   <Button color="danger" variant="light" onPress={onClose}>
                     닫기
                   </Button>
-                  <Button color="primary" onClick={handleCreateChatting}>
-                    1 : 1 채팅 걸기
-                  </Button>
+                  {user && user.id === otherUser.id ? (
+                    <Button color="primary" onClick={handleGoMyPage}>
+                      프로필 수정하기
+                    </Button>
+                  ) : (
+                    <Button color="primary" onClick={handleCreateChatting}>
+                      1 : 1 채팅 걸기
+                    </Button>
+                  )}
                 </ModalFooter>
               </>
             )}
