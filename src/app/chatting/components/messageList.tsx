@@ -10,10 +10,15 @@ import UserProfile from '@/app/components/profile/UserProfile';
 import { useParams } from 'next/navigation';
 import axiosInstance from '@/app/api/axiosInstance';
 
-const MessageList = ({ list }: { list: IMessage[] }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+interface MessageLIstProps {
+  list: IMessage[];
+}
+
+const MessageList: React.FC<MessageLIstProps> = ({ list }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [lastMessageId, setLastMessageId] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
@@ -23,7 +28,6 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
   const nickname = error ? null : user?.nickname;
 
   useEffect(() => {
-    // messageListData();
     setMessages(list);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -35,7 +39,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
     initialInView: true,
   });
   useEffect(() => {
-    const postMore = async () => {
+    const fetchMoreMessages = async () => {
       try {
         const res = await axiosInstance.post(
           `/api/chat/history?roomId=${params.roomId}&lastMessageId=${lastMessageId}`
@@ -60,33 +64,17 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
       }
     };
     if (inView) {
-      postMore();
+      fetchMoreMessages();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
-  // const postChatRoom = async (createData: any) => {
-  //   const res = await axiosInstance.post(
-  //     `/api/chat/create`,
-  //     JSON.stringify(createData)
-  //   );
-  //   return res.data.results;
-  // };
 
-  // const handleCreateChatroom = (partnerId: any) => async () => {
-  //   const createInfo = {
-  //     creator_id: user?.id,
-  //     participants: [partnerId],
-  //     roomType: 'DM',
-  //     basket_ball_id: '', // 시설채팅에만
-  //     name: '', // 1:1은 필요없음,시설명,매칭&같이하기는 작성글 제목
-  //   };
-  //   const createRoom = await postChatRoom(createInfo);
-  //   router.push(`/chatting/chatroom/${createRoom}`);
-  // };
   const messageEndRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
   useEffect(() => {
     if (messages.length > 0) {
       setLastMessageId(messages[0].messageId);
