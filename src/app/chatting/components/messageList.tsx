@@ -4,16 +4,21 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import IMessage from '@/types/chat/message';
+import { useInView } from 'react-intersection-observer';
 
 import UserProfile from '@/app/components/profile/UserProfile';
+import { useParams } from 'next/navigation';
+import axiosInstance from '@/app/api/axiosInstance';
 
 const MessageList = ({ list }: { list: IMessage[] }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [lastMessageId, setLastMessageId] = useState('');
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
+  const params = useParams();
 
   const nickname = error ? null : user?.nickname;
 
@@ -24,6 +29,41 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
+  const { ref, inView } = useInView({
+    threshold: 0,
+    delay: 0,
+    initialInView: true,
+  });
+  useEffect(() => {
+    const postMore = async () => {
+      try {
+        const res = await axiosInstance.post(
+          `/api/chat/history?roomId=${params.roomId}&lastMessageId=${lastMessageId}`
+        );
+        res.data.results as IMessage[];
+        const duplicatedMessage = [
+          ...messages,
+          ...res.data.results,
+        ] as IMessage[];
+        const unique = Array.from(
+          new Map(
+            duplicatedMessage.map((messageItem: IMessage) => [
+              messageItem.messageId,
+              messageItem,
+            ])
+          ).values()
+        );
+
+        setMessages(() => [...unique]);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    if (inView) {
+      postMore();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
   // const postChatRoom = async (createData: any) => {
   //   const res = await axiosInstance.post(
   //     `/api/chat/create`,
@@ -47,8 +87,15 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+  useEffect(() => {
+    if (messages.length > 0) {
+      setLastMessageId(messages[0].messageId);
+    }
+  }, [messages]);
+
   return (
     <div className="h-[calc(100vh-109px)] min-h-[50px]	w-full overflow-y-scroll">
+      <div ref={ref} />
       {messages.map((i: IMessage, index) => (
         <div>
           {new Date(i.timestamp).toLocaleDateString() !==
