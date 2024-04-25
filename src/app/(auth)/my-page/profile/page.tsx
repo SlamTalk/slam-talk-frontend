@@ -136,7 +136,7 @@ const MyProfile = () => {
     router.back();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       handleGoBack();
     }
