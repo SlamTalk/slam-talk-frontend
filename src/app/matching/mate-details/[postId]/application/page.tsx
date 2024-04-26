@@ -64,10 +64,7 @@ const MateMatchingApplication = () => {
           placeholder="포지션을 선택하세요"
         >
           {basketballPositionApplyData.map((selectedPosition) => (
-            <SelectItem
-              key={selectedPosition.value}
-              value={selectedPosition.value}
-            >
+            <SelectItem key={selectedPosition.key} value={selectedPosition.key}>
               {selectedPosition.value}
             </SelectItem>
           ))}
