@@ -133,7 +133,7 @@ const NicknamePassword: React.FC<EmailProps> = ({ validEmail }) => {
     onOpen();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       handleShowAlert();
     }

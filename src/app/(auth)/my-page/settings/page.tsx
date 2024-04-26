@@ -28,7 +28,7 @@ const MyPageSettings = () => {
     router.back();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       handleGoBack();
     }
@@ -38,7 +38,7 @@ const MyPageSettings = () => {
     onOpen();
   };
 
-  const handleKeyDownLogout = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDownLogout = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       handleLogout();
     }
@@ -49,7 +49,7 @@ const MyPageSettings = () => {
   };
 
   const handleKeyDownMoveToChangePassword = (
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLDivElement>
   ) => {
     if (e.key === 'Enter') {
       handleGoChangePassword();
