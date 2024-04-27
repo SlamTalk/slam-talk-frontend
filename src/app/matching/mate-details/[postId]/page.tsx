@@ -23,34 +23,15 @@ interface MateChatRoomType {
 }
 
 const MateDetailsPage = () => {
-  const {
-    isOpen: isCompleteRecruitModalOpen,
-    onOpen: handleCompleteRecruitModalOpen,
-    onClose: handleCompleteRecruitModalClose,
-  } = useDisclosure();
-  const {
-    isOpen: isCompleteConfirmationModalOpen,
-    onOpen: handleCompleteConfirmationModalOpen,
-    onClose: handleCompleteConfirmationModalClose,
-  } = useDisclosure();
-  const {
-    isOpen: isDeleteConfirmationModalOpen,
-    onOpen: handleDeleteConfirmationModalOpen,
-    onClose: handleDeleteConfirmationModalClose,
-  } = useDisclosure();
-  const {
-    isOpen: isProfileOpen,
-    onOpen: handleProfileOpen,
-    onClose: handleProfileClose,
-  } = useDisclosure();
+  const recruitCompleteModal = useDisclosure();
+  const completeConfirmModal = useDisclosure();
+  const deleteConfirmModal = useDisclosure();
+  const profileModal = useDisclosure();
 
-  const { error, data: user } = useQuery({
+  const { data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
-  if (error) {
-    console.log({ error });
-  }
 
   const { postId } = useParams();
   const [date, setDate] = useState('');
@@ -108,9 +89,9 @@ const MateDetailsPage = () => {
       );
 
       return response;
-    } catch (e) {
-      console.log(e);
-      throw e;
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
   };
 
@@ -123,10 +104,10 @@ const MateDetailsPage = () => {
     onSuccess: (response) => {
       const newChatRoomId = response.data.results;
       setChatRoomId(newChatRoomId);
-      handleCompleteRecruitModalOpen();
+      recruitCompleteModal.onOpen();
     },
-    onError: (er) => {
-      console.error(er);
+    onError: (error: Error) => {
+      console.error(error);
     },
   });
 
@@ -135,14 +116,14 @@ const MateDetailsPage = () => {
     onSuccess: () => {
       console.log('success');
     },
-    onError: (err: Error) => {
-      console.log(err);
-      throw err;
+    onError: (error: Error) => {
+      console.log(error);
+      throw error;
     },
   });
 
   const handleFinishRecruitment = () => {
-    handleCompleteConfirmationModalClose();
+    completeConfirmModal.onClose();
 
     patchPostStatusMutation.mutate(undefined, {
       onSuccess: () => {
@@ -210,38 +191,18 @@ const MateDetailsPage = () => {
     }
   };
 
-  const completeConfirmationModalLeftFunc = () => {
-    handleCompleteConfirmationModalClose();
-  };
-
-  const completeRecruitModalLeftFunc = () => {
-    handleCompleteRecruitModalClose();
-  };
-
-  const completeRecruitModalRightFunc = () => {
-    router.push(`/chatting/chatroom/${chatRoomId}`);
-  };
-
-  const deleteConfirmationModalLeftFunc = () => {
-    handleDeleteConfirmationModalClose();
-  };
-
-  const deleteConfirmationModalRightFunc = () => {
-    deleteRecruitment();
-  };
-
   return (
     <div className="mx-[16px] mt-4 rounded-md border-2">
       {/* 유저 프로필 */}
       <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
         <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gray-300">
           <UserProfile
-            isOpen={isProfileOpen}
+            isOpen={profileModal.isOpen}
             userId={writer?.userId || -1}
-            onClose={handleProfileClose}
+            onClose={profileModal.onClose}
           />
           <Avatar
-            onClick={handleProfileOpen}
+            onClick={profileModal.onOpen}
             showFallback
             className="cursor-pointer"
             alt="profile-img"
@@ -341,7 +302,7 @@ const MateDetailsPage = () => {
               <Button
                 color="primary"
                 className="mx-1"
-                onClick={handleCompleteConfirmationModalOpen}
+                onClick={completeConfirmModal.onOpen}
               >
                 모집 완료
               </Button>
@@ -354,7 +315,7 @@ const MateDetailsPage = () => {
                 color="default"
                 isIconOnly
                 className="mx-1 w-[30px] bg-gray-400 px-[0px] text-white"
-                onClick={handleDeleteConfirmationModalOpen}
+                onClick={deleteConfirmModal.onOpen}
               >
                 <FaTrashCan />
               </Button>
@@ -372,37 +333,37 @@ const MateDetailsPage = () => {
       </div>
       {/* 모집 완료 확인 모달 */}
       <CheckModal
-        isOpen={isCompleteConfirmationModalOpen}
-        onClose={handleCompleteConfirmationModalClose}
+        isOpen={completeConfirmModal.isOpen}
+        onClose={completeConfirmModal.onClose}
         title="메이트 찾기 모집 완료"
         content="정말로 모집을 완료하시겠습니까?"
         leftBtn="닫기"
         rightBtn="모집 완료"
-        leftFunc={completeConfirmationModalLeftFunc}
+        leftFunc={completeConfirmModal.onClose}
         rightFunc={handleFinishRecruitment}
       />
       {/* 모집 완료 안내 모달 */}
       <CheckModal
-        isOpen={isCompleteRecruitModalOpen}
-        onClose={handleCompleteRecruitModalClose}
+        isOpen={recruitCompleteModal.isOpen}
+        onClose={recruitCompleteModal.onClose}
         title="메이트 찾기 모집 완료"
         content="메이트 찾기 모집이 완료되었습니다. 단체 채팅방이
         생성되었습니다."
         leftBtn="닫기"
         rightBtn="채팅방으로 이동"
-        leftFunc={completeRecruitModalLeftFunc}
-        rightFunc={completeRecruitModalRightFunc}
+        leftFunc={recruitCompleteModal.onClose}
+        rightFunc={() => router.push(`/chatting/chatroom/${chatRoomId}`)}
       />
       {/* 게시글 삭제 확인 모달 */}
       <CheckModal
-        isOpen={isDeleteConfirmationModalOpen}
-        onClose={handleDeleteConfirmationModalClose}
+        isOpen={deleteConfirmModal.isOpen}
+        onClose={deleteConfirmModal.onClose}
         title="상대팀 찾기 게시글 삭제"
         content="정말로 게시글을 삭제하시겠습니까?"
         leftBtn="닫기"
         rightBtn="삭제"
-        leftFunc={deleteConfirmationModalLeftFunc}
-        rightFunc={deleteConfirmationModalRightFunc}
+        leftFunc={deleteConfirmModal.onClose}
+        rightFunc={deleteRecruitment}
       />
     </div>
   );
