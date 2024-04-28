@@ -54,22 +54,34 @@ const MateDetailsPage = () => {
     queryFn: fetchMateDetailsData,
   });
 
-  const writer = {
-    userId: data?.writerId,
-    userNickname: data?.writerNickname,
-    userProfile: data?.writerImageUrl,
-  };
-  const isWriter = user?.id === writer.userId; // 작성자인지 확인하는 변수
+  useEffect(() => {
+    if (data) {
+      const formatDate = (dateString: string) => {
+        const [year, month, day] = dateString.split('-');
+        return `${year}년 ${month}월 ${day}일`;
+      };
 
-  const deleteRecruitment = async (): Promise<AxiosResponse> => {
-    const response = await axiosInstance.delete<AxiosResponse>(
-      `/api/mate/${postId}`
-    );
+      const formatHour = (timeString: string) => {
+        const [hour, minuteString] = timeString.split(':');
+        const hours = parseInt(hour, 10);
+        const minutes = parseInt(minuteString, 10);
+        const suffix = hours >= 12 ? '오후' : '오전';
+        const formattedHour = ((hours + 11) % 12) + 1;
+        const paddedHour =
+          formattedHour < 10 ? `0${formattedHour}` : formattedHour;
+        const paddedMinute = minutes < 10 ? `0${minutes}` : minutes.toString();
+        return `${suffix} ${paddedHour}시 ${paddedMinute}분`;
+      };
 
-    router.push(`/matching?tab=mate`);
+      const startDate = formatDate(data.scheduledDate);
+      const startTimeFormatted = formatHour(data.startTime);
+      const endTimeFormatted = formatHour(data.endTime);
 
-    return response;
-  };
+      setDate(startDate);
+      setStartTime(startTimeFormatted);
+      setEndTime(endTimeFormatted);
+    }
+  }, [data]);
 
   const patchCompleteRecruitment = async (): Promise<AxiosResponse> => {
     const response = await axiosInstance.patch<AxiosResponse>(
@@ -122,26 +134,45 @@ const MateDetailsPage = () => {
     },
   });
 
+  if (!data) return <div />;
+
+  const writer = {
+    userId: data.writerId,
+    userNickname: data.writerNickname,
+    userProfile: data.writerImageUrl,
+  };
+  const isWriter = user?.id === writer.userId; // 작성자인지 확인하는 변수
+
+  const handleDeleteRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.delete<AxiosResponse>(
+      `/api/mate/${postId}`
+    );
+
+    router.push(`/matching?tab=mate`);
+
+    return response;
+  };
+
   const handleFinishRecruitment = () => {
     completeConfirmModal.onClose();
 
     patchPostStatusMutation.mutate(undefined, {
       onSuccess: () => {
         const acceptedParticipantIds =
-          data?.participants
+          data.participants
             .filter((participant) => participant.applyStatus === 'ACCEPTED')
             .map((acceptedParticipant) => acceptedParticipant.participantId) ||
           [];
         const participantsIds = [
-          data?.writerId,
+          data.writerId,
           ...acceptedParticipantIds,
         ].filter((id): id is number => id !== undefined);
 
         const newRoomData: MateChatRoomType = {
           participants: participantsIds,
           roomType: 'TM',
-          together_id: data?.matePostId.toString() ?? '',
-          name: data?.title ?? '',
+          together_id: data.matePostId.toString() ?? '',
+          name: data.title ?? '',
         };
 
         createMateChatRoomMutation.mutate(newRoomData);
@@ -152,39 +183,10 @@ const MateDetailsPage = () => {
     });
   };
 
-  useEffect(() => {
-    if (data) {
-      const formatDate = (dateString: string) => {
-        const [year, month, day] = dateString.split('-');
-        return `${year}년 ${month}월 ${day}일`;
-      };
-
-      const formatHour = (timeString: string) => {
-        const [hour, minuteString] = timeString.split(':');
-        const hours = parseInt(hour, 10);
-        const minutes = parseInt(minuteString, 10);
-        const suffix = hours >= 12 ? '오후' : '오전';
-        const formattedHour = ((hours + 11) % 12) + 1;
-        const paddedHour =
-          formattedHour < 10 ? `0${formattedHour}` : formattedHour;
-        const paddedMinute = minutes < 10 ? `0${minutes}` : minutes.toString();
-        return `${suffix} ${paddedHour}시 ${paddedMinute}분`;
-      };
-
-      const startDate = formatDate(data.scheduledDate);
-      const startTimeFormatted = formatHour(data.startTime);
-      const endTimeFormatted = formatHour(data.endTime);
-
-      setDate(startDate);
-      setStartTime(startTimeFormatted);
-      setEndTime(endTimeFormatted);
-    }
-  }, [data]);
-
   const handleApply = () => {
     const isLoggedIn = LocalStorage.getItem('isLoggedIn');
     if (isLoggedIn === 'true')
-      router.push(`/matching/mate-details/${data?.matePostId}/application`);
+      router.push(`/matching/mate-details/${data.matePostId}/application`);
     else {
       alert('로그인 후 이용할 수 있습니다.');
       router.push(`/login`);
@@ -196,11 +198,13 @@ const MateDetailsPage = () => {
       {/* 유저 프로필 */}
       <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
         <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gray-300">
-          <UserProfile
-            isOpen={profileModal.isOpen}
-            userId={writer?.userId || -1}
-            onClose={profileModal.onClose}
-          />
+          {writer && (
+            <UserProfile
+              isOpen={profileModal.isOpen}
+              userId={writer.userId}
+              onClose={profileModal.onClose}
+            />
+          )}
           <Avatar
             onClick={profileModal.onOpen}
             showFallback
@@ -209,18 +213,18 @@ const MateDetailsPage = () => {
             src={writer?.userProfile}
           />
         </div>
-        <span className="font-bold">{writer.userNickname}</span>
+        <div className="font-bold">{writer.userNickname}</div>
       </div>
 
       {/* 모집글 제목 */}
       <div className="mx-6 mb-2 flex items-start">
-        <h1 className="mr-4 max-w-[420px] text-xl font-bold">{data?.title}</h1>
+        <h1 className="mr-4 max-w-[420px] text-xl font-bold">{data.title}</h1>
         <div
           className={`mt-0.5 rounded-full px-3 py-1 text-xs text-white ${
-            data?.recruitmentStatus === 'COMPLETED' ? 'bg-danger' : 'bg-success'
+            data.recruitmentStatus === 'COMPLETED' ? 'bg-danger' : 'bg-success'
           }`}
         >
-          {data?.recruitmentStatus === 'COMPLETED' ? '모집 완료' : '모집중'}
+          {data.recruitmentStatus === 'COMPLETED' ? '모집 완료' : '모집중'}
         </div>
       </div>
 
@@ -238,7 +242,7 @@ const MateDetailsPage = () => {
         <div className="mt-2 flex items-center justify-between rounded-md border-2">
           <div>
             <Snippet className="bg-background" symbol="">
-              {data?.locationDetail}
+              {data.locationDetail}
             </Snippet>
           </div>
 
@@ -254,7 +258,7 @@ const MateDetailsPage = () => {
 
         <div className="mt-2 rounded-md border-2 p-3">
           <div className="flex">
-            {data?.skillLevelList.map((lev, index) => (
+            {data.skillLevelList.map((lev, index) => (
               <div
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
@@ -264,7 +268,7 @@ const MateDetailsPage = () => {
               </div>
             ))}
           </div>
-          {data?.positionList.map((position, index) => (
+          {data.positionList.map((position, index) => (
             // eslint-disable-next-line react/no-array-index-key
             <div key={index} className="mb-1">
               <span className="font-semibold">{position.position}</span>:{' '}
@@ -278,14 +282,14 @@ const MateDetailsPage = () => {
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">상세 내용</div>
         <p className="mb-6 mt-2 h-[100px] overflow-y-auto break-words rounded-md border-2 p-3">
-          {data?.content}
+          {data.content}
         </p>
       </div>
 
       {/* 지원자 리스트 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">지원자 리스트</div>
-        {data?.participants.map((participant, index) => (
+        {data.participants.map((participant, index) => (
           <MateApplicantList
             // eslint-disable-next-line react/no-array-index-key
             key={index}
@@ -297,7 +301,7 @@ const MateDetailsPage = () => {
       </div>
       <div className="flex justify-center py-3">
         {isWriter ? (
-          data?.recruitmentStatus !== 'COMPLETED' && (
+          data.recruitmentStatus !== 'COMPLETED' && (
             <>
               <Button
                 color="primary"
@@ -306,7 +310,7 @@ const MateDetailsPage = () => {
               >
                 모집 완료
               </Button>
-              <Link href={`/matching/mate-details/${data?.matePostId}/revise`}>
+              <Link href={`/matching/mate-details/${data.matePostId}/revise`}>
                 <Button color="default" className="mx-1 bg-gray-400 text-white">
                   모집글 수정
                 </Button>
@@ -325,7 +329,7 @@ const MateDetailsPage = () => {
           <Button
             color="primary"
             onClick={handleApply}
-            disabled={data?.recruitmentStatus === 'COMPLETED'}
+            disabled={data.recruitmentStatus === 'COMPLETED'}
           >
             지원하기
           </Button>
@@ -363,7 +367,7 @@ const MateDetailsPage = () => {
         leftBtn="닫기"
         rightBtn="삭제"
         leftFunc={deleteConfirmModal.onClose}
-        rightFunc={deleteRecruitment}
+        rightFunc={handleDeleteRecruitment}
       />
     </div>
   );
