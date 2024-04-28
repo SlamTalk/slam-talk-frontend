@@ -82,33 +82,6 @@ const TeamDetailsPage = () => {
     }
   }, [data]);
 
-  const writer = {
-    userId: data?.writerId,
-    userNickname: data?.writerNickname,
-    userProfile: data?.writerImageUrl,
-  };
-  const isWriter = user?.id === writer.userId;
-
-  const handleApply = () => {
-    const isLoggedIn = LocalStorage.getItem('isLoggedIn');
-    if (isLoggedIn === 'true')
-      router.push(`/matching/team-details/${data?.teamMatchingId}/application`);
-    else {
-      alert('로그인 후 이용할 수 있습니다.');
-      router.push(`/login`);
-    }
-  };
-
-  const deleteRecruitment = async (): Promise<AxiosResponse> => {
-    const response = await axiosInstance.delete<AxiosResponse>(
-      `/api/match/${postId}`
-    );
-
-    router.push(`/matching?tab=team`);
-
-    return response;
-  };
-
   const patchCompleteRecruitment = async (): Promise<AxiosResponse> => {
     const response = await axiosInstance.patch<AxiosResponse>(
       `/api/match/${postId}/complete`
@@ -116,17 +89,6 @@ const TeamDetailsPage = () => {
 
     return response;
   };
-
-  const patchPostStatusMutation = useMutation<AxiosResponse, Error>({
-    mutationFn: patchCompleteRecruitment,
-    onSuccess: () => {
-      console.log('success');
-    },
-    onError: (error: Error) => {
-      console.log(error);
-      throw error;
-    },
-  });
 
   const creatTeamChatRoom = async (
     roomData: TeamChatRoomType
@@ -144,6 +106,17 @@ const TeamDetailsPage = () => {
     }
   };
 
+  const patchPostStatusMutation = useMutation<AxiosResponse, Error>({
+    mutationFn: patchCompleteRecruitment,
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: (error: Error) => {
+      console.log(error);
+      throw error;
+    },
+  });
+
   const createTeamChatRoomMutation = useMutation<
     AxiosResponse,
     Error,
@@ -160,24 +133,53 @@ const TeamDetailsPage = () => {
     },
   });
 
+  if (!data) return <div />;
+
+  const writer = {
+    userId: data.writerId,
+    userNickname: data.writerNickname,
+    userProfile: data.writerImageUrl,
+  };
+  const isWriter = user?.id === writer.userId;
+
+  const handleApply = () => {
+    const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true')
+      router.push(`/matching/team-details/${data.teamMatchingId}/application`);
+    else {
+      alert('로그인 후 이용할 수 있습니다.');
+      router.push(`/login`);
+    }
+  };
+
+  const deleteRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.delete<AxiosResponse>(
+      `/api/match/${postId}`
+    );
+
+    router.push(`/matching?tab=team`);
+
+    return response;
+  };
+
   const handleFinishRecruitment = () => {
     completeConfirmModal.onClose();
 
     patchPostStatusMutation.mutate(undefined, {
       onSuccess: () => {
         const acceptedParticipantIds =
-          data?.teamApplicants
+          data.teamApplicants
             .filter((applicant) => applicant.applyStatus === 'ACCEPTED')
             .map((applicant) => applicant.applicantId) || [];
 
         const participantsIds = [
-          data?.writerId,
+          data.writerId,
           ...acceptedParticipantIds,
         ].filter((id): id is number => id !== undefined);
 
-        const title = `${data?.teamName} vs ${
+        const title = `${data.teamName} vs ${
           acceptedParticipantIds.length > 0
-            ? data?.teamApplicants.find(
+            ? data.teamApplicants.find(
                 (applicant) =>
                   applicant.applicantId === acceptedParticipantIds[0]
               )?.teamName
@@ -187,7 +189,7 @@ const TeamDetailsPage = () => {
         const newRoomData: TeamChatRoomType = {
           participants: participantsIds,
           roomType: 'MM',
-          teamMatching_id: data?.teamMatchingId.toString() ?? '',
+          teamMatching_id: data.teamMatchingId.toString() ?? '',
           name: title,
         };
 
@@ -204,35 +206,37 @@ const TeamDetailsPage = () => {
       {/* 유저 프로필 */}
       <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
         <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gray-300">
-          <UserProfile
-            isOpen={profileModal.isOpen}
-            userId={writer?.userId || -1}
-            onClose={profileModal.onClose}
-          />
+          {writer && (
+            <UserProfile
+              isOpen={profileModal.isOpen}
+              userId={writer.userId}
+              onClose={profileModal.onClose}
+            />
+          )}
           <Avatar
             onClick={profileModal.onOpen}
             showFallback
             className="cursor-pointer"
             alt="profile-img"
-            src={writer?.userProfile}
+            src={writer.userProfile}
           />
         </div>
         <span className="font-bold">
-          {writer.userNickname} [{data?.teamName}]
+          {writer.userNickname} [{data.teamName}]
         </span>
       </div>
 
       {/* 모집글 제목 */}
       <div className="mx-6 mb-2 flex items-start">
-        <h1 className="mr-4 max-w-[420px] text-xl font-bold">{data?.title}</h1>
+        <h1 className="mr-4 max-w-[420px] text-xl font-bold">{data.title}</h1>
         <div
           className={`mt-0.5 rounded-full px-3 py-1 text-xs text-white ${
-            data?.recruitmentStatusType === 'COMPLETED'
+            data.recruitmentStatusType === 'COMPLETED'
               ? 'bg-danger'
               : 'bg-success'
           }`}
         >
-          {data?.recruitmentStatusType === 'COMPLETED' ? '모집 완료' : '모집중'}
+          {data.recruitmentStatusType === 'COMPLETED' ? '모집 완료' : '모집중'}
         </div>
       </div>
 
@@ -250,7 +254,7 @@ const TeamDetailsPage = () => {
         <div className="mt-2 flex items-center justify-between rounded-md border-2">
           <div>
             <Snippet className="bg-background" symbol="">
-              {data?.locationDetail}
+              {data.locationDetail}
             </Snippet>
           </div>
 
@@ -264,7 +268,7 @@ const TeamDetailsPage = () => {
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">경기 유형</div>
         <p className="mb-6 mt-2 rounded-md border-2 p-3">
-          {data?.numberOfMembers} vs {data?.numberOfMembers}
+          {data.numberOfMembers} vs {data.numberOfMembers}
         </p>
       </div>
 
@@ -274,7 +278,7 @@ const TeamDetailsPage = () => {
 
         <div className="mt-2 rounded-md border-2 p-3">
           <div className="flex">
-            {data?.skillLevelList.map((lev, index) => (
+            {data.skillLevelList.map((lev, index) => (
               <div
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
@@ -290,14 +294,14 @@ const TeamDetailsPage = () => {
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">상세 내용</div>
         <p className="mb-6 mt-2 h-[100px] overflow-y-auto break-words rounded-md border-2 p-3">
-          {data?.content}
+          {data.content}
         </p>
       </div>
 
       {/* 지원자 리스트 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">지원자 리스트</div>
-        {data?.teamApplicants.map((applicant, index) => (
+        {data.teamApplicants.map((applicant, index) => (
           <TeamApplicantList
             // eslint-disable-next-line react/no-array-index-key
             key={index}
@@ -311,7 +315,7 @@ const TeamDetailsPage = () => {
       {/* 모집 완료, 수정, 지원 버튼 */}
       <div className="flex justify-center py-3">
         {isWriter ? (
-          data?.recruitmentStatusType !== 'COMPLETED' && (
+          data.recruitmentStatusType !== 'COMPLETED' && (
             <>
               <Button
                 color="primary"
@@ -321,7 +325,7 @@ const TeamDetailsPage = () => {
                 모집 완료
               </Button>
               <Link
-                href={`/matching/team-details/${data?.teamMatchingId}/revise`}
+                href={`/matching/team-details/${data.teamMatchingId}/revise`}
               >
                 <Button color="default" className="mx-1 bg-gray-400 text-white">
                   모집글 수정
@@ -341,7 +345,7 @@ const TeamDetailsPage = () => {
           <Button
             color="primary"
             onClick={handleApply}
-            disabled={data?.recruitmentStatusType === 'COMPLETED'}
+            disabled={data.recruitmentStatusType === 'COMPLETED'}
           >
             지원하기
           </Button>

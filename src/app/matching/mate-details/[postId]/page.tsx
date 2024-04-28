@@ -210,7 +210,7 @@ const MateDetailsPage = () => {
             showFallback
             className="cursor-pointer"
             alt="profile-img"
-            src={writer?.userProfile}
+            src={writer.userProfile}
           />
         </div>
         <div className="font-bold">{writer.userNickname}</div>
