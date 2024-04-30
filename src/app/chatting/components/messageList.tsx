@@ -26,10 +26,9 @@ const MessageList: React.FC<MessageLIstProps> = ({ list }) => {
   const params = useParams();
 
   const nickname = error ? null : user?.nickname;
-
+  const [hasFetched, setHasFetched] = useState(false);
   useEffect(() => {
     setMessages(list);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
@@ -58,15 +57,27 @@ const MessageList: React.FC<MessageLIstProps> = ({ list }) => {
           ).values()
         );
 
-        setMessages(() => [...unique]);
+        setMessages(() =>
+          [...unique].sort((a, b) => Number(a.messageId) - Number(b.messageId))
+        );
+
+        setLastMessageId(messages[0].messageId);
       } catch (err) {
         console.error(err);
       }
     };
-    if (inView) {
+
+    if (inView && !hasFetched) {
       fetchMoreMessages();
+      setHasFetched(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView, hasFetched]);
+
+  useEffect(() => {
+    if (!inView) {
+      setHasFetched(false);
+    }
   }, [inView]);
 
   const messageEndRef = useRef<HTMLDivElement | null>(null);
