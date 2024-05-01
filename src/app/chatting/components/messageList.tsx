@@ -107,7 +107,7 @@ const MessageList: React.FC<MessageLIstProps> = ({ list }) => {
                 {i.timestamp
                   ? new Date(i.timestamp).toLocaleDateString().split('.')[0]
                   : new Date().toLocaleDateString().split('.')[0]}
-                년{' '}
+                년
                 {i.timestamp
                   ? new Date(i.timestamp).toLocaleDateString().split('.')[1]
                   : new Date().toLocaleDateString().split('.')[1]}
