@@ -46,7 +46,6 @@ const ChatList = () => {
 
   return myChatList ? (
     <div>
-      <div className="text-xl">나의 채팅 목록</div>
       <title>슬램톡 | 채팅</title>
       {myChatList?.map((i: IChatRoomListItem) => (
         <div
