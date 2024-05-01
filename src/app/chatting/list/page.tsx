@@ -45,7 +45,7 @@ const ChatList = () => {
   }
 
   return myChatList ? (
-    <div>
+    <div className="h-[calc(100vh-150px)] overflow-y-scroll">
       <title>슬램톡 | 채팅</title>
       {myChatList?.map((i: IChatRoomListItem) => (
         <div
