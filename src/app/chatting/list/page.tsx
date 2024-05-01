@@ -60,8 +60,8 @@ const ChatList = () => {
                 src={
                   i.roomType === 'DIRECT'
                     ? i.imgUrl || undefined
-                    : i.roomType === 'BASEKETBALL'
-                      ? '/images/basketball-stand.svg'
+                    : i.roomType === 'BASKETBALL'
+                      ? ''
                       : i.roomType === 'TOGETHER'
                         ? '/images/team-group-thin.svg'
                         : i.roomType === 'MATCHING'
