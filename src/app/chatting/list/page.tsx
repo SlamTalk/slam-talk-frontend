@@ -82,6 +82,28 @@ const ChatList = () => {
                 </div>
               </Link>
             </div>
+            <div className="w-[60px]">
+              {i.roomType === 'DIRECT' && (
+                <div className="flex w-[50px] justify-center rounded bg-gray-200">
+                  <p className="my-1 font-semibold text-gray-600">일반</p>
+                </div>
+              )}
+              {i.roomType === 'BASKETBALL' && (
+                <div className="flex w-[50px] justify-center rounded bg-red-200">
+                  <p className="my-1 font-semibold text-red-600">농구장</p>
+                </div>
+              )}
+              {i.roomType === 'TOGETHER' && (
+                <div className="flex w-[50px] justify-center rounded bg-blue-200">
+                  <p className="my-1 font-semibold text-blue-600">팀</p>
+                </div>
+              )}
+              {i.roomType === 'MATCHING' && (
+                <div className="flex w-[50px] justify-center rounded bg-green-200">
+                  <p className="my-1 font-semibold text-green-600">메이트</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ))}
