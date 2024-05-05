@@ -45,8 +45,7 @@ const ChatList = () => {
   }
 
   return myChatList ? (
-    <div>
-      <div className="text-xl">나의 채팅 목록</div>
+    <div className="h-[calc(100vh-150px)] overflow-y-scroll">
       <title>슬램톡 | 채팅</title>
       {myChatList?.map((i: IChatRoomListItem) => (
         <div
@@ -60,8 +59,8 @@ const ChatList = () => {
                 src={
                   i.roomType === 'DIRECT'
                     ? i.imgUrl || undefined
-                    : i.roomType === 'BASEKETBALL'
-                      ? '/images/basketball-stand.svg'
+                    : i.roomType === 'BASKETBALL'
+                      ? ''
                       : i.roomType === 'TOGETHER'
                         ? '/images/team-group-thin.svg'
                         : i.roomType === 'MATCHING'
@@ -83,11 +82,27 @@ const ChatList = () => {
                 </div>
               </Link>
             </div>
-            <div className="right-4 w-[50px]">
-              {i.roomType === 'DIRECT' && `DM`}
-              {i.roomType === 'BASKETBALL' && `BM`}
-              {i.roomType === 'TOGETHER' && `TM`}
-              {i.roomType === 'MATCHING' && `MM`}
+            <div className="w-[60px]">
+              {i.roomType === 'DIRECT' && (
+                <div className="flex w-[50px] justify-center rounded bg-gray-200">
+                  <p className="my-1 font-semibold text-gray-600">일반</p>
+                </div>
+              )}
+              {i.roomType === 'BASKETBALL' && (
+                <div className="flex w-[50px] justify-center rounded bg-red-200">
+                  <p className="my-1 font-semibold text-red-600">농구장</p>
+                </div>
+              )}
+              {i.roomType === 'TOGETHER' && (
+                <div className="flex w-[50px] justify-center rounded bg-blue-200">
+                  <p className="my-1 font-semibold text-blue-600">팀</p>
+                </div>
+              )}
+              {i.roomType === 'MATCHING' && (
+                <div className="flex w-[50px] justify-center rounded bg-green-200">
+                  <p className="my-1 font-semibold text-green-600">메이트</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

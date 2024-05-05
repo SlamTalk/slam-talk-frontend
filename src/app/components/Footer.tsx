@@ -54,7 +54,7 @@ const Footer = () => {
             <div className="text-xs">농구장 지도</div>
           </div>
         </Link>
-        <Link href="/chatting/list">
+        <Link href="/chatting">
           <div
             className={`grid place-items-center ${tab === 'chat' ? 'text-primary' : ''}`}
           >
