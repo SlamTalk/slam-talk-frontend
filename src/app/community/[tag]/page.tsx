@@ -247,24 +247,21 @@ const Page = () => {
           </TableBody>
         </Table>
       </div>
-      <div className="fixed bottom-14 w-full max-w-[600px]">
-        <div className="mr-4 flex justify-end">
-          <Button
-            aria-label="Write new post"
-            type="button"
-            startContent={<FaPlus />}
-            className="rounded-full bg-primary text-white shadow-md"
-            onClick={() => {
-              if (isLoggedIn === 'true') {
-                return router.push('/community/write');
-              }
-              return router.push('/login');
-            }}
-          >
-            글 작성하기
-          </Button>
-        </div>
-      </div>
+
+      <Button
+        aria-label="Write new post"
+        type="button"
+        startContent={<FaPlus />}
+        className="absolute left-[calc(100vw-280px)] top-[calc(100vh-10px)] z-10	rounded-full bg-primary text-white shadow-md"
+        onClick={() => {
+          if (isLoggedIn === 'true') {
+            return router.push('/community/write');
+          }
+          return router.push('/login');
+        }}
+      >
+        글 작성하기
+      </Button>
     </div>
   );
 };
