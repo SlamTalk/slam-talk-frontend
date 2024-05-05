@@ -27,49 +27,52 @@ const Footer = () => {
     }
   }, [pathname]);
 
-  <div className="footer fixed bottom-0 z-30 h-[48px] w-full border-t-1 bg-background pt-[4px]">
-    <div className="flex items-center justify-around">
-      <Link href="/">
-        <div
-          className={`grid place-items-center ${tab === 'home' ? 'text-primary' : ''}`}
-        >
-          <AiFillHome size={24} />
-          <div className="text-xs">홈</div>
-        </div>
-      </Link>
-      <Link href="/community/all">
-        <div
-          className={`grid place-items-center ${tab === 'community' ? 'text-primary' : ''}`}
-        >
-          <PiClipboardTextFill size={24} />
-          <div className="text-xs">커뮤니티</div>
-        </div>
-      </Link>
-      <Link href="/map">
-        <div
-          className={`grid place-items-center ${tab === 'map' ? 'text-primary' : ''}`}
-        >
-          <HiMapPin size={24} />
-          <div className="text-xs">농구장 지도</div>
-        </div>
-      </Link>
-      <Link href="/chatting">
-        <div
-          className={`grid place-items-center ${tab === 'chat' ? 'text-primary' : ''}`}
-        >
-          <IoIosChatbubbles size={24} />
-          <div className="text-xs">채팅</div>
-        </div>
-      </Link>
-      <Link href="/matching">
-        <div
-          className={`grid place-items-center ${tab === 'match' ? 'text-primary' : ''}`}
-        >
-          <BsPeopleFill size={24} />
-          <div className="text-xs">매칭</div>
-        </div>
-      </Link>
+  return (
+    <div className="footer fixed bottom-0 z-30 h-[48px] w-full border-t-1 bg-background pt-[4px]">
+      <div className="flex items-center justify-around">
+        <Link href="/">
+          <div
+            className={`grid place-items-center ${tab === 'home' ? 'text-primary' : ''}`}
+          >
+            <AiFillHome size={24} />
+            <div className="text-xs">홈</div>
+          </div>
+        </Link>
+        <Link href="/community/all">
+          <div
+            className={`grid place-items-center ${tab === 'community' ? 'text-primary' : ''}`}
+          >
+            <PiClipboardTextFill size={24} />
+            <div className="text-xs">커뮤니티</div>
+          </div>
+        </Link>
+        <Link href="/map">
+          <div
+            className={`grid place-items-center ${tab === 'map' ? 'text-primary' : ''}`}
+          >
+            <HiMapPin size={24} />
+            <div className="text-xs">농구장 지도</div>
+          </div>
+        </Link>
+        <Link href="/chatting/list">
+          <div
+            className={`grid place-items-center ${tab === 'chat' ? 'text-primary' : ''}`}
+          >
+            <IoIosChatbubbles size={24} />
+            <div className="text-xs">채팅</div>
+          </div>
+        </Link>
+        <Link href="/matching">
+          <div
+            className={`grid place-items-center ${tab === 'match' ? 'text-primary' : ''}`}
+          >
+            <BsPeopleFill size={24} />
+            <div className="text-xs">매칭</div>
+          </div>
+        </Link>
+      </div>
     </div>
-  </div>;
+  );
 };
+
 export default Footer;
