@@ -53,6 +53,7 @@ const Page = () => {
     communityId: 0,
     content: '',
   });
+  const [isZoom, setIsZoom] = useState(false);
   const [writerInfo, setWriterInfo] = useState<OtherUserInfo | null>();
   useEffect(() => {
     if (isSuccess && writerId !== undefined) {
@@ -156,6 +157,10 @@ const Page = () => {
                 {articleData.imageUrls
                   ? articleData.imageUrls.map((i: string) => (
                       <Image
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setIsZoom(true);
+                        }}
                         key={i}
                         src={i}
                         alt="images"
@@ -164,6 +169,29 @@ const Page = () => {
                       />
                     ))
                   : null}
+                {isZoom &&
+                  (articleData.imageUrls
+                    ? articleData.imageUrls.map((i: string) => (
+                        // eslint-disable-next-line
+                        <div
+                          role="button"
+                          onClick={() => setIsZoom(false)}
+                          className="absolute top-0 z-10 flex h-full w-full items-center justify-center bg-black bg-opacity-60"
+                        >
+                          <Image
+                            aria-label="확대 이미지"
+                            onClick={() => {
+                              setIsZoom(false);
+                            }}
+                            key={i}
+                            src={i}
+                            width={300}
+                            height={200}
+                            alt="zoomImages"
+                          />
+                        </div>
+                      ))
+                    : null)}
               </div>
 
               <div className="flex justify-between">
