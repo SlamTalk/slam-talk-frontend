@@ -246,22 +246,25 @@ const Page = () => {
                   ))}
           </TableBody>
         </Table>
+        <div className="fixed bottom-14 mr-4 flex w-[600px] justify-end sm:w-[390px]">
+          <div className="fixed bottom-14 mr-4">
+            <Button
+              aria-label="Write new post"
+              type="button"
+              startContent={<FaPlus />}
+              className="z-40 rounded-full bg-primary text-white shadow-md sm:w-[100px]"
+              onClick={() => {
+                if (isLoggedIn === 'true') {
+                  return router.push('/community/write');
+                }
+                return router.push('/login');
+              }}
+            >
+              글 작성하기
+            </Button>
+          </div>
+        </div>
       </div>
-
-      <Button
-        aria-label="Write new post"
-        type="button"
-        startContent={<FaPlus />}
-        className="absolute left-[calc(100vw-280px)] top-[calc(100vh-10px)] z-10	rounded-full bg-primary text-white shadow-md"
-        onClick={() => {
-          if (isLoggedIn === 'true') {
-            return router.push('/community/write');
-          }
-          return router.push('/login');
-        }}
-      >
-        글 작성하기
-      </Button>
     </div>
   );
 };
