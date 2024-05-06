@@ -90,7 +90,7 @@ const ChatList = () => {
               )}
               {i.roomType === 'BASKETBALL' && (
                 <div className="flex w-[50px] justify-center rounded bg-red-200">
-                  <p className="my-1 font-semibold text-red-600">농구장</p>
+                  <p className="my-1 font-semibold text-primary">농구장</p>
                 </div>
               )}
               {i.roomType === 'TOGETHER' && (
