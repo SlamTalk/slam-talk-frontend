@@ -60,11 +60,11 @@ const ChatList = () => {
                   i.roomType === 'DIRECT'
                     ? i.imgUrl || undefined
                     : i.roomType === 'BASKETBALL'
-                      ? ''
+                      ? '/images/basketball-and-hoop.svg'
                       : i.roomType === 'TOGETHER'
-                        ? '/images/team-group-thin.svg'
+                        ? '/images/basketball-game.svg'
                         : i.roomType === 'MATCHING'
-                          ? i.imgUrl || undefined
+                          ? '/images/free-icon-basketball-player-2156765.png'
                           : undefined
                 }
               />
@@ -95,12 +95,12 @@ const ChatList = () => {
               )}
               {i.roomType === 'TOGETHER' && (
                 <div className="flex w-[50px] justify-center rounded bg-blue-200">
-                  <p className="my-1 font-semibold text-blue-600">팀</p>
+                  <p className="my-1 font-semibold text-blue-600">메이트</p>
                 </div>
               )}
               {i.roomType === 'MATCHING' && (
                 <div className="flex w-[50px] justify-center rounded bg-green-200">
-                  <p className="my-1 font-semibold text-green-600">메이트</p>
+                  <p className="my-1 font-semibold text-green-600">매칭</p>
                 </div>
               )}
             </div>
