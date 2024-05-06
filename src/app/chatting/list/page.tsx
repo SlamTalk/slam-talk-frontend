@@ -62,9 +62,9 @@ const ChatList = () => {
                     : i.roomType === 'BASKETBALL'
                       ? '/images/basketball-and-hoop.svg'
                       : i.roomType === 'TOGETHER'
-                        ? '/images/basketball-game.svg'
+                        ? '/images/free-icon-basketball-player-2156765.png'
                         : i.roomType === 'MATCHING'
-                          ? '/images/free-icon-basketball-player-2156765.png'
+                          ? i.imgUrl || undefined
                           : undefined
                 }
               />
