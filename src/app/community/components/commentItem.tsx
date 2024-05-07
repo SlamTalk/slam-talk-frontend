@@ -75,13 +75,15 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       </div>
 
       {editToggle ? (
-        <input
-          className="ml-2 mt-2 h-10 w-[750px]"
-          placeholder={content}
-          onChange={(e) => {
-            setEditedComment(e.target.value);
-          }}
-        />
+        <form onSubmit={handleEdit}>
+          <input
+            className="ml-2 mt-2 h-10 w-[750px]"
+            placeholder={content}
+            onChange={(e) => {
+              setEditedComment(e.target.value);
+            }}
+          />
+        </form>
       ) : (
         <div className="flex w-full justify-between">
           <div className="my-2 ml-1 flex flex-col">
