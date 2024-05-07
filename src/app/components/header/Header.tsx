@@ -29,8 +29,8 @@ const Header = () => {
     <div className="sticky top-0 z-30 flex h-[61px] w-full max-w-[600px] items-center justify-between border-b-1 bg-background pl-4">
       <Logo />
       <div className="flex items-center gap-2 pr-4">
-        <GoMyPage />
         <Notifications />
+        <GoMyPage />
       </div>
     </div>
   );
