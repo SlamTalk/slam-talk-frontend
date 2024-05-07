@@ -70,39 +70,48 @@ const ChatList = () => {
               />
 
               <Link href={`/chatting/chatroom/${i.roomId}`}>
-                <div className="text-xl">
-                  {i.roomType === 'DIRECT' && i.name}
-                  {i.roomType === 'BASKETBALL' && i.name}
-                  {i.roomType === 'TOGETHER' && i.name}
-                  {i.roomType === 'MATCHING' && i.name}
+                <div className="flex">
+                  {i.roomType === 'DIRECT' && (
+                    <div className="mr-1 flex w-[28px] justify-center rounded bg-gray-200">
+                      <p className="my-1 text-xs font-semibold text-gray-600">
+                        일반
+                      </p>
+                    </div>
+                  )}
+                  {i.roomType === 'BASKETBALL' && (
+                    <div className="mr-1 flex w-[40px] justify-center rounded bg-red-200">
+                      <p className="mx-1 my-1 text-xs font-semibold text-primary">
+                        농구장
+                      </p>
+                    </div>
+                  )}
+                  {i.roomType === 'TOGETHER' && (
+                    <div className="mr-1 flex w-[40px] justify-center rounded bg-green-200">
+                      <p className="mx-1 my-1 text-xs font-semibold text-green-600">
+                        메이트
+                      </p>
+                    </div>
+                  )}
+                  {i.roomType === 'MATCHING' && (
+                    <div className="mr-1 flex w-[28px] justify-center rounded bg-blue-200">
+                      <p className="my-1 text-xs font-semibold text-blue-600">
+                        팀
+                      </p>
+                    </div>
+                  )}
+
+                  <div className="font-bold ">
+                    {i.roomType === 'DIRECT' && i.name}
+                    {i.roomType === 'BASKETBALL' && i.name}
+                    {i.roomType === 'TOGETHER' && i.name}
+                    {i.roomType === 'MATCHING' && i.name}
+                  </div>
                 </div>
 
                 <div className="text-gray-400">
                   {i.lastMessage.replace(/"/g, '')}
                 </div>
               </Link>
-            </div>
-            <div className="w-[60px]">
-              {i.roomType === 'DIRECT' && (
-                <div className="flex w-[50px] justify-center rounded bg-gray-200">
-                  <p className="my-1 font-semibold text-gray-600">일반</p>
-                </div>
-              )}
-              {i.roomType === 'BASKETBALL' && (
-                <div className="flex w-[50px] justify-center rounded bg-red-200">
-                  <p className="my-1 font-semibold text-primary">농구장</p>
-                </div>
-              )}
-              {i.roomType === 'TOGETHER' && (
-                <div className="flex w-[50px] justify-center rounded bg-blue-200">
-                  <p className="my-1 font-semibold text-blue-600">메이트</p>
-                </div>
-              )}
-              {i.roomType === 'MATCHING' && (
-                <div className="flex w-[50px] justify-center rounded bg-green-200">
-                  <p className="my-1 font-semibold text-green-600">매칭</p>
-                </div>
-              )}
             </div>
           </div>
         </div>
