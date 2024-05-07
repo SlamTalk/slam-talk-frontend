@@ -177,7 +177,7 @@ const Chatting = () => {
   };
   const exitChat = () => {
     client.current?.publish({
-      destination: `/pub/chat/bot/${params.roomId}`,
+      destination: `/pub/chat/  /${params.roomId}`,
       headers: { authorization: `Bearer ${accessToken}` },
       body: JSON.stringify({
         roomId: params.roomId,
