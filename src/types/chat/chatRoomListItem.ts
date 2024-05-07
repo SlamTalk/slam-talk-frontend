@@ -9,4 +9,5 @@ export interface IChatRoomListItem {
   basket_ball_id: number | null;
   together_id: number | null;
   teamMatching_id: number | null;
+  newMsg: boolean;
 }
