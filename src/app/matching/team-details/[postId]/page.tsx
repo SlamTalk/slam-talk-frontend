@@ -3,24 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import {
-  Snippet,
-  Button,
-  Avatar,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-} from '@nextui-org/react';
+import { Snippet, Button, Avatar, useDisclosure } from '@nextui-org/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import axiosInstance from '@/app/api/axiosInstance';
 import { TeamPost } from '@/types/matching/teamDataType';
 import LocalStorage from '@/utils/localstorage';
 import { AxiosResponse } from 'axios';
+import UserProfile from '@/app/components/profile/UserProfile';
+import { FaTrashCan } from 'react-icons/fa6';
 import TeamApplicantList from '../../components/TeamApplicantList';
+import CheckModal from '../../components/CheckModal';
 
 interface TeamChatRoomType {
   participants: number[];
@@ -30,15 +23,15 @@ interface TeamChatRoomType {
 }
 
 const TeamDetailsPage = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { error, data: user } = useQuery({
+  const recruitCompleteModal = useDisclosure();
+  const completeConfirmModal = useDisclosure();
+  const deleteConfirmModal = useDisclosure();
+  const profileModal = useDisclosure();
+
+  const { data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
-
-  if (error) {
-    console.log({ error });
-  }
 
   const { postId } = useParams();
   const [date, setDate] = useState('');
@@ -89,31 +82,6 @@ const TeamDetailsPage = () => {
     }
   }, [data]);
 
-  const writer = {
-    userId: data?.writerId,
-    userNickname: data?.writerNickname,
-    userProfile: data?.writerImageUrl,
-  };
-  const isWriter = user?.id === writer.userId;
-
-  const handleApply = () => {
-    const isLoggedIn = LocalStorage.getItem('isLoggedIn');
-    if (isLoggedIn === 'true')
-      router.push(`/matching/team-details/${data?.teamMatchingId}/application`);
-    else {
-      alert('로그인 후 이용할 수 있습니다.');
-      router.push(`/login`);
-    }
-  };
-
-  // const deleteRecruitment = async (): Promise<AxiosResponse> => {
-  //   const response = await axiosInstance.delete<AxiosResponse>(
-  //     `/api/match/read/${postId}`
-  //   );
-
-  //   return response;
-  // };
-
   const patchCompleteRecruitment = async (): Promise<AxiosResponse> => {
     const response = await axiosInstance.patch<AxiosResponse>(
       `/api/match/${postId}/complete`
@@ -121,17 +89,6 @@ const TeamDetailsPage = () => {
 
     return response;
   };
-
-  const patchPostStatusMutation = useMutation<AxiosResponse, Error>({
-    mutationFn: patchCompleteRecruitment,
-    onSuccess: () => {
-      console.log('success');
-    },
-    onError: (err: Error) => {
-      console.log(err);
-      throw err;
-    },
-  });
 
   const creatTeamChatRoom = async (
     roomData: TeamChatRoomType
@@ -143,11 +100,22 @@ const TeamDetailsPage = () => {
       );
 
       return response;
-    } catch (e) {
-      console.log(e);
-      throw e;
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
   };
+
+  const patchPostStatusMutation = useMutation<AxiosResponse, Error>({
+    mutationFn: patchCompleteRecruitment,
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: (error: Error) => {
+      console.log(error);
+      throw error;
+    },
+  });
 
   const createTeamChatRoomMutation = useMutation<
     AxiosResponse,
@@ -158,47 +126,79 @@ const TeamDetailsPage = () => {
     onSuccess: (response) => {
       const newChatRoomId = response.data.results;
       setChatRoomId(newChatRoomId);
-      onOpen();
+      recruitCompleteModal.onOpen();
     },
-    onError: (er) => {
-      console.error(er);
+    onError: (error: Error) => {
+      console.error(error);
     },
   });
 
-  const handleFinishRecruitment = () => {
-    try {
-      patchPostStatusMutation.mutate();
+  if (!data) return <div />;
 
-      const acceptedParticipantIds =
-        data?.teamApplicants
-          .filter((applicant) => applicant.applyStatus === 'ACCEPTED')
-          .map((applicant) => applicant.applicantId) || [];
+  const writer = {
+    userId: data.writerId,
+    userNickname: data.writerNickname,
+    userProfile: data.writerImageUrl,
+  };
+  const isWriter = user?.id === writer.userId;
 
-      const participantsIds = [
-        data?.writerId,
-        ...acceptedParticipantIds,
-      ].filter((id): id is number => id !== undefined);
-
-      const title = `${data?.teamName} vs ${
-        acceptedParticipantIds.length > 0
-          ? data?.teamApplicants.find(
-              (applicant) => applicant.applicantId === acceptedParticipantIds[0]
-            )?.teamName
-          : ''
-      }`;
-
-      const newRoomData: TeamChatRoomType = {
-        participants: participantsIds,
-        roomType: 'MM',
-        teamMatching_id: data?.teamMatchingId.toString() ?? '',
-        name: title,
-      };
-
-      createTeamChatRoomMutation.mutate(newRoomData);
-    } catch (err) {
-      console.error(err);
-      alert('모집 완료 처리 중 오류가 발생했습니다.');
+  const handleApply = () => {
+    const isLoggedIn = LocalStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true')
+      router.push(`/matching/team-details/${data.teamMatchingId}/application`);
+    else {
+      alert('로그인 후 이용할 수 있습니다.');
+      router.push(`/login`);
     }
+  };
+
+  const deleteRecruitment = async (): Promise<AxiosResponse> => {
+    const response = await axiosInstance.delete<AxiosResponse>(
+      `/api/match/${postId}`
+    );
+
+    router.push(`/matching?tab=team`);
+
+    return response;
+  };
+
+  const handleFinishRecruitment = () => {
+    completeConfirmModal.onClose();
+
+    patchPostStatusMutation.mutate(undefined, {
+      onSuccess: () => {
+        const acceptedParticipantIds =
+          data.teamApplicants
+            .filter((applicant) => applicant.applyStatus === 'ACCEPTED')
+            .map((applicant) => applicant.applicantId) || [];
+
+        const participantsIds = [
+          data.writerId,
+          ...acceptedParticipantIds,
+        ].filter((id): id is number => id !== undefined);
+
+        const title = `${data.teamName} vs ${
+          acceptedParticipantIds.length > 0
+            ? data.teamApplicants.find(
+                (applicant) =>
+                  applicant.applicantId === acceptedParticipantIds[0]
+              )?.teamName
+            : ''
+        }`;
+
+        const newRoomData: TeamChatRoomType = {
+          participants: participantsIds,
+          roomType: 'MM',
+          teamMatching_id: data.teamMatchingId.toString() ?? '',
+          name: title,
+        };
+
+        createTeamChatRoomMutation.mutate(newRoomData);
+      },
+      onError: () => {
+        alert('모집 완료 처리 중 오류가 발생했습니다.');
+      },
+    });
   };
 
   return (
@@ -206,27 +206,37 @@ const TeamDetailsPage = () => {
       {/* 유저 프로필 */}
       <div className="mb-4 flex items-center space-x-4 border-b-2 px-8 py-2">
         <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gray-300">
+          {writer && (
+            <UserProfile
+              isOpen={profileModal.isOpen}
+              userId={writer.userId}
+              onClose={profileModal.onClose}
+            />
+          )}
           <Avatar
+            onClick={profileModal.onOpen}
+            showFallback
+            className="cursor-pointer"
             alt="profile-img"
-            src={writer.userProfile || '/images/userprofile-default.png'}
+            src={writer.userProfile}
           />
         </div>
         <span className="font-bold">
-          {writer.userNickname} [{data?.teamName}]
+          {writer.userNickname} [{data.teamName}]
         </span>
       </div>
 
       {/* 모집글 제목 */}
       <div className="mx-6 mb-2 flex items-start">
-        <h1 className="mr-4 max-w-[420px] text-xl font-bold">{data?.title}</h1>
+        <h1 className="mr-4 max-w-[420px] text-xl font-bold">{data.title}</h1>
         <div
           className={`mt-0.5 rounded-full px-3 py-1 text-xs text-white ${
-            data?.recruitmentStatusType === 'COMPLETED'
+            data.recruitmentStatusType === 'COMPLETED'
               ? 'bg-danger'
               : 'bg-success'
           }`}
         >
-          {data?.recruitmentStatusType === 'COMPLETED' ? '모집 완료' : '모집중'}
+          {data.recruitmentStatusType === 'COMPLETED' ? '모집 완료' : '모집중'}
         </div>
       </div>
 
@@ -244,7 +254,7 @@ const TeamDetailsPage = () => {
         <div className="mt-2 flex items-center justify-between rounded-md border-2">
           <div>
             <Snippet className="bg-background" symbol="">
-              {data?.locationDetail}
+              {data.locationDetail}
             </Snippet>
           </div>
 
@@ -258,7 +268,7 @@ const TeamDetailsPage = () => {
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">경기 유형</div>
         <p className="mb-6 mt-2 rounded-md border-2 p-3">
-          {data?.numberOfMembers} vs {data?.numberOfMembers}
+          {data.numberOfMembers} vs {data.numberOfMembers}
         </p>
       </div>
 
@@ -268,7 +278,7 @@ const TeamDetailsPage = () => {
 
         <div className="mt-2 rounded-md border-2 p-3">
           <div className="flex">
-            {data?.skillLevelList.map((lev, index) => (
+            {data.skillLevelList.map((lev, index) => (
               <div
                 // eslint-disable-next-line react/no-array-index-key
                 key={index}
@@ -284,14 +294,14 @@ const TeamDetailsPage = () => {
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">상세 내용</div>
         <p className="mb-6 mt-2 h-[100px] overflow-y-auto break-words rounded-md border-2 p-3">
-          {data?.content}
+          {data.content}
         </p>
       </div>
 
       {/* 지원자 리스트 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">지원자 리스트</div>
-        {data?.teamApplicants.map((applicant, index) => (
+        {data.teamApplicants.map((applicant, index) => (
           <TeamApplicantList
             // eslint-disable-next-line react/no-array-index-key
             key={index}
@@ -305,62 +315,76 @@ const TeamDetailsPage = () => {
       {/* 모집 완료, 수정, 지원 버튼 */}
       <div className="flex justify-center py-3">
         {isWriter ? (
-          data?.recruitmentStatusType !== 'COMPLETED' && (
+          data.recruitmentStatusType !== 'COMPLETED' && (
             <>
               <Button
                 color="primary"
-                className="mx-2"
-                onClick={handleFinishRecruitment}
+                className="mx-1"
+                onClick={completeConfirmModal.onOpen}
               >
                 모집 완료
               </Button>
               <Link
-                href={`/matching/team-details/${data?.teamMatchingId}/revise`}
+                href={`/matching/team-details/${data.teamMatchingId}/revise`}
               >
-                <Button color="default" className="mx-2 bg-gray-400 text-white">
+                <Button color="default" className="mx-1 bg-gray-400 text-white">
                   모집글 수정
                 </Button>
               </Link>
+              <Button
+                color="default"
+                isIconOnly
+                className="mx-1 w-[30px] bg-gray-400 px-[0px] text-white"
+                onClick={deleteConfirmModal.onOpen}
+              >
+                <FaTrashCan />
+              </Button>
             </>
           )
         ) : (
           <Button
             color="primary"
             onClick={handleApply}
-            disabled={data?.recruitmentStatusType === 'COMPLETED'}
+            disabled={data.recruitmentStatusType === 'COMPLETED'}
           >
             지원하기
           </Button>
         )}
       </div>
-      <Modal isOpen={isOpen} onClose={onClose} placement="center">
-        <ModalContent>
-          {() => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                상대팀 찾기 모집 완료
-              </ModalHeader>
-              <ModalBody>
-                <p>상대팀 찾기 모집이 완료되었습니다.</p>
-                <p>상대팀과의 채팅방이 개설되었습니다.</p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  닫기
-                </Button>
-                <Button
-                  color="primary"
-                  onPress={() =>
-                    router.push(`/chatting/chatroom/${chatRoomId}`)
-                  }
-                >
-                  채팅방으로 이동
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      {/* 모집 완료 확인 모달 */}
+      <CheckModal
+        isOpen={completeConfirmModal.isOpen}
+        onClose={completeConfirmModal.onClose}
+        title="상대팀 찾기 모집 완료"
+        content="정말로 모집을 완료하시겠습니까?"
+        leftBtn="닫기"
+        rightBtn="모집 완료"
+        leftFunc={completeConfirmModal.onClose}
+        rightFunc={handleFinishRecruitment}
+      />
+      {/* 모집 완료 안내 모달 */}
+      <CheckModal
+        isOpen={recruitCompleteModal.isOpen}
+        onClose={recruitCompleteModal.onClose}
+        title="상대팀 찾기 모집 완료"
+        content="상대팀 찾기 모집이 완료되었습니다. 상대팀과의 채팅방이
+        생성되었습니다."
+        leftBtn="닫기"
+        rightBtn="채팅방으로 이동"
+        leftFunc={recruitCompleteModal.onClose}
+        rightFunc={() => router.push(`/chatting/chatroom/${chatRoomId}`)}
+      />
+      {/* 게시글 삭제 확인 모달 */}
+      <CheckModal
+        isOpen={deleteConfirmModal.isOpen}
+        onClose={deleteConfirmModal.onClose}
+        title="상대팀 찾기 게시글 삭제"
+        content="정말로 게시글을 삭제하시겠습니까?"
+        leftBtn="닫기"
+        rightBtn="삭제"
+        leftFunc={deleteConfirmModal.onClose}
+        rightFunc={deleteRecruitment}
+      />
     </div>
   );
 };

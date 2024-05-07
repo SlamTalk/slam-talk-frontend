@@ -136,7 +136,7 @@ const MyProfile = () => {
     router.back();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       handleGoBack();
     }
@@ -172,6 +172,7 @@ const MyProfile = () => {
             <div className="mx-auto flex h-full max-w-md flex-col gap-4 p-4">
               <div className="flex items-center">
                 <Avatar
+                  showFallback
                   className="mr-4 h-20 w-20 text-large"
                   alt="프로필 사진"
                   src={previewUrl || user.imageUrl}

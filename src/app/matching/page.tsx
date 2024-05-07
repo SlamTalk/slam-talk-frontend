@@ -1,13 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Tabs, Tab } from '@nextui-org/react';
 import { IoSearchSharp } from 'react-icons/io5';
 import { useSearchParams } from 'next/navigation';
+import { FaArrowUp } from 'react-icons/fa';
+
 import TeamMatching from './components/TeamMatching';
 import MateMatching from './components/MateMatching';
 
 const MatchingPage = () => {
+  const scrollRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const tabValue = searchParams.get('tab');
   const [selectedTab, setSelectedTab] = useState<string>(
@@ -32,8 +35,13 @@ const MatchingPage = () => {
     setKeywordProp(searchKeyword);
   };
 
+  const handleScrollToTop = () => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div>
+      <div ref={scrollRef} />
       <div className="mt-2 flex justify-between px-[16px]">
         <div className="flex flex-wrap gap-4">
           <Tabs
@@ -67,12 +75,21 @@ const MatchingPage = () => {
           </button>
         </div>
       </div>
-
       {selectedTab === 'team' ? (
         <TeamMatching keywordProp={keywordProp} />
       ) : (
         <MateMatching keywordProp={keywordProp} />
       )}
+      <div className="relative flex w-full justify-center">
+        <button
+          type="button"
+          aria-label="Top button"
+          className="fixed bottom-12 m-4 rounded-full border-[1px] bg-white p-2 shadow-md"
+          onClick={handleScrollToTop}
+        >
+          <FaArrowUp />
+        </button>
+      </div>
     </div>
   );
 };

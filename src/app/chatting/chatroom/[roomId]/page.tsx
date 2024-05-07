@@ -31,31 +31,25 @@ const Chatting = () => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [message, setMessage] = useState('');
-  const [moreCount, setMoreCount] = useState(0);
+
   const [greeting, setGreeting] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
   const { data: token } = useQuery({
     queryKey: ['tokenData'],
     queryFn: postTokenRefresh,
-    gcTime: 3000,
   });
+  const accessToken = token;
   const { data: myChatList } = useQuery<IChatRoomListItem[]>({
     queryKey: ['myChatlist'],
     queryFn: getChatList,
   });
-  const accessToken = token;
+
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
-
-  const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
-  // 농구장은 basketballId, 개인은 유저 id? 사용해서 링크 넣어주기
-
-  const nickname = error ? null : user?.nickname;
-
-  const client = useRef<StompJs.Client | null>(null);
 
   const messageListData = async () => {
     try {
@@ -70,10 +64,33 @@ const Chatting = () => {
     }
   };
 
+  // useEffect(() => {
+  //   const duplicatedMessage = moreMessageData?.pages.flatMap((page) => page);
+  //   if (!duplicatedMessage) {
+  //     return;
+  //   }
+  //   const unique = Array.from(
+  //     new Map(
+  //       duplicatedMessage.map((messageItem: any) => [
+  //         messageItem.messageId,
+  //         messageItem,
+  //       ])
+  //     ).values()
+  //   );
+  //   setMessageListState((prevState: any) =>
+  //     [...prevState, ...unique].reverse()
+  //   );
+  // }, [moreMessageData]);
+  const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
+  // 농구장은 basketballId, 개인은 유저 id? 사용해서 링크 넣어주기
+
+  const nickname = error ? null : user?.nickname;
+
+  const client = useRef<StompJs.Client | null>(null);
+
   const connect = async () => {
     client.current = new StompJs.Client({
       brokerURL: process.env.NEXT_PUBLIC_SOCKET_URL,
-
       connectHeaders: {
         id: 'sub-0',
         authorization: `Bearer ${accessToken}`,
@@ -105,10 +122,11 @@ const Chatting = () => {
             }),
             headers: { authorization: `Bearer ${accessToken}` },
           });
+          messageListData();
         }
       },
-      onStompError: (err) => {
-        console.log({ err });
+      onStompError: () => {
+        // console.log({ err });
         if (client.current) {
           client.current.deactivate();
         }
@@ -172,36 +190,12 @@ const Chatting = () => {
 
     router.back();
   };
-  const postMore = async () => {
-    try {
-      setMoreCount(moreCount + 1);
-      const res = await axiosInstance.post(
-        `/api/chat/history?roomId=${params.roomId}&count=${moreCount}`
-      );
 
-      const duplicatedMessage = res.data.results as IMessage[];
-      const unique = Array.from(
-        new Map(
-          duplicatedMessage.map((messageItem: IMessage) => [
-            messageItem.messageId,
-            messageItem,
-          ])
-        ).values()
-      );
-      setMessageListState(() => [...messageListState, ...unique].reverse());
-    } catch (err) {
-      console.error(err);
-    }
-  };
   useEffect(() => {
     inputRef.current?.focus();
-
-    messageListData();
-
     connect();
-    postMore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [token]);
 
   return (
     <div aria-label="chat room wrapper" className="flex h-screen flex-col">

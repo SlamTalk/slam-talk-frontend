@@ -42,7 +42,7 @@ const Page = () => {
     if (imageInput.current && imageInput.current.files) {
       const selectedImages = Array.from(imageInput.current.files);
 
-      setImages((prevImages) => [...prevImages, ...selectedImages]);
+      setImages(selectedImages);
     }
   };
 
@@ -104,9 +104,7 @@ const Page = () => {
     );
     // 이미지가 있는 경우에만 이미지 추가
     if (images && images.length > 0) {
-      for (let i = 0; i < images.length; i += 1) {
-        formData.append('images', images[i]);
-      }
+      formData.append('images', images[0]);
     }
 
     setPostData(formData);
@@ -170,7 +168,6 @@ const Page = () => {
         />
         <input
           type="file"
-          multiple
           hidden
           ref={imageInput}
           onChange={handleImageUpload}

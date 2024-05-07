@@ -38,7 +38,7 @@ const MyPage = () => {
     router.back();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       handleGoBack();
     }
@@ -101,7 +101,7 @@ const MyPage = () => {
           </div>
           <div className="mt-7 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Avatar alt="profile-img" src={user.imageUrl} />
+              <Avatar showFallback alt="profile-img" src={user.imageUrl} />
               <p className="text-lg font-semibold">{user.nickname}</p>
             </div>
             <Button href="/my-page/profile" as={Link} size="sm">
