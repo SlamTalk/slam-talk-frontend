@@ -258,23 +258,23 @@ const Page = () => {
                   ))}
           </TableBody>
         </Table>
-        <div className="relative bottom-14 mr-4 flex w-[600px] justify-end sm:w-[390px]">
-          <div className="bottom-14 mr-4">
-            <Button
-              aria-label="Write new post"
-              type="button"
-              startContent={<FaPlus />}
-              className="fixed z-40 rounded-full bg-primary text-white shadow-md sm:w-[100px]"
-              onClick={() => {
-                if (isLoggedIn === 'true') {
-                  return router.push('/community/write');
-                }
-                return router.push('/login');
-              }}
-            >
-              글 작성하기
-            </Button>
-          </div>
+      </div>
+      <div className="fixed bottom-24 w-full max-w-[600px]">
+        <div className="mr-4 flex justify-end">
+          <Button
+            aria-label="Write new post"
+            type="button"
+            startContent={<FaPlus />}
+            className="fixed z-40 rounded-full bg-primary text-white shadow-md sm:w-[100px]"
+            onClick={() => {
+              if (isLoggedIn === 'true') {
+                return router.push('/community/write');
+              }
+              return router.push('/login');
+            }}
+          >
+            새 게시글 작성
+          </Button>
         </div>
       </div>
     </div>
