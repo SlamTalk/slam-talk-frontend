@@ -76,9 +76,7 @@ const Notifications = () => {
                     모두 삭제
                   </Button>
                 </div>
-                <div>
-                  <p>00님이 Lv 8이 되었습니다.</p>
-                </div>
+                <div>{/* <p>00님이 Lv 8이 되었습니다.</p> */}</div>
               </ModalBody>
             </>
           )}
