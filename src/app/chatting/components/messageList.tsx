@@ -4,51 +4,97 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getUserData } from '@/services/user/getUserData';
 import IMessage from '@/types/chat/message';
+import { useInView } from 'react-intersection-observer';
 
 import UserProfile from '@/app/components/profile/UserProfile';
+import { useParams } from 'next/navigation';
+import axiosInstance from '@/app/api/axiosInstance';
 
-const MessageList = ({ list }: { list: IMessage[] }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+interface MessageLIstProps {
+  list: IMessage[];
+}
+
+const MessageList: React.FC<MessageLIstProps> = ({ list }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [lastMessageId, setLastMessageId] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
+  const params = useParams();
 
   const nickname = error ? null : user?.nickname;
-
+  const [hasFetched, setHasFetched] = useState(false);
   useEffect(() => {
-    // messageListData();
     setMessages(list);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
-  // const postChatRoom = async (createData: any) => {
-  //   const res = await axiosInstance.post(
-  //     `/api/chat/create`,
-  //     JSON.stringify(createData)
-  //   );
-  //   return res.data.results;
-  // };
+  const { ref, inView } = useInView({
+    threshold: 0,
+    delay: 0,
+    initialInView: true,
+  });
+  useEffect(() => {
+    const fetchMoreMessages = async () => {
+      try {
+        const res = await axiosInstance.post(
+          `/api/chat/history?roomId=${params.roomId}&lastMessageId=${lastMessageId}`
+        );
+        res.data.results as IMessage[];
+        const duplicatedMessage = [
+          ...messages,
+          ...res.data.results,
+        ] as IMessage[];
+        const unique = Array.from(
+          new Map(
+            duplicatedMessage.map((messageItem: IMessage) => [
+              messageItem.messageId,
+              messageItem,
+            ])
+          ).values()
+        );
 
-  // const handleCreateChatroom = (partnerId: any) => async () => {
-  //   const createInfo = {
-  //     creator_id: user?.id,
-  //     participants: [partnerId],
-  //     roomType: 'DM',
-  //     basket_ball_id: '', // 시설채팅에만
-  //     name: '', // 1:1은 필요없음,시설명,매칭&같이하기는 작성글 제목
-  //   };
-  //   const createRoom = await postChatRoom(createInfo);
-  //   router.push(`/chatting/chatroom/${createRoom}`);
-  // };
+        setMessages(() =>
+          [...unique].sort((a, b) => Number(a.messageId) - Number(b.messageId))
+        );
+
+        setLastMessageId(messages[0].messageId);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (inView && !hasFetched) {
+      fetchMoreMessages();
+      setHasFetched(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView, hasFetched]);
+
+  useEffect(() => {
+    if (!inView) {
+      setHasFetched(false);
+    }
+  }, [inView]);
+
   const messageEndRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      setLastMessageId(messages[0].messageId);
+    }
+  }, [messages]);
+
   return (
     <div className="h-[calc(100vh-109px)] min-h-[50px]	w-full overflow-y-scroll">
+      <div ref={ref} />
       {messages.map((i: IMessage, index) => (
         <div>
           {new Date(i.timestamp).toLocaleDateString() !==
@@ -61,7 +107,7 @@ const MessageList = ({ list }: { list: IMessage[] }) => {
                 {i.timestamp
                   ? new Date(i.timestamp).toLocaleDateString().split('.')[0]
                   : new Date().toLocaleDateString().split('.')[0]}
-                년{' '}
+                년
                 {i.timestamp
                   ? new Date(i.timestamp).toLocaleDateString().split('.')[1]
                   : new Date().toLocaleDateString().split('.')[1]}

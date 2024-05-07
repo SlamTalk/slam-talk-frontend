@@ -155,17 +155,15 @@ const TeamMatching: React.FC<MateMatchingProps> = ({ keywordProp }) => {
           </Link>
         ))
       )}
-      <div className="fixed bottom-14 w-full max-w-[600px]">
-        <div className="mr-4 flex justify-end">
-          <Button
-            startContent={<FaPlus />}
-            color="primary"
-            className="rounded-full bg-primary text-white shadow-md"
-            onClick={handleCreateNewPost}
-          >
-            새 모집글 작성
-          </Button>
-        </div>
+      <div className="relative bottom-14 flex w-full justify-end">
+        <Button
+          startContent={<FaPlus />}
+          color="primary"
+          className="fixed bottom-12 m-4 rounded-full bg-primary text-white shadow-md"
+          onClick={handleCreateNewPost}
+        >
+          새 모집글 작성
+        </Button>
       </div>
       <div ref={ref} style={{ height: '10px' }} />
     </div>

@@ -38,16 +38,6 @@ import CourtDetails from './CourtDetails';
 import CourtReport from './CourtReport';
 import CourtReportDetails from './CourtReportDetails';
 
-// [TO DO]
-// 모달 알림 넣기 - 로그인 여부 ✅, 제보 성공✅/실패
-// 크게 보기 똑같은 UI 반영 ✅
-// 제보하기 이벤트 구현 ✅
-// 농구장 상세정보 UI 수정 ✅
-// 제보 모달 UI 수정 - 제보하기 Btn Fix ✅
-// 컨트롤 커스텀
-// 모바일 환경 움직임 확인하기 ✅
-// 농구장 제보 마커 추가 ✅
-
 export interface LatLng {
   getLat: () => number;
   getLng: () => number;
@@ -222,7 +212,7 @@ const KakaoMap = () => {
       <div className="relative h-[calc(100vh-109px)] w-full max-w-[600px]">
         <title>슬램톡 | 농구장 지도</title>
         <Map
-          className="relative z-0 h-full w-full"
+          className="relative h-full w-full"
           id="map"
           center={location.center}
           level={3}
@@ -343,10 +333,8 @@ const KakaoMap = () => {
               </>
             ))}
           </MarkerClusterer>
-          <div className="mt-20 !bg-primary !text-primary">
-            <MapTypeControl position="BOTTOMLEFT" />
-            <ZoomControl position="RIGHT" />
-          </div>
+          <MapTypeControl position="BOTTOMLEFT" />
+          <ZoomControl position="RIGHT" />
         </Map>
         {isCourtDetailsOpen && (
           <CourtDetails
@@ -372,13 +360,13 @@ const KakaoMap = () => {
             onReportSuccess={() => setMode(false)}
           />
         )}
-        <div className="fixed bottom-14 w-full max-w-[600px]">
-          <div className="mr-4 flex flex-col items-end gap-3">
+        <div className="relative z-10 w-full max-w-[600px]">
+          <div className="ml-10 mr-4 flex flex-col items-end gap-3">
             <Button
               isIconOnly
               aria-label="Current Location"
               type="button"
-              className="justify-center rounded-full bg-primary shadow-md"
+              className="fixed bottom-28 justify-center rounded-full bg-primary shadow-md"
               onClick={handleMoveUserLocation}
             >
               <MdMyLocation size={22} className="text-white" />
@@ -387,7 +375,7 @@ const KakaoMap = () => {
               startContent={<BiSolidLocationPlus size={20} />}
               aria-label="Court Report"
               type="button"
-              className="justify-center rounded-full bg-primary text-white shadow-md"
+              className="fixed bottom-14 justify-center rounded-full bg-primary text-white shadow-md"
               onClick={handleToggleMapClickEvent}
             >
               {mode ? '취소' : '농구장 제보'}

@@ -17,7 +17,7 @@ const TeamMatchingList = () => {
     router.back();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       handleGoBack();
     }

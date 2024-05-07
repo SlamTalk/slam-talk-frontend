@@ -31,7 +31,7 @@ const Chatting = () => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [message, setMessage] = useState('');
-  // const [moreCount, setMoreCount] = useState(0);
+
   const [greeting, setGreeting] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -50,44 +50,6 @@ const Chatting = () => {
     queryKey: ['loginData'],
     queryFn: getUserData,
   });
-  // const postMore = async () => {
-  //   try {
-  //     setMoreCount(moreCount + 1);
-  //     const res = await axiosInstance.post(
-  //       `/api/chat/history?roomId=${params.roomId}&count=${moreCount}`
-  //     );
-
-  //     const duplicatedMessage = res.data.results as IMessage[];
-  //     const unique = Array.from(
-  //       new Map(
-  //         duplicatedMessage.map((messageItem: IMessage) => [
-  //           messageItem.messageId,
-  //           messageItem,
-  //         ])
-  //       ).values()
-  //     );
-  //     setMessageListState(() => [...messageListState, ...unique].reverse());
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-  // const {
-  //   fetchPreviousPage,
-  //   hasPreviousPage,
-  //   isFetchingNextPage,
-  //   data: moreMessageData,
-  // } = useInfiniteQuery({
-  //   queryKey: ['moreMessage'],
-  //   queryFn: ({ pageParam = 1 }) => postMore(pageParam),
-  //   getNextPageParam: (lastPage, allPages) => lastPage.nextCursor,
-  //   getPreviousPageParam: (firstPage, allPages) => firstPage.prevCursor,
-  // });
-  const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
-  // 농구장은 basketballId, 개인은 유저 id? 사용해서 링크 넣어주기
-
-  const nickname = error ? null : user?.nickname;
-
-  const client = useRef<StompJs.Client | null>(null);
 
   const messageListData = async () => {
     try {
@@ -101,6 +63,30 @@ const Chatting = () => {
       console.error(err);
     }
   };
+
+  // useEffect(() => {
+  //   const duplicatedMessage = moreMessageData?.pages.flatMap((page) => page);
+  //   if (!duplicatedMessage) {
+  //     return;
+  //   }
+  //   const unique = Array.from(
+  //     new Map(
+  //       duplicatedMessage.map((messageItem: any) => [
+  //         messageItem.messageId,
+  //         messageItem,
+  //       ])
+  //     ).values()
+  //   );
+  //   setMessageListState((prevState: any) =>
+  //     [...prevState, ...unique].reverse()
+  //   );
+  // }, [moreMessageData]);
+  const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
+  // 농구장은 basketballId, 개인은 유저 id? 사용해서 링크 넣어주기
+
+  const nickname = error ? null : user?.nickname;
+
+  const client = useRef<StompJs.Client | null>(null);
 
   const connect = async () => {
     client.current = new StompJs.Client({
@@ -139,10 +125,10 @@ const Chatting = () => {
           messageListData();
         }
       },
-      onStompError: (err) => {
-        console.log({ err });
+      onStompError: () => {
+        // console.log({ err });
         if (client.current) {
-          client.current.activate();
+          client.current.deactivate();
         }
       },
       reconnectDelay: 5000,
@@ -207,10 +193,7 @@ const Chatting = () => {
 
   useEffect(() => {
     inputRef.current?.focus();
-
     connect();
-
-    // postMore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
