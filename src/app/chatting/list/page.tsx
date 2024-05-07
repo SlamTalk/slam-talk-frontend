@@ -74,7 +74,7 @@ const ChatList = () => {
                   {i.roomType === 'DIRECT' && (
                     <div className="mr-1 flex w-[28px] justify-center rounded bg-gray-200">
                       <p className="my-1 text-xs font-semibold text-gray-600">
-                        일반
+                        1:1
                       </p>
                     </div>
                   )}
