@@ -375,7 +375,7 @@ const KakaoMap = () => {
               startContent={<BiSolidLocationPlus size={20} />}
               aria-label="Court Report"
               type="button"
-              className="fixed bottom-14 justify-center rounded-full bg-primary text-white shadow-md"
+              className="fixed bottom-16 justify-center rounded-full bg-primary text-white shadow-md"
               onClick={handleToggleMapClickEvent}
             >
               {mode ? '취소' : '농구장 제보'}

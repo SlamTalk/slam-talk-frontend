@@ -135,11 +135,11 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
               <Button
                 size="sm"
                 radius="full"
-                variant="light"
+                variant="flat"
                 isIconOnly
                 className="absolute right-2 top-2"
                 onClick={handleClose}
-                aria-label="Close"
+                aria-label="닫기"
               >
                 <IoIosClose size={30} />
               </Button>
