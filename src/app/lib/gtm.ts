@@ -1,6 +1,6 @@
-type WindowWithDataLayer = Window & {
+interface WindowWithDataLayer extends Window {
   dataLayer: Record<string, any>[];
-};
+}
 
 declare const window: WindowWithDataLayer;
 
