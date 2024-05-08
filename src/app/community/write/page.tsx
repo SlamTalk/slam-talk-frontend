@@ -8,6 +8,7 @@ import React, {
   useRef,
   useCallback,
 } from 'react';
+
 import { Key, Selection } from '@react-types/shared';
 
 import {
@@ -144,7 +145,7 @@ const Page = () => {
           </Dropdown>
           <div className="space-x-1">
             <button
-              className="font-bold text-orange-600"
+              className="font-bold text-orange-600 sm:text-sm"
               type="button"
               onClick={handleSubmit}
             >
@@ -160,9 +161,8 @@ const Page = () => {
           onChange={handleTitle}
         />
         <textarea
-          className="h-48 border-b border-solid border-gray-200 text-xl font-medium"
-          placeholder="
-          커뮤니티에서는 상대를 존중하고 비방이나 욕설을 피하며, 허위 정보와 스팸을 제한하며, 책임감 있는 토론을 지향해야 합니다."
+          className="h-48 border-b border-solid border-gray-200 text-xl"
+          placeholder="커뮤니티에서는 상대를 존중하고 비방이나 욕설을 피하며, 허위 정보와 스팸을 제한하며, 책임감 있는 토론을 지향해야 합니다."
           value={content}
           onChange={handleContent}
           style={{ resize: 'none' }}
@@ -174,6 +174,7 @@ const Page = () => {
           onChange={handleImageUpload}
           accept="image/png, image/jpg, image/jpeg"
         />
+
         <button type="button" onClick={onClickImageUpload}>
           이미지 업로드
         </button>
