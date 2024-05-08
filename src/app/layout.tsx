@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import '@/styles/globals.css';
 import Script from 'next/script';
 import { usePathname } from 'next/navigation';
@@ -12,6 +12,7 @@ import useLocationStore from '@/store/userLocationStore';
 import Header from './components/header/Header';
 import Footer from './components/Footer';
 import Providers from './components/Providers';
+import Analytics from './components/Analytics';
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools />
+          <Suspense>
+            <Analytics />
+          </Suspense>
           <Providers>
             {withoutHeader ? null : <Header />}
             <main>{children}</main>
