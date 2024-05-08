@@ -117,7 +117,7 @@ const Page = () => {
     <form method="post" encType="multipart/form-data">
       <title>슬램톡 | 커뮤니티 작성하기</title>
       <div className="flex flex-col">
-        <div className="flex space-x-[460px] sm:space-x-60">
+        <div className="flex space-x-[460px] sm:space-x-[calc(100vw-140px)]">
           <Dropdown>
             <DropdownTrigger>
               <Button variant="bordered">{selectedValue}</Button>
@@ -155,7 +155,7 @@ const Page = () => {
         </div>
 
         <input
-          className="my-3 border-b border-solid border-gray-200 text-3xl font-bold"
+          className="my-3 border-b border-solid border-gray-200 text-2xl font-semibold"
           placeholder="제목을 입력해주세요"
           value={title}
           onChange={handleTitle}
