@@ -70,6 +70,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           strategy="beforeInteractive"
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_KEY}&autoload=false&libraries=services,clusterer`}
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="description"
+          content="농구를 할 장소와 함께 할 친구를 찾을 수 있는 플랫폼"
+        />
+        <meta name="author" content="Slam Talk" />
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
