@@ -154,14 +154,15 @@ const Page = () => {
         </div>
 
         <input
-          className="border-b border-solid border-gray-200"
-          placeholder="title"
+          className="my-3 border-b border-solid border-gray-200 text-3xl font-bold"
+          placeholder="제목을 입력해주세요"
           value={title}
           onChange={handleTitle}
         />
         <textarea
-          className="h-48 border-b border-solid border-gray-200"
-          placeholder="contents"
+          className="h-48 border-b border-solid border-gray-200 text-xl font-medium"
+          placeholder="
+          커뮤니티에서는 상대를 존중하고 비방이나 욕설을 피하며, 허위 정보와 스팸을 제한하며, 책임감 있는 토론을 지향해야 합니다."
           value={content}
           onChange={handleContent}
           style={{ resize: 'none' }}
