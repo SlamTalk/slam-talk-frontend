@@ -114,7 +114,7 @@ const ChatList = () => {
               </Link>
             </div>
             {i.newMsg ? (
-              <div className="h-[10px] w-[10px] rounded-full border border-blue-400 bg-blue-400" />
+              <div className="h-[10px] w-[10px] rounded-full bg-danger" />
             ) : null}
           </div>
         </div>
