@@ -17,6 +17,12 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
+  useDisclosure,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from '@nextui-org/react';
 import { useMutation } from '@tanstack/react-query';
 import { postCommunity } from '@/services/community/postCommunityArticle';
@@ -32,6 +38,8 @@ const Page = () => {
   const [images, setImages] = useState<File[]>([]);
   const imageInput = useRef<HTMLInputElement>(null);
   const [postData, setPostData] = useState<FormData>(new FormData());
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [imageErrorMsg, setImageErrorMsg] = useState('');
 
   const onClickImageUpload = useCallback(() => {
     if (imageInput.current) {
@@ -42,6 +50,28 @@ const Page = () => {
   const handleImageUpload = () => {
     if (imageInput.current && imageInput.current.files) {
       const selectedImages = Array.from(imageInput.current.files);
+
+      const fileSizeLimit = 1 * 1024 * 1024; // 1MB
+      const oversizedFiles = selectedImages.filter(
+        (file) => file.size > fileSizeLimit
+      );
+      if (oversizedFiles.length > 0) {
+        setImageErrorMsg(`파일 크기는 ${1}MB를 초과할 수 없습니다.`);
+        onOpen();
+        return;
+      }
+
+      const invalidFiles = selectedImages.filter((file) => {
+        const fileType = file.type.split('/')[1];
+        return !['png', 'jpg', 'jpeg'].includes(fileType);
+      });
+      if (invalidFiles.length > 0) {
+        setImageErrorMsg(
+          '허용되지 않은 파일 형식입니다. PNG, JPG, JPEG 형식의 파일만 업로드 가능합니다.'
+        );
+        onOpen();
+        return;
+      }
 
       setImages(selectedImages);
     }
@@ -92,7 +122,6 @@ const Page = () => {
     onSuccess: () => {
       setTitle('');
       setContent('');
-      router.push('/community/all');
     },
   });
   const handleSubmit = async () => {
@@ -111,6 +140,7 @@ const Page = () => {
     setPostData(formData);
 
     postArticle.mutate();
+    router.push('/community/all');
   };
 
   return (
@@ -178,6 +208,9 @@ const Page = () => {
         <button type="button" onClick={onClickImageUpload}>
           이미지 업로드
         </button>
+        <p className="text-xs text-gray-400">
+          확장자: png, jpg, jpeg / 용량: 1MB 이하
+        </p>
         {images.map((file, index) => (
           <Image
             key={URL.createObjectURL(file)}
@@ -187,6 +220,17 @@ const Page = () => {
             height={200}
           />
         ))}
+        <Modal isOpen={isOpen} onClose={onClose} placement="center">
+          <ModalContent>
+            <ModalHeader>이미지 참조 오류</ModalHeader>
+            <ModalBody>{imageErrorMsg}</ModalBody>
+            <ModalFooter>
+              <Button color="primary" onPress={onClose}>
+                확인
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </div>
     </form>
   );
