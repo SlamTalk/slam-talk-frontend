@@ -68,20 +68,16 @@ const ChangePassword = () => {
         return;
       }
       try {
-        const response = await axiosInstance.patch(
-          '/api/user/change-password',
-          {
-            email: user.email,
-            password,
-          }
-        );
+        const response = await axiosInstance.patch('/api/user/password', {
+          password,
+        });
         if (response.status === 200) {
           console.log(response);
           setMsg('비밀번호 변경에 성공했습니다.');
           onOpen();
         }
-      } catch (ChangeError) {
-        console.log(ChangeError);
+      } catch (changeError) {
+        console.log(changeError);
         setMsg('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
         onOpen();
       }
