@@ -52,6 +52,11 @@ const FindPassword = () => {
       console.log(error);
     }
   };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === 'Enter') {
+      handleSendEmail();
+    }
+  };
 
   return (
     <>
@@ -77,7 +82,13 @@ const FindPassword = () => {
         >
           {isEmailInvalid && '올바른 이메일을 입력해 주세요.'}
         </div>
-        <Button size="lg" radius="sm" color="primary" onClick={handleSendEmail}>
+        <Button
+          size="lg"
+          radius="sm"
+          color="primary"
+          onClick={handleSendEmail}
+          onKeyDown={handleKeyDown}
+        >
           메일 발송
         </Button>
       </div>
