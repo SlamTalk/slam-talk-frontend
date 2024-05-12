@@ -78,3 +78,8 @@ export interface MateCardInfo {
   positionNeeds: Position[];
   recruitmentStatus: string;
 }
+
+export interface MyMateMatching {
+  authoredPost: MatePost[];
+  participatedPost: MatePost[];
+}
