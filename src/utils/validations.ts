@@ -8,6 +8,6 @@ export const validateEmail = (email: string) =>
 
 /* eslint-disable no-useless-escape */
 export const validatePassword = (password: string) =>
-  /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\-_=+\[\]{};:'",.<>\/?])[A-Za-z0-9!@#$%^&*()\-_=+\[\]{};:'",.<>\/?]{8,16}$/.test(
+  /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()\-_=+\[\]{};:'",.<>\/?|\\])[A-Za-z0-9~!@#$%^&*()\-_=+\[\]{};:'",.<>\/?|\\]{8,16}$/.test(
     password
   );
