@@ -77,7 +77,6 @@ const ChangePassword = () => {
           onOpen();
         }
       } catch (changeError) {
-        console.log(changeError);
         setMsg('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
         onOpen();
       }
