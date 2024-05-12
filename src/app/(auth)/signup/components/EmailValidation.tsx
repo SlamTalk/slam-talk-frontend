@@ -9,6 +9,7 @@ import {
   ModalFooter,
   useDisclosure,
 } from '@nextui-org/react';
+import axios from 'axios';
 import axiosInstance from '@/app/api/axiosInstance';
 import { validateEmail } from '@/utils/validations';
 import { IoChevronBackSharp } from 'react-icons/io5';
@@ -76,7 +77,14 @@ const EmailValidation: React.FC<EmailValidateProps> = ({ onEmailValidate }) => {
         onOpen();
       }
     } catch (error) {
-      setMsg('이메일 인증 요청에 실패했습니다.');
+      if (axios.isAxiosError(error) && error.response) {
+        const errorResponse = error.response.data;
+        if (errorResponse.status === 4003) {
+          setMsg('이미 가입된 유저 이메일입니다. 다른 이메일을 사용해주세요.');
+        } else {
+          setMsg('이메일 인증 요청에 실패했습니다.');
+        }
+      }
       onOpen();
     }
   };
