@@ -137,17 +137,30 @@ const Page = () => {
                   />
                   <p
                     aria-label="작성자 닉네임"
-                    className="text-md w-[180px] font-bold"
+                    className="text-md w-[170px] font-bold"
                   >
                     {articleData.userNickname}
                   </p>
                 </div>
-                <p
-                  aria-label="작성일자"
-                  className="w-[100px] text-sm text-gray-400"
-                >
-                  {articleData.updatedAt.toString().split('T')[0]}
-                </p>
+                <div className="flex flex-col items-center justify-center">
+                  <p
+                    aria-label="작성일자"
+                    className="w-[100px] text-sm text-gray-400"
+                  >
+                    {articleData.updatedAt.toString().split('T')[0]}
+                  </p>
+                  <p
+                    aria-label="작성일자"
+                    className="w-[60px] text-sm text-gray-400"
+                  >
+                    {
+                      articleData.updatedAt
+                        .toString()
+                        .split('T')[1]
+                        .split('.')[0]
+                    }
+                  </p>
+                </div>
               </div>
 
               <div className="min-h-[200px] border-b-2">
