@@ -14,7 +14,7 @@ import {
 import getReportedCourtData from '@/services/admin/getReportedCourtData';
 import { BasketballCourtReportAdmin } from '@/types/basketballCourt/basketballCourtReport';
 import AdminCourtDetails from './components/AdminCourtDetails';
-import UserAvatar from './components/UserAvatar';
+import UserAvatar from '../components/profile/UserAvatar';
 
 const columns = [
   {
