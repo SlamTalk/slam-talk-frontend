@@ -2,22 +2,17 @@ import React from 'react';
 
 interface NotificationIconProps {
   size: number;
-  height?: number;
-  width?: number;
-  className?: string;
 }
 
-export const NotificationIcon: React.FC<NotificationIconProps> = ({
+const NotificationIcon: React.FC<NotificationIconProps> = ({
   size,
-  height,
-  width,
   ...props
 }) => (
   <svg
     fill="none"
-    height={size || height || 24}
+    height={size || 24}
     viewBox="0 0 24 24"
-    width={size || width || 24}
+    width={size || 24}
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
@@ -29,8 +24,4 @@ export const NotificationIcon: React.FC<NotificationIconProps> = ({
   </svg>
 );
 
-NotificationIcon.defaultProps = {
-  height: 24,
-  width: 24,
-  className: '',
-};
+export default NotificationIcon;
