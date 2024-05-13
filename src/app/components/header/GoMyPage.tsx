@@ -26,7 +26,7 @@ const GoMyPage = () => {
               name={user.nickname}
               size="sm"
               alt="마이 페이지"
-              src={user.imageUrl}
+              src={user.imageUrl || ''}
             />
           </Tooltip>
         </div>
