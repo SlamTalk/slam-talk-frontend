@@ -11,7 +11,7 @@ interface AdminUserAvatarProps {
   userId: number;
 }
 
-const AdminUserAvatar: React.FC<AdminUserAvatarProps> = ({ userId }) => {
+const UserAvatar: React.FC<AdminUserAvatarProps> = ({ userId }) => {
   const { data: userData, isLoading } = useQuery({
     queryKey: ['getUserData', userId],
     queryFn: () => getOtherUserData({ userId }),
@@ -60,4 +60,4 @@ const AdminUserAvatar: React.FC<AdminUserAvatarProps> = ({ userId }) => {
   );
 };
 
-export default AdminUserAvatar;
+export default UserAvatar;
