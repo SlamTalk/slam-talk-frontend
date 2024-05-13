@@ -7,11 +7,11 @@ import { getOtherUserData } from '@/services/user/getOtherUserData';
 import UserProfile from '@/app/components/profile/UserProfile';
 import SmallLoading from '@/app/components/loading/SmallLoading';
 
-interface AdminUserAvatarProps {
+interface UserAvatarProps {
   userId: number;
 }
 
-const UserAvatar: React.FC<AdminUserAvatarProps> = ({ userId }) => {
+const UserAvatar: React.FC<UserAvatarProps> = ({ userId }) => {
   const { data: userData, isLoading } = useQuery({
     queryKey: ['getUserData', userId],
     queryFn: () => getOtherUserData({ userId }),
