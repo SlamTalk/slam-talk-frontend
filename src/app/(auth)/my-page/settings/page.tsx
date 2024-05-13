@@ -36,7 +36,7 @@ const MyPageSettings = () => {
     }
   };
 
-  const handleAskLogout = async () => {
+  const handleAskLogout = () => {
     onOpen();
   };
 
