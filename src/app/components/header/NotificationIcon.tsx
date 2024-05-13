@@ -2,6 +2,7 @@ import React from 'react';
 
 interface NotificationIconProps {
   size: number;
+  className: string;
 }
 
 const NotificationIcon: React.FC<NotificationIconProps> = ({
