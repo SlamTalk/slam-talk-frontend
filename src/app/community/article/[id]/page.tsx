@@ -132,7 +132,7 @@ const Page = () => {
                     onClick={() => {
                       onOpen();
                     }}
-                    src={writerInfo?.imageUrl}
+                    src={writerInfo?.imageUrl || ''}
                     className="me-2"
                   />
                   <p
