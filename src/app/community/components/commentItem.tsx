@@ -67,7 +67,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       <div aria-label="작성자 정보" className="cursor-pointer p-2">
         <Avatar
           size="md"
-          src={writerUserInfo?.imageUrl}
+          src={writerUserInfo?.imageUrl || ''}
           onClick={() => {
             onOpen();
           }}
