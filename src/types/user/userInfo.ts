@@ -4,7 +4,7 @@ export interface UserInfo {
   socialType: string;
   id: number;
   nickname: string;
-  imageUrl: string;
+  imageUrl: string | null;
   selfIntroduction: string | null;
   basketballSkillLevel: string | null;
   basketballPosition: string | null;

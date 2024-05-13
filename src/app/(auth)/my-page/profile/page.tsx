@@ -175,7 +175,7 @@ const MyProfile = () => {
                   showFallback
                   className="mr-4 h-20 w-20 text-large"
                   alt="프로필 사진"
-                  src={previewUrl || user.imageUrl}
+                  src={previewUrl || user.imageUrl || ''}
                 />
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-2">

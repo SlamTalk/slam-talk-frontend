@@ -7,11 +7,11 @@ import { getOtherUserData } from '@/services/user/getOtherUserData';
 import UserProfile from '@/app/components/profile/UserProfile';
 import SmallLoading from '@/app/components/loading/SmallLoading';
 
-interface AdminUserAvatarProps {
+interface UserAvatarProps {
   userId: number;
 }
 
-const AdminUserAvatar: React.FC<AdminUserAvatarProps> = ({ userId }) => {
+const UserAvatar: React.FC<UserAvatarProps> = ({ userId }) => {
   const { data: userData, isLoading } = useQuery({
     queryKey: ['getUserData', userId],
     queryFn: () => getOtherUserData({ userId }),
@@ -46,7 +46,7 @@ const AdminUserAvatar: React.FC<AdminUserAvatarProps> = ({ userId }) => {
         className="cursor-pointer"
         onClick={handleAvatarClick}
       >
-        <Avatar showFallback size="sm" src={userData.imageUrl} />
+        <Avatar showFallback size="sm" src={userData.imageUrl || ''} />
         <span>{userData.nickname}</span>
       </div>
       {isProfileOpen && (
@@ -60,4 +60,4 @@ const AdminUserAvatar: React.FC<AdminUserAvatarProps> = ({ userId }) => {
   );
 };
 
-export default AdminUserAvatar;
+export default UserAvatar;
