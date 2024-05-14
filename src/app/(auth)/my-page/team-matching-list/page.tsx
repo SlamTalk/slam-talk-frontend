@@ -1,6 +1,7 @@
 'use client';
 
 import LocalStorage from '@/utils/localstorage';
+import { Tab, Tabs } from '@nextui-org/tabs';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { IoChevronBackSharp } from 'react-icons/io5';
@@ -25,7 +26,7 @@ const TeamMatchingList = () => {
 
   return (
     <>
-      <title>슬램톡 | 팀 매칭 내역</title>
+      <title>슬램톡 | 상대팀 찾기 내역</title>
       <div className="relative">
         <div
           aria-label="뒤로가기"
@@ -37,8 +38,18 @@ const TeamMatchingList = () => {
         >
           <IoChevronBackSharp size={24} />
         </div>
-        <h2 className="pt-4 text-center text-lg font-semibold">팀 매칭 내역</h2>
+        <h2 className="pt-4 text-center text-lg font-semibold">
+          상대팀 찾기 내역
+        </h2>
         <hr className="w-90 my-4 h-px bg-gray-300" />
+        <div className="mt-2 flex justify-between px-[16px]">
+          <div className="flex flex-wrap gap-4">
+            <Tabs variant="underlined" aria-label="Tabs variants">
+              <Tab key="team" title="내 모집글" />
+              <Tab key="mate" title="지원 현황" />
+            </Tabs>
+          </div>
+        </div>
         <div>목록 개발 중</div>
       </div>
     </>
