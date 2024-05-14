@@ -9,20 +9,49 @@ import {
   Button,
   useDisclosure,
   Badge,
+  Avatar,
 } from '@nextui-org/react';
-import { NotificationIcon } from './NotificationIcon';
+import { InAppNotification } from '@/types/notifications/InAppNotification';
+import axiosInstance from '@/app/api/axiosInstance';
+import UserAvatar from '@/app/components/profile/UserAvatar';
+import NotificationIcon from './NotificationIcon';
 
 const Notifications = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const { data } = useQuery({
+  const { data: notifications } = useQuery({
     queryKey: ['notifications'],
     queryFn: getNotifications,
   });
 
-  console.log(data);
+  const notificationsLength =
+    notifications?.filter((notification) => !notification.read).length || 0;
 
-  const notificationsLength = data?.length;
+  const handleReadAll = () => {
+    axiosInstance.patch('/api/notifications');
+  };
+
+  const handleDeleteAll = () => {
+    axiosInstance.delete('/api/notifications');
+  };
+
+  const formatCreatedAt = (createdAt: string) => {
+    const date = new Date(createdAt);
+    return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`;
+  };
+
+  const handleGoToURIAndRead = async (uri: string, notificationId: number) => {
+    try {
+      const response = await axiosInstance.patch(
+        `/api/notifications/${notificationId}`
+      );
+      if (response.status === 200) {
+        window.location.href = uri;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -51,7 +80,7 @@ const Notifications = () => {
         scrollBehavior="inside"
         backdrop="transparent"
         placement="top"
-        className="ml-72 mt-[61px] h-80 w-80 sm:ml-0 sm:mr-0 sm:mt-[61px] sm:w-full"
+        className="ml-[210px] mt-[61px] h-3/4 w-[400px] sm:ml-0 sm:mr-0 sm:mt-[61px] sm:w-full"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       >
@@ -66,17 +95,56 @@ const Notifications = () => {
                   <Button
                     size="sm"
                     className="bg-transpranent max-w-xs text-gray-400"
+                    onClick={handleReadAll}
                   >
                     <p>모두 읽음</p>
                   </Button>
                   <Button
                     size="sm"
                     className="bg-transpranent max-w-xs text-gray-400"
+                    onClick={handleDeleteAll}
                   >
                     모두 삭제
                   </Button>
                 </div>
-                <div>{/* <p>00님이 Lv 8이 되었습니다.</p> */}</div>
+                {notifications &&
+                  notifications.map((notification: InAppNotification) => (
+                    <div
+                      className="mt-2 flex items-center"
+                      key={notification.notificationId}
+                      role="link"
+                      tabIndex={0}
+                      onKeyDown={() =>
+                        handleGoToURIAndRead(
+                          notification.uri,
+                          notification.notificationId
+                        )
+                      }
+                      onClick={() =>
+                        handleGoToURIAndRead(
+                          notification.uri,
+                          notification.notificationId
+                        )
+                      }
+                    >
+                      {!notification.read && (
+                        <div className="h-[5px] w-[5px] rounded-full bg-danger" />
+                      )}
+                      <div className="mx-4">
+                        {notification.userId !== null ? (
+                          <UserAvatar userId={notification.userId} />
+                        ) : (
+                          <Avatar showFallback />
+                        )}
+                      </div>
+                      <div>
+                        <p>{notification.message}</p>
+                        <p className="mt-2 text-xs text-gray-400">
+                          {formatCreatedAt(notification.createdAt)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
               </ModalBody>
             </>
           )}
