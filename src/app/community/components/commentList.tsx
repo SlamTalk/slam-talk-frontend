@@ -7,7 +7,7 @@ interface ICommentListProps {
 }
 
 const CommentList: React.FC<ICommentListProps> = ({ commentListData }) => (
-  <div className="h-[480px] overflow-x-scroll pb-4">
+  <div className="mx-1 h-[480px] overflow-x-scroll pb-4 sm:text-sm">
     {commentListData?.map((i: ICommentItemProps) => (
       <div key={i.commentId}>
         <CommentItem

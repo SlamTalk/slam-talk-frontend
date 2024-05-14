@@ -1,7 +1,8 @@
 export interface OtherUserInfo {
   id: number;
   nickname: string;
-  imageUrl: string;
+  imageUrl: string | null;
+  socialType: string;
   selfIntroduction: string | null;
   basketballSkillLevel: string | null;
   basketballPosition: string | null;

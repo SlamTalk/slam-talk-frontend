@@ -124,7 +124,7 @@ const Page = () => {
             <div aria-label="contentsCard">
               <div
                 aria-label="유저 아바타"
-                className="mt-1 flex items-center border-b-1 sm:space-x-[60px] md:space-x-[260px]"
+                className="mx-2 flex items-center border-b-1 sm:space-x-[30px] md:space-x-[260px]"
                 style={{ cursor: 'pointer' }}
               >
                 <div className="ml-1 flex items-center p-1">
@@ -132,22 +132,35 @@ const Page = () => {
                     onClick={() => {
                       onOpen();
                     }}
-                    src={writerInfo?.imageUrl}
+                    src={writerInfo?.imageUrl || ''}
                     className="me-2"
                   />
                   <p
                     aria-label="작성자 닉네임"
-                    className="text-md w-[180px] font-bold"
+                    className="text-md w-[170px] font-bold"
                   >
                     {articleData.userNickname}
                   </p>
                 </div>
-                <p
-                  aria-label="작성일자"
-                  className="w-[100px] text-sm text-gray-400"
-                >
-                  {articleData.updatedAt.toString().split('T')[0]}
-                </p>
+                <div className="flex flex-col items-center justify-center">
+                  <p
+                    aria-label="작성일자"
+                    className="w-[100px] text-sm text-gray-400"
+                  >
+                    {articleData.updatedAt.toString().split('T')[0]}
+                  </p>
+                  <p
+                    aria-label="작성일자"
+                    className="w-[60px] text-sm text-gray-400"
+                  >
+                    {
+                      articleData.updatedAt
+                        .toString()
+                        .split('T')[1]
+                        .split('.')[0]
+                    }
+                  </p>
+                </div>
               </div>
 
               <div className="min-h-[200px] border-b-2">

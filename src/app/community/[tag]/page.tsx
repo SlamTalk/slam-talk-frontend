@@ -28,7 +28,7 @@ const Page = () => {
   const router = useRouter();
   const [inputData, setInputData] = useState('');
   const [isFocus, setIsFocus] = useState(false);
-
+  const [boardState, setBoardState] = useState<IBoard[]>([]);
   const [searchKey, setSearchKey] = useState('');
   const { data: communityBoard, refetch } = useQuery<IBoard[]>({
     queryKey: ['communityBoard'],
@@ -57,18 +57,30 @@ const Page = () => {
   }, []);
 
   const [page, setPage] = useState(1);
-  const rowsPerPage = isMobile ? 13 : 16;
+  const rowsPerPage = isMobile ? 13 : 15;
   const pages = useMemo(
-    () =>
-      communityBoard && tag === ''
-        ? Math.ceil((communityBoard || []).length / rowsPerPage)
-        : Math.ceil((communityBoard || []).length / rowsPerPage),
-    [communityBoard, tag, rowsPerPage]
+    () => Math.ceil((boardState?.length || 0) / rowsPerPage),
+    [boardState, rowsPerPage]
   );
 
   const handleLink = (id: number) => {
     router.push(`/community/article/${id}`);
   };
+  useEffect(() => {
+    if (communityBoard && tag === '') {
+      setBoardState(communityBoard);
+    }
+  }, [communityBoard, tag]);
+  useEffect(() => {
+    if (communityBoard) {
+      setBoardState(communityBoard);
+    }
+  }, [communityBoard]);
+  useEffect(() => {
+    if (categoriedBoard) {
+      setBoardState(categoriedBoard);
+    }
+  }, [categoriedBoard]);
 
   useEffect(() => {
     if (isFocus) {
@@ -200,10 +212,10 @@ const Page = () => {
             <TableColumn>글쓴이</TableColumn>
           </TableHeader>
 
-          <TableBody items={communityBoard ?? []} loadingContent={<Spinner />}>
+          <TableBody items={boardState} loadingContent={<Spinner />}>
             {tag === ''
               ? (
-                  communityBoard?.slice(
+                  boardState?.slice(
                     (page - 1) * rowsPerPage,
                     (page - 1) * rowsPerPage + rowsPerPage
                   ) || []
@@ -224,7 +236,7 @@ const Page = () => {
                     </TableRow>
                   ))
               : (
-                  categoriedBoard?.slice(
+                  boardState?.slice(
                     (page - 1) * rowsPerPage,
                     (page - 1) * rowsPerPage + rowsPerPage
                   ) || []
@@ -247,13 +259,13 @@ const Page = () => {
           </TableBody>
         </Table>
       </div>
-      <div className="fixed bottom-14 w-full max-w-[600px]">
+      <div className="fixed bottom-24 w-full max-w-[600px]">
         <div className="mr-4 flex justify-end">
           <Button
             aria-label="Write new post"
             type="button"
             startContent={<FaPlus />}
-            className="rounded-full bg-primary text-white shadow-md"
+            className="fixed z-40 rounded-full bg-primary text-white shadow-md sm:w-[100px]"
             onClick={() => {
               if (isLoggedIn === 'true') {
                 return router.push('/community/write');
@@ -261,7 +273,7 @@ const Page = () => {
               return router.push('/login');
             }}
           >
-            글 작성하기
+            새 게시글 작성
           </Button>
         </div>
       </div>

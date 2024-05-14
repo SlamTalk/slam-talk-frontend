@@ -67,7 +67,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       <div aria-label="작성자 정보" className="cursor-pointer p-2">
         <Avatar
           size="md"
-          src={writerUserInfo?.imageUrl}
+          src={writerUserInfo?.imageUrl || ''}
           onClick={() => {
             onOpen();
           }}
@@ -75,13 +75,15 @@ const CommentItem: React.FC<ICommentItemProps> = ({
       </div>
 
       {editToggle ? (
-        <input
-          className="ml-2 mt-2 h-10 w-[750px]"
-          placeholder={content}
-          onChange={(e) => {
-            setEditedComment(e.target.value);
-          }}
-        />
+        <form onSubmit={handleEdit}>
+          <input
+            className="ml-2 mt-2 h-10 w-[750px]"
+            placeholder={content}
+            onChange={(e) => {
+              setEditedComment(e.target.value);
+            }}
+          />
+        </form>
       ) : (
         <div className="flex w-full justify-between">
           <div className="my-2 ml-1 flex flex-col">

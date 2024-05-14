@@ -14,6 +14,7 @@ export const getOtherUserData = async ({
   const userData: OtherUserInfo = {
     id: user.id,
     nickname: user.nickname,
+    socialType: user.socialType,
     imageUrl: user.imageUrl,
     selfIntroduction: user.selfIntroduction,
     basketballSkillLevel: user.basketballSkillLevel,

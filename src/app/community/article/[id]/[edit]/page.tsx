@@ -7,9 +7,20 @@ import { patchCommunityArticle } from '@/services/community/patchCommunityArticl
 import React, { useState, useCallback, useRef } from 'react';
 import { getCommunityArticle } from '@/services/community/getCommunityArticle';
 import Image from 'next/image';
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from '@nextui-org/react';
 
 const Page = () => {
   const [editedTitle, setEditedTitle] = useState('');
+  const [imageErrorMsg, setImageErrorMsg] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [editedContent, setEditedContent] = useState('');
   const [images, setImages] = useState<File[]>([]);
   const [postData, setPostData] = useState<FormData>(new FormData());
@@ -20,6 +31,7 @@ const Page = () => {
     queryKey: ['articleData'],
     queryFn: () => getCommunityArticle(params.id),
   });
+
   const patchArticle: any = useMutation({
     mutationKey: ['patchedArtcle'],
     mutationFn: () => patchCommunityArticle(+params.id, postData),
@@ -40,7 +52,29 @@ const Page = () => {
     if (imageInput.current && imageInput.current.files) {
       const selectedImages = Array.from(imageInput.current.files);
 
-      setImages((prevImages) => [...prevImages, ...selectedImages]);
+      const fileSizeLimit = 1 * 1024 * 1024; // 1MB
+      const oversizedFiles = selectedImages.filter(
+        (file) => file.size > fileSizeLimit
+      );
+      if (oversizedFiles.length > 0) {
+        setImageErrorMsg(`파일 크기는 ${1}MB를 초과할 수 없습니다.`);
+        onOpen();
+        return;
+      }
+
+      const invalidFiles = selectedImages.filter((file) => {
+        const fileType = file.type.split('/')[1];
+        return !['png', 'jpg', 'jpeg'].includes(fileType);
+      });
+      if (invalidFiles.length > 0) {
+        setImageErrorMsg(
+          '허용되지 않은 파일 형식입니다. PNG, JPG, JPEG 형식의 파일만 업로드 가능합니다.'
+        );
+        onOpen();
+        return;
+      }
+
+      setImages(selectedImages);
     }
   };
 
@@ -94,6 +128,7 @@ const Page = () => {
 
           <div className="flex h-40 flex-col justify-between border-b-2">
             <textarea
+              className="h-48 border-b border-solid border-gray-200 text-xl"
               placeholder={articleData.content}
               onChange={(e) => {
                 setEditedContent(e.target.value);
@@ -126,22 +161,34 @@ const Page = () => {
                 >
                   이미지 업로드
                 </button>
-                {images.map((file, index) => (
-                  <Image
-                    key={URL.createObjectURL(file)}
-                    src={URL.createObjectURL(file)}
-                    alt={`Preview ${index}`}
-                    width={200}
-                    height={200}
-                  />
-                ))}
               </div>
             </div>
           </div>
+          {images.map((file, index) => (
+            <Image
+              key={URL.createObjectURL(file)}
+              src={URL.createObjectURL(file)}
+              alt={`Preview ${index}`}
+              width={200}
+              height={200}
+            />
+          ))}
         </div>
       ) : (
         <p>404 not found</p>
       )}
+
+      <Modal isOpen={isOpen} onClose={onClose} placement="center">
+        <ModalContent>
+          <ModalHeader>이미지 참조 오류</ModalHeader>
+          <ModalBody>{imageErrorMsg}</ModalBody>
+          <ModalFooter>
+            <Button color="primary" onPress={onClose}>
+              확인
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
