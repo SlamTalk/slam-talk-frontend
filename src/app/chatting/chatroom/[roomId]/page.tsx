@@ -132,8 +132,8 @@ const Chatting = () => {
         }
       },
       reconnectDelay: 5000,
-      heartbeatIncoming: 1000,
-      heartbeatOutgoing: 1000,
+      heartbeatIncoming: 5000,
+      heartbeatOutgoing: 5000,
     });
     if (client.current !== null) {
       client.current.activate();
@@ -193,9 +193,11 @@ const Chatting = () => {
 
   useEffect(() => {
     inputRef.current?.focus();
-    connect();
+    if (accessToken) {
+      connect();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, [accessToken]);
 
   return (
     <div aria-label="chat room wrapper" className="flex h-screen flex-col">
