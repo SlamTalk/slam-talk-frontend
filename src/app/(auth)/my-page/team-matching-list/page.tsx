@@ -35,7 +35,7 @@ const TeamMatchingList = () => {
   }
 
   const { data } = useQuery<MyTeamMatching>({
-    queryKey: ['myMateMatching'],
+    queryKey: ['myTeamMatching'],
     queryFn: getMyTeamMatchingData,
   });
 
