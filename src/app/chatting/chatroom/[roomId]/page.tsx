@@ -23,6 +23,7 @@ import IMessage from '@/types/chat/message';
 import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
 import { getChatList } from '@/services/chatting/getChatList';
 
+import LocalStorage from '@/utils/localstorage';
 import axiosInstance from '../../../api/axiosInstance';
 import MessageList from '../../components/messageList';
 
@@ -45,6 +46,7 @@ const Chatting = () => {
     queryKey: ['myChatlist'],
     queryFn: getChatList,
   });
+  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
 
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
@@ -199,7 +201,12 @@ const Chatting = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
-
+  useEffect(() => {
+    if (!isLoggedIn || !user) {
+      router.push('/login');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div aria-label="chat room wrapper" className="flex h-screen flex-col">
       <title>슬램톡 | 채팅</title>
