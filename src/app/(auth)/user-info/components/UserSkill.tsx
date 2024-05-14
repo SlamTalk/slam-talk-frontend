@@ -24,7 +24,7 @@ const UserSkill: React.FC<UserSkillProps> = ({ onSkillSelect }) => {
             key={skill.value}
             size="lg"
             radius="full"
-            className="bg-gradient-to-tr from-primary to-secondary text-xl font-semibold text-white shadow-lg dark:shadow-gray-600"
+            className="bg-gradient-to-tr from-primary to-secondary text-xl font-semibold text-white shadow-md dark:shadow-gray-600"
             onClick={() => handleSkillSelect(skill.value)}
           >
             {skill.value}
