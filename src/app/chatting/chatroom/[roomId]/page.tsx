@@ -202,7 +202,7 @@ const Chatting = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
   useEffect(() => {
-    if (!isLoggedIn || !user) {
+    if (isLoggedIn === 'false' || !user) {
       router.push('/login');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

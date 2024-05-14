@@ -19,6 +19,7 @@ import LocalStorage from '@/utils/localstorage';
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { getUserData } from '@/services/user/getUserData';
 import { IChatRoomListItem } from '../../../types/chat/chatRoomListItem';
 
 import { getChatList } from '../../../services/chatting/getChatList';
@@ -27,9 +28,13 @@ const ChatList = () => {
   const router = useRouter();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { data: user } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: getUserData,
+  });
 
   useEffect(() => {
-    if (isLoggedIn === 'false') {
+    if (isLoggedIn === 'false' || !user) {
       onOpen();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
