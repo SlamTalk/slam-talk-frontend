@@ -127,13 +127,13 @@ const MyPage = () => {
               <Link href="/my-page/team-matching-list">
                 <div className="flex items-center gap-2">
                   <LuClipboardList className="text-text" />
-                  <span>팀 매칭 내역</span>
+                  <span>상대팀 찾기 내역</span>
                 </div>
               </Link>
               <Link href="/my-page/mate-matching-list">
                 <div className="flex items-center gap-2">
                   <LuClipboardList className="text-text" />
-                  <span>농구 메이트 찾기 내역</span>
+                  <span>메이트 찾기 내역</span>
                 </div>
               </Link>
             </div>

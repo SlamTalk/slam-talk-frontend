@@ -67,3 +67,17 @@ export interface TeamCardInfo {
   numberOfMembers: string;
   recruitmentStatusType: string;
 }
+
+export interface MyTeamMatchingInfo {
+  teamMatchingId: number;
+  title: string;
+  location: string;
+  startTime: string;
+  recruitmentStatusType: string;
+  applyStatusType: string | null;
+}
+
+export interface MyTeamMatching {
+  authoredPost: MyTeamMatchingInfo[];
+  participatedPost: MyTeamMatchingInfo[];
+}
