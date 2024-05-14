@@ -232,8 +232,10 @@ const Page = () => {
                       aria-labelledby={`title-${item.communityId}`}
                     >
                       <TableCell className="flex hover:text-white">
-                        <p className="me-2">{item.title}</p>[
-                        <p className="font-bold">{`${item.commentCount}`}</p>]
+                        <p className="me-2">{item.title}</p>
+                        <p className="mb-1 text-xs font-bold">
+                          {item.commentCount}
+                        </p>
                       </TableCell>
                       <TableCell>{item.userNickname}</TableCell>
                     </TableRow>
@@ -255,9 +257,11 @@ const Page = () => {
                       key={item.communityId}
                       aria-labelledby={`title-${item.communityId}`}
                     >
-                      <TableCell className="flex-grow">
-                        {item.title}
-                        {`[${item.commentCount}]`}
+                      <TableCell className="flex">
+                        <p className="me-2">{item.title}</p>
+                        <p className="mb-1 text-xs font-bold">
+                          {item.commentCount}
+                        </p>
                       </TableCell>
                       <TableCell>{item.userNickname}</TableCell>
                     </TableRow>
