@@ -80,7 +80,7 @@ const Page = () => {
     mutationFn: () => postComment(commentData),
   });
   const handlePostComment = () => {
-    if (comment.length > 10) {
+    if (comment.length > 200) {
       CommentModal.onOpen();
       return;
     }

@@ -60,7 +60,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   return (
     <div
       key={commentId}
-      className="border-gray mt-2 flex items-center border-b-1"
+      className="border-gray mt-2 flex w-full items-center border-b-1"
     >
       <UserProfile isOpen={isOpen} userId={userId} onClose={onClose} />
 
@@ -88,7 +88,11 @@ const CommentItem: React.FC<ICommentItemProps> = ({
         <div className="flex w-full justify-between">
           <div className="my-2 ml-1 flex flex-col">
             <p className="font-bold">{writerUserInfo?.nickname}</p>
-            <p className="">{content}</p>
+            <p className="">
+              {content.length > 50
+                ? `${content.substring(0, 49)}\n${content.substring(50, content.length)}`
+                : content}
+            </p>
           </div>
           {loginUserData?.id === userId && (
             <div
