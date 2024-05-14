@@ -19,7 +19,7 @@ import NotificationIcon from './NotificationIcon';
 const Notifications = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const { data: notifications } = useQuery({
+  const { data: notifications, refetch } = useQuery({
     queryKey: ['notifications'],
     queryFn: getNotifications,
   });
@@ -29,10 +29,12 @@ const Notifications = () => {
 
   const handleReadAll = () => {
     axiosInstance.patch('/api/notifications');
+    refetch();
   };
 
   const handleDeleteAll = () => {
     axiosInstance.delete('/api/notifications');
+    refetch();
   };
 
   const formatCreatedAt = (createdAt: string) => {
