@@ -41,7 +41,7 @@ const Chatting = () => {
     queryFn: postTokenRefresh,
   });
   const accessToken = token;
-  const { data: myChatList } = useQuery<IChatRoomListItem[]>({
+  const { data: myChatList, refetch } = useQuery<IChatRoomListItem[]>({
     queryKey: ['myChatlist'],
     queryFn: getChatList,
   });
@@ -194,6 +194,7 @@ const Chatting = () => {
   useEffect(() => {
     inputRef.current?.focus();
     if (accessToken) {
+      refetch();
       connect();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
