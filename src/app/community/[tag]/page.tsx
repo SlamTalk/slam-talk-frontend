@@ -265,13 +265,13 @@ const Page = () => {
           </TableBody>
         </Table>
       </div>
-      <div className="fixed bottom-24 w-full max-w-[600px]">
-        <div className="mr-4 flex justify-end">
+      <div className="w-full max-w-[600px]">
+        <div className="relative mr-4 flex justify-end">
           <Button
             aria-label="Write new post"
             type="button"
             startContent={<FaPlus />}
-            className="fixed z-40 rounded-full bg-primary text-white shadow-md sm:w-[100px]"
+            className="fixed bottom-16 z-40 rounded-full bg-primary text-white shadow-md sm:w-[100px]"
             onClick={() => {
               if (isLoggedIn === 'true') {
                 return router.push('/community/write');
