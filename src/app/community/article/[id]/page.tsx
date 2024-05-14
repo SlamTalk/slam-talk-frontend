@@ -2,7 +2,14 @@
 
 import { Button } from '@nextui-org/button';
 import { useParams, useRouter } from 'next/navigation';
-import { Avatar, useDisclosure, Spinner } from '@nextui-org/react';
+import {
+  Avatar,
+  useDisclosure,
+  Spinner,
+  Modal,
+  ModalHeader,
+  ModalBody,
+} from '@nextui-org/react';
 import { IoChevronBackSharp } from 'react-icons/io5';
 // import { FaHeart } from 'react-icons/fa';
 
@@ -69,7 +76,7 @@ const Page = () => {
     mutationFn: () => postComment(commentData),
   });
   const handlePostComment = () => {
-    if (comment !== '') {
+    if (comment !== '' || comment.length <= 50) {
       setCommentData({
         communityId: +params.id,
         content: comment,
@@ -106,6 +113,10 @@ const Page = () => {
   return (
     <div className="relative h-[calc(100vh-109px)] w-full overflow-hidden">
       <UserProfile isOpen={isOpen} userId={writerId} onClose={onClose} />
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalHeader>hi</ModalHeader>
+        <ModalBody>eee</ModalBody>
+      </Modal>
       {articleData ? (
         <div>
           <title>슬램톡 | 커뮤니티</title>
@@ -236,7 +247,7 @@ const Page = () => {
           </div>
           <div className="flex" aria-label="댓글 입력">
             <input
-              placeholder="댓글을 입력해주세요"
+              placeholder="댓글을 입력해주세요 (50자 이하)"
               className="w-11/12 rounded-md bg-background p-2 shadow-md focus:outline-none focus:ring-0"
               value={comment}
               onChange={(e) => {
