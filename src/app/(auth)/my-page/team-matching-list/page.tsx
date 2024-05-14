@@ -61,8 +61,6 @@ const TeamMatchingList = () => {
     }
   }, [data, currentPage, selectedTab]);
 
-  console.log({ data }, { currentData });
-
   const handleGoBack = () => {
     router.back();
   };

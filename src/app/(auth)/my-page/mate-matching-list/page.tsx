@@ -61,8 +61,6 @@ const MateMatchingList = () => {
     }
   }, [data, currentPage, selectedTab]);
 
-  console.log({ currentData });
-
   const handleGoBack = () => {
     router.back();
   };
@@ -137,7 +135,7 @@ const MateMatchingList = () => {
                     className="hover: border-b-1 hover:cursor-pointer hover:bg-black/10 dark:hover:bg-white/10"
                     onClick={() => handleRowClick(item.matePostId)}
                   >
-                    <TableCell className="line-clamp-1 w-[200px] overflow-hidden break-keep sm:max-w-[80px]">
+                    <TableCell className="w-[200px] break-keep sm:max-w-[80px]">
                       {item.title}
                     </TableCell>
                     <TableCell className="overflow-hidden break-keep">
