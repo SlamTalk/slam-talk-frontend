@@ -27,8 +27,13 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
   onClose,
   refetch,
 }) => {
-  const handleReject = () => {
-    // 거절 로직 추가 필요
+  const handleReject = async () => {
+    try {
+      await axiosInstance.put(`/api/admin/reject/${selectedPlace.courtId}`);
+    } catch (error) {
+      console.error('Error while updating court data:', error);
+    }
+
     onClose();
   };
 
