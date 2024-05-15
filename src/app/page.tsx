@@ -94,10 +94,10 @@ const Home = () => {
       <title>슬램톡 | 농구 플랫폼</title>
       <div className="relative w-full max-w-[600px] pb-[52px]">
         <div className="m-auto overflow-y-auto scrollbar-hide">
-          <div className="relative mx-[16px] mt-4 rounded-md bg-background">
+          <div className="relative mx-[16px] mt-4 rounded-md bg-background ">
             {mostImminentSchedule ? (
-              <Card className="w-full px-4 py-2">
-                <div className="mt-2 text-center text-lg font-bold">
+              <Card className="w-full px-4 py-4">
+                <div className="text-center text-lg font-bold">
                   임박한 매칭이 있어요!
                 </div>
                 <div className="mt-1 text-sm">
@@ -113,13 +113,13 @@ const Home = () => {
                 <Link
                   href={`/matching/${mostImminentSchedule.source}-details/${mostImminentSchedule.postId}`}
                 >
-                  <div className="mb-2 text-right text-xs text-black text-opacity-50 underline">
+                  <div className="absolute bottom-0 right-2 text-right text-xs text-black/50 underline dark:text-white/50">
                     자세히 보기
                   </div>
                 </Link>
               </Card>
             ) : (
-              <div className="flex min-h-[130px] items-center justify-center rounded-medium bg-gray-100">
+              <div className="flex min-h-[130px] items-center justify-center rounded-medium border-1 bg-content1 shadow-md dark:border-none">
                 <div className="text-md m-2 h-[50%] text-gray-400">
                   예정된 매칭이 없습니다.
                 </div>
@@ -157,7 +157,7 @@ const Home = () => {
             <div className="flex justify-between ">
               <div className="text-lg font-bold">경기할 팀을 찾고 있어요!</div>
               <Link href="/matching?tab=team">
-                <div className="mr-2 text-black text-opacity-40">
+                <div className="mr-2 text-sm text-black/50 dark:text-white/50">
                   전체보기 〉
                 </div>
               </Link>
@@ -184,7 +184,9 @@ const Home = () => {
           <div className="flex justify-between ">
             <div className="text-lg font-bold">같이 농구할 사람을 구해요!</div>
             <Link href="/matching?tab=mate">
-              <div className="mr-2 text-black text-opacity-40">전체보기 〉</div>
+              <div className="mr-2 text-sm text-black/50 dark:text-white/50">
+                전체보기 〉
+              </div>
             </Link>
           </div>
           <div className="my-2 flex gap-3">
