@@ -282,7 +282,12 @@ const MateDetailsPage = () => {
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">상세 내용</div>
         <p className="mb-6 mt-2 h-[100px] overflow-y-auto break-words rounded-md border-2 p-3">
-          {data.content}
+          {data.content.split('\n').map((line) => (
+            <>
+              {line}
+              <br />
+            </>
+          ))}
         </p>
       </div>
 
