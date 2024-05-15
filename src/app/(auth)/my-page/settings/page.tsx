@@ -160,10 +160,7 @@ const MyPageSettings = () => {
               <>
                 <ModalHeader className="flex flex-col gap-1">탈퇴</ModalHeader>
                 <ModalBody>
-                  <p>
-                    정말 탈퇴하시겠습니까? 탈퇴 후 7일 동안 같은 이메일로
-                    재가입이 불가하고 복구가 어렵습니다.
-                  </p>
+                  <p>정말 탈퇴하시겠습니까? 탈퇴하시면 복구가 어렵습니다.</p>
                 </ModalBody>
                 <ModalFooter>
                   <Button

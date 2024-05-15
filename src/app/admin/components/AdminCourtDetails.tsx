@@ -27,8 +27,13 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
   onClose,
   refetch,
 }) => {
-  const handleReject = () => {
-    // 거절 로직 추가 필요
+  const handleReject = async () => {
+    try {
+      await axiosInstance.put(`/api/admin/reject/${selectedPlace.courtId}`);
+    } catch (error) {
+      console.error('Error while updating court data:', error);
+    }
+
     onClose();
   };
 
@@ -155,10 +160,10 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                   길찾기
                 </Button>
               </div>
-              <div className="flex justify-center " />
+              <div className="flex justify-center" />
               <hr className="w-90 my-4 h-px bg-gray-300" />
               <div className="my-4 flex flex-col gap-4">
-                <div className="flex gap-2 align-middle">
+                <div className="flex items-center gap-2 align-middle">
                   <FaLocationDot
                     size={16}
                     className="dark:text-gray-20 text-gray-400"
@@ -168,7 +173,7 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                     <span className="text-blue-500">복사</span>
                   </button>
                 </div>
-                <div className="flex gap-2 align-middle">
+                <div className="flex items-center gap-2 align-middle">
                   <FaClock
                     size={14}
                     className="text-gray-400 dark:text-gray-200"
@@ -180,7 +185,7 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                     </span>
                   </span>
                 </div>
-                <div className="flex gap-2 align-middle">
+                <div className="flex items-center gap-2 align-middle">
                   <FaPhoneAlt
                     size={15}
                     className="pointer-events-auto text-gray-400 dark:text-gray-200"
@@ -189,14 +194,14 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                     {selectedPlace.phoneNum ? selectedPlace.phoneNum : '-'}
                   </span>
                 </div>
-                <div className="flex gap-2 align-middle">
+                <div className="flex items-center gap-2 align-middle">
                   <FeeIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-info text-blue-500">
                     이용료: {selectedPlace.fee}
                   </span>
                 </div>
 
-                <div className="flex gap-2 align-middle">
+                <div className="flex items-center gap-2 align-middle">
                   <WebsiteIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-blue-500">
                     {selectedPlace.website ? (
@@ -208,35 +213,35 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                     )}
                   </span>
                 </div>
-                <div className="flex gap-2 align-middle">
+                <div className="flex items-center gap-2 align-middle">
                   <CourtIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="font-medium">
                     코트 종류:{' '}
                     {selectedPlace.courtType ? selectedPlace.courtType : '-'}
                   </span>
                 </div>
-                <div className="flex gap-2 align-middle">
+                <div className="flex items-center gap-2 align-middle">
                   <CourtIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="font-medium">
                     코트 사이즈:{' '}
                     {selectedPlace.courtSize ? selectedPlace.courtSize : '-'}
                   </span>
                 </div>
-                <div className="flex gap-2 align-middle">
+                <div className="flex items-center gap-2 align-middle">
                   <HoopIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="font-medium">
                     골대 수:{' '}
                     {selectedPlace.hoopCount ? selectedPlace.hoopCount : '-'}
                   </span>
                 </div>
-                <div className="flex gap-2 align-middle">
+                <div className="flex items-center gap-2 align-middle">
                   <FaLightbulb
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
                   <span>야간 조명: {selectedPlace.nightLighting}</span>
                 </div>
-                <div className="flex gap-2 align-middle">
+                <div className="flex items-center gap-2 align-middle">
                   <FaParking
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
@@ -244,7 +249,7 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                   <span>주차: {selectedPlace.parkingAvailable}</span>
                 </div>
 
-                <div className="flex gap-2 align-middle text-sm">
+                <div className="flex items-center gap-2 align-middle text-sm">
                   <FaTag
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
@@ -265,7 +270,7 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                       : '-'}
                   </ul>
                 </div>
-                <div className="flex gap-2 align-middle">
+                <div className="flex items-center gap-2 align-middle">
                   <InfoIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-sm">
                     {selectedPlace.additionalInfo

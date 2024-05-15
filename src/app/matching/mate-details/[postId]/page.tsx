@@ -246,7 +246,7 @@ const MateDetailsPage = () => {
             </Snippet>
           </div>
 
-          <Link href="/map">
+          <Link href={`/map?address=${data.locationDetail}`}>
             <div className="pr-10 text-blue-600 hover:underline">지도 보기</div>
           </Link>
         </div>
@@ -282,7 +282,12 @@ const MateDetailsPage = () => {
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">상세 내용</div>
         <p className="mb-6 mt-2 h-[100px] overflow-y-auto break-words rounded-md border-2 p-3">
-          {data.content}
+          {data.content.split('\n').map((line) => (
+            <>
+              {line}
+              <br />
+            </>
+          ))}
         </p>
       </div>
 
