@@ -31,13 +31,16 @@ const Loginlayout = ({ children }: { children: React.ReactNode }) => {
       </div>
       <h2 className="mt-4 text-center text-lg font-semibold">로그인</h2>
       <main>{children}</main>
-      <footer className="sticky bottom-12 mt-72 flex w-full max-w-[600px] flex-col justify-center gap-2 bg-gray-100 px-4 pb-3 pt-8 text-xs text-gray-500">
+
+      <footer className="sticky bottom-12 mt-72 flex w-full max-w-[600px] flex-col justify-center gap-2 bg-gray-100 px-4 pb-3 pt-8 text-xs text-gray-500 dark:bg-transparent dark:text-white">
         <p className="text-sm">슬램톡 정보</p>
         <a href="mailto:slamtalk.official@gmail.com">
           <p>문의: slamtalk.official@gmail.com</p>
         </a>
         <hr className="my-3 h-px w-full bg-gray-300" />
-        <p className="text-gray-400">©Slam Talk. All rights reserved.</p>
+        <p className="text-gray-400 dark:text-white">
+          ©Slam Talk. All rights reserved.
+        </p>
       </footer>
     </div>
   );
