@@ -21,7 +21,6 @@ import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 import IMessage from '@/types/chat/message';
 import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
 import { getChatList } from '@/services/chatting/getChatList';
-
 import LocalStorage from '@/utils/localstorage';
 import FullLoading from '@/app/components/loading/FullLoading';
 import axiosInstance from '../../../api/axiosInstance';
@@ -36,6 +35,7 @@ const Chatting = () => {
   const [greeting, setGreeting] = useState('');
   const [messageListState, setMessageListState] = useState<IMessage[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
 
   const { data: token } = useQuery({
     queryKey: ['tokenData'],
@@ -47,7 +47,6 @@ const Chatting = () => {
     queryKey: ['myChatlist'],
     queryFn: getChatList,
   });
-  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
 
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
@@ -68,7 +67,6 @@ const Chatting = () => {
   };
 
   const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
-  // 농구장은 basketballId, 개인은 유저 id? 사용해서 링크 넣어주기
 
   const nickname = error ? null : user?.nickname;
 
