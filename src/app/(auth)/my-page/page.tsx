@@ -17,6 +17,7 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  Tooltip,
 } from '@nextui-org/react';
 import Link from 'next/link';
 import LocalStorage from '@/utils/localstorage';
@@ -160,6 +161,18 @@ const MyPage = () => {
               카카오톡 채널 문의하기
             </Button>
           </div> */}
+          <div>
+            <p className="mb-3 font-semibold">문의</p>
+            <Tooltip
+              showArrow
+              content="slamtalk.official@gmail.com"
+              placement="right-end"
+            >
+              <a href="mailto:slamtalk.official@gmail.com">
+                <span>📬 이메일 문의</span>
+              </a>
+            </Tooltip>
+          </div>
           {user.role === 'ADMIN' && (
             <div className="absolute bottom-16 right-4">
               <Button
