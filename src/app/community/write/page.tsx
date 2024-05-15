@@ -222,7 +222,7 @@ const Page = () => {
         ))}
         <Modal isOpen={isOpen} onClose={onClose} placement="center">
           <ModalContent>
-            <ModalHeader>이미지 참조 오류</ModalHeader>
+            <ModalHeader>알림</ModalHeader>
             <ModalBody>{imageErrorMsg}</ModalBody>
             <ModalFooter>
               <Button color="primary" onPress={onClose}>
