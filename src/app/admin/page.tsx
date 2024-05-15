@@ -14,7 +14,7 @@ import {
 import getReportedCourtData from '@/services/admin/getReportedCourtData';
 import { BasketballCourtReportAdmin } from '@/types/basketballCourt/basketballCourtReport';
 import AdminCourtDetails from './components/AdminCourtDetails';
-import UserAvatar from '../components/profile/UserAvatar';
+import AdminUserAvatar from './components/AdminUserAvatar';
 
 const columns = [
   {
@@ -88,7 +88,7 @@ const AdminPage = () => {
                 {columns.map((column) => (
                   <TableCell key={`${column.key}`}>
                     {column.key === 'informerId' ? (
-                      <UserAvatar userId={item.informerId} />
+                      <AdminUserAvatar userId={item.informerId} />
                     ) : (
                       <div
                         role="button"

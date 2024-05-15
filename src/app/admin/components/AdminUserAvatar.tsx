@@ -11,7 +11,7 @@ interface UserAvatarProps {
   userId: number;
 }
 
-const UserAvatar: React.FC<UserAvatarProps> = ({ userId }) => {
+const AdminUserAvatar: React.FC<UserAvatarProps> = ({ userId }) => {
   const { data: userData, isLoading } = useQuery({
     queryKey: ['getUserData', userId],
     queryFn: () => getOtherUserData({ userId }),
@@ -40,14 +40,15 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ userId }) => {
   return (
     <>
       <div
+        aria-label="Avatar"
         role="button"
         onKeyDown={handleKeyDown}
         tabIndex={0}
-        className="cursor-pointer"
+        className="flex cursor-pointer flex-col items-center text-center"
         onClick={handleAvatarClick}
       >
         <Avatar showFallback size="sm" src={userData.imageUrl || ''} />
-        <span>{userData.nickname}</span>
+        <span className="mt-1 text-ellipsis text-xs">{userData.nickname}</span>
       </div>
       {isProfileOpen && (
         <UserProfile
@@ -60,4 +61,4 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ userId }) => {
   );
 };
 
-export default UserAvatar;
+export default AdminUserAvatar;
