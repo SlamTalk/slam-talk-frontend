@@ -8,10 +8,21 @@ import { IoIosChatbubbles } from 'react-icons/io';
 import { AiFillHome } from 'react-icons/ai';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { getChatList } from '@/services/chatting/getChatList';
+import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
 
 const Footer = () => {
   const pathname = usePathname();
   const [tab, setTab] = useState('');
+
+  const { data: myChatList } = useQuery<IChatRoomListItem[]>({
+    queryKey: ['myChatlist'],
+    queryFn: getChatList,
+  });
+  const isNewMsg = myChatList?.filter(
+    (v: IChatRoomListItem) => v.newMsg === true
+  );
 
   useEffect(() => {
     if (pathname.includes('community')) {
@@ -54,12 +65,20 @@ const Footer = () => {
             <div className="text-xs">농구장 지도</div>
           </div>
         </Link>
+
         <Link href="/chatting">
-          <div
-            className={`grid place-items-center ${tab === 'chat' ? 'text-primary' : ''}`}
-          >
-            <IoIosChatbubbles size={24} />
-            <div className="text-xs">채팅</div>
+          <div className="flex items-center">
+            <div
+              aria-label="새 메시지 표시"
+              className={`mb-7 h-[6px] w-[5px] rounded-full ${isNewMsg && isNewMsg?.length > 0 ? 'bg-danger' : ''}`}
+            />
+            <div
+              className={`grid place-items-center ${tab === 'chat' ? 'text-primary' : ''}`}
+            >
+              <IoIosChatbubbles size={24} />
+
+              <div className="text-xs">채팅</div>
+            </div>
           </div>
         </Link>
         <Link href="/matching">

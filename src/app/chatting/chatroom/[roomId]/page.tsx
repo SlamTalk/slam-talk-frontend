@@ -21,6 +21,8 @@ import { postTokenRefresh } from '@/services/token/postTokenRefresh';
 import IMessage from '@/types/chat/message';
 import { IChatRoomListItem } from '@/types/chat/chatRoomListItem';
 import { getChatList } from '@/services/chatting/getChatList';
+
+import LocalStorage from '@/utils/localstorage';
 import FullLoading from '@/app/components/loading/FullLoading';
 import axiosInstance from '../../../api/axiosInstance';
 import MessageList from '../../components/messageList';
@@ -41,10 +43,11 @@ const Chatting = () => {
   });
 
   const accessToken = token;
-  const { data: myChatList } = useQuery<IChatRoomListItem[]>({
+  const { data: myChatList, refetch } = useQuery<IChatRoomListItem[]>({
     queryKey: ['myChatlist'],
     queryFn: getChatList,
   });
+  const isLoggedIn = LocalStorage.getItem('isLoggedIn');
 
   const { error, data: user } = useQuery({
     queryKey: ['loginData'],
@@ -64,23 +67,6 @@ const Chatting = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const duplicatedMessage = moreMessageData?.pages.flatMap((page) => page);
-  //   if (!duplicatedMessage) {
-  //     return;
-  //   }
-  //   const unique = Array.from(
-  //     new Map(
-  //       duplicatedMessage.map((messageItem: any) => [
-  //         messageItem.messageId,
-  //         messageItem,
-  //       ])
-  //     ).values()
-  //   );
-  //   setMessageListState((prevState: any) =>
-  //     [...prevState, ...unique].reverse()
-  //   );
-  // }, [moreMessageData]);
   const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
   // 농구장은 basketballId, 개인은 유저 id? 사용해서 링크 넣어주기
 
@@ -131,8 +117,8 @@ const Chatting = () => {
         }
       },
       reconnectDelay: 5000,
-      heartbeatIncoming: 1000,
-      heartbeatOutgoing: 1000,
+      heartbeatIncoming: 5000,
+      heartbeatOutgoing: 5000,
     });
     if (client.current !== null) {
       client.current.activate();
@@ -192,7 +178,16 @@ const Chatting = () => {
 
   useEffect(() => {
     inputRef.current?.focus();
-    connect();
+    if (accessToken) {
+      refetch();
+      connect();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken]);
+  useEffect(() => {
+    if (isLoggedIn === 'false' || !user) {
+      router.push('/login');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 

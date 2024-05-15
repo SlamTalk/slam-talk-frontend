@@ -78,3 +78,17 @@ export interface MateCardInfo {
   positionNeeds: Position[];
   recruitmentStatus: string;
 }
+
+export interface MyMateMatchingInfo {
+  matePostId: number;
+  title: string;
+  location: string;
+  startTime: string;
+  recruitmentStatusType: string;
+  applyStatusType: string | null;
+}
+
+export interface MyMateMatching {
+  authoredPost: MyMateMatchingInfo[];
+  participatedPost: MyMateMatchingInfo[];
+}
