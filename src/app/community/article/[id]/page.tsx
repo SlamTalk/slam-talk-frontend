@@ -2,7 +2,16 @@
 
 import { Button } from '@nextui-org/button';
 import { useParams, useRouter } from 'next/navigation';
-import { Avatar, useDisclosure, Spinner } from '@nextui-org/react';
+import {
+  Avatar,
+  useDisclosure,
+  Spinner,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+} from '@nextui-org/react';
 import { IoChevronBackSharp } from 'react-icons/io5';
 // import { FaHeart } from 'react-icons/fa';
 
@@ -35,11 +44,13 @@ import CommentList from '../../components/commentList';
 
 const Page = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const CommentModal = useDisclosure();
   const router = useRouter();
 
   const params = useParams<{ id: string }>();
   const { data: articleData, isLoading } = useQuery({
     queryKey: ['articleData'],
+
     queryFn: () => getCommunityArticle(params.id),
   });
   const { data: loginData, isSuccess } = useQuery({
@@ -69,12 +80,19 @@ const Page = () => {
     mutationFn: () => postComment(commentData),
   });
   const handlePostComment = () => {
+    if (comment.length > 200) {
+      CommentModal.onOpen();
+      return;
+    }
     if (comment !== '') {
       setCommentData({
         communityId: +params.id,
         content: comment,
       });
+
       postCommunityComment.mutate();
+      setComment('');
+
       const currentUrl = window.location.href;
       const domain = new URL(currentUrl).origin;
       if (domain === 'http://localhost:3000') {
@@ -95,6 +113,7 @@ const Page = () => {
   const handelDelete = () => {
     deleteArticle.mutate();
   };
+
   if (isLoading) {
     return (
       <div className="align-center flex h-[calc(100vh-109px)] w-full justify-center">
@@ -106,6 +125,21 @@ const Page = () => {
   return (
     <div className="relative h-[calc(100vh-109px)] w-full overflow-hidden">
       <UserProfile isOpen={isOpen} userId={writerId} onClose={onClose} />
+      <Modal
+        placement="center"
+        isOpen={CommentModal.isOpen}
+        onClose={CommentModal.onClose}
+      >
+        <ModalContent>
+          <ModalHeader>Error</ModalHeader>
+          <ModalBody>댓글 수는 200자이하로 작성해주세요</ModalBody>
+          <ModalFooter>
+            <Button color="primary" onPress={CommentModal.onClose}>
+              확인
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       {articleData ? (
         <div>
           <title>슬램톡 | 커뮤니티</title>
@@ -236,7 +270,7 @@ const Page = () => {
           </div>
           <div className="flex" aria-label="댓글 입력">
             <input
-              placeholder="댓글을 입력해주세요"
+              placeholder="댓글을 입력해주세요 (200자 이하)"
               className="w-11/12 rounded-md bg-background p-2 shadow-md focus:outline-none focus:ring-0"
               value={comment}
               onChange={(e) => {

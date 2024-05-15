@@ -22,7 +22,9 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   commentId,
 }) => {
   const [editToggle, setEditToggle] = useState(false);
+
   const [editedComment, setEditedComment] = useState('');
+
   const patchArticleComment = useMutation({
     mutationKey: ['patchComment'],
     mutationFn: () => patchComment(communityId, editedComment, commentId),
@@ -60,7 +62,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   return (
     <div
       key={commentId}
-      className="border-gray mt-2 flex items-center border-b-1"
+      className="border-gray mt-2 flex w-full items-center border-b-1"
     >
       <UserProfile isOpen={isOpen} userId={userId} onClose={onClose} />
 
@@ -88,12 +90,12 @@ const CommentItem: React.FC<ICommentItemProps> = ({
         <div className="flex w-full justify-between">
           <div className="my-2 ml-1 flex flex-col">
             <p className="font-bold">{writerUserInfo?.nickname}</p>
-            <p className="">{content}</p>
+            <p className="text-ellipsis	text-wrap break-all">{content}</p>
           </div>
           {loginUserData?.id === userId && (
             <div
               aria-label="comment button group"
-              className="my-2 mr-4 flex flex-col break-keep text-sm"
+              className="mr-2 mt-4 flex flex-col break-keep text-sm"
             >
               <button
                 onClick={handleEdit}
