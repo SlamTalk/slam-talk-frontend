@@ -176,8 +176,8 @@ const Chatting = () => {
 
   useEffect(() => {
     inputRef.current?.focus();
+    refetch();
     if (accessToken) {
-      refetch();
       connect();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
