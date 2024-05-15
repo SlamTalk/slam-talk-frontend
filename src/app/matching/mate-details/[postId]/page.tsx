@@ -223,10 +223,10 @@ const MateDetailsPage = () => {
       </div>
 
       {/* 모집글 제목 */}
-      <div className="mx-6 mb-2 flex items-start">
+      <div className="mx-6 my-2 flex items-start">
         <h1 className="mr-4 max-w-[420px] text-xl font-bold">{data.title}</h1>
         <div
-          className={`mt-0.5 rounded-full px-3 py-1 text-xs text-white ${
+          className={`mt-0.5 text-nowrap rounded-full px-3 py-1 text-xs text-white ${
             data.recruitmentStatus === 'COMPLETED' ? 'bg-danger' : 'bg-success'
           }`}
         >
@@ -235,9 +235,9 @@ const MateDetailsPage = () => {
       </div>
 
       {/* 날짜와 시간 */}
-      <div className="mx-6 mb-4 flex items-center">
+      <div className="mx-6 mb-4 md:flex md:items-center">
         <div className="text-sm">{date}</div>
-        <div className="pl-4 text-sm font-semibold">
+        <div className="text-sm font-semibold md:pl-4">
           {startTime} ~ {endTime}
         </div>
       </div>
@@ -253,7 +253,9 @@ const MateDetailsPage = () => {
           </div>
 
           <Link href="/map">
-            <div className="pr-10 text-blue-600 hover:underline">지도 보기</div>
+            <div className="pr-4 text-blue-600 hover:underline md:pr-10">
+              지도 보기
+            </div>
           </Link>
         </div>
       </div>
@@ -287,7 +289,7 @@ const MateDetailsPage = () => {
       {/* 상세 내용 */}
       <div className="mx-6 mb-4">
         <div className="text-sm font-semibold">상세 내용</div>
-        <p className="mb-6 mt-2 h-[100px] overflow-y-auto break-words rounded-md border-2 p-3">
+        <p className="mb-6 mt-2 max-h-[300px] min-h-[100px] overflow-y-auto break-words rounded-md border-2 p-3">
           {data.content.split('\n').map((line) => (
             <>
               {line}
