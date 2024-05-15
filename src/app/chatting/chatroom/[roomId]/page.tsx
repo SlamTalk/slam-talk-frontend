@@ -66,23 +66,6 @@ const Chatting = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const duplicatedMessage = moreMessageData?.pages.flatMap((page) => page);
-  //   if (!duplicatedMessage) {
-  //     return;
-  //   }
-  //   const unique = Array.from(
-  //     new Map(
-  //       duplicatedMessage.map((messageItem: any) => [
-  //         messageItem.messageId,
-  //         messageItem,
-  //       ])
-  //     ).values()
-  //   );
-  //   setMessageListState((prevState: any) =>
-  //     [...prevState, ...unique].reverse()
-  //   );
-  // }, [moreMessageData]);
   const roomInfo = myChatList?.find((i) => i.roomId === params.roomId);
   // 농구장은 basketballId, 개인은 유저 id? 사용해서 링크 넣어주기
 
