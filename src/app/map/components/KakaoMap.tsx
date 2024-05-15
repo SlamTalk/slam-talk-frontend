@@ -4,8 +4,8 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Map,
   MapMarker,
@@ -48,6 +48,8 @@ export interface MouseEventWithLatLng {
 }
 
 const KakaoMap = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [map, setMap] = useState<any>();
   const userLocation = userLocationStore((state) => state.userLocation);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -73,9 +75,7 @@ const KakaoMap = () => {
   } | null>(null);
   const [clickPositionAddress, setClickPositionAddress] = useState<string>('');
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
-  const router = useRouter();
 
   const { error, data: courts } = useQuery<BasketballCourts[]>({
     queryKey: ['courts'],
@@ -133,11 +133,6 @@ const KakaoMap = () => {
   const handleSearch = () => {
     if (!map) return;
 
-    if (!searchKeyword) {
-      alert('검색어를 입력하세요.');
-      return;
-    }
-
     const filteredCourts = filterCourts(courts || [], searchKeyword);
     if (filteredCourts.length > 0) {
       const firstCourt = filteredCourts[0];
@@ -174,6 +169,20 @@ const KakaoMap = () => {
       handleSearch();
     }
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const searchAddressQueryParams = () => {
+    const address = searchParams.get('address');
+    if (address) {
+      setSearchKeyword(address);
+      handleSearch();
+      router.replace('/map');
+    }
+  };
+
+  useEffect(() => {
+    searchAddressQueryParams();
+  }, [searchAddressQueryParams]);
 
   const handleClickReport = (
     _: kakao.maps.Map,

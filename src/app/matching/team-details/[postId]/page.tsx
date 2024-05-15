@@ -258,7 +258,7 @@ const TeamDetailsPage = () => {
             </Snippet>
           </div>
 
-          <Link href="/map">
+          <Link href={`/map?address=${data.locationDetail}`}>
             <div className="pr-10 text-blue-600 hover:underline">지도 보기</div>
           </Link>
         </div>
