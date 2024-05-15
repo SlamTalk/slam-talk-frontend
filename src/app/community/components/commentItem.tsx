@@ -1,7 +1,7 @@
 import { deleteComment } from '@/services/community/comment/deleteComment';
 import { patchComment } from '@/services/community/comment/patchComment';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { getOtherUserData } from '@/services/user/getOtherUserData';
 import { OtherUserInfo } from '@/types/user/otherUserInfo';
 import { Avatar, useDisclosure } from '@nextui-org/react';
@@ -22,26 +22,9 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   commentId,
 }) => {
   const [editToggle, setEditToggle] = useState(false);
-  const [commentIndex, setCommentIndex] = useState(50);
+
   const [editedComment, setEditedComment] = useState('');
 
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 415);
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-  useEffect(() => {
-    if (isMobile) {
-      setCommentIndex(30);
-    }
-  }, [isMobile]);
   const patchArticleComment = useMutation({
     mutationKey: ['patchComment'],
     mutationFn: () => patchComment(communityId, editedComment, commentId),
@@ -107,11 +90,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
         <div className="flex w-full justify-between">
           <div className="my-2 ml-1 flex flex-col">
             <p className="font-bold">{writerUserInfo?.nickname}</p>
-            <p className="">
-              {content.length > 50
-                ? `${content.substring(0, commentIndex)}\n${content.substring(commentIndex, content.length)}`
-                : content}
-            </p>
+            <p className="text-ellipsis	text-wrap break-all">{content}</p>
           </div>
           {loginUserData?.id === userId && (
             <div
