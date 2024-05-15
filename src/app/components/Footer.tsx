@@ -67,17 +67,18 @@ const Footer = () => {
         </Link>
 
         <Link href="/chatting">
-          {isNewMsg && isNewMsg?.length > 0 ? (
-            <div className="h-[5px] w-[5px] rounded-full bg-danger" />
-          ) : null}
-          <div
-            className={`grid place-items-center ${tab === 'chat' ? 'text-primary' : ''}`}
-          >
-            <IoIosChatbubbles
-              size={isNewMsg && isNewMsg?.length > 0 ? 20 : 24}
+          <div className="flex items-center">
+            <div
+              aria-label="새 메시지 표시"
+              className={`mb-7 h-[6px] w-[5px] rounded-full ${isNewMsg && isNewMsg?.length > 0 ? 'bg-danger' : ''}`}
             />
+            <div
+              className={`grid place-items-center ${tab === 'chat' ? 'text-primary' : ''}`}
+            >
+              <IoIosChatbubbles size={24} />
 
-            <div className="text-xs">채팅</div>
+              <div className="text-xs">채팅</div>
+            </div>
           </div>
         </Link>
         <Link href="/matching">
