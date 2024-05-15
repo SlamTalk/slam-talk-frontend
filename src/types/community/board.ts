@@ -6,4 +6,5 @@ export interface IBoard {
   category: string;
   imageUrls: string[];
   updatedAt: string;
+  commentCount: number;
 }

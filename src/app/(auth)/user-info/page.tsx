@@ -45,17 +45,13 @@ const SignUpProcess = () => {
   const handleSkillSelect = (skill: string) => {
     const updatedSkill = mapSkillToKey(skill);
     setSelectedSkill(updatedSkill);
-    if (selectedSkill !== null) {
-      goToNextStep();
-    }
+    goToNextStep();
   };
 
   const handlePositionSelect = (position: string) => {
     const updatedPosition = mapPositionToKey(position);
     setSelectedPosition(updatedPosition);
-    if (selectedPosition !== null) {
-      goToNextStep();
-    }
+    goToNextStep();
   };
 
   return (

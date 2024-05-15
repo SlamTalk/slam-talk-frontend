@@ -19,6 +19,7 @@ import LocalStorage from '@/utils/localstorage';
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { getUserData } from '@/services/user/getUserData';
 import { IChatRoomListItem } from '../../../types/chat/chatRoomListItem';
 
 import { getChatList } from '../../../services/chatting/getChatList';
@@ -27,9 +28,13 @@ const ChatList = () => {
   const router = useRouter();
   const isLoggedIn = LocalStorage.getItem('isLoggedIn');
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { data: user } = useQuery({
+    queryKey: ['loginData'],
+    queryFn: getUserData,
+  });
 
   useEffect(() => {
-    if (isLoggedIn === 'false') {
+    if (isLoggedIn === 'false' || !user) {
       onOpen();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,29 +77,29 @@ const ChatList = () => {
               <Link href={`/chatting/chatroom/${i.roomId}`}>
                 <div className="flex">
                   {i.roomType === 'DIRECT' && (
-                    <div className="mr-1 flex w-[28px] justify-center rounded bg-gray-200">
-                      <p className="my-1 text-xs font-semibold text-gray-600">
+                    <div className="mr-1 flex justify-center rounded bg-gray-200">
+                      <p className="m-1 text-xs font-semibold text-gray-600">
                         1:1
                       </p>
                     </div>
                   )}
                   {i.roomType === 'BASKETBALL' && (
-                    <div className="mr-1 flex w-[40px] justify-center rounded bg-red-200">
-                      <p className="mx-1 my-1 text-xs font-semibold text-primary">
+                    <div className="mr-1 flex justify-center rounded bg-red-200">
+                      <p className="m-1 text-xs font-semibold text-primary">
                         농구장
                       </p>
                     </div>
                   )}
                   {i.roomType === 'TOGETHER' && (
-                    <div className="mr-1 flex w-[40px] justify-center rounded bg-green-200">
-                      <p className="mx-1 my-1 text-xs font-semibold text-green-600">
+                    <div className="mr-1 flex justify-center rounded bg-green-200">
+                      <p className="m-1 text-xs font-semibold text-green-600">
                         메이트
                       </p>
                     </div>
                   )}
                   {i.roomType === 'MATCHING' && (
-                    <div className="mr-1 flex w-[28px] justify-center rounded bg-blue-200">
-                      <p className="my-1 text-xs font-semibold text-blue-600">
+                    <div className="mr-1 flex justify-center rounded bg-blue-200">
+                      <p className="m-1 text-xs font-semibold text-blue-600">
                         팀
                       </p>
                     </div>

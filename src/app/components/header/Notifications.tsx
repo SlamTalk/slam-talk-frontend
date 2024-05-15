@@ -13,13 +13,15 @@ import {
 } from '@nextui-org/react';
 import { InAppNotification } from '@/types/notifications/InAppNotification';
 import axiosInstance from '@/app/api/axiosInstance';
-import UserAvatar from '@/app/components/profile/UserAvatar';
+import { IoIosChatbubbles, IoIosClose } from 'react-icons/io';
+import NotificationsUserAvatar from './NotificationsUserAvatar';
+
 import NotificationIcon from './NotificationIcon';
 
 const Notifications = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const { data: notifications } = useQuery({
+  const { data: notifications, refetch } = useQuery({
     queryKey: ['notifications'],
     queryFn: getNotifications,
   });
@@ -27,12 +29,27 @@ const Notifications = () => {
   const notificationsLength =
     notifications?.filter((notification) => !notification.read).length || 0;
 
-  const handleReadAll = () => {
-    axiosInstance.patch('/api/notifications');
+  const handleReadAll = async () => {
+    const response = await axiosInstance.patch('/api/notifications');
+    if (response.status === 200) {
+      refetch();
+    }
   };
 
-  const handleDeleteAll = () => {
-    axiosInstance.delete('/api/notifications');
+  const handleDeleteAll = async () => {
+    const response = await axiosInstance.delete('/api/notifications');
+    if (response.status === 200) {
+      refetch();
+    }
+  };
+
+  const handleDeleteNotification = async (notificationsId: number) => {
+    const response = await axiosInstance.delete(
+      `/api/notifications/${notificationsId}`
+    );
+    if (response.status === 200) {
+      refetch();
+    }
   };
 
   const formatCreatedAt = (createdAt: string) => {
@@ -90,7 +107,7 @@ const Notifications = () => {
               <ModalHeader className="flex flex-col gap-1 pb-0">
                 알림
               </ModalHeader>
-              <ModalBody>
+              <ModalBody className="overflow-x-hidden">
                 <div className="flex justify-end">
                   <Button
                     size="sm"
@@ -109,39 +126,67 @@ const Notifications = () => {
                 </div>
                 {notifications &&
                   notifications.map((notification: InAppNotification) => (
-                    <div
-                      className="mt-2 flex items-center"
-                      key={notification.notificationId}
-                      role="link"
-                      tabIndex={0}
-                      onKeyDown={() =>
-                        handleGoToURIAndRead(
-                          notification.uri,
-                          notification.notificationId
-                        )
-                      }
-                      onClick={() =>
-                        handleGoToURIAndRead(
-                          notification.uri,
-                          notification.notificationId
-                        )
-                      }
-                    >
-                      {!notification.read && (
-                        <div className="h-[5px] w-[5px] rounded-full bg-danger" />
-                      )}
-                      <div className="mx-4">
-                        {notification.userId !== null ? (
-                          <UserAvatar userId={notification.userId} />
-                        ) : (
-                          <Avatar showFallback />
-                        )}
+                    <div className="mt-2 flex cursor-pointer justify-between">
+                      <div className="flex">
+                        <div
+                          className={`mt-4 h-[5px] w-[5px] rounded-full ${!notification.read ? 'bg-danger' : ''}`}
+                        />
+                        <div className="ml-2 mr-4">
+                          {notification.notificationType === 'CHAT' && (
+                            <Avatar
+                              showFallback
+                              fallback={<IoIosChatbubbles size={26} />}
+                            />
+                          )}
+                          {notification.userId !== null && (
+                            <NotificationsUserAvatar
+                              userId={notification.userId}
+                            />
+                          )}
+                        </div>
+                        <div
+                          className="flex"
+                          key={notification.notificationId}
+                          role="link"
+                          tabIndex={0}
+                          onKeyDown={() =>
+                            handleGoToURIAndRead(
+                              notification.uri,
+                              notification.notificationId
+                            )
+                          }
+                          onClick={() =>
+                            handleGoToURIAndRead(
+                              notification.uri,
+                              notification.notificationId
+                            )
+                          }
+                        >
+                          <div className="truncate">
+                            <div className="text-ellipsis text-wrap break-all">
+                              <p>{notification.message}</p>
+                            </div>
+                            <p className="mt-2 text-xs text-gray-400">
+                              {formatCreatedAt(notification.createdAt)}
+                            </p>
+                          </div>
+                        </div>
                       </div>
                       <div>
-                        <p>{notification.message}</p>
-                        <p className="mt-2 text-xs text-gray-400">
-                          {formatCreatedAt(notification.createdAt)}
-                        </p>
+                        <Button
+                          radius="full"
+                          isIconOnly
+                          size="sm"
+                          variant="light"
+                          aria-label="삭제"
+                          onClick={() =>
+                            handleDeleteNotification(
+                              notification.notificationId
+                            )
+                          }
+                        >
+                          <IoIosClose size={18} />
+                        </Button>
                       </div>
                     </div>
                   ))}
