@@ -84,7 +84,7 @@ const MatchingPage = () => {
         <button
           type="button"
           aria-label="Top button"
-          className="fixed bottom-12 m-4 rounded-full border-[1px] bg-white p-2 shadow-md"
+          className="fixed bottom-12 m-4 rounded-full border-[1px] bg-white p-2 text-black shadow-md"
           onClick={handleScrollToTop}
         >
           <FaArrowUp />

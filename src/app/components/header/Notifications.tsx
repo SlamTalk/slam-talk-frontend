@@ -15,7 +15,6 @@ import { InAppNotification } from '@/types/notifications/InAppNotification';
 import axiosInstance from '@/app/api/axiosInstance';
 import { IoIosChatbubbles, IoIosClose } from 'react-icons/io';
 import NotificationsUserAvatar from './NotificationsUserAvatar';
-
 import NotificationIcon from './NotificationIcon';
 
 const Notifications = () => {
