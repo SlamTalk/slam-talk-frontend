@@ -48,7 +48,11 @@ const Page = () => {
   const router = useRouter();
 
   const params = useParams<{ id: string }>();
-  const { data: articleData, isLoading } = useQuery({
+  const {
+    data: articleData,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ['articleData'],
 
     queryFn: () => getCommunityArticle(params.id),
@@ -78,12 +82,9 @@ const Page = () => {
   const postCommunityComment: any = useMutation({
     mutationKey: ['postComment'],
     mutationFn: () => postComment(commentData),
+    onSuccess: () => refetch(),
   });
   const handlePostComment = async () => {
-    if (comment.length > 200) {
-      CommentModal.onOpen();
-      return;
-    }
     if (comment !== '') {
       setCommentData({
         communityId: +params.id,
@@ -92,14 +93,9 @@ const Page = () => {
 
       await postCommunityComment.mutate();
       setComment('');
-
-      const currentUrl = window.location.href;
-      const domain = new URL(currentUrl).origin;
-      if (domain === 'http://localhost:3000') {
-        window.location.href = `http://localhost:3000/community/article/${params.id}`;
-      } else {
-        window.location.href = `${process.env.NEXT_PUBLIC_BASE_URL}/community/article/${params.id}`;
-      }
+    }
+    if (comment.length > 200) {
+      CommentModal.onOpen();
     }
   };
   const deleteArticle: any = useMutation({
