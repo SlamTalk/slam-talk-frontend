@@ -95,7 +95,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
           {loginUserData?.id === userId && (
             <div
               aria-label="comment button group"
-              className="mr-2 mt-4 flex flex-col break-keep text-sm"
+              className="mr-2 mt-4 flex flex-col break-keep p-2 text-sm"
             >
               <button
                 onClick={handleEdit}

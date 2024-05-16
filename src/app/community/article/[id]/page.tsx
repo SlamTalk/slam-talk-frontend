@@ -131,7 +131,7 @@ const Page = () => {
         onClose={CommentModal.onClose}
       >
         <ModalContent>
-          <ModalHeader>Error</ModalHeader>
+          <ModalHeader>알림</ModalHeader>
           <ModalBody>댓글 수는 200자이하로 작성해주세요</ModalBody>
           <ModalFooter>
             <Button color="primary" onPress={CommentModal.onClose}>
