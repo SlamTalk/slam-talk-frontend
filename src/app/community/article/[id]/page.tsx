@@ -79,7 +79,7 @@ const Page = () => {
     mutationKey: ['postComment'],
     mutationFn: () => postComment(commentData),
   });
-  const handlePostComment = () => {
+  const handlePostComment = async () => {
     if (comment.length > 200) {
       CommentModal.onOpen();
       return;
@@ -90,7 +90,7 @@ const Page = () => {
         content: comment,
       });
 
-      postCommunityComment.mutate();
+      await postCommunityComment.mutate();
       setComment('');
 
       const currentUrl = window.location.href;
