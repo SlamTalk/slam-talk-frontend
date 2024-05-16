@@ -288,7 +288,10 @@ const Page = () => {
               </Button>
             )}
           </div>
-          <CommentList commentListData={articleData?.comments} />
+          <CommentList
+            commentListData={articleData?.comments}
+            refetch={refetch}
+          />
         </div>
       ) : null}
     </div>

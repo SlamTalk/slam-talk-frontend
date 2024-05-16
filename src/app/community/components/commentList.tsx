@@ -4,9 +4,13 @@ import CommentItem, { ICommentItemProps } from './commentItem';
 
 interface ICommentListProps {
   commentListData: ICommentItemProps[];
+  refetch: () => void;
 }
 
-const CommentList: React.FC<ICommentListProps> = ({ commentListData }) => {
+const CommentList: React.FC<ICommentListProps> = ({
+  commentListData,
+  refetch,
+}) => {
   const [comments, setComments] =
     useState<ICommentItemProps[]>(commentListData);
   useEffect(() => {
@@ -22,6 +26,7 @@ const CommentList: React.FC<ICommentListProps> = ({ commentListData }) => {
             userId={+i.userId}
             content={i.content}
             communityId={+i.communityId}
+            refetch={refetch}
           />
         </div>
       ))}
