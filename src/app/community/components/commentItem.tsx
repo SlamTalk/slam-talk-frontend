@@ -13,6 +13,7 @@ export interface ICommentItemProps {
   communityId: number;
   userId: number;
   content: string;
+  refetch: () => void;
 }
 
 const CommentItem: React.FC<ICommentItemProps> = ({
@@ -20,6 +21,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
   communityId,
   content,
   commentId,
+  refetch,
 }) => {
   const [editToggle, setEditToggle] = useState(false);
 
@@ -29,7 +31,7 @@ const CommentItem: React.FC<ICommentItemProps> = ({
     mutationKey: ['patchComment'],
     mutationFn: () => patchComment(communityId, editedComment, commentId),
     onSuccess: () => {
-      window.location.reload();
+      refetch();
     },
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -41,10 +43,10 @@ const CommentItem: React.FC<ICommentItemProps> = ({
     queryKey: ['getLoginData'],
     queryFn: getUserData,
   });
-  const handleEdit = () => {
+  const handleEdit = async () => {
     setEditToggle(!editToggle);
     if (editToggle && editedComment !== '') {
-      patchArticleComment.mutate();
+      await patchArticleComment.mutate();
       setEditToggle(false);
     }
   };
@@ -52,11 +54,11 @@ const CommentItem: React.FC<ICommentItemProps> = ({
     mutationKey: ['deleteComment'],
     mutationFn: () => deleteComment(communityId, commentId),
     onSuccess: () => {
-      window.location.reload();
+      refetch();
     },
   });
-  const handleDelete = () => {
-    deleteArticleComment.mutate();
+  const handleDelete = async () => {
+    await deleteArticleComment.mutate();
   };
 
   return (
