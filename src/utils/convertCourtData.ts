@@ -20,7 +20,7 @@ export const convertCourtData = (
   latitude: data.latitude,
   longitude: data.longitude,
   courtType: data.courtType,
-  indoorOutdoor: data.indoorOutdoor,
+  indoorOutdoor: data.indoorOutdoor || null,
   courtSize: data.courtSize,
   hoopCount: data.hoopCount,
   nightLighting: mapValue(data.nightLighting, {
@@ -41,7 +41,7 @@ export const convertCourtData = (
   }),
   phoneNum: data.phoneNum,
   website: data.website,
-  convenience: data.convenience?.join(', ') ?? '',
+  convenience: data.convenience ?? [],
   photoUrl: data.photoUrl ?? null,
   additionalInfo: data.additionalInfo,
   informerId: data.informerId,
