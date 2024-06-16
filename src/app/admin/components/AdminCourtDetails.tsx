@@ -3,7 +3,13 @@
 import React from 'react';
 import { Button } from '@nextui-org/react';
 import { IoIosClose } from 'react-icons/io';
-import { FaPhoneAlt, FaParking, FaTag, FaRegDotCircle } from 'react-icons/fa';
+import {
+  FaPhoneAlt,
+  FaParking,
+  FaTag,
+  FaRegDotCircle,
+  FaEdit,
+} from 'react-icons/fa';
 import Image from 'next/image';
 import { FaLocationDot, FaClock, FaLightbulb } from 'react-icons/fa6';
 import Link from 'next/link';
@@ -18,13 +24,15 @@ import { convertCourtData } from '@/utils/convertCourtData';
 
 interface CourtDetailsProps {
   data: BasketballCourtReportAdmin;
-  onClose: () => void;
+  handleCloseDetails: () => void;
+  handleEditMode: () => void;
   refetch: () => void;
 }
 
 const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
   data,
-  onClose,
+  handleCloseDetails,
+  handleEditMode,
   refetch,
 }) => {
   const handleReject = async () => {
@@ -34,7 +42,7 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
       );
       if (response.status === 200) {
         refetch();
-        onClose();
+        handleCloseDetails();
       }
     } catch (error) {
       console.error('농구장 거절 에러:', error);
@@ -51,7 +59,7 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
       );
       if (response.status === 200) {
         refetch();
-        onClose();
+        handleCloseDetails();
       }
     } catch (error) {
       console.error('농구장 수락 에러:', error);
@@ -90,27 +98,30 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                 variant="light"
                 isIconOnly
                 className="absolute right-2 top-2"
-                onClick={onClose}
+                onClick={handleCloseDetails}
                 aria-label="Close"
               >
                 <IoIosClose size={30} />
               </Button>
             </div>
             <div className="p-4">
-              <h2 className="mb-1 text-xl font-bold">{data.courtName}</h2>
+              <div className="flex items-center justify-between gap-2">
+                <h2 className="mb-1 text-xl font-bold">{data.courtName}</h2>
+                <Button
+                  startContent={<FaEdit size={20} />}
+                  className="flex items-center justify-center gap-1"
+                  onClick={handleEditMode}
+                >
+                  수정하기
+                </Button>
+              </div>
+
               {data.indoorOutdoor && (
                 <span className="break-keep rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
                   {data.indoorOutdoor}
                 </span>
               )}
-              <div className="justify-end gap-2">
-                <Button color="danger" variant="light" onClick={handleReject}>
-                  거절
-                </Button>
-                <Button color="primary" onClick={handleAccept}>
-                  승인
-                </Button>
-              </div>
+
               <div className="flex w-full items-center justify-end">
                 <Button
                   size="sm"
@@ -249,6 +260,14 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                 </div>
               </div>
             </div>
+          </div>
+          <div className="flex justify-center gap-2 p-4 pt-0">
+            <Button color="danger" variant="flat" onClick={handleReject}>
+              거절
+            </Button>
+            <Button color="primary" onClick={handleAccept}>
+              승인
+            </Button>
           </div>
         </div>
       </>

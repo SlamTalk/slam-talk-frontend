@@ -15,6 +15,7 @@ import getReportedCourtData from '@/services/admin/getReportedCourtData';
 import { BasketballCourtReportAdmin } from '@/types/basketballCourt/basketballCourtReport';
 import AdminCourtDetails from './components/AdminCourtDetails';
 import AdminUserAvatar from './components/AdminUserAvatar';
+import EditAdminCourtDetails from './components/EditAdminCourtDetails';
 
 const columns = [
   {
@@ -41,6 +42,7 @@ const AdminPage = () => {
   const [isCourtDetailsVisible, setIsCourtDetailsVisible] = useState(false);
   const [selectedCourt, setSelectedCourt] =
     useState<BasketballCourtReportAdmin | null>(null);
+  const [editMode, setEditMode] = useState(false);
 
   const { data: reportedData, refetch } = useQuery({
     queryKey: ['reportedData'],
@@ -52,11 +54,21 @@ const AdminPage = () => {
     setSelectedCourt(item);
   };
 
+  const handleEditMode = () => {
+    setEditMode(true);
+    setIsCourtDetailsVisible(false);
+  };
+
   if (reportedData) {
     const currentData = reportedData.slice(
       (currentPage - 1) * ITEMS_PER_PAGE,
       currentPage * ITEMS_PER_PAGE
     );
+
+    const handleEditClose = () => {
+      setEditMode(false);
+      refetch();
+    };
 
     return (
       <div className="relative h-[calc(100vh-109px)] w-full max-w-[600px] overflow-y-scroll">
@@ -109,11 +121,18 @@ const AdminPage = () => {
             ))}
           </TableBody>
         </Table>
-        {isCourtDetailsVisible && selectedCourt && (
+        {isCourtDetailsVisible && selectedCourt && !editMode && (
           <AdminCourtDetails
             data={selectedCourt}
-            onClose={() => setIsCourtDetailsVisible(false)}
+            handleCloseDetails={() => setIsCourtDetailsVisible(false)}
+            handleEditMode={handleEditMode}
             refetch={refetch}
+          />
+        )}
+        {editMode && selectedCourt && (
+          <EditAdminCourtDetails
+            data={selectedCourt}
+            handleEditClose={handleEditClose}
           />
         )}
       </div>

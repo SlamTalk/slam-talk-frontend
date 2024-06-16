@@ -63,6 +63,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
 
     const finalData = {
       ...data,
+      indoorOutdoor: data.indoorOutdoor || null,
       address,
       latitude: position.lat,
       longitude: position.lng,
