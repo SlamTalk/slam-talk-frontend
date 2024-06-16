@@ -14,7 +14,7 @@ import { InfoIcon } from '@/app/map/components/icons/InfoIcon';
 import { WebsiteIcon } from '@/app/map/components/icons/WebsiteIcon';
 import axiosInstance from '@/app/api/axiosInstance';
 import { BasketballCourtReportAdmin } from '@/types/basketballCourt/basketballCourtReport';
-import { ICreateCourtChatRoom } from '@/types/chat/createChatRoom';
+import { convertCourtData } from '@/utils/convertCourtData';
 
 interface CourtDetailsProps {
   data: BasketballCourtReportAdmin;
@@ -23,95 +23,65 @@ interface CourtDetailsProps {
 }
 
 const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
-  data: selectedPlace,
+  data,
   onClose,
   refetch,
 }) => {
   const handleReject = async () => {
     try {
-      await axiosInstance.put(`/api/admin/reject/${selectedPlace.courtId}`);
-    } catch (error) {
-      console.error('Error while updating court data:', error);
-    }
-
-    onClose();
-  };
-
-  const putReportedCourt = async (
-    acceptedCourtData: BasketballCourtReportAdmin
-  ): Promise<void> => {
-    try {
-      const convenienceString = acceptedCourtData.convenience?.join(', ');
-
-      const updatedCourtData = {
-        ...acceptedCourtData,
-        convenience: convenienceString,
-      };
-
-      await axiosInstance.put(
-        `/api/admin/update/${updatedCourtData.courtId}`,
-        updatedCourtData
+      const response = await axiosInstance.put(
+        `/api/admin/reject/${data.courtId}`
       );
-
-      refetch();
-
-      // 성공 알림 모달 추가하기
+      if (response.status === 200) {
+        refetch();
+        onClose();
+      }
     } catch (error) {
-      console.error('Error while updating court data:', error);
+      console.error('농구장 거절 에러:', error);
     }
   };
 
   const handleAccept = async () => {
-    const newRoomData: ICreateCourtChatRoom = {
-      basket_ball_id: selectedPlace.courtId,
-      name: selectedPlace.courtName,
-    };
+    const cleanedData = convertCourtData(data);
+
     try {
-      const response = await axiosInstance.post(
-        `/api/chat/create/basketball`,
-        newRoomData
+      const response = await axiosInstance.put(
+        `/api/admin/update/${data.courtId}`,
+        cleanedData
       );
-      const newChatroomId = response.data.results;
-      const newData = {
-        ...selectedPlace,
-        chatroomId: newChatroomId,
-      };
-      await putReportedCourt(newData);
-      onClose();
+      if (response.status === 200) {
+        refetch();
+        onClose();
+      }
     } catch (error) {
-      console.error('Error while creating chat room:', error);
+      console.error('농구장 수락 에러:', error);
     }
   };
 
-  if (selectedPlace) {
-    const handleCopyAddress = async () => {
-      if (selectedPlace.address) {
-        try {
-          await navigator.clipboard.writeText(selectedPlace.address);
-          alert('주소가 복사되었습니다.');
-        } catch (copyError) {
-          console.error('주소 복사 중 오류 발생:', copyError);
-          alert('주소를 복사하는 데 실패했습니다.');
-        }
+  const handleCopyAddress = async () => {
+    if (data.address) {
+      try {
+        await navigator.clipboard.writeText(data.address);
+        alert('주소가 복사되었습니다.');
+      } catch (copyError) {
+        console.error('주소 복사 중 오류 발생:', copyError);
+        alert('주소를 복사하는 데 실패했습니다.');
       }
-    };
+    }
+  };
 
+  if (data) {
     return (
       <>
         <title>슬램톡 | 관리자</title>
-        <div
-          className={`min-w-md sm-h-full absolute inset-0 z-40 m-auto h-fit max-h-[calc(100vh-109px)] w-fit min-w-96 max-w-md overflow-y-auto rounded-lg
-            bg-background shadow-md transition-all duration-300 ease-in-out sm:min-w-full`}
-        >
+        <div className="min-w-md sm-h-full absolute inset-0 z-40 m-auto h-fit max-h-[calc(100vh-109px)] w-fit min-w-96 max-w-md overflow-y-auto rounded-lg bg-background shadow-md transition-all duration-300 ease-in-out sm:min-w-full">
           <div className="w-full text-sm">
             <div className="relative h-56 w-full sm:h-52">
               <Image
                 fill
                 alt="농구장 사진"
                 src={
-                  selectedPlace.photoUrl
-                    ? selectedPlace.photoUrl
-                    : '/images/basketball-court.svg'
+                  data.photoUrl ? data.photoUrl : '/images/basketball-court.svg'
                 }
               />
               <Button
@@ -127,15 +97,13 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
               </Button>
             </div>
             <div className="p-4">
-              <h2 className="mb-1 text-xl font-bold">
-                {selectedPlace.courtName}
-              </h2>
-              {selectedPlace.indoorOutdoor && (
+              <h2 className="mb-1 text-xl font-bold">{data.courtName}</h2>
+              {data.indoorOutdoor && (
                 <span className="break-keep rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600">
-                  {selectedPlace.indoorOutdoor}
+                  {data.indoorOutdoor}
                 </span>
               )}
-              <div className="flex gap-2">
+              <div className="justify-end gap-2">
                 <Button color="danger" variant="light" onClick={handleReject}>
                   거절
                 </Button>
@@ -152,7 +120,7 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                   className="border-0 p-0"
                   onClick={() => {
                     window.open(
-                      `https://map.kakao.com/link/to/${selectedPlace.courtName},${selectedPlace.latitude},${selectedPlace.longitude}`,
+                      `https://map.kakao.com/link/to/${data.courtName},${data.latitude},${data.longitude}`,
                       '_blank'
                     );
                   }}
@@ -168,7 +136,7 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                     size={16}
                     className="dark:text-gray-20 text-gray-400"
                   />
-                  <span>{selectedPlace.address}</span>
+                  <span>{data.address}</span>
                   <button type="button" onClick={handleCopyAddress}>
                     <span className="text-blue-500">복사</span>
                   </button>
@@ -181,7 +149,9 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                   <span>
                     개방 시간:{' '}
                     <span className="text-rose-400">
-                      {selectedPlace.openingHours}
+                      {data.openingHours === '정보없음'
+                        ? '-'
+                        : data.openingHours}
                     </span>
                   </span>
                 </div>
@@ -190,23 +160,20 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                     size={15}
                     className="pointer-events-auto text-gray-400 dark:text-gray-200"
                   />
-                  <span>
-                    {selectedPlace.phoneNum ? selectedPlace.phoneNum : '-'}
-                  </span>
+                  <span>{data.phoneNum ? data.phoneNum : '-'}</span>
                 </div>
                 <div className="flex items-center gap-2 align-middle">
                   <FeeIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-info text-blue-500">
-                    이용료: {selectedPlace.fee}
+                    이용료: {data.fee === '정보없음' ? '-' : data.fee}
                   </span>
                 </div>
-
                 <div className="flex items-center gap-2 align-middle">
                   <WebsiteIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-blue-500">
-                    {selectedPlace.website ? (
-                      <Link href={selectedPlace.website} target="_blank">
-                        {selectedPlace.website}
+                    {data.website ? (
+                      <Link href={data.website} target="_blank">
+                        {data.website}
                       </Link>
                     ) : (
                       '-'
@@ -216,22 +183,19 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                 <div className="flex items-center gap-2 align-middle">
                   <CourtIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="font-medium">
-                    코트 종류:{' '}
-                    {selectedPlace.courtType ? selectedPlace.courtType : '-'}
+                    코트 종류: {data.courtType ? data.courtType : '-'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 align-middle">
                   <CourtIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="font-medium">
-                    코트 사이즈:{' '}
-                    {selectedPlace.courtSize ? selectedPlace.courtSize : '-'}
+                    코트 사이즈: {data.courtSize ? data.courtSize : '-'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 align-middle">
                   <HoopIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="font-medium">
-                    골대 수:{' '}
-                    {selectedPlace.hoopCount ? selectedPlace.hoopCount : '-'}
+                    골대 수: {data.hoopCount ? data.hoopCount : '-'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 align-middle">
@@ -239,43 +203,48 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>야간 조명: {selectedPlace.nightLighting}</span>
+                  <span>
+                    야간 조명:{' '}
+                    {data.nightLighting === '정보없음'
+                      ? '-'
+                      : data.nightLighting}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 align-middle">
                   <FaParking
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>주차: {selectedPlace.parkingAvailable}</span>
+                  <span>
+                    주차:{' '}
+                    {data.parkingAvailable === '정보없음'
+                      ? '-'
+                      : data.parkingAvailable}
+                  </span>
                 </div>
-
                 <div className="flex items-center gap-2 align-middle text-sm">
                   <FaTag
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
                   <ul className="flex gap-2">
-                    {selectedPlace.convenience?.length
-                      ? selectedPlace.convenience.map(
-                          (tag: string, idx: number) => (
-                            <li
-                              // eslint-disable-next-line react/no-array-index-key
-                              key={idx}
-                              className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600"
-                            >
-                              <span>{tag}</span>
-                            </li>
-                          )
-                        )
+                    {data.convenience?.length
+                      ? data.convenience.map((tag: string, idx: number) => (
+                          <li
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={idx}
+                            className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600"
+                          >
+                            <span>{tag}</span>
+                          </li>
+                        ))
                       : '-'}
                   </ul>
                 </div>
                 <div className="flex items-center gap-2 align-middle">
                   <InfoIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-sm">
-                    {selectedPlace.additionalInfo
-                      ? selectedPlace.additionalInfo
-                      : '-'}
+                    {data.additionalInfo ? data.additionalInfo : '-'}
                   </span>
                 </div>
               </div>

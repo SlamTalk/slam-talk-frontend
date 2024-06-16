@@ -131,7 +131,9 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                   <span>
                     개방 시간:{' '}
                     <span className="text-rose-400">
-                      {selectedPlace.openingHours}
+                      {selectedPlace.openingHours === '정보없음'
+                        ? '-'
+                        : selectedPlace.openingHours}
                     </span>
                   </span>
                 </div>
@@ -147,7 +149,8 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                 <div className="flex items-center gap-2 align-middle">
                   <FeeIcon className="text-gray-400 dark:text-gray-200" />
                   <span className="text-info text-blue-500">
-                    이용료: {selectedPlace.fee}
+                    이용료:{' '}
+                    {selectedPlace.fee === '정보없음' ? '-' : selectedPlace.fee}
                   </span>
                 </div>
 
@@ -189,14 +192,24 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>야간 조명: {selectedPlace.nightLighting}</span>
+                  <span>
+                    야간 조명:{' '}
+                    {selectedPlace.nightLighting === '정보없음'
+                      ? '-'
+                      : selectedPlace.nightLighting}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 align-middle">
                   <FaParking
                     size={17}
                     className="text-gray-400 dark:text-gray-200"
                   />
-                  <span>주차: {selectedPlace.parkingAvailable}</span>
+                  <span>
+                    주차:{' '}
+                    {selectedPlace.parkingAvailable === '정보없음'
+                      ? '-'
+                      : selectedPlace.parkingAvailable}
+                  </span>
                 </div>
 
                 <div className="flex items-center gap-2 align-middle text-sm">
