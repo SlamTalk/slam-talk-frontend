@@ -129,7 +129,7 @@ const EditAdminCourtDetails: React.FC<EditAdminCourtDetailsProps> = ({
           <div className="relative h-full overflow-y-auto">
             <div className="sticky top-0 z-30 flex h-14 w-full items-center justify-center border-b bg-background">
               <p className="text-center text-xl font-semibold">
-                농구장 제보하기
+                농구장 제보 데이터 수정하기
               </p>
               <Button
                 size="sm"
