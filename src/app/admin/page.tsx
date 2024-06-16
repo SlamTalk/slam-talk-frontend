@@ -9,7 +9,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Pagination,
 } from '@nextui-org/react';
 import getReportedCourtData from '@/services/admin/getReportedCourtData';
 import { BasketballCourtReportAdmin } from '@/types/basketballCourt/basketballCourtReport';
@@ -35,10 +34,8 @@ const columns = [
     label: '상태',
   },
 ];
-const ITEMS_PER_PAGE = 10; // 예를 들어, 페이지당 2개의 아이템
 
 const AdminPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const [isCourtDetailsVisible, setIsCourtDetailsVisible] = useState(false);
   const [selectedCourt, setSelectedCourt] =
     useState<BasketballCourtReportAdmin | null>(null);
@@ -59,87 +56,72 @@ const AdminPage = () => {
     setIsCourtDetailsVisible(false);
   };
 
-  if (reportedData) {
-    const currentData = reportedData.slice(
-      (currentPage - 1) * ITEMS_PER_PAGE,
-      currentPage * ITEMS_PER_PAGE
-    );
-
-    const handleEditClose = () => {
-      setEditMode(false);
-      refetch();
-    };
-
+  if (!reportedData) {
     return (
-      <div className="relative h-[calc(100vh-109px)] w-full max-w-[600px] overflow-y-scroll">
-        <title>슬램톡 | 관리자</title>
-        <Table
-          aria-label="농구장 제보 목록"
-          fullWidth
-          classNames={{
-            wrapper: 'h-full min-h-[810px] sm:min-h-[637px]',
-          }}
-          bottomContent={
-            <div className="flex w-full justify-center">
-              <Pagination
-                total={Math.ceil(reportedData.length / ITEMS_PER_PAGE)}
-                initialPage={1}
-                onChange={(page) => setCurrentPage(page)}
-              />
-            </div>
-          }
-        >
-          <TableHeader>
-            {columns.map((column) => (
-              <TableColumn key={column.key}>{column.label}</TableColumn>
-            ))}
-          </TableHeader>
-          <TableBody items={reportedData}>
-            {currentData.map((item: BasketballCourtReportAdmin) => (
-              <TableRow key={item.courtId}>
-                {columns.map((column) => (
-                  <TableCell key={`${column.key}`}>
-                    {column.key === 'informerId' ? (
-                      <AdminUserAvatar userId={item.informerId} />
-                    ) : (
-                      <div
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => handleCourtDetailClick(item)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            handleCourtDetailClick(item);
-                          }
-                        }}
-                      >
-                        {item[column.key as keyof BasketballCourtReportAdmin]}
-                      </div>
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        {isCourtDetailsVisible && selectedCourt && !editMode && (
-          <AdminCourtDetails
-            data={selectedCourt}
-            handleCloseDetails={() => setIsCourtDetailsVisible(false)}
-            handleEditMode={handleEditMode}
-            refetch={refetch}
-          />
-        )}
-        {editMode && selectedCourt && (
-          <EditAdminCourtDetails
-            data={selectedCourt}
-            handleEditClose={handleEditClose}
-          />
-        )}
+      <div className="mt-60 w-full text-center">
+        제보받은 농구장이 없습니다.
       </div>
     );
   }
+
+  const handleEditClose = () => {
+    setEditMode(false);
+    refetch();
+  };
+
   return (
-    <div className="mt-20 w-full text-center">제보받은 농구장이 없습니다.</div>
+    <div
+      className={`relative h-[calc(100vh-109px)] w-full ${isCourtDetailsVisible || editMode ? 'overflow-y-hidden' : 'overflow-y-scroll'}`}
+    >
+      <title>슬램톡 | 관리자</title>
+      <Table isHeaderSticky aria-label="농구장 제보 목록" fullWidth>
+        <TableHeader>
+          {columns.map((column) => (
+            <TableColumn key={column.key}>{column.label}</TableColumn>
+          ))}
+        </TableHeader>
+        <TableBody items={reportedData}>
+          {reportedData.map((item: BasketballCourtReportAdmin) => (
+            <TableRow key={item.courtId}>
+              {columns.map((column) => (
+                <TableCell key={`${column.key}`}>
+                  {column.key === 'informerId' ? (
+                    <AdminUserAvatar userId={item.informerId} />
+                  ) : (
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => handleCourtDetailClick(item)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleCourtDetailClick(item);
+                        }
+                      }}
+                    >
+                      {item[column.key as keyof BasketballCourtReportAdmin]}
+                    </div>
+                  )}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      {isCourtDetailsVisible && selectedCourt && !editMode && (
+        <AdminCourtDetails
+          data={selectedCourt}
+          handleCloseDetails={() => setIsCourtDetailsVisible(false)}
+          handleEditMode={handleEditMode}
+          refetch={refetch}
+        />
+      )}
+      {editMode && selectedCourt && (
+        <EditAdminCourtDetails
+          data={selectedCourt}
+          handleEditClose={handleEditClose}
+        />
+      )}
+    </div>
   );
 };
 

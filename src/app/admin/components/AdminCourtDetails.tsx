@@ -82,8 +82,8 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
     return (
       <>
         <title>슬램톡 | 관리자</title>
-        <div className="min-w-md sm-h-full absolute inset-0 z-40 m-auto h-fit max-h-[calc(100vh-109px)] w-fit min-w-96 max-w-md overflow-y-auto rounded-lg bg-background shadow-md transition-all duration-300 ease-in-out sm:min-w-full">
-          <div className="w-full text-sm">
+        <div className="min-w-md sm-h-full fixed inset-0 z-40 m-auto h-fit max-h-[calc(100vh-109px)] w-fit min-w-96 max-w-md overflow-y-auto rounded-lg bg-background shadow-md transition-all duration-300 ease-in-out sm:min-w-full">
+          <div className="relative h-full w-full text-sm">
             <div className="relative h-56 w-full sm:h-52">
               <Image
                 fill
@@ -240,15 +240,17 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
                   />
                   <ul className="flex gap-2">
                     {data.convenience?.length
-                      ? data.convenience.map((tag: string, idx: number) => (
-                          <li
-                            // eslint-disable-next-line react/no-array-index-key
-                            key={idx}
-                            className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600"
-                          >
-                            <span>{tag}</span>
-                          </li>
-                        ))
+                      ? data.convenience
+                          .filter((item) => item !== '')
+                          .map((tag: string, idx: number) => (
+                            <li
+                              // eslint-disable-next-line react/no-array-index-key
+                              key={idx}
+                              className="rounded-sm bg-gray-100 px-1 text-gray-500 dark:bg-gray-300 dark:text-gray-600"
+                            >
+                              <span>{tag}</span>
+                            </li>
+                          ))
                       : '-'}
                   </ul>
                 </div>

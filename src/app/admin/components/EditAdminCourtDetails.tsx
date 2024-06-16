@@ -122,9 +122,9 @@ const EditAdminCourtDetails: React.FC<EditAdminCourtDetailsProps> = ({
       <>
         <title>슬램톡 | 관리자</title>
         <div
-          className={`absolute inset-0 z-20 m-auto w-full max-w-md overflow-y-auto rounded-lg
+          className="fixed inset-0 z-20 m-auto h-full w-full max-w-md overflow-y-auto rounded-lg
     bg-background text-sm shadow-md transition-all duration-300 ease-in-out
-    md:max-h-[90vh] md:text-lg lg:text-xl`}
+    sm:max-h-[85vh] md:max-h-[90vh] md:text-lg lg:text-xl"
         >
           <div className="relative h-full overflow-y-auto">
             <div className="sticky top-0 z-30 flex h-14 w-full items-center justify-center border-b bg-background">
@@ -299,7 +299,9 @@ const EditAdminCourtDetails: React.FC<EditAdminCourtDetailsProps> = ({
                   />
                 </div>
                 <Select
-                  defaultSelectedKeys={data.convenience || []}
+                  defaultSelectedKeys={
+                    data.convenience?.filter((item) => item !== '') || []
+                  }
                   className="z-10 font-semibold"
                   radius="sm"
                   labelPlacement="outside"

@@ -27,5 +27,5 @@ export interface BasketballCourtReportAdmin
 
 export interface ConvertedCourtData
   extends Omit<BasketballCourtReportAdmin, 'convenience'> {
-  convenience: string[];
+  convenience: string;
 }

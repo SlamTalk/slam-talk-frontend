@@ -286,8 +286,9 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
                   />
                   <ul className="flex gap-2">
                     {selectedPlace.convenience &&
-                      selectedPlace.convenience.map(
-                        (tag: string, idx: number) =>
+                      selectedPlace.convenience
+                        .filter((item) => item !== '')
+                        .map((tag: string, idx: number) =>
                           tag !== '' ? (
                             <li
                               // eslint-disable-next-line react/no-array-index-key
@@ -299,7 +300,7 @@ const CourtDetails: React.FC<CourtDetailsProps> = ({
                           ) : (
                             '-'
                           )
-                      )}
+                        )}
                   </ul>
                 </div>
                 <div className="flex items-center gap-2 align-middle">

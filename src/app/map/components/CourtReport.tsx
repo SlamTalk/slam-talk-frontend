@@ -83,7 +83,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
         가능: 'PARKING_AVAILABLE',
         불가능: 'PARKING_UNAVAILABLE',
       }),
-      convenience: data.convenience ?? '',
+      convenience: data.convenience?.length ? data.convenience : null,
     };
 
     formData.append(

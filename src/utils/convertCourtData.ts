@@ -41,7 +41,9 @@ export const convertCourtData = (
   }),
   phoneNum: data.phoneNum,
   website: data.website,
-  convenience: data.convenience ?? [],
+  convenience: Array.isArray(data.convenience)
+    ? data.convenience.join(',')
+    : data.convenience || '',
   photoUrl: data.photoUrl ?? null,
   additionalInfo: data.additionalInfo,
   informerId: data.informerId,

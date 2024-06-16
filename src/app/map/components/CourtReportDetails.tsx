@@ -219,8 +219,9 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                   />
                   <ul className="flex gap-2">
                     {selectedPlace.convenience?.length
-                      ? selectedPlace.convenience.map(
-                          (tag: string, idx: number) => (
+                      ? selectedPlace.convenience
+                          .filter((item) => item !== '')
+                          .map((tag: string, idx: number) => (
                             <li
                               // eslint-disable-next-line react/no-array-index-key
                               key={idx}
@@ -228,8 +229,7 @@ const CourtReportDetails: React.FC<CourtDetailsProps> = ({
                             >
                               <span>{tag}</span>
                             </li>
-                          )
-                        )
+                          ))
                       : '-'}
                   </ul>
                 </div>
