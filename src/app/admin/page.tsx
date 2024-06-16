@@ -29,10 +29,6 @@ const columns = [
     key: 'address',
     label: '위치',
   },
-  {
-    key: 'status',
-    label: '상태',
-  },
 ];
 
 const AdminPage = () => {
