@@ -73,7 +73,7 @@ const CourtReport: React.FC<CourtReportProps> = ({
       }),
       openingHours: mapValue(data.openingHours, {
         '24시': 'ALL_NIGHT',
-        제한: 'NON_ALL_LIGHT',
+        제한: 'NON_ALL_NIGHT',
       }),
       fee: mapValue(data.fee, {
         무료: 'FREE',
