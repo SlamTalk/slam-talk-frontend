@@ -21,7 +21,6 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import { IoIosClose } from 'react-icons/io';
-import { FaTrashCan } from 'react-icons/fa6';
 import axiosInstance from '@/app/api/axiosInstance';
 import { BasketballCourtReportAdmin } from '@/types/basketballCourt/basketballCourtReport';
 import { convertCourtData } from '@/utils/convertCourtData';
@@ -69,15 +68,6 @@ const EditAdminCourtDetails: React.FC<EditAdminCourtDetailsProps> = ({
         setPreviewUrl(imageUrl);
       }
     }
-  };
-
-  const resetPreview = () => {
-    setFile(null);
-    setPreviewUrl(null);
-  };
-
-  const handleFileDelete = () => {
-    resetPreview();
   };
 
   const onSubmit: SubmitHandler<BasketballCourtReportAdmin> = async (data) => {
@@ -178,23 +168,11 @@ const EditAdminCourtDetails: React.FC<EditAdminCourtDetailsProps> = ({
                   onChange={handleFileChange}
                 />
                 {previewUrl && (
-                  <>
-                    <Button
-                      size="sm"
-                      radius="full"
-                      aria-label="삭제"
-                      startContent={<FaTrashCan size={16} />}
-                      className="absolute bottom-2 right-2 z-30 gap-1 bg-gray-400 p-1 font-bold text-white"
-                      onClick={handleFileDelete}
-                    >
-                      삭제
-                    </Button>
-                    <img
-                      src={previewUrl}
-                      alt="미리보기"
-                      className="absolute inset-0 h-full w-full object-cover"
-                    />
-                  </>
+                  <img
+                    src={previewUrl}
+                    alt="미리보기"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
                 )}
               </div>
               <div className="mt-2 flex flex-col p-4">
