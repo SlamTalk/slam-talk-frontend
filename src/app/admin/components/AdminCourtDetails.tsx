@@ -50,7 +50,7 @@ const AdminCourtDetails: React.FC<CourtDetailsProps> = ({
   };
 
   const handleAccept = async () => {
-    const cleanedData = convertCourtData(data);
+    const cleanedData = convertCourtData(data, data.photoUrl);
 
     try {
       const response = await axiosInstance.put(

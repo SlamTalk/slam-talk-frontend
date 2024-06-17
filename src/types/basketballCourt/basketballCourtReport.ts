@@ -21,7 +21,7 @@ export interface BasketballCourtReport {
 export interface BasketballCourtReportAdmin
   extends Omit<BasketballCourtReport, 'file'> {
   courtId: number;
-  photoUrl: string;
+  photoUrl: string | null;
   informerId: number;
 }
 

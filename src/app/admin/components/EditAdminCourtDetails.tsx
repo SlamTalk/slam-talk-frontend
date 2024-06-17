@@ -87,7 +87,7 @@ const EditAdminCourtDetails: React.FC<EditAdminCourtDetailsProps> = ({
       formData.append('image', file);
     }
 
-    const finalData = convertCourtData(data);
+    const finalData = convertCourtData(data, previewUrl);
 
     formData.append(
       'data',

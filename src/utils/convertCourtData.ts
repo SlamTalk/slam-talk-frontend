@@ -12,7 +12,8 @@ export const mapValue = (
 };
 
 export const convertCourtData = (
-  data: BasketballCourtReportAdmin
+  data: BasketballCourtReportAdmin,
+  previewUrl: string | null
 ): ConvertedCourtData => ({
   courtId: data.courtId,
   courtName: data.courtName,
@@ -44,7 +45,7 @@ export const convertCourtData = (
   convenience: Array.isArray(data.convenience)
     ? data.convenience.join(',')
     : data.convenience || '',
-  photoUrl: data.photoUrl ?? null,
+  photoUrl: previewUrl,
   additionalInfo: data.additionalInfo,
   informerId: data.informerId,
 });
