@@ -5,8 +5,3 @@ export interface ICreateChatRoom {
   basket_ball_id: number;
   name: string;
 }
-
-export interface ICreateCourtChatRoom {
-  basket_ball_id: number;
-  name: string;
-}

@@ -28,6 +28,7 @@ import {
   basketballConvenience,
 } from '@/constants/courtReportData';
 import { BasketballCourtReport } from '@/types/basketballCourt/basketballCourtReport';
+import { mapValue } from '@/utils/convertCourtData';
 import { CameraIcon } from './icons/CameraIcon';
 
 interface CourtReportProps {
@@ -36,13 +37,6 @@ interface CourtReportProps {
   handleClose: () => void;
   onReportSuccess: () => void;
 }
-
-// 농구장 사진(1MB) ✅
-// (마커 정보→ 위도, 경도, 주소) ✅
-// 농구장명(필수), 주소(필수), 코트 종류, 실내외(실내/야외), 코트사이즈, 골대수, ✅
-// 야간 조명, 개방시간(제한/24시), 사용료, 주차 가능, 기타 정보 ✅
-// 전화번호, 홈페이지(링크), 편의시설 ✅
-// (도로명 주소 반영) ✅
 
 const CourtReport: React.FC<CourtReportProps> = ({
   position,
@@ -67,57 +61,29 @@ const CourtReport: React.FC<CourtReportProps> = ({
       formData.append('image', file);
     }
 
-    // nightLighting : 있음(LIGHT) , 없음(NON_LIGHT)
-    // openingHours : 24시(ALL_NIGHT), 제한(NON_ALL_NIGHT)
-    // fee : 무료(FREE) , 유료(NON_FREE)
-    // parkingAvailable : 가능(PARKING_AVAILABLE), 불가능(PARKING_UNAVAILABLE)
-
-    // 백엔드에 보낼 형식 맞추기
-    if (data.convenience?.length === 0) {
-      data.convenience = null;
-    }
-
-    if (data.indoorOutdoor === undefined) {
-      data.indoorOutdoor = null;
-    }
-
-    if (data.nightLighting === '있음') {
-      data.nightLighting = 'LIGHT';
-    } else if (data.nightLighting === '없음') {
-      data.nightLighting = 'NON_LIGHT';
-    } else {
-      data.nightLighting = null;
-    }
-
-    if (data.openingHours === '24시') {
-      data.openingHours = 'ALL_NIGHT';
-    } else if (data.openingHours === '제한') {
-      data.openingHours = 'NON_ALL_LIGHT';
-    } else {
-      data.openingHours = null;
-    }
-
-    if (data.fee === '무료') {
-      data.fee = 'FREE';
-    } else if (data.fee === '유료') {
-      data.fee = 'NON_FREE';
-    } else {
-      data.fee = null;
-    }
-
-    if (data.parkingAvailable === '가능') {
-      data.parkingAvailable = 'PARKING_AVAILABLE';
-    } else if (data.parkingAvailable === '불가능') {
-      data.parkingAvailable = 'PARKING_UNAVAILABLE';
-    } else {
-      data.parkingAvailable = null;
-    }
-
     const finalData = {
       ...data,
+      indoorOutdoor: data.indoorOutdoor || null,
       address,
       latitude: position.lat,
       longitude: position.lng,
+      nightLighting: mapValue(data.nightLighting, {
+        있음: 'LIGHT',
+        없음: 'NON_LIGHT',
+      }),
+      openingHours: mapValue(data.openingHours, {
+        '24시': 'ALL_NIGHT',
+        제한: 'NON_ALL_NIGHT',
+      }),
+      fee: mapValue(data.fee, {
+        무료: 'FREE',
+        유료: 'NON_FREE',
+      }),
+      parkingAvailable: mapValue(data.parkingAvailable, {
+        가능: 'PARKING_AVAILABLE',
+        불가능: 'PARKING_UNAVAILABLE',
+      }),
+      convenience: data.convenience?.length ? data.convenience : null,
     };
 
     formData.append(

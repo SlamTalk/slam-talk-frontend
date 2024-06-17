@@ -8,14 +8,15 @@ export interface BasketballCourtsDetails {
   indoorOutdoor: string;
   courtSize: string;
   hoopCount: number;
-  nightLighting: boolean;
-  openingHours: boolean;
-  fee: boolean;
-  parkingAvailable: boolean;
+  nightLighting: string;
+  openingHours: string;
+  fee: string;
+  parkingAvailable: string;
   phoneNum: string | null;
   website: string | null;
   convenience: string[] | null;
   additionalInfo: string | null;
   photoUrl: string | null;
+  informerId: number;
   chatroomId: number;
 }

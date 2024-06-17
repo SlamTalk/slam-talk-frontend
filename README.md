@@ -85,8 +85,9 @@
 
 <br/>
 
+<li>자체 회원가입 및 소셜 로그인 개발</li>
 <li>농구장 지도, 제보 기능 개발</li>
-<li>회원가입 및 로그인 개발</li>
+<li>관리자 페이지 - 제보 정보 관리</li>
 <li>마이페이지 및 유저 관리 기능 개발(프로필 표시 및 수정, 탈퇴, 비밀번호 재설정 등)</li>
 <li>인앱 알림 기능 개발</li>
 <li>개발 전반 환경설정(Next.js, GitHub Actions, 테마 등)</li>
@@ -167,7 +168,7 @@
 
 | [🔗 커뮤니티](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0) | [🔗 1:1 채팅](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-11-%EC%B1%84%ED%8C%85) | [🔗 농구장 시설 채팅](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EB%86%8D%EA%B5%AC%EC%9E%A5-%EC%8B%9C%EC%84%A4-%EC%B1%84%ED%8C%85) | [🔗 관리자 페이지](https://github.com/SlamTalk/slam-talk-frontend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C#-%EA%B4%80%EB%A6%AC%EC%9E%90-%ED%8E%98%EC%9D%B4%EC%A7%80) |
 | :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|                    <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/76f50d21-a2b1-4727-8b9f-e851d45c6bfa'>                    |            <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/6ebb2284-a133-4343-b6f1-81af871f6e78'>             |                                      <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/35abce74-7444-466e-ab93-1cfe24d6f841'>                                       |                               <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/100774811/a3e09059-c57a-47a1-af85-42fc66c5647f'>                                |
+|                    <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/76f50d21-a2b1-4727-8b9f-e851d45c6bfa'>                    |            <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/6ebb2284-a133-4343-b6f1-81af871f6e78'>             |                                      <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/92986844/35abce74-7444-466e-ab93-1cfe24d6f841'>                                       |                               <img width='400' src='https://github.com/SlamTalk/slam-talk-frontend/assets/103404125/8c83dbe2-8143-4fbf-a799-0cc9158b27a9'>                                |
 
 ## 🕹 프로젝트 구동 방식
 
@@ -210,3 +211,5 @@ npm run dev
 ## 기타
 
 - 구름 풀스택 2회차 최종 프로젝트 인기상 수상 - [발표(24/02/22) PPT](https://github.com/SlamTalk/slam-talk-frontend/files/14399752/slam_talk.pdf)
+
+---
