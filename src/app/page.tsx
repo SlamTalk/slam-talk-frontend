@@ -134,7 +134,7 @@ const Home = () => {
               <Card>
                 <Image
                   isZoomed
-                  src="/images/map-image.png"
+                  src="/images/map-image.webp"
                   alt="map-image"
                   height={200}
                   width={600}
