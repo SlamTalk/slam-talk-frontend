@@ -69,7 +69,6 @@ const Footer = () => {
         <Link href="/chatting">
           <div className="flex items-center">
             <div
-              aria-label="새 메시지 표시"
               className={`mb-7 h-[5px] w-[5px] rounded-full ${isNewMsg && isNewMsg?.length > 0 ? 'bg-danger' : ''}`}
             />
             <div
