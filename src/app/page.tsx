@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Card, CardFooter, Image, Link } from '@nextui-org/react';
+import { Card, Image, Link } from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Schedule,
@@ -120,7 +120,7 @@ const Home = () => {
               </Card>
             ) : (
               <div className="flex min-h-[130px] items-center justify-center rounded-medium border-1 bg-content1 shadow-md dark:border-none">
-                <div className="text-md m-2 h-[50%] text-gray-400">
+                <div className="text-md m-2 h-[50%] text-gray-600 dark:text-gray-200">
                   예정된 매칭이 없습니다.
                 </div>
               </div>
@@ -139,17 +139,6 @@ const Home = () => {
                   height={200}
                   width={600}
                 />
-                <CardFooter className="absolute bottom-1 z-10 justify-center">
-                  <Button
-                    className="w-1/3 font-semibold sm:h-8 sm:w-2/5 sm:text-xs"
-                    color="primary"
-                    radius="sm"
-                    size="md"
-                    onKeyDown={handleKeyDownGoMap}
-                  >
-                    농구장 찾으러 가기
-                  </Button>
-                </CardFooter>
               </Card>
             </Link>
           </div>
@@ -157,7 +146,7 @@ const Home = () => {
             <div className="flex justify-between ">
               <div className="text-lg font-bold">경기할 팀을 찾고 있어요!</div>
               <Link href="/matching?tab=team">
-                <div className="mr-2 text-sm text-black/50 dark:text-white/50">
+                <div className="mr-2 text-sm text-gray-600 dark:text-gray-300">
                   전체보기 〉
                 </div>
               </Link>
@@ -173,7 +162,7 @@ const Home = () => {
                     />
                   ))
               ) : (
-                <div className="m-auto flex h-[80px] max-w-[568px] items-center justify-center text-center text-gray-500">
+                <div className="m-auto flex h-[80px] max-w-[568px] items-center justify-center text-center text-gray-600 dark:text-gray-200">
                   새로운 게시글이 없습니다.
                 </div>
               )}
@@ -184,7 +173,7 @@ const Home = () => {
           <div className="flex justify-between ">
             <div className="text-lg font-bold">같이 농구할 사람을 구해요!</div>
             <Link href="/matching?tab=mate">
-              <div className="mr-2 text-sm text-black/50 dark:text-white/50">
+              <div className="mr-2 text-sm text-gray-600 dark:text-gray-300">
                 전체보기 〉
               </div>
             </Link>
@@ -200,7 +189,7 @@ const Home = () => {
                   />
                 ))
             ) : (
-              <div className="m-auto flex h-[80px] max-w-[568px] items-center justify-center text-center text-gray-500">
+              <div className="m-auto flex h-[80px] max-w-[568px] items-center justify-center text-center dark:text-gray-200">
                 새로운 게시글이 없습니다.
               </div>
             )}
