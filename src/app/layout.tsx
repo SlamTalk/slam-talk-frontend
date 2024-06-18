@@ -70,6 +70,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           strategy="beforeInteractive"
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_MAP_KEY}&autoload=false&libraries=services,clusterer`}
         />
+        <meta
+          name="google-site-verification"
+          content="Vpl3J30Bqv8gU7ORaK1xFXxM9OpPafHAZFeRebtSjf8"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta
           name="description"
