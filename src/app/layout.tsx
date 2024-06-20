@@ -1,6 +1,8 @@
 'use client';
 
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
+import { GoogleTagManager } from '@next/third-parties/google';
 import '@/styles/globals.css';
 import Script from 'next/script';
 import axios from 'axios';
@@ -13,7 +15,6 @@ import useLocationStore from '@/store/userLocationStore';
 import Header from './components/header/Header';
 import Footer from './components/Footer';
 import Providers from './components/Providers';
-import Analytics from './components/Analytics';
 
 const queryClient = new QueryClient();
 
@@ -81,18 +82,17 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         />
         <meta name="author" content="Slam Talk" />
       </head>
+      <GoogleTagManager gtmId="G-SZBHKLC66H" />
       <body>
         <QueryClientProvider client={queryClient}>
           <ReactQueryDevtools />
-          <Suspense>
-            <Analytics />
-          </Suspense>
           <Providers>
             {shouldRenderHeader(pathname) && <Header />}
             <main>{children}</main>
             {shouldRenderFooter(pathname) && <Footer />}
           </Providers>
         </QueryClientProvider>
+        <Analytics />
       </body>
     </html>
   );
